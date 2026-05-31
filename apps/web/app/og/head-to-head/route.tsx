@@ -1,55 +1,13 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
+import {
+  bureauH2HOgSnapshotToData,
+  decodeBureauH2HOgSnapshot,
+  type H2HData,
+} from "@/lib/bureau-h2h-og-snapshot";
 
 export const runtime = "edge";
-
-interface TeamSummary {
-  team: string;
-  record: string;
-  ppg: number;
-}
-
-interface PosCompare {
-  position: string;
-  your_count: number;
-  their_count: number;
-}
-
-interface H2HData {
-  you?: TeamSummary;
-  them?: TeamSummary;
-  position_compare?: PosCompare[];
-  trade_fit?: { you_could_offer?: string[]; you_could_target?: string[] };
-}
-
-type H2hSnapshotCompact = {
-  y?: TeamSummary;
-  t?: TeamSummary;
-  pc?: Array<PosCompare | { position: string; y?: number; t?: number }>;
-  tf?: { o?: string[]; g?: string[] };
-};
-
-function decodeH2hSnapshot(param: string): H2HData | null {
-  try {
-    const b64 = param.replace(/-/g, "+").replace(/_/g, "/");
-    const json = atob(b64);
-    const raw = JSON.parse(json) as H2hSnapshotCompact;
-    if (!raw.y?.team || !raw.t?.team) return null;
-    return {
-      you: raw.y,
-      them: raw.t,
-      position_compare: (raw.pc ?? []).map((row) => ({
-        position: row.position,
-        your_count: "your_count" in row ? Number(row.your_count) : Number((row as { y?: number }).y ?? 0),
-        their_count: "their_count" in row ? Number(row.their_count) : Number((row as { t?: number }).t ?? 0),
-      })),
-      trade_fit: raw.tf ? { you_could_offer: raw.tf.o ?? [], you_could_target: raw.tf.g ?? [] } : undefined,
-    };
-  } catch {
-    return null;
-  }
-}
 
 /** Sample rivalry for OG preview when league params/API unavailable (FACTORY-DOD Gate C). */
 const DEMO_H2H: Required<Pick<H2HData, "you" | "them" | "position_compare" | "trade_fit">> = {
@@ -105,7 +63,11 @@ function teamLabel(name: string): string {
   return name.length > 18 ? `${name.slice(0, 16)}…` : name;
 }
 
-function atlasH2hRoomQuestion(them: TeamSummary, offer: string, want: string): string {
+function atlasH2hRoomQuestion(
+  them: { team: string; record: string; ppg: number },
+  offer: string,
+  want: string,
+): string {
   return `How do I beat ${them.team} (${them.record})? I'm deeper at ${offer} and thin at ${want}.`;
 }
 
@@ -118,13 +80,18 @@ export async function GET(req: Request) {
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
 
   const atlas = AGENT_BY_ID.atlas;
-  const snapshotData = snapshotParam ? decodeH2hSnapshot(snapshotParam) : null;
-  const isSnapshot = Boolean(snapshotData?.you && snapshotData?.them);
+  const snapshot = snapshotParam ? decodeBureauH2HOgSnapshot(snapshotParam) : null;
+  const isSnapshot = Boolean(snapshot);
   const hasLeagueParams = Boolean(league && user);
   const live = isSnapshot ? null : await fetchH2H(req, { league, user, opponent });
   const isLive = !isSnapshot && Boolean(live?.you && live?.them);
   const isDemo = !isSnapshot && !isLive;
-  const data = isSnapshot ? snapshotData! : isLive ? live! : DEMO_H2H;
+  const data: H2HData =
+    isSnapshot && snapshot
+      ? bureauH2HOgSnapshotToData(snapshot)
+      : isLive
+        ? live!
+        : DEMO_H2H;
 
   const you = data.you;
   const them = data.them;
@@ -132,7 +99,7 @@ export async function GET(req: Request) {
   const offer = (data.trade_fit?.you_could_offer ?? []).join(", ") || "—";
   const want = (data.trade_fit?.you_could_target ?? []).join(", ") || "—";
   const hasData = Boolean(you && them);
-  const themSummary = them as TeamSummary;
+  const themSummary = them!;
   const atlasRoomPath = hasData
     ? toRoom({
         agentId: "atlas",
@@ -156,7 +123,6 @@ export async function GET(req: Request) {
           border: "10px solid #2d1f14",
         }}
       >
-        {/* Header */}
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 12 }}>
           <div style={{ fontSize: 48, display: "flex" }}>🐯</div>
           <div style={{ display: "flex", fontSize: 36, fontWeight: 700 }}>
@@ -181,14 +147,13 @@ export async function GET(req: Request) {
           </div>
         </div>
 
-        {/* Title */}
         <div style={{ fontFamily: "Luckiest Guy", fontSize: 56, lineHeight: 1.1, marginBottom: 4 }}>
           Head-to-Head
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 18 }}>
           {`rivalry dossier — your roster vs one leaguemate${
             isSnapshot
-              ? " · from your panel"
+              ? " · exported matchup"
               : isLive
                 ? " · live league data"
                 : hasLeagueParams && isDemo
@@ -199,11 +164,10 @@ export async function GET(req: Request) {
 
         {hasData ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 14, flex: 1 }}>
-            {/* Team matchup */}
             <div style={{ display: "flex", gap: 14 }}>
               {[
-                { label: "YOU", t: you as TeamSummary, accent: "#d97757" },
-                { label: "THEM", t: them as TeamSummary, accent: "#5c4a3d" },
+                { label: "YOU", t: you!, accent: "#d97757" },
+                { label: "THEM", t: them!, accent: "#5c4a3d" },
               ].map((side) => (
                 <div
                   key={side.label}
@@ -231,7 +195,6 @@ export async function GET(req: Request) {
               ))}
             </div>
 
-            {/* Position depth bars */}
             <div
               style={{
                 display: "flex",
@@ -278,14 +241,12 @@ export async function GET(req: Request) {
               })}
             </div>
 
-            {/* Trade lanes */}
             <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30, color: "#d97757" }}>
               You offer depth at {offer} · target their surplus at {want}
             </div>
           </div>
         ) : null}
 
-        {/* Footer — Bureau path + Atlas room deep-link (hallway T6) */}
         <div
           style={{
             display: "flex",
