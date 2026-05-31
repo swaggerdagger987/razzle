@@ -1,7 +1,7 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — not arbitrary table order.",
-  "epic": "Lab L5 — OG snapshot row fidelity",
+  "big_problem": "Lab OG export cards must mirror in-panel position filters — snapshot-less exports still fetch unscoped live rows.",
+  "epic": "Lab L5 — OG export matches in-panel position filters",
   "slice_title": "Weekly OG export ranks top-6 by PPG for active position tab",
   "atom_id": "lab-og-weekly-ppg-ranked",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
