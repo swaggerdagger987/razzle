@@ -1,9 +1,9 @@
-cycle: 122
+cycle: 128
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L4
-next_slice: lab-pro-gate-hallway-teasers
-last_keep_cycle: 122
-last_commit: 0e58e99d
+next_slice: lab-sidebar-search-agent-labels
+last_keep_cycle: 128
+last_commit: da33eafd
 lab_l5_og_live_rows_epic: complete
-lab_l4_pro_gate_epic: active
+lab_l4_pro_gate_epic: complete
