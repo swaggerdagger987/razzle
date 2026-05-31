@@ -17,10 +17,10 @@ From `LOOP-STATE.md`:
 |-------|-------|
 | Cycle | 146 |
 | Last board | 54 |
-| Focus pillar | League |
+| Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | league-trade-finder-room-hallway |
-| Last commit | `c3a46f51b` |
+| Next slice | lab-og-tolab-snapshot-player |
+| Last commit | `19a1af0e9` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

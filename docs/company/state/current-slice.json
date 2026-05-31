@@ -1,8 +1,8 @@
 {
   "date": "2026-05-31",
   "atom_id": "league-trade-finder-og-snapshot",
-  "slice_title": "Trade Finder OG — snapshot param encodes in-panel trade rows",
-  "content_commit": "c3a46f51b",
+  "slice_title": "Trade Finder OG snapshot — dedup on base",
+  "content_commit": "19a1af0e9",
   "status": "shipped",
   "reality": "PASS",
   "merge": "pending"

@@ -1,8 +1,7 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Data Researcher
 
-2026-05-31 | league-trade-finder-og-snapshot | c3a46f51b | DynastyFF trade posts need export rows matching Bureau panel.
-
+2026-05-31 | lab-og-tolab-gamelog-default | — | PASS | No new Reddit intel; hallway slice only.
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | No new intel; Lab formula OG slice only.
 
 2026-05-31 | lab-og-dynasty-comps-live-sticker | — | PASS | No Reddit intel change this atom.

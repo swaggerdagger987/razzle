@@ -1,10 +1,11 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Chief of Staff
 
-2026-05-31 | league-trade-finder-og-snapshot | c3a46f51b | Factory open cycle 1; NO_LOCK_GUARDRAIL; Trade Finder epic 2/3.
-2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | Factory cycle 2; buy/sell formula OG parity.
-
-2026-05-31 | cycle 142 formula OG live | ceadf0402 | SHIP | Factory open; Lab breakouts/rankings formula_score parity.
+2026-05-31 | league-trade-finder-og-snapshot dedup | 19a1af0e9 | Factory cycle 146; atom on base; PR 1263 sync.
+2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | SHIP | Factory cycle 2; hallway epic atom 2/3.
+2026-05-31 | league-trade-finder-og-snapshot | 19a1af0e9 | SHIP | Trade Finder snapshot atom 2/3.
+2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | buy/sell formula OG parity.
+2026-05-31 | cycle 142 formula OG live | ceadf0402 | SHIP | Lab breakouts/rankings formula_score parity.
 
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | Lab L5 OG rows epic atom 1/3.
 
