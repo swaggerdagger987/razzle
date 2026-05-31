@@ -62,8 +62,50 @@
   background: var(--bg-card);
   border-bottom: 2px dashed var(--border-dashed);
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   gap: 6px;
+}
+
+.lab-sidebar-view-toggle {
+  display: flex;
+  gap: 4px;
+}
+
+.lab-sidebar-view-btn {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 4px 6px;
+  border: 2px solid var(--ink);
+  background: var(--bg);
+  color: var(--ink-medium);
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.lab-sidebar-view-btn.active {
+  background: var(--orange);
+  color: var(--bg-card);
+}
+
+.lab-sidebar-view-btn:hover {
+  background: var(--bg-warm);
+}
+
+.lab-sidebar-view-btn.active:hover {
+  background: var(--orange);
+}
+
+.lab-sidebar-desk {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
 }
 
 .sidebar-search {
