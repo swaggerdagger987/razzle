@@ -1,5 +1,7 @@
 2026-05-31 | league-og-pressure-map-watermark | 73d87cf79 | SHIP | pressure-map terracotta band.
 2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | SHIP | breakouts WR in TOLAB_DEFAULT_POSITION.
+2026-05-31 | league-og-power-rankings-watermark | f6e0985f3 | SHIP | Power Rankings OG toLeague + LIVE/SAMPLE stickers.
+2026-05-31 | league-og-pressure-map-watermark | 7b942533a | SHIP | Pressure Map OG toLeague + LIVE/SAMPLE stickers.
 2026-05-31 | league-og-self-scout-watermark | a76b2e4e0 | SHIP | Self-Scout OG terracotta band.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | TOP_MARGIN_NOTE_ROWS=3 per-row margin on explore OG.
 2026-05-31 | explore-og-margin-note-lead | a76b2e4e0 | SHIP | marginNoteForOgExploreRow + lead row on explore OG route.
