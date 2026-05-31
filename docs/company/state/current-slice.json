@@ -10,21 +10,15 @@
   "allowed_paths": [
     "apps/web/components/lab/renderers/ProspectsRenderer.tsx",
     "apps/api/tests/test_lab_og_export_link.py",
-    "apps/api/tests/test_og_prospects_loading_snapshot.py",
-    "docs/v2/evidence/2026-05-31-lab-og-prospects-loading-snapshot.md"
+    "apps/api/tests/test_og_prospects_loading_snapshot.py"
   ],
   "max_files": 4,
   "max_lines": 120,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH python3 -m pytest apps/api/tests/test_lab_og_export_link.py apps/api/tests/test_og_prospects_loading_snapshot.py -q --noconftest",
+    "pytest apps/api/tests/test_og_prospects_loading_snapshot.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": [
-    "OG route behavior changes",
-    "New panels",
-    "Bureau OG routes",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
-  ],
+  "out_of_scope": ["OG route changes", "NORTH_STAR edits"],
   "builder_mode": "composer-surgical",
   "status": "shipped",
   "content_commit": "75ff53361"

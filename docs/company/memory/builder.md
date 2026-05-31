@@ -1,7 +1,9 @@
 2026-05-31 | lab-og-prospects-loading-snapshot | 75ff53361 | SHIP | PROSPECTS_SAMPLE_OG_ROWS on pending/empty + pytest guards.
+2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | SHIP | breakouts WR in TOLAB_DEFAULT_POSITION.
 2026-05-31 | league-og-self-scout-watermark | a76b2e4e0 | SHIP | Self-Scout OG terracotta band.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | TOP_MARGIN_NOTE_ROWS=3 per-row margin on explore OG.
 2026-05-31 | explore-og-margin-note-lead | a76b2e4e0 | SHIP | marginNoteForOgExploreRow + lead row on explore OG route.
+2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | SHIP | Gate C pytest + 76270B snapshot OG.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WEEKLY_SAMPLE_OG_ROWS + test_lab_og_export_link guard.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | launch10Demo* helpers + pytest guard.
