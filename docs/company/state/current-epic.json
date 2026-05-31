@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Bureau rivalry screens must travel in group chats like Explore — copy link plus export on the same row.",
   "epic_title": "League L5 — Bureau share row parity",
   "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
@@ -20,11 +20,11 @@
     {
       "id": "bureau-monte-carlo-copy-link",
       "title": "Monte Carlo copy link beside export card",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "85974228"
     }
   ],
-  "next_atom_id": "bureau-monte-carlo-copy-link",
+  "next_atom_id": null,
   "created_at": "2026-05-31T04:35:00Z",
   "updated_at": "2026-05-31T04:50:00Z"
 }
