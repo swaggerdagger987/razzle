@@ -1,3 +1,4 @@
+import { decodeBureauH2HOgSnapshot } from "@/lib/bureau-h2h-og-snapshot";
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
 
@@ -76,9 +77,11 @@ export async function GET(req: Request) {
   const opponent = url.searchParams.get("opponent") ?? "";
 
   const atlas = AGENT_BY_ID.atlas;
-  const live = await fetchH2H({ league, user, opponent });
-  const isDemo = !live?.you || !live?.them;
-  const data = isDemo ? DEMO_H2H : live;
+  const snapshotParam = url.searchParams.get("snapshot") ?? "";
+  const snapshot = snapshotParam ? decodeBureauH2HOgSnapshot(snapshotParam) : null;
+  const live = snapshot ? null : await fetchH2H({ league, user, opponent });
+  const isDemo = !snapshot && (!live?.you || !live?.them);
+  const data = snapshot ?? (isDemo ? DEMO_H2H : live) ?? DEMO_H2H;
 
   const you = data.you;
   const them = data.them;
@@ -86,6 +89,12 @@ export async function GET(req: Request) {
   const offer = (data.trade_fit?.you_could_offer ?? []).join(", ") || "—";
   const want = (data.trade_fit?.you_could_target ?? []).join(", ") || "—";
   const hasData = Boolean(you && them);
+
+  const rivalrySubtitle = isDemo
+    ? "rivalry dossier — your roster vs one leaguemate · sample preview"
+    : them?.team
+      ? `rivalry dossier — vs ${teamLabel(them.team)}${snapshot ? " · from panel" : ""}`
+      : "rivalry dossier — your roster vs one leaguemate";
 
   return new ImageResponse(
     (
@@ -132,7 +141,7 @@ export async function GET(req: Request) {
           Head-to-Head
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 18 }}>
-          {`rivalry dossier — your roster vs one leaguemate${isDemo ? " · sample preview" : ""}`}
+          {rivalrySubtitle}
         </div>
 
         {hasData ? (
