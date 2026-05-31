@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | Factory cycle 1; dedup snapshot on base.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Factory cycle 153; weekly WR in OG watermark.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Factory open cycle 1; empty OG epic 3/3 complete; NO_LOCK_GUARDRAIL.
 
