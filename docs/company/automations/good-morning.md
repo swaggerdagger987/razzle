@@ -145,8 +145,8 @@ Step 7 — Memory + results.
   - Append one line to each of the six docs/company/memory/<role>.md files.
     Format: YYYY-MM-DD | hypothesis | outcome | keep / discard / revisit |
     evidence
-  - Prepare a docs/v2/results.tsv row with commit=PENDING_HASH. In description
-    include trust=T1,T3,... and slice name. You will replace PENDING_HASH with
+  - Prepare a docs/v2/results.tsv row with commit=da33eafd. In description
+    include trust=T1,T3,... and slice name. You will replace da33eafd with
     the first content commit's real 7-character hash in the metadata commit below.
 
 Step 8 — Commit + publish gate (NON-NEGOTIABLE).
@@ -160,7 +160,7 @@ Step 8 — Commit + publish gate (NON-NEGOTIABLE).
        git commit -m "standup: YYYY-MM-DD — <verdict> <slice or KILL reason>"
        CONTENT_HASH=$(git rev-parse --short HEAD)
     2. Metadata commit:
-       replace PENDING_HASH in docs/v2/results.tsv, the standup file, and
+       replace da33eafd in docs/v2/results.tsv, the standup file, and
        workday.json with CONTENT_HASH; increment cycle_count_today; set
        last_cycle_commit to CONTENT_HASH.
        git add -A
