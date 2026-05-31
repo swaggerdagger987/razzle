@@ -1,4 +1,4 @@
-2026-05-31 | lab-panel-share-bar-weekly-gamelog | f6e0985f3 | SHIP | 4 files; swap LabOgExportLink → LabPanelShareBar.
+2026-05-31 | lab-panel-share-bar-weekly-gamelog | c3893abdc | SHIP | 4 files; swap LabOgExportLink → LabPanelShareBar.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | route map loop + pytest rows; ≤80 lines.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | TOLAB_DEFAULT_POSITION + watermarkPosition.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | 3 files; decodeOgSnapshot pid + labOgWatermarkLink snapshotPlayerId.
