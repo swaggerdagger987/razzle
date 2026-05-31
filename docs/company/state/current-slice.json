@@ -1,31 +1,36 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 branches across launch-10 renderers drift from teaser/perks polish.",
-  "epic": "Lab L4 — shared pro-gate error surface",
-  "slice_title": "ProGateFromPanelError on breakouts + pytest guard",
-  "atom_id": "lab-l4-pro-gate-error-surface",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
-  "acceptance_ref": "ACCEPTANCE Gate 2 — pro panel shows upgrade message (402)",
-  "trust_pillars": ["T2", "T6"],
+  "big_problem": "Lab OG exports without snapshot still fall back to demo — blank player_id= must not bypass Ja'Marr Chase default on gamelog cards.",
+  "epic": "Lab L5 — OG live fetch edge-case trim (L4 pro-gate epic active on tick)",
+  "slice_title": "Gamelog OG — trim blank player_id query",
+  "atom_id": "lab-og-gamelog-blank-player-trim",
+  "parity_ref": "PARITY Lab L5 — gamelog OG",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — gamelog PNG ≥40KB with blank player_id",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/ProGateFromPanelError.tsx",
-    "apps/web/components/lab/renderers/BreakoutsRenderer.tsx",
-    "apps/api/tests/test_panel_pro_gate_surface.py"
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/api/tests/test_lab_og_gamelog_player_default.py"
   ],
-  "max_files": 3,
-  "max_lines": 140,
+  "max_files": 2,
+  "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_pro_gate_surface.py apps/api/tests/test_panel_upgrade_teaser.py -q"
+    "JWT_SECRET=test-secret .venv-v2/bin/pytest apps/api/tests/test_lab_og_gamelog_player_default.py -q --noconftest",
+    "curl -s -o /tmp/og-gamelog.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1'",
+    "curl -s -o /tmp/og-gamelog-blank.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1&player_id='",
+    "file /tmp/og-gamelog.png /tmp/og-gamelog-blank.png"
   ],
-  "out_of_scope": ["Tradevalues/efficiency this cycle"],
+  "out_of_scope": [
+    "LabOgExportLink changes",
+    "L4 pro-gate renderers",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  },
-  "status": "shipped"
+  }
 }

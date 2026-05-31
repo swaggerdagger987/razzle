@@ -1,5 +1,6 @@
 # Memory — Reality Checker
 
+2026-05-31 | lab-og-gamelog-blank-player-trim Gate C | 0b6eefe7 | PASS gamelog 60634B ×2; pytest 3; web build exit 0.
 2026-05-31 | explore-og-universe-query Gate C | 7dbd4b11 | PASS college OG 41427B; build + pytest 58.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | pytest 6; web build ok; Gate C N/A.
 
@@ -64,3 +65,4 @@ explicit checks in the verification routine.
 2026-05-31 | Waiver Tendencies OG Gate C | 6dcb0f72 | PASS | curl waiver-tendencies 73121B PNG | keep | evidence/2026-05-31-league-waiver-tendencies-og-share.md
 2026-05-31 | Lab OG snapshot Gate C | 70af534a | PASS | curl prospects snap 45583B tradevalues 62488B | keep | evidence/2026-05-31-lab-og-snapshot-tradevalues-prospects.md
 2026-05-31 | Lab OG live sort Gate C | 7f78b631 | PASS | curl rankings 50251B tradevalues 51115B | keep | evidence/2026-05-31-lab-og-rankings-tradevalues-live-sort.md
+2026-05-31 | lab-og-gamelog-player-default | c09a8f9e | SHIP | gamelog OG blank player_id → Chase default; curl 60634B.
