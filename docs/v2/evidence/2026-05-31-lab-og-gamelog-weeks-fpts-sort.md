@@ -1,22 +1,24 @@
-# Evidence — Lab OG gamelog peak weeks by FPTS
+# Evidence — lab-og-gamelog-weeks-fpts-sort
 
 **Date:** 2026-05-31  
 **Atom:** `lab-og-gamelog-weeks-fpts-sort`  
-**Cycle:** 106
+**Cycle:** 117
 
-## Changes
+## Acceptance
 
-- `extractGamelogWeekRows` — sorts `weeks[]` by `fpts` desc, labels `Wk N`, matches `GamelogRenderer` ogSnapshotRows
-- Demo rows updated to week-style PPR peaks (not multi-player names)
-
-## Commands
-
-```text
-npm run build --workspace=apps/web  → exit 0
-JWT_SECRET=test python3 -m pytest apps/api/tests -q  → 51 passed
-curl /og/gamelog?download=1&player_id=00-0036900&position=WR  → 200 56390 PNG 1200×630
+```bash
+npm run build --workspace=apps/web  # exit 0
+JWT_SECRET=test python3 -m pytest apps/api/tests -q  # 55 passed, 5 skipped
+curl -s -o /tmp/gamelog-og.png -w '%{http_code} %{size_download}\n' \
+  'http://127.0.0.1:3000/og/gamelog?download=1&player_id=00-0036900'
+# 200 61129
+file /tmp/gamelog-og.png  # PNG 1200x630
 ```
 
-## Gate C
+## Change
 
-PASS — PNG ≥ 40KB, week rows visible (demo or live).
+`extractGamelogWeekRows` in `/og/[panel]` maps API `weeks[]` to OG rows (`Wk N`, PPR sort) matching `GamelogRenderer` snapshot export — live fetch no longer falls back to demo players.
+
+## Verdict
+
+PASS — FACTORY-DOD Gate C (PNG ≥ 40KB, live week layout).

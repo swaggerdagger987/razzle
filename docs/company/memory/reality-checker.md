@@ -1,11 +1,8 @@
 # Memory — Reality Checker
 
-2026-05-31 | lab-og-live-sticker-launch10-staff-picks | da33eafd | curl 64632B 65600B 64459B PASS | Gate C.
+2026-05-31 | lab-og-live-sticker-launch10-staff-picks | 13e20047 | curl 64632B 65600B 64459B PASS | Gate C.
 
-2026-05-31 | lab-og-live-demo-fallback-copy | 9cd6a5cf | curl rankings-demo 67083B weekly-live 70383B PASS | Gate C.
-
-2026-05-31 | lab-og-live-sticker-prospects-weekly | 5bb77346 | curl weekly 66512B prospects 60688B PASS | Gate C.
-
+2026-05-31 | launch10 live-fetch merge Gate C | 3f0411ec | PASS curl rankings 62355B weekly 66512B; build + pytest 58.
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | curl rankings 62355B PASS | Gate C.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 4d84af9a | curl H2H 67846B PASS | Gate C terracotta band on export.

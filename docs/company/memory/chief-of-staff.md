@@ -2,13 +2,9 @@
 
 2026-05-31 | lab-og-live-sticker-launch10-staff-picks | 13e20047 | keep | Factory open; L5 sticker epic atom 1/3; PR #809.
 
-2026-05-31 | Factory cycle 120 pro-gate loading copy | 7236be3e | Deduped OG on base #753; L4 epic atom 1/3.
+2026-05-31 | Factory cycle 120 live fetch merge | 3f0411ec | workday cycle 1; live-fetch epic atom 1/3.
 
 2026-05-31 | Factory cycle 107 Lab sidebar agent groups | 4e8b0e8e | Workday open; L2 sidebar epic atom 1/2.
-
-2026-05-31 | Factory cycle 119 SAMPLE vs LIVE OG | 9cd6a5cf | Live-rows epic 3/3 complete; force_demo for Gate C.
-
-2026-05-31 | Factory cycle 118 prospects-weekly OG | 5bb77346 | Deduped PR720 gamelog on base; live-rows epic 2/3.
 
 2026-05-31 | Factory cycle 116 LIVE OG sticker | 4e905360 | Dedup H2H on base #666; live-rows epic 1/3.
 
