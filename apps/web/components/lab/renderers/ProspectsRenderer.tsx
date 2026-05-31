@@ -12,6 +12,16 @@ import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHe
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
+/** Sample RPS board when the API returns no prospects — OG export still screenshots. */
+const PROSPECTS_SAMPLE_OG_ROWS: OgSnapshotRow[] = [
+  { name: "Travis Hunter", position: "WR", team: "JAX", stat: 94, statLabel: "RPS" },
+  { name: "Cam Ward", position: "QB", team: "TEN", stat: 91, statLabel: "RPS" },
+  { name: "Ashton Jeanty", position: "RB", team: "LV", stat: 89, statLabel: "RPS" },
+  { name: "Tyler Warren", position: "TE", team: "IND", stat: 86, statLabel: "RPS" },
+  { name: "Tre Harris", position: "WR", team: "LAC", stat: 83, statLabel: "RPS" },
+  { name: "Emeka Egbuka", position: "WR", team: "TB", stat: 80, statLabel: "RPS" },
+];
+
 interface Prospect {
   player_name: string;
   position: string;
@@ -99,7 +109,18 @@ export function ProspectsRenderer({ panel }: Props) {
       )}
 
       {!prospects.length ? (
-        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+        <div className="p-6">
+          <p className="text-ink-medium">{agent.emptyCopy}</p>
+          <footer className="mt-4 flex flex-wrap items-center gap-4">
+            <LabOgExportLink
+              slug="prospects"
+              downloadName="razzle-prospects.png"
+              position={position || undefined}
+              snapshotRows={PROSPECTS_SAMPLE_OG_ROWS}
+              label="export sample card"
+            />
+          </footer>
+        </div>
       ) : (
         <div className="tier-stack">
           {prospects.slice(0, 50).map((p) => (
