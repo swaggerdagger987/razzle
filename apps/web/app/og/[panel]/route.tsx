@@ -95,6 +95,7 @@ const TOLAB_DEFAULT_POSITION: Record<string, string> = {
   efficiency: "RB",
   aging: "RB",
   breakouts: "WR",
+  percentiles: "WR",
 };
 
 const LAUNCH_10_OG_SLUGS = new Set([

@@ -1,3 +1,4 @@
+2026-05-31 | league-og-pressure-map-watermark | 73d87cf79 | SHIP | pressure-map terracotta band.
 2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | SHIP | breakouts WR in TOLAB_DEFAULT_POSITION.
 2026-05-31 | league-og-self-scout-watermark | a76b2e4e0 | SHIP | Self-Scout OG terracotta band.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | TOP_MARGIN_NOTE_ROWS=3 per-row margin on explore OG.
@@ -127,3 +128,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | league-waiver-tendencies-og-share | 6dcb0f72 | SHIP | /og/waiver-tendencies 73121B; BureauWaiverTendenciesShareBar
 2026-05-31 | league-strength-of-schedule-tab | eb542d51 | keep | BureauStrengthOfSchedule; HIDDEN_BUREAU_SLUGS empty; epic 3/3
 2026-05-31 | lab-og-rankings-tradevalues-live-sort | 7f78b631 | keep | dynasty_value + trade_value OG sort; curl 50KB PNGs
+2026-05-31 | lab-og-percentiles-tolab | f6e0985f3 | keep | TOLAB_DEFAULT_POSITION percentiles WR; pytest 11; curl 65326B

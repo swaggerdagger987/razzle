@@ -1,3 +1,4 @@
+2026-05-31 | league-og-pressure-map-watermark | 73d87cf79 | SHIP | Factory cycle 1 PR #1526.
 2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | SHIP | Factory open cycle 1; position-default epic 3/3; NO_LOCK_GUARDRAIL.
 2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | SHIP | Factory cycle 1; H2H GTM epic complete; dedup pytest on base.
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | Factory open cycle 1; Explore L5 margin epic 1/4; NO_LOCK_GUARDRAIL.
@@ -15,3 +16,4 @@
 2026-05-31 | league-trade-finder-og-snapshot | 19a1af0e9 | SHIP | Trade Finder snapshot atom 2/3.
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | buy/sell formula OG parity.
 2026-05-31 | cycle 142 formula OG live | ceadf0402 | SHIP | Lab breakouts/rankings formula_score parity.
+2026-05-31 | lab-og-percentiles-tolab | f6e0985f3 | SHIP | Percentiles OG toLab WR position; pro-profile epic 4/4 closes.
