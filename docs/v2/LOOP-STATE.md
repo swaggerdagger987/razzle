@@ -1,11 +1,11 @@
 cycle: 120
 last_board_cycle: 54
 focus_pillar: Lab
-focus_layer: L5
-next_slice: explore-og-universe-query
+focus_layer: L4
+next_slice: (L4 epic complete — pick from PARITY/NEXT)
 last_keep_cycle: 120
-last_commit: 3f0411ec
-lab_l5_og_live_fetch_epic: active
+last_commit: da33eafd
+lab_l4_pro_gate_epic: complete
+lab_l5_og_live_rows_epic: complete
 lab_l5_og_watermark_epic: complete
-lab_l5_og_live_sort_epic: complete
-bureau_h2h_codec_epic: complete
+lab_l5_launch10_og_extract_epic: complete

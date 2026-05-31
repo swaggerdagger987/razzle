@@ -20,6 +20,21 @@ export const VISIBLE_BUREAU_FEATURES = BUREAU_FEATURES.filter((f) => !HIDDEN_BUR
 
 export type BureauFeatureSlug = (typeof BUREAU_FEATURES)[number]["slug"];
 
+/** Core Bureau moat tabs (PARITY Bureau-7) — perks copy + OG epic alignment. */
+export const BUREAU_7_SLUGS: readonly BureauFeatureSlug[] = [
+  "self-scout",
+  "build-profiles",
+  "power-rankings",
+  "trade-network",
+  "manager-profiles",
+  "pressure-map",
+  "trade-finder",
+];
+
+export function bureauFeatureLabels(slugs: readonly string[]): string[] {
+  return slugs.map((slug) => BUREAU_FEATURES.find((f) => f.slug === slug)?.label ?? slug);
+}
+
 export const BUREAU_ENDPOINTS: Record<
   string,
   { path: string; needsUser: boolean; title: string }

@@ -5,7 +5,7 @@ import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
 import type { Route } from "next";
 import {
-  PRO_UPGRADE_PERKS,
+  proUpgradePerksBullets,
   teaserRowsForPanel,
   upgradePitchForPanel,
 } from "@/lib/panel-upgrade-teaser";
@@ -29,6 +29,7 @@ export function ProUpgradeGate({
   const agent = panelAgent(panelSlug);
   const pitch = upgradePitchForPanel(panelSlug, agent.name);
   const rows = teaserRowsForPanel(panelSlug);
+  const perks = proUpgradePerksBullets();
   const roomQuestion = `What should I know about ${panelTitle.toLowerCase()} for my dynasty roster?`;
 
   return (
@@ -83,7 +84,7 @@ export function ProUpgradeGate({
         </div>
         <p className="mt-3 text-xs text-ink-light">dev? flip plan in the toolbar ↑</p>
         <ul className="pro-upgrade-perks mt-6 text-left text-sm text-ink-medium">
-          {PRO_UPGRADE_PERKS.map((line) => (
+          {perks.map((line) => (
             <li key={line}>{line}</li>
           ))}
         </ul>
