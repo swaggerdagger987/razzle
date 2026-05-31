@@ -1,29 +1,26 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-percentiles-tolab",
-  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
-  "epic": "Lab L5 — pro profile OG live parity",
-  "slice_title": "Percentiles OG toLab default player hallway",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
-  "trust_pillars": ["T5", "T6"],
+  "big_problem": "Catalog pro panels still show raw errors instead of the shared L4 upgrade card.",
+  "epic": "Lab L4 — generic pro-gate polish (atom 3/3)",
+  "slice_title": "lab-l4-catalog-teaser-batch-1",
+  "parity_ref": "Lab L4 pro-gate polish or formula extraction",
+  "depth_ref": "Lab L4",
+  "acceptance_ref": "GENERIC_CATALOG_PRO_GATE_SLUGS have distinct screenshot-worthy teaser rows + pitches",
+  "trust_pillars": ["T2", "T5"],
   "allowed_paths": [
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/web/lib/panel-upgrade-teaser.ts",
+    "apps/api/tests/test_panel_upgrade_teaser.py"
   ],
-  "max_files": 1,
-  "max_lines": 20,
+  "max_files": 2,
+  "max_lines": 80,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q",
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/pct-og.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/percentiles?download=1&force_demo=1'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q --noconftest",
+    "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["percentiles live extract (done)", "NORTH_STAR/DESIGN edits"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+  "out_of_scope": [
+    "PanelRenderer changes",
+    "OG routes",
+    "New catalog panels"
+  ],
+  "builder_mode": "composer-surgical"
 }
