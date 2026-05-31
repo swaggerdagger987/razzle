@@ -285,6 +285,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 1. **Manager archetype labels are trade-DM shorthand** — PANIC SELLER / HOARDER badges travel faster than transaction counts in group chats.
 2. **Bureau OG series compounds** — Pressure Map + Manager Profiles give two screenshot hooks before trade-network atom.
 
+## 2026-05-31 — Workday cycle 1 (Lab OG live rows)
+
+1. **Share cards must hit the same API as the panel** — users screenshot after filtering in Lab; OG that calls a different legacy path shows wrong rows and erodes trust in exports.
+2. **`live tape` vs `sample preview`** — dynasty threads punish fake-live cards; label the data source on the PNG.
+
 ## 2026-05-31 — Cycle 63 (factory reopen cycle 1)
 
 1. **Trade partnership lanes are collusion bait** — "these two trade every week" screenshots spark DM threads; OG card must show partner pairs + trade counts, not a graph stub.
