@@ -25,6 +25,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | self-scout OG | POST /api/bureau/self-scout + grade helpers | e732f973 | keep | 2 files; POS_COLORS; Hawkeye badge
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
-2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
-2026-05-31 | Lab OG snapshot rows atom 1/4 | 916ba843 | keep | base64url snapshot + request-origin API fallback
-2026-05-31 | Lab OG snapshot buysell/efficiency/aging | snapshotRows useMemo | 33808392 | keep | 3 renderers | — | — | evidence/2026-05-31-lab-og-snapshot-launch10-panels.md
+2026-05-31 | fetchLiveOgRows + candidates | 2cb898b6 | keep | X-Razzle-Plan pro header; legacy API fallback chain
