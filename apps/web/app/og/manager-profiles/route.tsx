@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { toLeague, toRoom } from "@razzle/hallway";
 
 export const runtime = "edge";
 
@@ -68,9 +69,14 @@ const ARCHETYPE_COLORS: Record<string, string> = {
 
 const DEMO_META = { season: "2025", hero_team: "Rebuild FC", hero_archetype: "PANIC SELLER" };
 
-async function fetchManagerProfiles(leagueId: string): Promise<ProfileData | null> {
-  const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
+/** Edge OG must hit same-origin `/api/*` so Next rewrites reach FastAPI (dev/preview/CI). */
+function resolveApiOrigin(req: Request): string {
+  return new URL(req.url).origin;
+}
+
+async function fetchManagerProfiles(req: Request, leagueId: string): Promise<ProfileData | null> {
   if (!leagueId) return null;
+  const apiOrigin = resolveApiOrigin(req);
 
   try {
     const res = await fetch(`${apiOrigin}/api/bureau/manager-profiles`, {
@@ -91,19 +97,33 @@ function teamLabel(name: string): string {
   return name.length > 14 ? `${name.slice(0, 12)}…` : name;
 }
 
+function bonesManagerProfilesRoomQuestion(heroTeam: string, heroArchetype: string): string {
+  return `${heroTeam} is a ${heroArchetype} — when should I send a trade offer?`;
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
   const league = url.searchParams.get("league") ?? "";
 
   const bones = AGENT_BY_ID.bones;
-  const live = await fetchManagerProfiles(league);
-  const isDemo = !live?.rows?.length;
+  const live = await fetchManagerProfiles(req, league);
+  const isLive = Boolean(live?.rows?.length);
+  const isDemo = !isLive;
   const rows = (isDemo ? DEMO_ROWS : live!.rows!).slice(0, 4);
   const season = isDemo ? DEMO_META.season : live!.season;
   const hero = rows.find((r) => r.archetype === "PANIC SELLER") ?? rows[0];
   const heroTeam = isDemo ? DEMO_META.hero_team : hero?.team;
   const heroArchetype = isDemo ? DEMO_META.hero_archetype : hero?.archetype;
+  const hasHero = Boolean(heroTeam && heroArchetype);
+  const leagueDeepLink = league ? toLeague(league, "manager-profiles") : "/league/manager-profiles";
+  const bonesRoomPath = hasHero
+    ? toRoom({
+        agentId: "bones",
+        question: bonesManagerProfilesRoomQuestion(heroTeam!, heroArchetype!),
+        panelSlug: "manager-profiles",
+      })
+    : "/room?agent=bones&from=manager-profiles";
 
   return new ImageResponse(
     (
@@ -150,10 +170,10 @@ export async function GET(req: Request) {
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 10 }}>
           {`manager archetypes · ${season} season`}
-          {isDemo ? " · sample preview" : ""}
+          {isLive ? " · live league data" : isDemo ? " · sample preview" : ""}
         </div>
 
-        {heroTeam && heroArchetype ? (
+        {hasHero ? (
           <div
             style={{
               display: "flex",
@@ -220,22 +240,32 @@ export async function GET(req: Request) {
           })}
         </div>
 
+        {hasHero ? (
+          <div style={{ display: "flex", fontSize: 18, color: "#d97757", marginTop: 10 }}>
+            {`razzle.lol${bonesRoomPath} · ask ${bones.name} about ${teamLabel(heroTeam!)}`}
+          </div>
+        ) : null}
+
+        {/* Always-on watermark band — matches Pressure Map + Trade Finder OG (T6) */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-end",
+            alignItems: "center",
+            marginTop: 16,
+            padding: "10px 18px",
+            background: "#d97757",
+            color: "#f7efe5",
+            border: "3px solid #2d1f14",
+            borderRadius: 8,
+            boxShadow: "4px 4px 0 #2d1f14",
             fontSize: 20,
-            color: "#5c4a3d",
-            marginTop: 12,
           }}
         >
-          <div style={{ display: "flex" }}>{`razzle.lol/league${league ? `/${league}` : ""}/manager-profiles`}</div>
-          {isDownload ? (
-            <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
-              made with 🐯 razzle.lol
-            </div>
-          ) : null}
+          <div style={{ display: "flex", fontWeight: 700 }}>{`razzle.lol${leagueDeepLink}`}</div>
+          <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
+            {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
+          </div>
         </div>
       </div>
     ),
