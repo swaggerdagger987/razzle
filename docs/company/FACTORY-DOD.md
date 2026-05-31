@@ -16,8 +16,7 @@ After local commits:
 1. Branch exists on `origin` (`git push`).
 2. A PR is **open** with title `standup: YYYY-MM-DD` (or updated if one exists).
    **Primary path:** GitHub Actions workflow `standup-pr-autopen` opens the PR
-   within ~30s of a standup push (VM `gh pr create` always 403 on Automations).
-   Agent polls: `bash scripts/company-os-wait-for-pr.sh`.
+   after standup push. Agent polls: `bash scripts/company-os-wait-for-pr.sh`.
 3. Slack summary includes **PR URL**. No URL = cycle incomplete.
 
 If push fails and no PR appears after polling → `BLOCKED: GITHUB_PUBLISH` and stop.
