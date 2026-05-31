@@ -9,7 +9,7 @@
       "id": "lab-og-tolab-weekly-position",
       "title": "weekly OG watermark includes default WR position in toLab",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "9be64d109"
     }
   ],
   "next_atom_id": null,
