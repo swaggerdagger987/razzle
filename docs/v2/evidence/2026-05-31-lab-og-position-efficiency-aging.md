@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-31  
 **Atom:** `lab-og-position-efficiency-aging`  
-**Content commit:** pending metadata
+**Content commit:** 3cbd834f
 
 ## Curl (Gate C)
 
