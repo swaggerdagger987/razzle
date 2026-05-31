@@ -259,8 +259,28 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 
 ## 2026-05-31 — Cycle 59
 
-### r/DynastyFF — panel-specific stat labels on share cards (pattern)
-- **Pattern:** Users screenshot **tool-specific** views — weekly FPTS grids, prospect scores, aging curves — and comment using that vocabulary. Generic "Value" columns on a heatmap card read as lazy export.
-- **Razzle slice:** Lab L5 atom 2 — launch-10 OG demo rows with FPTS/Score/Rank/Peak Age/Chg stat headers per panel slug.
+### r/DynastyFF — playoff odds screenshot posts (pattern)
+- **Pattern:** Managers share "who wins my league" sim cards before playoffs; comment threads want the tool name when odds look league-specific.
+- **Razzle move:** Monte Carlo OG card mirrors in-product top-3 title/playoff bars + Octo badge; export from Bureau tab.
 - **Council cycle:** 59
-- **Screenshot potential:** Weekly heatmap + prospect big board cards now match in-product column semantics on preview hosts
+
+## 2026-05-31 — Cycle 60
+
+### r/DynastyFF — fair-trade screenshot posts (pattern)
+- **Pattern:** Trade deadline threads ask "is this fair?" with player names + value context; generic trade-value charts get ignored.
+- **Razzle move:** Trade Finder OG shows hero match with gap % + partner team; Bones badge; export from Bureau tab.
+- **Council cycle:** 60
+
+## 2026-05-31 — Cycle 61
+
+### r/DynastyFF — panel-specific stat labels on share cards (pattern)
+- **Pattern:** Users screenshot tool-specific views — weekly FPTS grids, prospect scores, aging curves.
+- **Razzle slice:** Lab L5 atom 2 — launch-10 OG demo rows with FPTS/Score/Rank/Peak Age/Chg stat headers.
+- **Council cycle:** 61
+
+## 2026-05-31 — Cycle 62
+
+### r/DynastyFF — parameterized panel OG URLs (pattern)
+- **Pattern:** Dynasty comp screenshots need player context; share links without player_id read broken.
+- **Razzle slice:** Lab L5 atom 3 — DEFAULT_OG_PLAYER_ID + dynasty-comps Match % demo rows.
+- **Council cycle:** 62

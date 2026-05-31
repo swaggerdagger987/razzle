@@ -17,6 +17,6 @@ anecdotes (>=3 independent threads = signal).
 ## Entries
 
 2026-05-30 | no web scraping | screenshot culture on r/DynastyFF remains the primary distribution engine | existing REDDIT-INTEL.md signals (cycles 31, 55) directly support Lab L5 OG — agent voice on screenshots and filtered data cards | keep | Lab OG live data card addresses standing gap "screenshot-worthy share cards"
-2026-05-31 | light scan | loading-only OG reads as broken tool in screenshot culture | demo rows + sample preview label | keep | cycle 58 REDDIT-INTEL entry
-2026-05-31 | launch-10 OG demo stat labels | atom 2/3 SHIP | keep | curl weekly 63819B tradevalues 62488B gamelog 58408B
-2026-05-31 | default OG player_id | share links work without query params | keep | Chase anchor matches demo row culture
+2026-05-31 | Panel OG needs rows not shells | 0019814f | keep | Cycle 58 intel logged
+2026-05-31 | Playoff odds sim cards | da33eafd | keep | Cycle 59 intel — league-specific odds screenshots
+2026-05-31 | Lab OG launch10 demos cycle 61 + param defaults cycle 62 | epic complete | keep | da09d5b4 ef908a99

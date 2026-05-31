@@ -72,6 +72,18 @@ After merging harness CI updates, open a test PR and confirm these three appear.
 In Cursor → Automations → each automation → confirm **Open Pull Request** is
 enabled. Agents must use it when `git push` fails.
 
+### 3d. Allow Actions to open standup PRs (required once)
+
+GitHub repo → **Settings → Actions → General → Workflow permissions**:
+
+- [x] **Read and write permissions**
+- [x] **Allow GitHub Actions to create and approve pull requests**
+
+Without this, `standup-pr-autopen` fails with:
+`GitHub Actions is not permitted to create or approve pull requests.`
+
+This is separate from the Cursor GitHub App install page. Both are required.
+
 ### 3c. Merge without Founder click (pick one)
 
 **Option A — Auto-merge (simplest):**
