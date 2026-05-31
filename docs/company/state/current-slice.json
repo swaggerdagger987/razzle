@@ -1,32 +1,24 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG exports without snapshot still fall back to demo — Reddit can't screenshot real Launch-10 nflverse rows alongside the LIVE sticker.",
-  "epic": "Lab L5 — OG live fetch + sticker parity",
-  "slice_title": "Explore OG — pass universe, season, team in export URL",
-  "atom_id": "explore-og-universe-query",
-  "parity_ref": "PARITY Explore L5 — shareable URL + watermarked export",
-  "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — college OG PNG ≥40KB with query params",
-  "trust_pillars": ["T5", "T6"],
-  "allowed_paths": [
-    "apps/web/components/explore/ExploreShareButton.tsx",
-    "apps/web/components/explore/ExplorePageClient.tsx",
-    "apps/web/app/og/explore/route.tsx"
-  ],
-  "max_files": 3,
-  "max_lines": 80,
+  "big_problem": "Lab sidebar still lists Staff Picks as a flat catalog — agents own panels in headers but not in navigation.",
+  "epic": "Lab L2 — sidebar groups launch-10 by agent owner",
+  "slice_title": "Search results show agent owner in sidebar item title",
+  "atom_id": "lab-sidebar-search-agent-labels",
+  "parity_ref": "docs/v2/AGENTS.md — LabSidebar group by agent",
+  "depth_ref": "Lab L2",
+  "acceptance_ref": "Hallway H-04 — six agents same ids everywhere",
+  "trust_pillars": ["T2", "T6"],
+  "allowed_paths": ["apps/web/components/lab/LabSidebar.tsx"],
+  "max_files": 1,
+  "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test .venv-v2/bin/pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-college.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?universe=college&sort=total_yards&dir=desc&season=2024'",
-    "curl -s -o /tmp/og-nfl.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?universe=nfl&sort=fantasy_points_ppr&dir=desc'",
-    "file /tmp/og-college.png /tmp/og-nfl.png"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
   ],
   "out_of_scope": [
-    "Lab OG routes",
-    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "category sidebar regroup when not searching",
     "new npm deps",
-    "prospects universe"
+    "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",
   "votes": {
