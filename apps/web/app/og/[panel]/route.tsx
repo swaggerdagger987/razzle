@@ -287,7 +287,7 @@ function extractRows(data: unknown): OgRow[] {
     }
   }
 
-  return candidates.slice(0, 6).map((row) => ({
+  const rows = candidates.map((row) => ({
     name: String(row.full_name ?? row.name ?? row.player_name ?? ""),
     position: String(row.position ?? row.pos ?? ""),
     team: String(row.team ?? row.team_abbr ?? ""),
@@ -299,6 +299,10 @@ function extractRows(data: unknown): OgRow[] {
           : 0,
     statLabel,
   }));
+
+  const sortAsc = statKey === "rank" || statLabel === "Rank";
+  rows.sort((a, b) => (sortAsc ? a.stat - b.stat : b.stat - a.stat));
+  return rows.slice(0, 6);
 }
 
 function siteOrigin(req: Request): string {
