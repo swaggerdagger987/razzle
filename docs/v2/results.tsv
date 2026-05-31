@@ -75,3 +75,4 @@ cycle	commit	score	status	pillar	slice	description
 82	9714bfa6	depth+hallway+voice+simplicity	keep	League	L5 Bureau power rankings OG card	trust=T2,T5,T6; /og/power-rankings demo rows; curl 59358B; export footer
 83	367786d3	depth+hallway+voice+simplicity	keep	League	L5 Bureau build profiles tab	trust=T2,T5,T6; BureauBuildProfiles Atlas grid; build+pytest PASS
 84	eabf1b8c	depth+hallway+voice+simplicity	keep	League	L5 Bureau waiver tendencies tab	trust=T2,T5,T6; BureauWaiverTendencies Hawkeye bars; build+pytest PASS
+85	da33eafd	depth+hallway+voice+simplicity	keep	League	L5 Bureau schedule tab	trust=T2,T5,T6; BureauStrengthOfSchedule Octo verdict; build+pytest PASS; epic complete

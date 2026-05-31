@@ -15,6 +15,7 @@ which migrations were painful, which test patterns caught bugs.
 
 ## Entries
 
+2026-05-31 | BureauStrengthOfSchedule 3-file contract | BureauStrengthOfSchedule + FeatureBody + bureau-features | League L5 tab | keep | Octo verdict + PPG bars; personal SOS API shape; no OG
 2026-05-31 | BureauWaiverTendencies 3-file contract | BureauWaiverTendencies + FeatureBody + bureau-features | League L5 tab | keep | Hawkeye pressure bars mirror PowerRankings; no OG this atom
 2026-05-31 | BureauBuildProfiles 3-file contract | BureauBuildProfiles + FeatureBody + bureau-features | League L5 tab | keep | Atlas card grid mirrors ManagerProfiles; no OG this atom
 2026-05-30 | Generic extractRows() with 7 response shapes handles all 100 panels without per-panel switch | apps/web/app/og/[panel]/route.tsx | ACCEPTANCE Gate 2 (Lab renderers) | keep | Satori constraints: display:flex everywhere, no grid; agentForPanel() from @razzle/agents avoids metadata duplication; parameterized API paths ({player_id}) correctly skipped

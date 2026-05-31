@@ -15,6 +15,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ## Entries
 
+2026-05-31 | Bureau schedule tab | da33eafd | keep | BureauStrengthOfSchedule + empty HIDDEN_BUREAU_SLUGS; build+pytest PASS; League L5 epic complete
 2026-05-31 | Bureau waiver tendencies tab | eabf1b8c | keep | BureauWaiverTendencies + unhide slug; build+pytest PASS
 2026-05-31 | Bureau build profiles tab | 367786d3 | keep | BureauBuildProfiles + unhide slug; build+pytest PASS
 2026-05-31 | Bureau Self-Scout copy link | 3fc08ebc | keep | copyScoutLink row; curl self-scout 66997B

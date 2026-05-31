@@ -15,6 +15,7 @@ new evidence.
 
 ## Entries
 
+2026-05-31 | Bureau schedule unhide | league-schedule-tab | SHIP | T2/T5/T6 — closes League L5 unhide epic; all Bureau tabs bespoke
 2026-05-31 | Bureau waiver tendencies unhide | league-waiver-tendencies-tab | SHIP | T2/T5/T6 — FAAB/streamer archetypes in League L5 epic atom 5/6
 2026-05-31 | Bureau build profiles unhide | league-build-profiles-tab | SHIP | T2/T5/T6 — construction archetypes per manager in League L5 epic atom 4/6
 2026-05-30 | Lab L5 OG export cards with live data compound the Explore L5 watermarked export pattern | Lab L5 OG — DEPTH.md L5 "OG card per panel matches in-product export" | SHIP | keep | T5+T6 — screenshot gravity via real data rows not branding cards; agent badges differentiate from generic SaaS

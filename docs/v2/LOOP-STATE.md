@@ -1,11 +1,12 @@
-cycle: 84
+cycle: 85
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: league-schedule-tab (epic atom 6/6)
-last_keep_cycle: 84
-last_commit: eabf1b8c
-league_l5_unhide_bureau_epic: in_progress
+next_slice: see docs/company/NEXT.md (Lab OG live rows lead)
+last_keep_cycle: 85
+last_commit: da33eafd
+league_l5_unhide_bureau_epic: complete
+league_l5_schedule_tab: complete
 league_l5_roster_depth_tab: complete
 league_l5_power_rankings_tab: complete
 lab_l5_og_snapshot_launch10: complete
