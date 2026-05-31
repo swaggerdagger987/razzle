@@ -1,31 +1,33 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
-  "epic": "Lab L5 — OG hallway deep links (atom 3/3)",
-  "slice_title": "Snapshot exports preserve player in OG toLab watermark band",
-  "atom_id": "lab-og-tolab-snapshot-player",
-  "parity_ref": "Lab panel OG data rows",
+  "atom_id": "lab-og-tolab-strengths-default",
+  "big_problem": "Pro player-scoped Lab OG cards still drop default Ja'Marr from the toLab watermark — strengths export lands on generic /lab/strengths without Player Sheet hallway.",
+  "epic": "Lab L5 — pro panel OG toLab hallway",
+  "slice_title": "Strengths OG watermark — toLab includes default player_id",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — snapshot OG PNG ≥40KB + pid in watermark",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with hallway path",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/LabOgExportLink.tsx",
     "apps/web/app/og/[panel]/route.tsx",
     "apps/api/tests/test_lab_og_tolab_watermark.py"
   ],
-  "max_files": 3,
-  "max_lines": 120,
+  "max_files": 2,
+  "max_lines": 15,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
-    "npm run build --workspace=apps/web"
+    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-strengths.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/strengths?download=1&player_id=00-0036900'"
   ],
   "out_of_scope": [
+    "Weekly/rankings renderer playerId wiring",
     "NORTH_STAR/DESIGN/DECISIONS edits",
-    "other Launch-10 renderers",
-    "snapshot row shape changes beyond optional pid wrapper"
+    "Bureau H2H export"
   ],
   "builder_mode": "composer-surgical",
-  "content_commit": "1a12d9c0b",
-  "reality": "PASS",
-  "merge": "pending"
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP"
+  }
 }
