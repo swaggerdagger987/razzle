@@ -26,11 +26,12 @@
   ],
   "next_atom_id": "lab-pro-weekly-paywall-copy",
   "created_at": "2026-05-31T06:12:00Z",
-  "updated_at": "2026-05-31T06:12:00Z",
-  "last_cycle_commit": null,
+  "updated_at": "2026-05-31T06:18:00Z",
+  "last_cycle_commit": "dacfe8cd",
   "closing_epic": {
     "epic_title": "Lab L5 — OG snapshot row fidelity",
     "final_atom_id": "lab-og-breakouts-score-ranked",
-    "status": "in_progress"
+    "status": "done",
+    "merge_commit": "dacfe8cd"
   }
 }
