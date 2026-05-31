@@ -33,3 +33,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Bureau Power Rankings | 131ee281 | keep | beyond W-L differential boards share in league chats
 2026-05-31 | Bureau Trade Finder | b11ed616 | keep | fair-trade OG cards with give/get rows for league DMs
 2026-05-31 | Bureau Trade Network | 07e4fc71 | keep | partnership graph OG + copy link for collusion-thread screenshots
+2026-05-31 | Lab Breakouts snapshot | da33eafd | keep | Hawkeye RBS leaders encoded in export URL for screenshot parity

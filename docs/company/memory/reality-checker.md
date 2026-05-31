@@ -33,3 +33,4 @@ explicit checks in the verification routine.
 2026-05-31 | Bureau Power Rankings OG Gate C | 131ee281 | PASS | curl power-rankings 63022B PNG | keep | evidence/2026-05-31-bureau-power-rankings-og.md
 2026-05-31 | Bureau Trade Finder share Gate C | b11ed616 | PASS | curl trade-finder 57813B PNG | keep | evidence/2026-05-31-bureau-trade-finder-share.md
 2026-05-31 | Bureau Trade Network share Gate C | 07e4fc71 | PASS | curl trade-network 68199B PNG | keep | evidence/2026-05-31-bureau-trade-network-share.md
+2026-05-31 | Lab Breakouts snapshot Gate C | da33eafd | PASS | curl breakouts 60649B demo / 40704B snap | keep | evidence/2026-05-31-lab-breakouts-og-snapshot.md

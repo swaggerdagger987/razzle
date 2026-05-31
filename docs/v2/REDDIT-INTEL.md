@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab Breakouts OG snapshot (cycle 83)
+- **Angle:** Breakout boards screenshot with the same RBS leaders users sorted in-panel — not generic demo names.
+- **Screenshot hook:** Hawkeye breakout card with top-6 RBS/formula rows encoded in export link.
+
 ### 2026-05-31 — Bureau Trade Network (cycle 82)
 - **Angle:** Partnership graphs travel — copy network link + Bones OG card with hottest trade pairs for league chat.
 - **Screenshot hook:** Hottest partnership callout + edge list on export card.

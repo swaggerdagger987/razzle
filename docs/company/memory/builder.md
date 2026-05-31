@@ -33,3 +33,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Bureau Power Rankings OG | 131ee281 | keep | og/power-rankings route + copy board; curl 63022B
 2026-05-31 | Bureau Trade Finder share | b11ed616 | keep | header copy finder link + export; curl trade-finder 57813B
 2026-05-31 | Bureau Trade Network share | 07e4fc71 | keep | header copy network link + export; curl trade-network 68199B
+2026-05-31 | Lab Breakouts OG snapshot | da33eafd | keep | ogSnapshotRows top-6 RBS; snapshotRows on LabOgExportLink; curl 60649B / snap 40704B
