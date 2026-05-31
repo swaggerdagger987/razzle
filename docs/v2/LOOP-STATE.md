@@ -4,7 +4,7 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: lab-efficiency-og-live-extract
 last_keep_cycle: 94
-last_commit: da33eafd
+last_commit: 59c05e93
 lab_l5_live_og_epic: active
 lab_l5_rankings_og_live_blurb: complete
 lab_l5_aging_og_live_extract: complete

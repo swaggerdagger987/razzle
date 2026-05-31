@@ -1,5 +1,6 @@
 # Memory — Data Researcher
 
+- **2026-05-31:** No new intel — rankings OG slice; dynasty API shape documented in legacy dynasty.py.
 - **2026-05-31:** No new Reddit intel — aging OG slice used existing nflverse terminal path.
 
 Append-only log of recurring user pain patterns, language signals, and feature-gap
