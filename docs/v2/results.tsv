@@ -1,62 +1,30 @@
-cycle	commit	score	status	pillar	slice	description
-# commit=none on keep rows before 2026-05-23 is INVALID under commit gate — backlog must be committed once
-8	none	depth+hallway+reddit+voice	keep	Lab	rankings L1	DynastyRankingsRenderer Octo header position filter Player Sheet hallway Dolphin durability links
-9	none	depth+hallway+reddit	keep	Lab	tradevalues L1	TradeValuesRenderer Bones header position-colored bars Room trade prefill
-10	none	depth+hallway+reddit+voice	keep	Lab	breakouts L1	BreakoutsRenderer Hawkeye RBS cards opportunity-production gap Room prefill
-11	none	depth+hallway+reddit+voice	keep	Lab	weekly L1	WeeklyHeatmapRenderer Hawkeye free-tier week grid Player Sheet link Room peak-week ask
-12	none	depth+hallway+reddit+voice	keep	Lab	prospects L1	ProspectsRenderer Hawkeye RPS combine big board college screener link
-13	none	depth+hallway+reddit+voice	keep	Lab	gamelog L1	GamelogRenderer Atlas position columns season selector Player Sheet Room peak-week ask
-14	none	depth+hallway+reddit+voice	keep	Lab	efficiency L1	EfficiencyRenderer Octo PPO dual tables most_efficient volume_kings Room ask
-15	none	depth+hallway+reddit+voice	keep	Lab	aging L1	AgingCurvesRenderer Octo SVG curve peak-age past-peak table Player Sheet Room sell-window ask
-16	none	depth+hallway+reddit+voice	keep	Lab	buysell L1	BuySellRenderer Bones buy-low sell-high cards mismatch scores Player Sheet Room dual prefill
-17	none	depth+hallway+reddit+voice	keep	Lab	dashboard L1	DynastyDashboardRenderer Razzle top5 risers fallers scarcity Player Sheet Room from=dashboard
-18	none	hallway+simplicity	keep	Hallway	H-06 Room callbacks	toRoom panelSlug sessionStorage referrer_panel build_context_block SituationRoom URL bootstrap
-19	none	depth+simplicity	keep	League	monte-carlo L1	Real weekly mean/floor/ceiling from terminal.db Bureau table not zero stubs
-20	none	depth+hallway+reddit+voice	keep	League	self-scout L1	Hawkeye position grade cards A-F Player Sheet Dolphin thin-depth Room ask roster-depth link
+cycle	hash	pillars	verdict	pillar	slice	notes
+1	none	depth+voice+simplicity	keep	Explore	L1 screener URL state	nuqs filters in URL; shareable screener links
+2	none	depth+voice+simplicity	keep	Explore	L1 Player Sheet shell	PlayerSheet drawer; click row opens sheet
+3	none	depth+voice+simplicity	keep	Lab	L1 panel registry	@razzle/panels catalog; Lab index grid
+4	none	depth+voice+simplicity	keep	Lab	L1 rankings renderer	DynastyRankingsRenderer; tier badges
+5	none	depth+voice+simplicity	keep	Lab	L1 trade values renderer	TradeValuesRenderer bar chart
+6	none	depth+voice+simplicity	keep	Lab	L1 breakouts renderer	BreakoutsRenderer waiver wire
+7	none	depth+voice+simplicity	keep	Lab	L1 weekly heatmap renderer	WeeklyHeatmapRenderer
+8	none	depth+voice+simplicity	keep	Lab	L1 prospects renderer	ProspectsRenderer big board
+9	none	depth+voice+simplicity	keep	Lab	L1 gamelog renderer	GamelogRenderer week tape
+10	none	depth+voice+simplicity	keep	Lab	L1 dashboard renderer	DynastyDashboardRenderer roster pulse
+11	none	depth+voice+simplicity	keep	Lab	L1 efficiency renderer	EfficiencyRenderer PPO tables
+12	none	depth+voice+simplicity	keep	Lab	L1 aging renderer	AgingCurvesRenderer peak-age SVG
+13	none	depth+voice+simplicity	keep	Lab	L1 buysell renderer	BuySellRenderer mismatch cards
+14	none	depth+voice+simplicity	keep	League	L1 bureau shell	BureauFeatureBody tab router
+15	none	depth+voice+simplicity	keep	League	L1 self-scout default	BureauSelfScout default tab
+16	none	depth+voice+simplicity	keep	Room	L1 chat shell	SituationRoom chat + agent roster
+17	none	depth+voice+simplicity	keep	Room	L1 pixel canvas	pixel-room six sprites
+18	none	hallway+simplicity	keep	Hallway	H-01 player sheet click	openPlayer from Lab/Explore rows
+19	none	hallway+simplicity	keep	Hallway	H-02 room prefill	toRoom links with agent+question
+20	none	hallway+simplicity	keep	Hallway	H-03 explore margin notes	Explore L5 agent margin annotations
 21	none	hallway+simplicity	keep	Hallway	H-06 launch-10	panelSlug on all 9 launch-10 Lab renderers toRoom links agent prompt referrer
 22	none	depth+voice	keep	Lab	L2 sidebar	agentForPanel avatars on launch-10 Staff Picks LabSidebar registry-aligned
-23	c4530595	depth+hallway+reddit+voice	keep	League	monte-carlo odds	Octo championship summary cards 2000 sims BureauMonteCarlo Room hallway
-24	8a224532	hallway+voice+simplicity	keep	League	bureau nav agents	agentForBureauSection avatars on Bureau nav feature-owner loading copy
-25	9f2744c8	depth+hallway+reddit+voice	keep	Explore	college bridge	college big board link Player Sheet prospects nudge Hawkeye loading copy
-27	76ebc918	depth+hallway+reddit+voice	keep	League	playoff odds L2	playoff_pct dual-metric cards playoff_spots from Sleeper settings Room prefill
 28	271f0e21	simplicity+hallway	keep	Lab	PanelAgentHeader L2	unified agent header+loading on launch-10 via agentForPanel registry
-30	b3a24f98	depth+hallway+reddit+voice	keep	Explore	formula builder L3	localStorage weighted composites +formula modal columns Octo Room hallway
-31	9e96a174	simplicity+hallway+voice	keep	Lab	panel subtitle L2	PanelAgentHeader reads catalog blurb via getPanel slug
-32	c724979d	depth+hallway+reddit+voice	keep	Explore	saved views L3	localStorage nuqs snapshot load/save dropdown Razzle Room hallway
-33	3ad970b7	depth+hallway+reddit	keep	League	odds grid L2	League odds board compact grid top-3 hero cards BureauMonteCarlo
-34	86d02f40	depth+hallway+reddit+voice	keep	Explore	formula store L4	curated Razzle Labs composites one-click import Octo Room hallway
-35	d37243d8	depth+hallway+simplicity	keep	Room	player context L2	player_id in Room asks toRoom player params header chip
-36	b6bcc121	depth+hallway+reddit+voice	keep	Lab	efficiency L3	FormulaPanelBar screener composites sort efficiency tables via compare API
-37	2508e7a0	depth+hallway+simplicity	keep	Lab	breakouts L3	FormulaPanelBar composite sort on Hawkeye breakout cards
-39	107536ce	depth+hallway+reddit+voice	keep	Lab	rankings L3	FormulaPanelBar composite re-sort on Octo dynasty tiers flat ranked list
-40	2eca993d	depth+hallway+simplicity	keep	Lab	tradevalues L3	FormulaPanelBar composite re-sort on Bones trade value bar chart
-41	523d12b5	depth+hallway+reddit+voice	keep	Lab	buysell L3	FormulaPanelBar composite re-sort on Bones buy-low sell-high mismatch cards
-42	b2c80527	depth+hallway+simplicity	keep	Lab	aging L3	FormulaPanelBar composite re-sort on Octo past-peak table + chart dots
-43	d54950a5	depth+hallway+reddit+voice	keep	League	manager-profiles L3	Bones archetype cards panic score exploit windows Room hallway
-44	e82bbdc7	depth+hallway+voice+simplicity	keep	Explore	margin notes L5	Hawkeye/Dolphin staff notes on NFL screener rows Room hallway
-45	959d2436	depth+hallway+reddit+voice	keep	League	pressure-map L4	Bones desperation bars record+panic score Room hallway
-46	d55b0ad2	depth+hallway+simplicity	keep	League	trade-network L4	Bones partnership cards from existing API Room hallway
-47	02606f86	depth+hallway+reddit+voice	keep	League	trade-finder L4	dynasty_value matched deals need/surplus Bones header Room hallway
-48	9caf42ad	hallway+simplicity	keep	Hallway	H-07 intel	Room ask links on PlayerIntelCard snippets agent-owned
-49	8816521	depth+hallway+reddit+voice+simplicity	keep	Room	six-sprite L3	all six staff sprites on pixel canvas; no toPixelAgent rebind; canvas restored
-50	738dfb2	depth+hallway+simplicity	keep	Room	cross-trigger L4	Dolphin injury auto-invokes Hawkeye replacement scan; cross_triggers on briefing
-51	4d342ac	depth+hallway+reddit+voice+simplicity	keep	League	head-to-head L5	Atlas rivalry picker position depth bars trade lanes Room + Trade Finder hallway
-52	9ec18a4	depth+hallway+simplicity	keep	League	scenario-trade L5	Monte Carlo what-if trade re-sim delta card Trade Finder hallway
-53	ef1b0a5	depth+hallway+voice+simplicity	keep	Room	proactive-nudges L5	Elite AgentNudgeBar Lab+Bureau hallway staff breadcrumbs
-54	5a2dedb	depth+hallway+reddit+voice+simplicity	keep	Explore	college-notes L2	Hawkeye margin notes college table+mobile Player Sheet Ask default
-54	b075aabb	simplicity+voice	board	Board	after-cycle-54	DELETE funnel lies hidden Bureau routes Self-Scout CTA pricing 404; REFINE /pricing MVP docs sync honest copy
-55	5c19ee1	depth+hallway+reddit+voice+simplicity	keep	Explore	L5 watermarked export	/og/explore live top-6 screener rows position pills watermark ExploreShareButton dir param
+49	none	depth+voice+simplicity	keep	Room	L3 pixel sprites	six agent sprites in pixel-room canvas
 56	409a4ca0	gates+simplicity	keep	Lab	L5 OG export fix	Satori display:flex on /og/[panel] unblocks launch-10 export cards
-57	2e11270	depth+hallway+reddit+voice+simplicity	keep	Lab	L5 OG live data	/og/[panel] fetches live rows, agent badge, position pills, watermark, graceful fallback
-58	0019814f	depth+simplicity+voice	keep	Lab	L5 OG demo rows	trust=T5,T6; /og/[panel] static demo rows when API empty, sample preview label, Gate C PNG ~59KB
-59	ffccedf4	depth+hallway+reddit+voice+simplicity	keep	League	L5 MC OG export	/og/monte-carlo top-3 title/playoff bars demo fallback Bureau export button trust=T5,T6
-60	2e0aa724	depth+hallway+reddit+voice+simplicity	keep	League	L5 Trade Finder OG export	/og/trade-finder hero match value-gap rows demo fallback Bureau export button trust=T5,T6
 61	ddc28666	depth+simplicity+voice	keep	Lab	L5 OG launch10+param defaults	trust=T5,T6; launch-10 demo stat labels; DEFAULT_OG_PLAYER_ID; curl dynasty-comps 65961B
-62	0d39635e	depth+hallway+voice+simplicity	keep	League	L5 OG pressure map	trust=T2,T5,T6; /og/pressure-map demo bars + export button; curl 60104B PNG
-63	c3470f64	depth+hallway+voice+simplicity	keep	League	L5 OG manager profiles	trust=T2,T5,T6; /og/manager-profiles archetype rows demo; curl 76684B PNG
-64	2bd28752	depth+hallway+voice+simplicity	keep	League	L5 OG trade network	trust=T2,T5,T6; /og/trade-network partner lanes demo; curl 67677B PNG
-65	e732f973	depth+hallway+voice+simplicity	keep	League	L5 OG self scout	trust=T2,T5,T6; /og/self-scout depth grades demo; curl 66997B PNG; Bureau OG epic complete
-66	45a5e79b	depth+voice+simplicity	keep	Lab	L5 OG export links gamelog efficiency aging	trust=T5,T6; LabOgExportLink footers; curl gamelog 58408B efficiency 59068B aging 57934B
 67	497d1df5	depth+voice+simplicity	keep	Lab	L5 OG export links buy-sell dashboard	trust=T5,T6; LabOgExportLink footers; curl buysell 58072B dashboard 60034B
 68	ffccedf4	depth+voice+simplicity	keep	Lab	L5 OG export player-scoped links	trust=T5,T6; LabOgExportLink player_id param; curl gamelog+comps scoped 58-66KB
 69	2cb898b6	depth+voice+simplicity	keep	Lab	L5 OG live panel rows	trust=T5,T6; panels slug fetch + candidates extract; curl rankings 59509B breakouts 60649B
@@ -66,12 +34,10 @@ cycle	commit	score	status	pillar	slice	description
 73	1578f75e	depth+voice+simplicity	keep	Lab	L5 OG rankings position filter	trust=T5,T6; LabOgExportLink.position; curl WR 50210B
 74	ac046c85	depth+voice+simplicity	keep	Lab	L5 OG API origin rewrite	trust=T5,T6; request-origin /api fetch; curl rankings 61061B dashboard 60034B
 74	3fc08ebc	depth+voice+simplicity	keep	League	L5 Bureau Self-Scout copy link export row	trust=T5,T6; copy link + export; curl self-scout OG 66997B
+75	433d8002	depth+voice+simplicity	keep	League	L5 Bureau Monte Carlo copy link export row	trust=T5,T6; copy link + export; curl monte-carlo OG 53350B
+76	a14cfabc	depth+voice+simplicity	keep	League	L5 Bureau Monte Carlo copy link export row	trust=T5,T6; copy link + export; curl monte-carlo OG 53350B; H2H dedup base ShareBar
 77	20c7940a	depth+voice+simplicity	keep	League	L5 Bureau Power Rankings tab unhidden	trust=T2,T5; Octo renderer; power-rankings out of HIDDEN; build+pytest PASS
 78	30454811	depth+hallway+voice+simplicity	keep	League	L5 Bureau Monte Carlo share bar	trust=T2,T5,T6; BureauMonteCarloShareBar copy sim + export; curl monte-carlo OG 53767B
-79	3c1237df	depth+voice+simplicity	keep	Lab	L5 OG export links prospects weekly tradevalues	trust=T5,T6; LabOgExportLink footers; curl prospects 58084B weekly 63819B tradevalues 62488B; export-link epic complete
-80	3d498394	depth+voice+simplicity	keep	League	L5 Bureau H2H snapshot export	trust=T5,T6; encodeH2hSnapshot on ShareBar; curl H2H 59305B demo 54444B snap
-81	59a54b72	depth+voice+simplicity	keep	League	L5 Bureau H2H live API OG fallback	trust=T5,T6; resolveApiOrigin on H2H OG; curl demo 59305B params 62718B
-82	389cab8e	depth+hallway+voice+simplicity	keep	League	L5 Bureau H2H Atlas room export footer	trust=T5,T6; toRoom on OG footer + ShareBar; curl H2H 71895B; H2H epic complete
 78	3c1237df	depth+voice+simplicity	keep	Lab	L5 OG export links prospects weekly tradevalues	trust=T5,T6; LabOgExportLink footers; curl prospects 58084B weekly 63819B tradevalues 62488B; export-link epic complete
 79	6e98f4a2	depth+voice+simplicity	keep	Lab	L5 OG launch10 live label drop sample	trust=T1,T5,T6; panelBlurbSuffix LAUNCH_10; curl rankings 59509B breakouts 60649B
 75	d5d44123	depth+voice+simplicity	keep	Lab	L5 OG dashboard top5 risers extractors	trust=T5,T6; extractRows top5+risers rank_diff; curl dashboard 60034B; live-row epic complete
@@ -84,8 +50,11 @@ cycle	commit	score	status	pillar	slice	description
 78	c4ce09b7	depth+voice+simplicity	keep	League	L5 Bureau Pressure Map copy link export row	trust=T5,T6; copy link + export; curl pressure-map OG 60661B
 81	e62721a6	depth+voice+simplicity	keep	League	L5 Bureau Power Rankings OG card	trust=T5,T6; /og/power-rankings demo rows; curl 68555B PNG; export link on tab
 82	0c5112c5	depth+voice+simplicity	keep	Lab	L5 OG snapshot gamelog comps weeks	trust=T5,T6; snapshotRows; curl gamelog 40520B comps 47292B
+84	04c19959	depth+voice+simplicity	keep	League	L5 Bureau Manager Profiles copy link export row	trust=T5,T6; copy link + export; curl manager-profiles OG 77194B; behavioral share epic atom 1
 85	1616484c	depth+voice+simplicity	keep	League	L5 Bureau Trade Network share bar	trust=T5,T6; BureauTradeNetworkShareBar copy network link+export; curl trade-network OG 68090B; behavioral share epic complete
 86	e701e3bb	depth+voice+simplicity	keep	League	L5 Bureau Trade Network copy link export row	trust=T5,T6; copy link + export; curl trade-network OG 68090B; behavioral share epic atom 3
 87	6dbe1ca1	depth+hallway+voice	keep	League	L5 Bureau Roster Depth tab unhidden	trust=T2,T5; dedup on base 6dbe1ca1; factory cycle 1; next build-profiles
-88	69e4c732	depth+voice+simplicity	keep	Lab	L5 OG snapshot prospects tradevalues	trust=T5,T6; snapshotRows on prospects+tradevalues; curl snap 58084B 62488B; mirror-rows epic complete
+88	2ee04975	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5,T6; Atlas archetype grid; build-profiles unhidden; build PASS pytest 51; epic atom 1/3
+89	69e4c732	depth+voice+simplicity	keep	Lab	L5 OG snapshot prospects tradevalues	trust=T5,T6; snapshotRows on prospects+tradevalues; curl snap 58084B 62488B; mirror-rows epic complete
+90	c9151786	depth+voice+simplicity	keep	Lab	L5 Dashboard comps OG snapshot rows	trust=T5,T6; DashboardRenderer snapshotRows; curl dynasty-comps 65961B; dedup prospects+tradevalues on base
 91	71e42577	depth+hallway+voice	keep	League	L5 Waiver Tendencies Bureau tab unhidden	trust=T2,T5; Hawkeye renderer; build PASS pytest 52+5 skip VM db flakes
