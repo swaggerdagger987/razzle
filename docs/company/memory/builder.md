@@ -6,7 +6,7 @@
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | launch10Demo* helpers + pytest guard.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
-2026-05-31 | lab-og-tolab-strengths-default | PLACEHOLDER | SHIP | strengths in TOLAB set; pytest guard.
+2026-05-31 | lab-og-tolab-strengths-default | 4b4ee4be1 | SHIP | strengths in TOLAB set; pytest guard.
 # Memory — Builder
 
 2026-05-31 | lab-og-watermark-display-name | 338709883 | SHIP | playerName on export + watermark display name; pytest 6.
