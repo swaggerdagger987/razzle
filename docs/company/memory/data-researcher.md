@@ -1,6 +1,7 @@
 2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | PASS | No new Reddit intel.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | PASS | No new Reddit intel.
 2026-05-31 | lab-og-tolab-weekly-position | — | PASS | No new Reddit intel.
+2026-05-31 | league-pressure-map-og-room-hallway | f6e0985f3 | PASS | Reddit intel: deadline pressure screenshots travel with Bones ask.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | No new Reddit intel; empty weekly export unblocks heatmap tape screenshots.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | No new intel.

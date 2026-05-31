@@ -1,37 +1,49 @@
 {
   "epic_status": "active",
-  "big_problem": "Bureau H2H rivalry exports don't signal in-panel snapshot trust \u2014 group chats can't tell exported rivalry rows from live Sleeper pulls.",
-  "epic_title": "League L5 \u2014 Bureau H2H GTM export",
-  "parity_ref": "Explore L5 \u2014 Bureau H2H export or Lab panel OG data rows",
+  "big_problem": "Bureau Pressure Map export cards dead-end at league URLs — desperation screenshots should prefill Bones in the Situation Room.",
+  "epic_title": "League L5 — Bureau Pressure Map GTM export",
+  "parity_ref": "League L5 hidden Bureau / watermarked export",
   "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "bureau-h2h-og-exported-sticker",
-      "title": "H2H OG EXPORTED sticker when snapshot param present",
-      "status": "done",
-      "merge_commit": "5b60ea23d"
+      "id": "league-pressure-map-og-room-hallway",
+      "title": "Pressure Map OG Bones Room hero ask line",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "bureau-h2h-og-exported-pytest",
-      "title": "pytest guard for H2H snapshot EXPORTED sticker + ShareBar encode",
+      "id": "league-pressure-map-og-watermark-band",
+      "title": "Pressure Map OG terracotta watermark band",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "bureau-h2h-og-gate-c-snapshot",
-      "title": "Gate C curl evidence for H2H snapshot OG PNG",
+      "id": "league-pressure-map-og-snapshot-rows",
+      "title": "Pressure Map snapshot export encodes top pressure rows",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-h2h-og-exported-pytest",
-  "created_at": "2026-05-31T20:00:00Z",
-  "updated_at": "2026-05-31T20:30:00Z",
+  "next_atom_id": "league-pressure-map-og-room-hallway",
+  "created_at": "2026-05-31T11:35:00Z",
+  "updated_at": "2026-05-31T11:42:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l5-og-hallway-deep-links",
+      "status": "complete",
+      "last_atom": "lab-og-tolab-snapshot-player",
+      "merge_commit": "8327741f6"
+    },
+    {
+      "id": "lab-l5-launch10-og-demo-trust-labels",
+      "status": "complete",
+      "last_atom": "lab-og-launch10-demo-blurbs",
+      "merge_commit": "3705fdce8"
+    },
     {
       "id": "league-l5-trade-finder-gtm",
       "status": "complete",
-      "last_atom": "league-trade-finder-og-room-hallway",
+      "last_atom": "league-trade-finder-room-hallway",
       "merge_commit": "c8091030c"
     }
   ]

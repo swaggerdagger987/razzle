@@ -1,29 +1,31 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermarks omit default position filters — efficiency exports click back to an unscoped PPO board.",
-  "epic": "Lab L5 — OG hallway position defaults (atom 2/3)",
-  "slice_title": "Efficiency OG watermark includes default RB position in toLab",
-  "atom_id": "lab-og-tolab-efficiency-position",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
+  "big_problem": "Bureau Pressure Map export cards dead-end at league URLs — desperation screenshots should prefill Bones in the Situation Room.",
+  "epic": "League L5 — Bureau Pressure Map GTM export",
+  "slice_title": "Pressure Map OG Bones Room hero ask line",
+  "atom_id": "league-pressure-map-og-room-hallway",
+  "parity_ref": "League L5 — Bureau H2H export (NEXT backup)",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2 + HALLWAY crossRoomLinkPresent",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/web/app/og/pressure-map/route.tsx",
+    "apps/api/tests/test_pressure_map_og_room_hallway.py"
   ],
   "max_files": 2,
-  "max_lines": 25,
+  "max_lines": 80,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
-    "npm run build --workspace=apps/web"
+    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_pressure_map_og_room_hallway.py -q --noconftest",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-pressure.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/pressure-map?download=1'"
   ],
-  "out_of_scope": ["other renderers", "billing", "NORTH_STAR edits"],
+  "out_of_scope": ["Snapshot encode", "API schema", "NORTH_STAR/DESIGN/DECISIONS"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+    "verdict": "SHIP"
+  },
+  "status": "in_progress"
 }
