@@ -1,5 +1,5 @@
 {
-  "big_problem": "Lab navigation hides agent ownership outside Staff Picks — the panel grid still looks anonymous before you open a panel.",
+  "big_problem": "Lab navigation hides agent ownership outside Staff Picks — sidebar search and panel grid still feel anonymous.",
   "epic_title": "Lab L2 — agent ownership visible in Lab navigation",
   "parity_ref": "H-04 — Six agents same ids everywhere",
   "depth_ref": "Lab L2",
@@ -11,17 +11,29 @@
       "merge_commit": "4e8b0e8e"
     },
     {
+      "id": "lab-sidebar-search-agent-labels",
+      "title": "Search results show agent owner in sidebar item title",
+      "status": "done",
+      "merge_commit": "e75ec714"
+    },
+    {
       "id": "lab-panel-grid-agent-avatars",
       "title": "Lab panel grid cards show agent avatar + owner name",
-      "status": "in_progress",
+      "status": "done",
       "merge_commit": "1cecde2a"
     }
   ],
   "next_atom_id": null,
   "epic_status": "complete",
   "created_at": "2026-05-31T14:00:00Z",
-  "updated_at": "2026-05-31T14:20:00Z",
+  "updated_at": "2026-05-31T14:25:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l2-sidebar-agent-ownership",
+      "status": "complete",
+      "last_atom": "lab-panel-grid-agent-avatars",
+      "merge_commit": "1cecde2a"
+    },
     {
       "id": "lab-l4-pro-gate-polish",
       "status": "complete",
