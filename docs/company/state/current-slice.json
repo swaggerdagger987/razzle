@@ -1,9 +1,9 @@
 {
   "date": "2026-05-31",
-  "atom_id": "bureau-trade-network-copy-link",
-  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
+  "atom_id": "bureau-trade-network-share-bar",
+  "big_problem": "Bureau-7 surfaces need copyable league URLs plus OG export on every tab.",
   "epic": "League L5 — Bureau behavioral share parity",
-  "slice_title": "Trade Network copy link + export share row",
+  "slice_title": "Trade Network ShareBar copy link + export",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "acceptance_ref": "FACTORY-DOD Gate C",

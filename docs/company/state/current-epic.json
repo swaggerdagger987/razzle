@@ -24,8 +24,8 @@
       "merge_commit": "90bf2dd5"
     },
     {
-      "id": "bureau-trade-network-copy-link",
-      "title": "Trade Network copy link beside export card",
+      "id": "bureau-trade-network-share-bar",
+      "title": "Trade Network ShareBar copy link + export",
       "status": "done",
       "merge_commit": "1616484c"
     },
@@ -38,6 +38,5 @@
   ],
   "next_atom_id": null,
   "created_at": "2026-05-31T04:44:00Z",
-  "updated_at": "2026-05-31T05:10:00Z",
-  "last_cycle_commit": "1616484c"
+  "updated_at": "2026-05-31T05:20:00Z"
 }
