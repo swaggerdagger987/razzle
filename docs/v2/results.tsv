@@ -71,3 +71,4 @@ cycle	commit	score	status	pillar	slice	description
 79	3c1237df	depth+voice+simplicity	keep	Lab	L5 OG export links prospects weekly tradevalues	trust=T5,T6; LabOgExportLink footers; curl prospects 58084B weekly 63819B tradevalues 62488B; export-link epic complete
 80	3d498394	depth+voice+simplicity	keep	League	L5 Bureau H2H snapshot export	trust=T5,T6; encodeH2hSnapshot on ShareBar; curl H2H 59305B demo 54444B snap
 81	59a54b72	depth+voice+simplicity	keep	League	L5 Bureau H2H live API OG fallback	trust=T5,T6; resolveApiOrigin on H2H OG; curl demo 59305B params 62718B
+82	da33eafd	depth+hallway+voice+simplicity	keep	League	L5 Bureau H2H Atlas room export footer	trust=T5,T6; toRoom on OG footer + ShareBar; curl H2H 71895B; H2H epic complete

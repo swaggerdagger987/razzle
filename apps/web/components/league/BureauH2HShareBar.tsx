@@ -1,6 +1,9 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import Link from "next/link";
+import type { Route } from "next";
+import { toRoom } from "@razzle/hallway";
 import { encodeH2hSnapshot, type H2hSnapshotPayload } from "./BureauOgExportLink";
 
 interface Props {
@@ -29,6 +32,17 @@ export function BureauH2HShareBar({ leagueId, userId, opponentId, snapshot }: Pr
   const snap = snapshot ? encodeH2hSnapshot(snapshot) : undefined;
   if (snap) ogParams.set("snapshot", snap);
 
+  const offer = (snapshot?.trade_fit?.you_could_offer ?? []).join(", ") || "—";
+  const want = (snapshot?.trade_fit?.you_could_target ?? []).join(", ") || "—";
+  const atlasRoomHref =
+    snapshot?.them?.team
+      ? (toRoom({
+          agentId: "atlas",
+          question: `How do I beat ${snapshot.them.team} (${snapshot.them.record})? I'm deeper at ${offer} and thin at ${want}.`,
+          panelSlug: "head-to-head",
+        }) as Route)
+      : null;
+
   const copyLink = useCallback(async () => {
     const url =
       typeof window !== "undefined"
@@ -56,6 +70,11 @@ export function BureauH2HShareBar({ leagueId, userId, opponentId, snapshot }: Pr
       >
         export card
       </a>
+      {atlasRoomHref && snapshot?.them ? (
+        <Link href={atlasRoomHref} className="text-xs text-orange underline">
+          ask Atlas about {snapshot.them.team} →
+        </Link>
+      ) : null}
     </div>
   );
 }

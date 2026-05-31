@@ -30,4 +30,5 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | league H2H export fidelity | 3d498394 | keep | rivalry cards must match Bureau panel for chat shares
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
+2026-05-31 | H2H export Atlas CTA | da33eafd | keep | opponent-named Room link on shared rivalry PNGs
 2026-05-31 | Bureau H2H live shares | 59a54b72 | keep | param URLs can refresh live rivalry when API up

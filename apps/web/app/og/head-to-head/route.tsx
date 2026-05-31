@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { toRoom } from "@razzle/hallway";
 
 export const runtime = "edge";
 
@@ -104,6 +105,10 @@ function teamLabel(name: string): string {
   return name.length > 18 ? `${name.slice(0, 16)}…` : name;
 }
 
+function atlasH2hRoomQuestion(them: TeamSummary, offer: string, want: string): string {
+  return `How do I beat ${them.team} (${them.record})? I'm deeper at ${offer} and thin at ${want}.`;
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
@@ -127,6 +132,14 @@ export async function GET(req: Request) {
   const offer = (data.trade_fit?.you_could_offer ?? []).join(", ") || "—";
   const want = (data.trade_fit?.you_could_target ?? []).join(", ") || "—";
   const hasData = Boolean(you && them);
+  const themSummary = them as TeamSummary;
+  const atlasRoomPath = hasData
+    ? toRoom({
+        agentId: "atlas",
+        question: atlasH2hRoomQuestion(themSummary, offer, want),
+        panelSlug: "head-to-head",
+      })
+    : "/room?agent=atlas&from=head-to-head";
 
   return new ImageResponse(
     (
@@ -272,7 +285,7 @@ export async function GET(req: Request) {
           </div>
         ) : null}
 
-        {/* Footer */}
+        {/* Footer — Bureau path + Atlas room deep-link (hallway T6) */}
         <div
           style={{
             display: "flex",
@@ -283,7 +296,14 @@ export async function GET(req: Request) {
             marginTop: 14,
           }}
         >
-          <div style={{ display: "flex" }}>razzle.lol/league{league ? `/${league}` : ""}/head-to-head</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <div style={{ display: "flex" }}>razzle.lol/league{league ? `/${league}` : ""}/head-to-head</div>
+            {hasData ? (
+              <div style={{ display: "flex", fontSize: 18, color: "#d97757" }}>
+                {`razzle.lol${atlasRoomPath} · ask ${atlas.name} about ${teamLabel(themSummary.team)}`}
+              </div>
+            ) : null}
+          </div>
           {isDownload ? (
             <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
               made with 🐯 razzle.lol

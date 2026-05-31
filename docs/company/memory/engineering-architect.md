@@ -30,4 +30,5 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
 2026-05-31 | encodeH2hSnapshot on ShareBar | 3d498394 | keep | BureauOgExportLink codec; OG from your panel label
+2026-05-31 | H2H OG Atlas hallway | da33eafd | keep | toRoom on edge OG footer; ShareBar link; no new deps
 2026-05-31 | resolveApiOrigin H2H OG | 59a54b72 | keep | snapshot → live → demo; mirrors Lab panel OG
