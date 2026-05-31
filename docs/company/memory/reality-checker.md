@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-career-compare-live | f6e0985f3 | PASS | pytest 2; curl career-compare 52967B; web build exit 0.
+2026-05-31 | lab-og-career-compare-live | 9a32bf547 | PASS | pytest 2; curl career-compare 52967B; web build exit 0.
 2026-05-31 | lab-og-percentiles-live-extract | 454db1c1d | PASS | pytest 2; curl percentiles 62517B; web build exit 0.
 2026-05-31 | lab-og-tolab-snapshot-player | aa5cc4b0d | PASS | pytest 4; curl snapshot-only 53042B; web build exit 0.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
@@ -11,7 +11,7 @@
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | PASS | curl dynasty-comps 54807B; pytest 2.
 
 
-2026-05-31 | room-briefing-watermark | f6e0985f3 | PASS | pytest 3; curl briefing OG 89235B PNG.
+2026-05-31 | room-briefing-watermark | 9a32bf547 | PASS | pytest 3; curl briefing OG 89235B PNG.
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | PASS | curl 200 59323B PNG; web build + pytest green.
 2026-05-31 | room-briefing-watermark Gate C | eca00c3f0 | PASS | curl 51866B export; pytest 5; build exit 0.
 2026-05-31 | lab-og-tolab-watermark | b80512bb4 | PASS | pytest 3; web build exit 0; curl rankings OG 66806B.

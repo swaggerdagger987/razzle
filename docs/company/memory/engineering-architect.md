@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-career-compare-live | f6e0985f3 | SHIP | 2-file contract; multi-fetch p1/p2/p3 capped at 3 players.
+2026-05-31 | lab-og-career-compare-live | 9a32bf547 | SHIP | 2-file contract; multi-fetch p1/p2/p3 capped at 3 players.
 2026-05-31 | lab-og-percentiles-live-extract | 454db1c1d | SHIP | 2-file contract; extractPercentilesRows mirrors strengths.
 2026-05-31 | lab-og-tolab-snapshot-player | aa5cc4b0d | SHIP | 3-file contract; backward-compat snapshot decode.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
@@ -9,7 +9,7 @@
 
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | PLAYER_SCOPED_LIVE_STICKER_SLUGS excludes Launch-10 gamelog.
 
-2026-05-31 | room-briefing-watermark | f6e0985f3 | 2 files; watermark band matches Explore/H2H OG pattern.
+2026-05-31 | room-briefing-watermark | 9a32bf547 | 2 files; watermark band matches Explore/H2H OG pattern.
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | 1 file GamelogRenderer; footer LabOgExportLink ≤15 lines.
 
 2026-05-31 | room-briefing-watermark | eca00c3f0 | 3 files; BriefingCard mirrors ExploreShareButton; OG band uses roomPath.
@@ -74,11 +74,11 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | fetchLiveOgRows + candidates | 2cb898b6 | keep | X-Razzle-Plan pro header; legacy API fallback chain
 2026-05-31 | BureauMonteCarlo clipboard | 433d8002 | keep | useCallback + copied state mirrors Self-Scout; no OG route change
-2026-05-31 | Bureau Monte Carlo clipboard | f6e0985f3 | keep | merge sync base Lab epic; OG Razzle spans; dedup H2H ShareBar
+2026-05-31 | Bureau Monte Carlo clipboard | 9a32bf547 | keep | merge sync base Lab epic; OG Razzle spans; dedup H2H ShareBar
 2026-05-31 | panelBlurbSuffix launch-10 | 6e98f4a2 | keep | 1 file; LAUNCH_10_OG_SLUGS mirrors LabSidebar STAFF_PICKS
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
-2026-05-31 | BureauTradeNetworkShareBar | f6e0985f3 | keep | mirrors MC share bar; league OG param unchanged
+2026-05-31 | BureauTradeNetworkShareBar | 9a32bf547 | keep | mirrors MC share bar; league OG param unchanged
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
-2026-05-31 | BureauBuildProfiles | f6e0985f3 | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
+2026-05-31 | BureauBuildProfiles | 9a32bf547 | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
 2026-05-31 | lab-og-rankings-tradevalues-live-sort | 7f78b631 | keep | 1 file route.tsx; PANEL_OG_STAT_KEY + tradevalues formula_score order

@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-career-compare-live | f6e0985f3 | SHIP | Career compare overlay completes pro profile OG trio before toLab atom.
+2026-05-31 | lab-og-career-compare-live | 9a32bf547 | SHIP | Career compare overlay completes pro profile OG trio before toLab atom.
 2026-05-31 | lab-og-percentiles-live-extract | 454db1c1d | SHIP | NEXT Lab OG live rows; percentiles before career atoms.
 2026-05-31 | lab-og-tolab-snapshot-player | aa5cc4b0d | SHIP | Lab L5 hallway epic complete; snapshot shares keep player in toLab.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
@@ -10,7 +10,7 @@
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | Dynasty comps OG LIVE comp matches sticker.
 
 
-2026-05-31 | room-briefing-watermark | f6e0985f3 | SHIP | Briefing exports carry terracotta brand + deep Room link for Reddit.
+2026-05-31 | room-briefing-watermark | 9a32bf547 | SHIP | Briefing exports carry terracotta brand + deep Room link for Reddit.
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | SHIP | Lab L5 empty OG epic atom 1/3; gamelog zero-week export for Reddit tape.
 2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | Room GTM epic closed; briefing screenshots deep-link to Situation Room.
 2026-05-31 | lab-og-tolab-watermark | b80512bb4 | SHIP | Lab OG exports click back via toLab; T6 hallway on Launch-10.
