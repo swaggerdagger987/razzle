@@ -13,7 +13,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
-2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | da33eafd | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
+2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | db109bfa | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
 
 ---
 
@@ -33,4 +33,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Lab OG live panel rows | 2cb898b6 | keep | fetchLiveOgRows panels slug + candidates extract; curl rankings 59509B breakouts 60649B
 2026-05-31 | Bureau H2H share bar | 044ee1e8 | keep | BureauH2HShareBar copy link + export; OG blurb Satori fix; curl 59305B
 2026-05-31 | Bureau Monte Carlo share bar | 3392bc29 | keep | BureauMonteCarloShareBar; curl monte-carlo OG 53767B
-2026-05-31 | bureau-h2h-og-snapshot-decode | da33eafd | keep | decodeBureauH2HOgSnapshot snapshot-first OG route
+2026-05-31 | bureau-h2h-og-snapshot-decode | db109bfa | keep | decodeBureauH2HOgSnapshot snapshot-first OG route

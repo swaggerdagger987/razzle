@@ -28,4 +28,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | fetchLiveOgRows + candidates | 2cb898b6 | keep | X-Razzle-Plan pro header; legacy API fallback chain
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
-2026-05-31 | bureau-h2h-og-snapshot-decode | da33eafd | keep | 2-file snapshot decode contract
+2026-05-31 | bureau-h2h-og-snapshot-decode | db109bfa | keep | 2-file snapshot decode contract
