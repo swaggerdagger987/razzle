@@ -9,7 +9,7 @@
       "id": "explore-og-watermark-band",
       "title": "Screener OG card shows always-on terracotta watermark band",
       "status": "done",
-      "merge_commit": "3e96ab7f"
+      "merge_commit": "64ed5b0b"
     },
     {
       "id": "explore-og-preview-watermark",
@@ -26,5 +26,14 @@
   ],
   "next_atom_id": "explore-og-preview-watermark",
   "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T12:00:00Z"
+  "updated_at": "2026-05-31T06:05:43Z",
+  "last_cycle_commit": "64ed5b0b",
+  "completed_epics": [
+    {
+      "id": "league-l5-unhide-bureau-tabs",
+      "status": "complete",
+      "last_atom": "league-strength-of-schedule-tab",
+      "merge_commit": "eb542d51"
+    }
+  ]
 }
