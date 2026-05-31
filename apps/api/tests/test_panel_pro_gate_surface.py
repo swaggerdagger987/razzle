@@ -92,3 +92,12 @@ def test_pro_gate_from_panel_error_wired_in_remaining_launch10(path: str):
 
 def test_pro_gate_from_panel_error_wired_in_dynasty_comps():
     _assert_pro_gate_renderer_path("apps/web/components/lab/renderers/DynastyCompsRenderer.tsx")
+
+
+def test_pro_gate_from_panel_error_wired_in_generic_panel_renderer():
+    panel_renderer = (
+        _repo_root() / "apps/web/components/lab/PanelRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "ProGateFromPanelError" in panel_renderer
+    assert "ProUpgradeGate" not in panel_renderer
+    assert "function GenericPanelRenderer" in panel_renderer
