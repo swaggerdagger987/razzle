@@ -1,8 +1,8 @@
-cycle: 146
+cycle: 147
 last_board_cycle: 54
-focus_pillar: Room
+focus_pillar: Lab
 focus_layer: L5
-next_slice: pick from PARITY/NEXT
-last_keep_cycle: 146
-last_commit: 252e421fa
-room_briefing_gtm_share_row: complete
+next_slice: lab-og-tradevalues-live-rank-labels
+last_keep_cycle: 147
+last_commit: HASH147
+lab_l5_og_live_rank_readout_epic: active

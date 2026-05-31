@@ -1,5 +1,7 @@
-2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Data Researcher
+
+2026-05-31 | lab-og-rankings-live-rank-labels | HASH147 | No new intel; Lab OG rank label slice.
+2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | No new intel; Lab formula OG slice only.
 

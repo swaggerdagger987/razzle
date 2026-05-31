@@ -74,12 +74,7 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
   aging: "ppg",
   buysell: "mismatch_score",
   dashboard: "rank_diff",
-  "dynasty-comps": "similarity",
-  strengths: "percentile",
 };
-
-/** Pro player-scoped Lab panels (not Launch-10) — LIVE trust sticker when API returns rows. */
-const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set(["dynasty-comps", "strengths"]);
 
 const LAUNCH_10_OG_SLUGS = new Set([
   "weekly",
@@ -120,13 +115,6 @@ function launch10LiveBlurbSuffix(slug: string): string {
     default:
       return " · live nflverse rows";
   }
-}
-
-function playerScopedLiveStickerLabel(slug: string): string {
-  if (slug === "dynasty-comps") return "LIVE · comp matches";
-  if (slug === "strengths") return "LIVE · top strengths";
-  if (slug === "gamelog") return "LIVE · Wk tape";
-  return "LIVE · panel rows";
 }
 
 function launch10LiveStickerLabel(slug: string): string {
@@ -185,9 +173,6 @@ function panelBlurbSuffix(
   if (slug === "dynasty-comps" && showingDemoRows) {
     return `${pos} · Pro comp preview · sample`;
   }
-  if (slug === "strengths" && showingDemoRows) {
-    return `${pos} · sample strength grades`;
-  }
   if (isSnapshot) {
     return `${pos} · from your panel`;
   }
@@ -199,12 +184,6 @@ function panelBlurbSuffix(
   }
   if (showingLiveData && LAUNCH_10_OG_SLUGS.has(slug)) {
     return `${pos}${launch10LiveBlurbSuffix(slug)}`;
-  }
-  if (showingLiveData && slug === "dynasty-comps") {
-    return `${pos} · live comp matches`;
-  }
-  if (showingLiveData && slug === "strengths") {
-    return `${pos} · live positional strengths`;
   }
   if (showingLiveData) {
     return `${pos} · live data`;
@@ -307,14 +286,6 @@ const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
     { name: "Xavier Worthy", position: "WR", team: "KC", stat: 7.5, statLabel: "Chg" },
     { name: "Stefon Diggs", position: "WR", team: "HOU", stat: -5.4, statLabel: "Chg" },
   ],
-  strengths: [
-    { name: "Target Share", position: "WR", team: "CIN", stat: 94, statLabel: "A+" },
-    { name: "Air Yards Share", position: "WR", team: "CIN", stat: 91, statLabel: "A" },
-    { name: "YAC/R", position: "WR", team: "CIN", stat: 88, statLabel: "B+" },
-    { name: "Red Zone Targets", position: "WR", team: "CIN", stat: 85, statLabel: "B+" },
-    { name: "Catch Rate", position: "WR", team: "CIN", stat: 82, statLabel: "B" },
-    { name: "First Downs", position: "WR", team: "CIN", stat: 79, statLabel: "B" },
-  ],
   "dynasty-comps": [
     { name: "Amon-Ra St. Brown", position: "WR", team: "DET", stat: 96, statLabel: "Match %" },
     { name: "CeeDee Lamb", position: "WR", team: "DAL", stat: 94, statLabel: "Match %" },
@@ -338,17 +309,8 @@ function dynastyCompsTeaserOgRows(): OgRow[] {
   }));
 }
 
-function strengthsTeaserOgRows(): OgRow[] {
-  const grades = ["A+", "A", "B+", "B+", "B", "B"];
-  return (DEMO_ROWS_BY_SLUG.strengths ?? DEFAULT_DEMO_ROWS).map((row, i) => ({
-    ...row,
-    statLabel: grades[i] ?? "Pct",
-  }));
-}
-
 function demoRowsForPanel(slug: string): OgRow[] {
   if (slug === "dynasty-comps") return dynastyCompsTeaserOgRows();
-  if (slug === "strengths") return strengthsTeaserOgRows();
   return DEMO_ROWS_BY_SLUG[slug] ?? DEFAULT_DEMO_ROWS;
 }
 
@@ -439,42 +401,36 @@ function extractProspectsRows(
   return [...rows].sort((a, b) => b.stat - a.stat).slice(0, 6);
 }
 
-/** Strengths OG — top percentile metrics (matches legacy player-strengths payload). */
-function extractStrengthsRows(
-  strengths: Record<string, unknown>[],
-  player?: Record<string, unknown>,
+/** Dynasty rankings — dynasty_value sort with #rank column (matches DynastyRankingsRenderer). */
+function extractRankingsRows(
+  players: Record<string, unknown>[],
+  positionFilter: string,
 ): OgRow[] {
-  const position = String(player?.position ?? player?.pos ?? "");
-  const team = String(player?.team ?? player?.team_abbr ?? "");
-  return strengths
-    .map((s) => ({
-      name: String(s.label ?? s.stat ?? s.metric ?? ""),
-      position,
-      team,
-      stat: Number(s.percentile ?? 0),
-      statLabel: String(s.grade ?? "Pct"),
-    }))
-    .filter((r) => r.name.trim().length > 0 && r.stat > 0)
+  let rows = players
+    .map((row, idx) => {
+      const rankRaw = row.rank ?? row.dynasty_rank ?? row.overall_rank;
+      const rank =
+        rankRaw != null && Number(rankRaw) > 0 ? Number(rankRaw) : idx + 1;
+      const value = Number(row.dynasty_value ?? row.value ?? 0);
+      return {
+        name: String(row.full_name ?? row.name ?? row.player_name ?? ""),
+        position: String(row.position ?? row.pos ?? ""),
+        team: String(row.team ?? row.team_abbr ?? ""),
+        stat: value > 0 ? value : rank,
+        statLabel: `#${rank}`,
+      };
+    })
+    .filter((r) => r.name.trim().length > 0);
+  if (positionFilter) {
+    rows = rows.filter((r) => r.position === positionFilter);
+  }
+  return [...rows]
     .sort((a, b) => b.stat - a.stat)
-    .slice(0, 6);
-}
-
-/** Dynasty comps OG — match % sort (matches DynastyCompsRenderer ogSnapshotRows). */
-function extractDynastyCompsRows(comps: Record<string, unknown>[]): OgRow[] {
-  return [...comps]
-    .map((c) => ({
-      name: String(c.full_name ?? c.name ?? c.player_name ?? ""),
-      position: String(c.position ?? c.pos ?? ""),
-      team: String(c.team ?? c.team_abbr ?? ""),
-      stat:
-        c.similarity != null
-          ? Number(c.similarity) * (Number(c.similarity) <= 1 ? 100 : 1)
-          : 0,
-      statLabel: "Match %",
-    }))
-    .filter((r) => r.name.trim().length > 0 && r.stat > 0)
-    .sort((a, b) => b.stat - a.stat)
-    .slice(0, 6);
+    .slice(0, 6)
+    .map((row, i) => ({
+      ...row,
+      statLabel: `#${i + 1}`,
+    }));
 }
 
 /** Gamelog OG — top weeks by FPTS (matches GamelogRenderer ogSnapshotRows). */
@@ -510,66 +466,14 @@ function statLabelForKey(k: string): string {
   if (k === "formula_score") statLabel = "Score";
   if (k === "rbs_score" || k === "breakout_score") statLabel = "RBS";
   if (k === "similarity") statLabel = "Match %";
-  if (k === "percentile") statLabel = "Pct";
   if (k === "rank_diff") statLabel = "Chg";
   return statLabel;
-}
-
-const BUYSELL_STAT_KEYS: string[] = [
-  "formula_score",
-  "mismatch_score",
-  "efficiency_pct",
-  "dynasty_rank_pct",
-  ...STAT_CANDIDATE_KEYS.filter(
-    (k) => !["formula_score", "mismatch_score", "efficiency_pct", "dynasty_rank_pct"].includes(k),
-  ),
-];
-
-function pickRowStat(row: Record<string, unknown>, statKeys: string[]): { stat: number; statLabel: string } {
-  for (const k of statKeys) {
-    if (k in row && row[k] != null) {
-      return { stat: Number(row[k] ?? 0), statLabel: statLabelForKey(k) };
-    }
-  }
-  return { stat: 0, statLabel: "Value" };
-}
-
-/** Buy/sell OG — mirrors BuySellRenderer lanes + formula_score priority. */
-function extractBuySellRows(obj: Record<string, unknown>, positionFilter: string): OgRow[] {
-  const buyLow = Array.isArray(obj.buy_low) ? (obj.buy_low as Record<string, unknown>[]) : [];
-  const sellHigh = Array.isArray(obj.sell_high) ? (obj.sell_high as Record<string, unknown>[]) : [];
-  if (!buyLow.length && !sellHigh.length) return [];
-
-  const filterPos = (rows: Record<string, unknown>[]) =>
-    positionFilter
-      ? rows.filter((r) => String(r.position ?? r.pos ?? "") === positionFilter)
-      : rows;
-
-  const toRow = (row: Record<string, unknown>, lane: "Buy" | "Sell"): OgRow => {
-    const { stat, statLabel } = pickRowStat(row, BUYSELL_STAT_KEYS);
-    return {
-      name: String(row.full_name ?? row.name ?? row.player_name ?? ""),
-      position: String(row.position ?? row.pos ?? ""),
-      team: String(row.team ?? row.team_abbr ?? ""),
-      stat,
-      statLabel: `${lane} · ${statLabel}`,
-    };
-  };
-
-  const buyRows = filterPos(buyLow).slice(0, 3).map((r) => toRow(r, "Buy"));
-  const sellRows = filterPos(sellHigh).slice(0, 3).map((r) => toRow(r, "Sell"));
-  return [...buyRows, ...sellRows].slice(0, 6);
 }
 
 function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[] {
   if (!data || typeof data !== "object") return [];
 
   const obj = data as Record<string, unknown>;
-
-  if (slug === "buysell") {
-    const buySellRows = extractBuySellRows(obj, positionFilter);
-    if (buySellRows.length > 0) return buySellRows;
-  }
 
   if (slug === "weekly" && Array.isArray(obj.players)) {
     const weeklyRows = extractWeeklyHeatmapRows(
@@ -596,23 +500,6 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
   if (slug === "gamelog" && Array.isArray(obj.weeks)) {
     const gamelogRows = extractGamelogWeekRows(obj);
     if (gamelogRows.length > 0) return gamelogRows;
-  }
-
-  if (slug === "dynasty-comps" && Array.isArray(obj.comps) && obj.comps.length > 0) {
-    const compRows = extractDynastyCompsRows(obj.comps as Record<string, unknown>[]);
-    if (compRows.length > 0) return compRows;
-  }
-
-  if (slug === "strengths" && Array.isArray(obj.strengths) && obj.strengths.length > 0) {
-    const player =
-      obj.player && typeof obj.player === "object"
-        ? (obj.player as Record<string, unknown>)
-        : undefined;
-    const strengthRows = extractStrengthsRows(
-      obj.strengths as Record<string, unknown>[],
-      player,
-    );
-    if (strengthRows.length > 0) return strengthRows;
   }
 
   let candidates: Record<string, unknown>[] = [];
@@ -678,38 +565,23 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
 
   if (candidates.length === 0) return [];
 
+  if (slug === "rankings") {
+    const rankingRows = extractRankingsRows(candidates, positionFilter);
+    if (rankingRows.length > 0) return rankingRows;
+  }
+
   const preferredKey = slug ? PANEL_OG_STAT_KEY[slug] : undefined;
   const tradeValueStatKeys: string[] = [
     "formula_score",
     "trade_value",
     ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "trade_value"),
   ];
-  const breakoutsStatKeys: string[] = [
-    "formula_score",
-    "rbs_score",
-    "breakout_score",
-    ...STAT_CANDIDATE_KEYS.filter(
-      (k) => k !== "formula_score" && k !== "rbs_score" && k !== "breakout_score",
-    ),
-  ];
-  const rankingsStatKeys: string[] = [
-    "formula_score",
-    "dynasty_value",
-    ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "dynasty_value"),
-  ];
-  const buysellStatKeys: string[] = [...BUYSELL_STAT_KEYS];
   const statKeys =
     slug === "tradevalues"
       ? tradeValueStatKeys
-      : slug === "breakouts"
-        ? breakoutsStatKeys
-        : slug === "rankings"
-          ? rankingsStatKeys
-          : slug === "buysell"
-            ? buysellStatKeys
-            : preferredKey
-              ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
-              : [...STAT_CANDIDATE_KEYS];
+      : preferredKey
+        ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
+        : [...STAT_CANDIDATE_KEYS];
 
   let statKey = "";
   let statLabel = "";
@@ -1070,27 +942,6 @@ export async function GET(
             }}
           >
             {launch10LiveStickerLabel(slug)}
-          </div>
-        ) : null}
-
-        {showingLiveData && PLAYER_SCOPED_LIVE_STICKER_SLUGS.has(slug) ? (
-          <div
-            style={{
-              fontFamily: "Caveat",
-              fontSize: 32,
-              color: "#f7efe5",
-              background: "#2ec4b6",
-              padding: "6px 18px",
-              alignSelf: "flex-start",
-              border: "3px solid #2d1f14",
-              borderRadius: 10,
-              boxShadow: "4px 4px 0 #2d1f14",
-              transform: "rotate(-2deg)",
-              marginBottom: 12,
-              fontWeight: 700,
-            }}
-          >
-            {playerScopedLiveStickerLabel(slug)}
           </div>
         ) : null}
 
