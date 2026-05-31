@@ -1,5 +1,6 @@
 2026-05-31 | explore-og-margin-note-lead | 75d90aca8 | SHIP | Factory open cycle 1; dedup base 0fc4932b7; margin epic atom 1 done.
-2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | Parallel PR #1364 merged lead-row margin on Explore OG.
+2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | Parallel base; efficiency RB in OG toLab watermark.
+2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | PR #1364 merged lead-row margin on Explore OG.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Factory cycle 153; weekly WR in OG watermark.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Factory open cycle 1; empty OG epic 3/3 complete; NO_LOCK_GUARDRAIL.
 

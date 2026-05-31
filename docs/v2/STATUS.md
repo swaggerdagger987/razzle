@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 154 — Explore OG lead-row margin note, dedup verified on base)
+**Last updated:** 2026-05-31 (factory cycle 154 — Explore OG margin note factory verify)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read

@@ -1,4 +1,5 @@
 2026-05-31 | explore-og-margin-note-lead | 75d90aca8 | keep | Screener OG lead mirrors ExploreMarginNote rules for Reddit GTM.
+2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | PASS | No new Reddit intel.
 2026-05-31 | lab-og-tolab-weekly-position | — | PASS | No new Reddit intel.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | No new Reddit intel; empty weekly export unblocks heatmap tape screenshots.
 
