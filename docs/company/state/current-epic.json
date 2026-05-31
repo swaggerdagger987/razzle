@@ -14,8 +14,8 @@
     {
       "id": "bureau-self-scout-copy-link",
       "title": "Self-Scout copy link beside export card",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "3fc08ebc"
     },
     {
       "id": "bureau-monte-carlo-copy-link",

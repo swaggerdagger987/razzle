@@ -4,7 +4,7 @@ focus_pillar: League
 focus_layer: L5
 next_slice: bureau-h2h-copy-link or bureau-monte-carlo-copy-link
 last_keep_cycle: 73
-last_commit: PLACEHOLDER
+last_commit: 3fc08ebc
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
