@@ -1,3 +1,4 @@
+2026-05-31 | explore-in-product-margin-parity | f6e0985f3 | SHIP | Margin epic 3/3; Staff column OG parity.
 2026-05-31 | explore-og-margin-note-demo-college | c1cc75b15 | SHIP | Explore margin epic atom 2/3; campus demo Gate C.
 2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | H2H snapshot EXPORTED trust — mirrors Trade Finder.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | Position hallway epic atom 2/3.

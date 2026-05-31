@@ -14,19 +14,19 @@
     {
       "id": "explore-og-margin-note-demo-college",
       "title": "College demo OG rows trigger campus margin notes",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "c1cc75b15"
     },
     {
       "id": "explore-in-product-margin-parity",
       "title": "Verify in-product Explore margin note matches OG lead copy",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "explore-og-margin-note-demo-college",
+  "next_atom_id": "explore-in-product-margin-parity",
   "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T11:47:12Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-hallway-position-defaults",

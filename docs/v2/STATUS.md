@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 155 — Explore college demo OG campus margin notes)
+**Last updated:** 2026-05-31 (factory cycle 156 — Explore in-product Staff margin OG parity)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 155 |
+| Cycle | 156 |
 | Last board | 54 |
 | Focus pillar | Explore |
 | Focus layer | L5 |
-| Next slice | explore-in-product-margin-parity (margin epic atom 3/3) |
-| Last commit | `c1cc75b15` |
+| Next slice | NEXT.md Lab L5 OG live data rows |
+| Last commit | `f6e0985f3` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

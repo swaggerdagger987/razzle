@@ -1,3 +1,4 @@
+2026-05-31 | explore-in-product-margin-parity | f6e0985f3 | SHIP | Shared marginNoteForOgExploreRow path; 3 files.
 2026-05-31 | explore-og-margin-note-demo-college | c1cc75b15 | SHIP | 3 files; college demo pytest guards ≤80 lines.
 2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | 2 files; isSnapshot EXPORTED sticker.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | 2 files; generalized default position.
