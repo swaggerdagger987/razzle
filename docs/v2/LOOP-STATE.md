@@ -1,10 +1,10 @@
-cycle: 79
+cycle: 80
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: league-roster-depth-tab
-last_keep_cycle: 79
-last_commit: a796f350
+next_slice: league-build-profiles-tab
+last_keep_cycle: 80
+last_commit: da33eafd
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
