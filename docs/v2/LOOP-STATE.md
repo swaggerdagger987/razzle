@@ -1,8 +1,10 @@
-cycle: 157
+cycle: 159
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: League
 focus_layer: L5
-next_slice: lab-og-percentiles-tolab
-last_keep_cycle: 157
-last_commit: 9d19930cf
-lab_l5_pro_profile_og_epic: atom 4/4 percentiles-tolab next
+next_slice: league-bureau-og-live-stickers
+last_keep_cycle: 159
+last_commit: 4854dd6e3
+league_l5_behavioral_og_epic: active
+lab_l5_og_hallway_epic: complete
+league_l5_trade_finder_gtm_epic: complete

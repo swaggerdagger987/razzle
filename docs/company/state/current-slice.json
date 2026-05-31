@@ -1,28 +1,27 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-career-compare-live",
-  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
-  "epic": "Lab L5 — pro profile OG live parity (atom 3/4)",
-  "slice_title": "Career compare OG multi-player overlay rows",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
+  "atom_id": "league-manager-profiles-og-watermark",
+  "big_problem": "Bureau Manager Profiles exports lack the terracotta OG watermark band — Reddit screenshots don't match Trade Finder/H2H GTM cards.",
+  "epic": "League L5 — Bureau behavioral OG parity (atom 1/2)",
+  "slice_title": "Manager Profiles OG terracotta watermark + ShareBar",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_career_compare_live.py"
+    "apps/web/app/og/manager-profiles/route.tsx",
+    "apps/web/components/league/BureauManagerProfilesShareBar.tsx",
+    "apps/web/components/league/BureauManagerProfiles.tsx",
+    "apps/api/tests/test_manager_profiles_og_watermark.py"
   ],
-  "max_files": 2,
-  "max_lines": 180,
+  "max_files": 4,
+  "max_lines": 120,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_lab_og_career_compare_live.py -q --noconftest",
-    "npm run build --workspace=apps/web"
+    "python3 -m pytest apps/api/tests/test_manager_profiles_og_watermark.py -q --noconftest",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/mp-og.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/manager-profiles?league=demo&download=1'"
   ],
-  "out_of_scope": [
-    "percentiles toLab atom",
-    "NORTH_STAR/DESIGN/DECISIONS",
-    "new npm deps"
-  ],
+  "out_of_scope": ["snapshot encode", "NORTH_STAR/DESIGN/DECISIONS"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
@@ -30,7 +29,6 @@
     "builder": "SHIP",
     "verdict": "SHIP 3/3"
   },
-  "content_commit": "9d19930cf",
-  "reality": "PASS",
-  "status": "done"
+  "status": "shipped",
+  "content_commit": "4854dd6e3"
 }

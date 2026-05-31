@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { toLeague } from "@razzle/hallway";
 
 export const runtime = "edge";
 
@@ -104,6 +105,7 @@ export async function GET(req: Request) {
   const hero = rows.find((r) => r.archetype === "PANIC SELLER") ?? rows[0];
   const heroTeam = isDemo ? DEMO_META.hero_team : hero?.team;
   const heroArchetype = isDemo ? DEMO_META.hero_archetype : hero?.archetype;
+  const leagueDeepLink = league ? toLeague(league, "manager-profiles") : "/league/manager-profiles";
 
   return new ImageResponse(
     (
@@ -220,22 +222,26 @@ export async function GET(req: Request) {
           })}
         </div>
 
+        {/* Always-on watermark band — matches Trade Finder + H2H OG (T6 screenshot gravity) */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-end",
+            alignItems: "center",
+            marginTop: 16,
+            padding: "10px 18px",
+            background: "#d97757",
+            color: "#f7efe5",
+            border: "3px solid #2d1f14",
+            borderRadius: 8,
+            boxShadow: "4px 4px 0 #2d1f14",
             fontSize: 20,
-            color: "#5c4a3d",
-            marginTop: 12,
           }}
         >
-          <div style={{ display: "flex" }}>{`razzle.lol/league${league ? `/${league}` : ""}/manager-profiles`}</div>
-          {isDownload ? (
-            <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
-              made with 🐯 razzle.lol
-            </div>
-          ) : null}
+          <div style={{ display: "flex", fontWeight: 700 }}>{`razzle.lol${leagueDeepLink}`}</div>
+          <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
+            {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
+          </div>
         </div>
       </div>
     ),
