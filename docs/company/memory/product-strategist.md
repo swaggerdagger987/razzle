@@ -33,3 +33,4 @@ new evidence.
 2026-05-31 | League hidden Bureau epic | roster-depth unhide | da33eafd | keep | PARITY League L5; moat tabs visible one atom at a time
 2026-05-31 | Lab OG live row parity epic atom 1 | 2cb898b6 | SHIP | keep | NEXT.md lead; panels slug + candidates on OG
 2026-05-31 | Bureau H2H export epic atom 1 | 044ee1e8 | SHIP | keep | PARITY Explore L5 H2H; Lab epic atoms deduped on base
+2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row
