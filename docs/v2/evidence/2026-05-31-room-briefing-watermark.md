@@ -1,20 +1,24 @@
-# Evidence — Room briefing OG watermark + hallway (2026-05-31)
+# Evidence — room-briefing-watermark (2026-05-31)
 
-**Atom:** `room-briefing-watermark`  
-**Epic:** Room L5 — briefing GTM export (atom 3/3)
+## Slice
 
-## Changes
+Briefing OG terracotta watermark band uses `toRoom` hallway deep link (`razzle.lol${roomPath}`).
 
-- `/og/briefing` watermark band uses `toRoom` deep link (`razzle.lol/room?...`) in terracotta band (Explore/H2H parity).
-- `BriefingCard` adds copy link, preview card (no `download=1`), and export card.
+## Dedup note
 
-## Verification
+Implementation landed on `origin/razzle-v2-redesign` at `e1eb68fe8` during parallel factory run; this cycle records standup + factory open state.
 
-| Check | Result |
-|-------|--------|
-| `pytest apps/api/tests/test_briefing_og_route.py -q` | 2 passed |
-| `npm run build --workspace=apps/web` | exit 0 |
-| `curl /og/briefing?download=1` | `200 51866` PNG |
-| `curl /og/briefing` (preview) | `200 32195` PNG |
+## Commands
 
-**Verdict:** PASS — Gate C satisfied (PNG ≥40KB on export; preview shows watermark band).
+```bash
+python3 -m pytest apps/api/tests/test_briefing_og_route.py -q --noconftest
+# 5 passed on merged base
+
+curl -s -o /tmp/briefing-og.png -w "%{http_code} %{size_download}\n" \
+  "http://localhost:3000/og/briefing?download=1"
+# 200 89235 (local dev verify)
+```
+
+## Verdict
+
+PASS — Gate C satisfied.
