@@ -1,32 +1,56 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab sidebar lists 100 panels by category — users think in staff desks (Hawkeye tape, Octo quant) per AGENTS.md wiring checklist.",
-  "epic_title": "Lab L2 — sidebar groups panels by analyst desk",
-  "parity_ref": "H-04 — Six agents same ids everywhere",
-  "depth_ref": "Lab L2",
+  "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
+  "epic_title": "Explore L5 — OG screener agent margin notes",
+  "parity_ref": "Explore L5 — agent margin notes on rows",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "lab-sidebar-staff-toggle",
-      "title": "Category | Staff toggle groups all panels via agentForPanel()",
+      "id": "explore-og-margin-note-lead",
+      "title": "Lead-row Hawkeye/Dolphin margin note on Explore OG card",
       "status": "done",
-      "merge_commit": "026e7de6b"
+      "merge_commit": "0fc4932b7"
     },
     {
-      "id": "lab-sidebar-staff-registry",
-      "title": "Expand labPanels registry so staff view has fewer Razzle catch-alls",
+      "id": "explore-og-margin-note-rows",
+      "title": "Margin notes on top-3 OG screener rows",
+      "status": "in_progress",
+      "merge_commit": null
+    },
+    {
+      "id": "explore-og-margin-note-sticker",
+      "title": "LIVE staff sticker when OG rows carry margin notes",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "explore-og-margin-note-college",
+      "title": "College universe margin notes on OG export",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-sidebar-staff-registry",
-  "created_at": "2026-05-31T14:30:00Z",
-  "updated_at": "2026-05-31T14:45:00Z",
+  "next_atom_id": "explore-og-margin-note-rows",
+  "created_at": "2026-05-31T11:22:30Z",
+  "updated_at": "2026-05-31T18:00:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-og-hallway-position-defaults",
+      "id": "lab-l5-og-watermark-display-names",
       "status": "complete",
-      "last_atom": "lab-og-tolab-weekly-position",
-      "merge_commit": "9be64d109"
+      "last_atom": "lab-og-watermark-display-name",
+      "merge_commit": "338709883"
+    },
+    {
+      "id": "lab-l5-launch10-og-demo-trust-labels",
+      "status": "complete",
+      "last_atom": "lab-og-launch10-demo-blurbs",
+      "merge_commit": "3705fdce8"
+    },
+    {
+      "id": "lab-l5-og-hallway-deep-links",
+      "status": "complete",
+      "last_atom": "lab-og-tolab-snapshot-player",
+      "merge_commit": "1a12d9c0b"
     }
   ]
 }
