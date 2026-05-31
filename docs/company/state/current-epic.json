@@ -29,6 +29,12 @@
   "updated_at": "2026-05-31T11:34:00Z",
   "completed_epics": [
     {
+      "id": "league-l5-h2h-og-exported-sticker",
+      "status": "complete",
+      "last_atom": "bureau-h2h-og-exported-sticker",
+      "merge_commit": "5b60ea23d"
+    },
+    {
       "id": "lab-l5-og-watermark-display-names",
       "status": "complete",
       "last_atom": "lab-og-watermark-display-name",
