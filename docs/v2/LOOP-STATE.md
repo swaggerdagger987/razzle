@@ -1,10 +1,10 @@
-cycle: 81
+cycle: 82
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-breakouts-snapshot
-last_keep_cycle: 81
-last_commit: 67159562
+next_slice: lab-og-tradevalues-snapshot
+last_keep_cycle: 82
+last_commit: da33eafd
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
@@ -36,3 +36,4 @@ league_l5_power_rankings_tab: complete
 league_l5_unhide_bureau_epic: complete
 lab_l5_hawkeye_og_snapshot_epic: active
 lab_l5_og_weekly_prospects_snapshot: complete
+lab_l5_og_breakouts_snapshot: complete

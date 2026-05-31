@@ -13,6 +13,8 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
+2026-05-31 | lab-og-breakouts-snapshot | ogSnapshotRows RBS/formula top-6 + position on LabOgExportLink | da33eafd | SHIP | KEEP candidates slice not rawCandidates | — | — | evidence/2026-05-31-lab-og-breakouts-snapshot.md
+
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | da33eafd | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
 
 2026-05-31 | bureau-h2h-og-snapshot-decode | decodeBureauH2HOgSnapshot snapshot-first in /og/head-to-head | bbbd1b3c | SHIP | KEEP skip API when snapshot valid | — | — | evidence/2026-05-31-bureau-h2h-og-snapshot-decode.md

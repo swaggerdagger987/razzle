@@ -2,26 +2,24 @@
   "date": "2026-05-31",
   "big_problem": "Lab Hawkeye export cards must encode the rows users see in weekly, prospects, and breakouts — not generic demo fallbacks (NEXT.md Lab L5; DEPTH Lab L5 OG parity).",
   "epic": "Lab L5 — Hawkeye OG snapshot export",
-  "atom_id": "lab-og-weekly-prospects-snapshot",
-  "slice_title": "Weekly + prospects OG export encodes in-panel rows",
+  "atom_id": "lab-og-breakouts-snapshot",
+  "slice_title": "Breakouts export encodes formula-sorted top candidates",
   "parity_ref": "Explore L5 / Lab L5 — panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — /og/weekly and /og/prospects PNG ≥40KB with snapshot param",
+  "acceptance_ref": "FACTORY-DOD Gate C — /og/breakouts PNG ≥40KB with snapshot param",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx",
-    "apps/web/components/lab/renderers/ProspectsRenderer.tsx"
+    "apps/web/components/lab/renderers/BreakoutsRenderer.tsx"
   ],
-  "max_files": 2,
-  "max_lines": 80,
+  "max_files": 1,
+  "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/weekly?download=1'",
-    "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/prospects?download=1'"
+    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/breakouts?download=1'"
   ],
   "out_of_scope": [
-    "breakouts/tradevalues (next atoms)",
+    "tradevalues atom",
     "OG route changes",
     "NORTH_STAR / DESIGN edits"
   ],
