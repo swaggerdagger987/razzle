@@ -262,6 +262,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 1. **Deadline pressure screenshots travel.** Trade threads share "who's desperate" bar charts before deadline — Pressure Map OG completes Bureau export parity with H2H/MC/Trade Finder.
 2. **Bones owns trade-deadline intel** — OG card shows Bones badge + desperation labels (desperate/motivated/comfortable) matching in-product Bureau tab.
 
+## 2026-05-31 — Cycle 62 (workday cycle 2)
+
+1. **Manager archetype labels are trade-DM shorthand** — PANIC SELLER / HOARDER badges travel faster than transaction counts in group chats.
+2. **Bureau OG series compounds** — Pressure Map + Manager Profiles give two screenshot hooks before trade-network atom.
+
 ## 2026-05-31 — Cycle 59
 
 ### r/DynastyFF — panel-specific stat labels on share cards (pattern)

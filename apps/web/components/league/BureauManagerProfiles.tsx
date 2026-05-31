@@ -117,7 +117,15 @@ export function BureauManagerProfiles({ data, leagueId }: Props) {
         ))}
       </section>
 
-      <footer className="flex flex-wrap gap-4 text-sm">
+      <footer className="flex flex-wrap items-center gap-4 text-sm">
+        <a
+          href={`/og/manager-profiles?league=${encodeURIComponent(leagueId)}&download=1`}
+          download="razzle-manager-profiles.png"
+          className="btn-chunky active text-xs"
+          style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+        >
+          export card
+        </a>
         <Link href={`/league/${leagueId}/pressure-map` as Route} className="text-orange underline">
           deadline pressure map →
         </Link>

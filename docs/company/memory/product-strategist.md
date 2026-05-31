@@ -20,3 +20,4 @@ new evidence.
 2026-05-31 | launch-10 OG demo stat labels | atom 2/3 SHIP | keep | curl weekly 63819B tradevalues 62488B gamelog 58408B
 2026-05-31 | lab-og-param-defaults closes Lab L5 OG epic | SHIP | keep | shareable /og/dynasty-comps without manual player_id
 2026-05-31 | League L5 Bureau OG epic atom 1 | pressure-map | SHIP | keep | PARITY League L5; trade-deadline screenshot moat
+2026-05-31 | League L5 Bureau OG atom 2 | manager-profiles archetypes | SHIP | keep | PANIC SELLER badges for trade-DM screenshots
