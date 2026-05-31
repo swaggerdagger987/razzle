@@ -22,3 +22,5 @@ JWT_SECRET=test pytest apps/api/tests/test_smoke.py → 3 passed
 ## Verdict
 
 **PASS** — `force_demo=1` skips H2H API fetch for Gate C curl; natural demo path unchanged.
+
+<!-- ci retrigger -->
