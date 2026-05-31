@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-tolab-breakouts-position | f6e0985f3 | PASS | pytest 10; curl breakouts 67718B.
 2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | PASS | pytest 9; curl snapshot OG 76270B.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.

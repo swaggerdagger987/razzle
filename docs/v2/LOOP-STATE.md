@@ -1,10 +1,11 @@
-cycle: 155
+cycle: 157
 last_board_cycle: 54
-focus_pillar: Explore
+focus_pillar: Lab
 focus_layer: L5
 next_slice: explore-og-margin-note-sticker
-last_keep_cycle: 155
-last_commit: 4907c8327
+last_keep_cycle: 157
+last_commit: 1ebb9dc73
+lab_l5_position_default_epic: complete
 explore_l5_og_margin_epic: active
 league_l5_h2h_gtm_epic: complete
 lab_l5_og_watermark_display_name_epic: complete

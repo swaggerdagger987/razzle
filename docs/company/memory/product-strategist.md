@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-tolab-breakouts-position | f6e0985f3 | SHIP | Lab L5 position-default epic 3/3; breakouts WR hallway.
 2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | SHIP | League L5 H2H GTM epic closed — Gate C evidence on snapshot path.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Weekly OG toLab matches WR heatmap default (T6).
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | SHIP | Snapshot pid wrapper; hallway epic complete (T6).
