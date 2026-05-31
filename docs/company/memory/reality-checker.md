@@ -1,3 +1,4 @@
+2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Reality Checker
 
@@ -9,7 +10,7 @@
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | PASS | curl dynasty-comps 54807B; pytest 2.
 
 
-2026-05-31 | room-briefing-watermark | f6e0985f3 | PASS | pytest 3; curl briefing OG 89235B PNG.
+2026-05-31 | room-briefing-watermark | 088cebc07 | PASS | pytest 3; curl briefing OG 89235B PNG.
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | PASS | curl 200 59323B PNG; web build + pytest green.
 2026-05-31 | room-briefing-watermark Gate C | eca00c3f0 | PASS | curl 51866B export; pytest 5; build exit 0.
 2026-05-31 | lab-og-tolab-watermark | b80512bb4 | PASS | pytest 3; web build exit 0; curl rankings OG 66806B.
