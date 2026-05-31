@@ -24,8 +24,17 @@ export interface OgSnapshotRow {
   statLabel: string;
 }
 
+export interface OgSnapshotEncodeContext {
+  slug: string;
+  playerId?: string;
+  playerName?: string;
+}
+
 /** Compact base64url payload for OG route — mirrors rows visible in the Lab panel. */
-export function encodeOgSnapshot(rows: OgSnapshotRow[]): string | undefined {
+export function encodeOgSnapshot(
+  rows: OgSnapshotRow[],
+  ctx?: OgSnapshotEncodeContext,
+): string | undefined {
   const trimmed = rows.filter((r) => r.name).slice(0, 6);
   if (trimmed.length === 0) return undefined;
   const compact = trimmed.map((r) => ({
@@ -35,7 +44,17 @@ export function encodeOgSnapshot(rows: OgSnapshotRow[]): string | undefined {
     s: r.stat,
     sl: r.statLabel,
   }));
-  const json = JSON.stringify(compact);
+  const playerId = ctx?.playerId?.trim();
+  const payload =
+    playerId && ctx?.slug && (PLAYER_SCOPED_OG_SLUGS as readonly string[]).includes(ctx.slug)
+      ? {
+          v: 1,
+          pi: playerId,
+          pn: ctx?.playerName?.trim() ?? "",
+          rows: compact,
+        }
+      : compact;
+  const json = JSON.stringify(payload);
   if (typeof btoa === "function") {
     return btoa(json).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
   }
@@ -47,6 +66,7 @@ export function LabOgExportLink({
   downloadName,
   label = "export card",
   playerId,
+  playerName,
   position,
   snapshotRows,
 }: {
@@ -55,6 +75,8 @@ export function LabOgExportLink({
   label?: string;
   /** When set, OG route uses this player for player-scoped panels (e.g. gamelog, dynasty-comps). */
   playerId?: string;
+  /** Player display name for hallway toLab deep link on snapshot exports. */
+  playerName?: string;
   /** When set, OG route applies the same position filter as the in-product panel (e.g. rankings WR). */
   position?: string;
   /** Top rows from the in-product panel — OG card matches what the user sees. */
@@ -66,8 +88,16 @@ export function LabOgExportLink({
   const resolvedPlayerId =
     playerId?.trim() || (isPlayerScoped ? DEFAULT_LAB_OG_PLAYER_ID : undefined);
   if (resolvedPlayerId) params.set("player_id", resolvedPlayerId);
+  if (playerName?.trim()) params.set("name", playerName.trim());
   if (position) params.set("position", position);
-  const snapshot = snapshotRows?.length ? encodeOgSnapshot(snapshotRows) : undefined;
+  const snapshot =
+    snapshotRows?.length
+      ? encodeOgSnapshot(snapshotRows, {
+          slug,
+          playerId: resolvedPlayerId,
+          playerName: playerName?.trim(),
+        })
+      : undefined;
   if (snapshot) params.set("snapshot", snapshot);
   return (
     <a

@@ -1,8 +1,30 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-launch10-demo-blurbs",
-  "slice_title": "Panel-specific demo blurb + SAMPLE stickers for gamelog, efficiency, aging, buysell, dashboard",
-  "content_commit": "3705fdce8",
-  "reality": "PASS",
-  "merge": "merged"
+  "big_problem": "Lab OG snapshot exports dead-end in the watermark — player context drops when rows travel without a name in the URL.",
+  "epic": "Lab L5 — OG hallway deep links",
+  "slice_title": "Snapshot exports preserve player in OG toLab watermark",
+  "atom_id": "lab-og-tolab-snapshot-player",
+  "parity_ref": "Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/web/components/lab/LabOgExportLink.tsx",
+    "apps/api/tests/test_lab_og_tolab_snapshot_player.py"
+  ],
+  "max_files": 3,
+  "max_lines": 120,
+  "acceptance_commands": [
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_snapshot_player.py apps/api/tests/test_lab_og_tolab_watermark.py -q",
+    "npm run build --workspace=apps/web"
+  ],
+  "out_of_scope": ["Bureau OG codecs", "new API endpoints", "NORTH_STAR edits"],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP"
+  }
 }

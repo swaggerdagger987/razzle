@@ -48,6 +48,7 @@ const OG_PRO_PREVIEW_HEADER = "X-Razzle-Plan";
 
 /** Ja'Marr Chase — nflverse gsis_id for OG previews when no player_id in URL. */
 const DEFAULT_OG_PLAYER_ID = "00-0036900";
+const DEFAULT_OG_PLAYER_NAME = "Ja'Marr Chase";
 
 /** Lab panels that require player_id on the API (path or query). */
 const PLAYER_SCOPED_SLUGS = new Set([
@@ -367,25 +368,51 @@ function demoRowsForPanel(slug: string): OgRow[] {
 
 type CompactOgRow = { n: string; p: string; t: string; s: number; sl: string };
 
-function decodeOgSnapshot(param: string): OgRow[] {
+interface OgSnapshotPayload {
+  rows: OgRow[];
+  playerId?: string;
+  playerName?: string;
+}
+
+function compactRowsToOgRows(arr: CompactOgRow[]): OgRow[] {
+  return arr
+    .filter((r) => r?.n)
+    .slice(0, 6)
+    .map((r) => ({
+      name: r.n,
+      position: r.p ?? "",
+      team: r.t ?? "",
+      stat: Number(r.s ?? 0),
+      statLabel: r.sl ?? "",
+    }));
+}
+
+/** Decode Lab snapshot param — legacy array or v1 object with player hallway context. */
+function decodeOgSnapshot(param: string): OgSnapshotPayload {
   try {
     const b64 = param.replace(/-/g, "+").replace(/_/g, "/");
     const json = atob(b64);
-    const arr = JSON.parse(json) as CompactOgRow[];
-    if (!Array.isArray(arr)) return [];
-    return arr
-      .filter((r) => r?.n)
-      .slice(0, 6)
-      .map((r) => ({
-        name: r.n,
-        position: r.p ?? "",
-        team: r.t ?? "",
-        stat: Number(r.s ?? 0),
-        statLabel: r.sl ?? "",
-      }));
+    const parsed = JSON.parse(json) as
+      | CompactOgRow[]
+      | { v?: number; pi?: string; pn?: string; rows?: CompactOgRow[] };
+    if (Array.isArray(parsed)) {
+      return { rows: compactRowsToOgRows(parsed) };
+    }
+    if (parsed && typeof parsed === "object" && Array.isArray(parsed.rows)) {
+      return {
+        rows: compactRowsToOgRows(parsed.rows),
+        playerId: typeof parsed.pi === "string" ? parsed.pi : undefined,
+        playerName: typeof parsed.pn === "string" ? parsed.pn : undefined,
+      };
+    }
+    return { rows: [] };
   } catch {
-    return [];
+    return { rows: [] };
   }
+}
+
+function slugifyPlayerName(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
 /** Edge OG must hit same-origin `/api/*` so Next rewrites reach FastAPI (dev/preview/CI). */
@@ -857,21 +884,31 @@ async function fetchOgLiveRows(
 /** Typed hallway path for OG watermark band (T6 — click back into Lab). */
 function labOgWatermarkLink(
   slug: string,
-  opts: { positionFilter: string; playerId: string; playerScoped: boolean },
+  opts: {
+    positionFilter: string;
+    playerId: string;
+    playerName: string;
+    playerScoped: boolean;
+  },
 ): string {
   const includeDefaultPlayer = TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS.has(slug);
   const usePlayer =
     opts.playerScoped &&
     opts.playerId &&
     (opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer);
+  const resolvedName =
+    opts.playerName.trim() ||
+    (opts.playerId === DEFAULT_OG_PLAYER_ID && includeDefaultPlayer
+      ? DEFAULT_OG_PLAYER_NAME
+      : "player");
   let path = toLab(
     slug,
     usePlayer
       ? {
           player: {
             playerId: opts.playerId,
-            slug: opts.playerId,
-            name: "player",
+            slug: slugifyPlayerName(resolvedName) || opts.playerId,
+            name: resolvedName,
           },
         }
       : undefined,
@@ -935,7 +972,8 @@ export async function GET(
     // Match WeeklyHeatmapRenderer default so /api/panels/weekly returns live rows for OG.
     apiParams.position = "WR";
   }
-  const snapshotRows = snapshotParam ? decodeOgSnapshot(snapshotParam) : [];
+  const snapshotPayload = snapshotParam ? decodeOgSnapshot(snapshotParam) : { rows: [] };
+  const snapshotRows = snapshotPayload.rows;
   const snapshotHasRows =
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
   let liveRows: OgRow[] = [];
@@ -964,9 +1002,16 @@ export async function GET(
   const showingLiveData = !isSnapshot && liveHasRows && hasRows;
   const showingDemoRows = !isSnapshot && !showingLiveData && hasRows;
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
+  const watermarkPlayerId =
+    isSnapshot && snapshotPayload.playerId ? snapshotPayload.playerId : playerId;
+  const watermarkPlayerName =
+    (isSnapshot && snapshotPayload.playerName ? snapshotPayload.playerName : "") ||
+    url.searchParams.get("name") ||
+    "";
   const labLink = labOgWatermarkLink(slug, {
     positionFilter,
-    playerId,
+    playerId: watermarkPlayerId,
+    playerName: watermarkPlayerName,
     playerScoped: PLAYER_SCOPED_SLUGS.has(slug),
   });
 
