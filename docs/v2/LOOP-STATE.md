@@ -1,10 +1,10 @@
-cycle: 85
+cycle: 86
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: bureau-trade-network-copy-link
-last_keep_cycle: 85
-last_commit: 90bf2dd5
+next_slice: bureau-share-parity-epic-complete
+last_keep_cycle: 86
+last_commit: da33eafd
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
@@ -34,4 +34,5 @@ league_l5_bureau_monte_carlo_share: complete
 league_l5_bureau_manager_profiles_copy_link: complete
 league_l5_bureau_pressure_map_copy_link: complete
 league_l5_power_rankings_og: complete
-league_l5_bureau_share_row_epic: active
+league_l5_bureau_trade_network_copy_link: complete
+league_l5_bureau_share_row_epic: complete
