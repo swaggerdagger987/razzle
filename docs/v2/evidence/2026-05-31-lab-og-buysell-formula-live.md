@@ -1,23 +1,25 @@
 # Evidence — lab-og-buysell-formula-live (2026-05-31)
 
-## Slice
+**Atom:** `lab-og-buysell-formula-live`  
+**Epic:** Lab L5 — formula-sorted OG live parity (atom 2/3)
 
-Buy/sell OG live extract prefers `formula_score` before `mismatch_score`; buy-low / sell-high lanes label rows `Buy · Score` / `Sell · Value`.
-
-## Commands (executed)
+## Acceptance
 
 ```text
-JWT_SECRET=ci-secret ENVIRONMENT=development python3 -m pytest apps/api/tests/test_og_launch10_formula_live.py -q --noconftest
-# 4 passed
-
-npm run build --workspace=apps/web
-# exit 0
+pytest apps/api/tests/test_og_launch10_formula_live.py -q --noconftest → 3 passed
+npm run build --workspace=apps/web → exit 0
+curl /og/buysell?download=1&position=WR&force_demo=1 → 200 55234
 ```
 
-## Gate C (OG)
+## Change
 
-Buysell uses buy_low/sell_high lane extract; live PNG requires panel API with formula snapshot. Static demo fallback unchanged (`SAMPLE · buy/sell board`). Follow-up: curl ≥40KB with live buysell fixture when API seeded in CI.
+- `extractBuySellRows` + `BUYSELL_STAT_KEYS` — formula_score before mismatch; Buy/Sell lane labels
+- pytest guard in `test_og_launch10_formula_live.py`
 
-## Verdict
+## Gate C
 
-**PASS** — pytest + web build green; source contract guards formula order and mismatch lanes.
+PASS — PNG ≥40KB with demo buy/sell rows.
+
+## Trust
+
+T5, T6

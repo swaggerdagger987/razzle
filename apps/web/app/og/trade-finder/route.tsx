@@ -1,33 +1,18 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { toLeague, toRoom } from "@razzle/hallway";
+import {
+  bureauTradeFinderOgSnapshotToData,
+  decodeBureauTradeFinderOgSnapshot,
+  type BureauTradeFinderOgMatch,
+  type TradeFinderOgData,
+} from "@/lib/bureau-trade-finder-og-snapshot";
 
 export const runtime = "edge";
 
-type PlayerRef = {
-  player_id: string;
-  name: string;
-  position: string;
-  dynasty_value: number;
-};
+type TradeFinderData = TradeFinderOgData & { error?: string };
 
-type Match = {
-  partner_roster_id: number;
-  partner_team: string;
-  give: PlayerRef;
-  get: PlayerRef;
-  value_gap: number;
-  gap_pct: number;
-};
-
-type TradeFinderData = {
-  matches?: Match[];
-  hero_match?: Match | null;
-  needs?: string[];
-  surplus?: string[];
-  error?: string;
-};
-
-const DEMO_MATCHES: Match[] = [
+const DEMO_MATCHES: BureauTradeFinderOgMatch[] = [
   {
     partner_roster_id: 2,
     partner_team: "Rebuild FC",
@@ -59,9 +44,18 @@ const DEMO_META = {
   surplus: ["RB"],
 };
 
-async function fetchTradeFinder(leagueId: string, userId: string): Promise<TradeFinderData | null> {
-  const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
+/** Edge OG must hit same-origin `/api/*` so Next rewrites reach FastAPI (dev/preview/CI). */
+function resolveApiOrigin(req: Request): string {
+  return new URL(req.url).origin;
+}
+
+async function fetchTradeFinder(
+  req: Request,
+  leagueId: string,
+  userId: string,
+): Promise<TradeFinderData | null> {
   if (!leagueId || !userId) return null;
+  const apiOrigin = resolveApiOrigin(req);
 
   try {
     const res = await fetch(`${apiOrigin}/api/bureau/trade-finder`, {
@@ -82,19 +76,47 @@ function playerLabel(name: string): string {
   return name.length > 16 ? `${name.slice(0, 14)}…` : name;
 }
 
+function bonesTradeFinderRoomQuestion(hero: BureauTradeFinderOgMatch): string {
+  return `Should I offer ${hero.give.name} for ${hero.get.name} from ${hero.partner_team}? Value gap is ${hero.gap_pct}%.`;
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
   const league = url.searchParams.get("league") ?? "";
   const user = url.searchParams.get("user") ?? "";
+  const snapshotParam = url.searchParams.get("snapshot") ?? "";
 
   const bones = AGENT_BY_ID.bones;
-  const live = await fetchTradeFinder(league, user);
-  const isDemo = !live?.matches?.length;
-  const matches = isDemo ? DEMO_MATCHES : live!.matches!.slice(0, 3);
-  const hero = isDemo ? DEMO_MATCHES[0] : (live!.hero_match ?? matches[0]);
-  const needs = isDemo ? DEMO_META.needs : (live!.needs ?? []);
-  const surplus = isDemo ? DEMO_META.surplus : (live!.surplus ?? []);
+  const snapshot = snapshotParam ? decodeBureauTradeFinderOgSnapshot(snapshotParam) : null;
+  const isSnapshot = Boolean(snapshot);
+  const live = isSnapshot ? null : await fetchTradeFinder(req, league, user);
+  const isLive = !isSnapshot && Boolean(live?.matches?.length);
+  const isDemo = !isSnapshot && !isLive;
+  const panelData: TradeFinderOgData =
+    isSnapshot && snapshot
+      ? bureauTradeFinderOgSnapshotToData(snapshot)
+      : isLive
+        ? live!
+        : { matches: DEMO_MATCHES, hero_match: DEMO_MATCHES[0], needs: DEMO_META.needs, surplus: DEMO_META.surplus };
+  const matches = (panelData.matches ?? DEMO_MATCHES).slice(0, 3);
+  const hero = panelData.hero_match ?? matches[0];
+  const needs = panelData.needs ?? [];
+  const surplus = panelData.surplus ?? [];
+  const leagueDeepLink = league ? toLeague(league, "trade-finder") : "/league/trade-finder";
+  const bonesRoomPath = hero
+    ? toRoom({
+        agentId: "bones",
+        question: bonesTradeFinderRoomQuestion(hero),
+        panelSlug: "trade-finder",
+        player: {
+          playerId: hero.give.player_id,
+          name: hero.give.name,
+          slug: hero.give.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+          position: hero.give.position,
+        },
+      })
+    : "/room?agent=bones&from=trade-finder";
 
   return new ImageResponse(
     (
@@ -140,10 +162,78 @@ export async function GET(req: Request) {
           Trade Finder
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 16 }}>
-          {`value-matched league trades${isDemo ? " · sample preview" : ""}`}
+          {`value-matched league trades${
+            isSnapshot ? " · exported from panel" : isDemo ? " · sample preview" : ""
+          }`}
           {needs.length ? ` · need ${needs.join(", ")}` : ""}
           {surplus.length ? ` · surplus ${surplus.join(", ")}` : ""}
         </div>
+
+        {isSnapshot ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#8b5cf6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-1.5deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            EXPORTED · panel trade rows
+          </div>
+        ) : null}
+
+        {isLive ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            LIVE · Sleeper trade paths
+          </div>
+        ) : null}
+
+        {isDemo ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(1.5deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            SAMPLE · demo trade rows
+          </div>
+        ) : null}
 
         {hero ? (
           <div
@@ -214,24 +304,32 @@ export async function GET(req: Request) {
           ))}
         </div>
 
+        {hero ? (
+          <div style={{ display: "flex", fontSize: 18, color: "#d97757", marginTop: 10 }}>
+            {`razzle.lol${bonesRoomPath} · ask ${bones.name} about ${playerLabel(hero.partner_team)}`}
+          </div>
+        ) : null}
+
+        {/* Always-on watermark band — matches H2H + Lab panel OG (T6 screenshot gravity) */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-end",
+            alignItems: "center",
+            marginTop: 16,
+            padding: "10px 18px",
+            background: "#d97757",
+            color: "#f7efe5",
+            border: "3px solid #2d1f14",
+            borderRadius: 8,
+            boxShadow: "4px 4px 0 #2d1f14",
             fontSize: 20,
-            color: "#5c4a3d",
-            marginTop: 14,
           }}
         >
-          <div style={{ display: "flex" }}>
-            razzle.lol/league{league ? `/${league}` : ""}/trade-finder
+          <div style={{ display: "flex", fontWeight: 700 }}>{`razzle.lol${leagueDeepLink}`}</div>
+          <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
+            {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
           </div>
-          {isDownload ? (
-            <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
-              made with 🐯 razzle.lol
-            </div>
-          ) : null}
         </div>
       </div>
     ),

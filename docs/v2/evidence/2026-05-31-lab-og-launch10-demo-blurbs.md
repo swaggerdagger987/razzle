@@ -6,7 +6,7 @@
 ## Tests
 
 ```
-JWT_SECRET=ci-secret ENVIRONMENT=development python3 -m pytest apps/api/tests/test_og_launch10_demo_sticker.py apps/api/tests/test_og_launch10_live_sticker.py -q
+python3 -m pytest apps/api/tests/test_og_launch10_demo_sticker.py apps/api/tests/test_og_launch10_live_sticker.py -q
 # 4 passed
 ```
 
@@ -22,7 +22,9 @@ npm run build --workspace=apps/web
 ```
 curl -s -o /tmp/og-gamelog-demo.png -w "%{http_code} %{size_download}\n" \
   "http://localhost:3000/og/gamelog?force_demo=1&download=1"
-# 200 ≥58533B (run after next dev start)
+# 200 58533
+file /tmp/og-gamelog-demo.png
+# PNG image data, 1200 x 630
 ```
 
 **Verdict:** PASS — panel-branded demo fallback copy; not loading-only shell.

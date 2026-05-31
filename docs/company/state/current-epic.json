@@ -1,62 +1,38 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG cards without a snapshot can rank by the wrong stat — formula-sorted panels export nflverse defaults instead of what the user sees.",
-  "epic_title": "Lab L5 — formula-sorted OG live parity",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Bureau H2H rivalry exports don't signal in-panel snapshot trust \u2014 group chats can't tell exported rivalry rows from live Sleeper pulls.",
+  "epic_title": "League L5 \u2014 Bureau H2H GTM export",
+  "parity_ref": "Explore L5 \u2014 Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-breakouts-rankings-formula-live",
-      "title": "Breakouts + rankings OG live extract prefers formula_score",
+      "id": "bureau-h2h-og-exported-sticker",
+      "title": "H2H OG EXPORTED sticker when snapshot param present",
       "status": "done",
-      "merge_commit": "ceadf0402"
+      "merge_commit": "5b60ea23d"
     },
     {
-      "id": "lab-og-weekly-prospects-live-sticker-guard",
-      "title": "Weekly + prospects LIVE sticker pytest guard",
-      "status": "done",
-      "merge_commit": "d03cb653b"
+      "id": "bureau-h2h-og-exported-pytest",
+      "title": "pytest guard for H2H snapshot EXPORTED sticker + ShareBar encode",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-buysell-formula-live",
-      "title": "Buy/sell OG live extract prefers formula_score + mismatch lanes",
-      "status": "done",
-      "merge_commit": "901120b3d"
-    },
-    {
-      "id": "lab-og-from-panel-gate-c-rest",
-      "title": "Gate C pytest + curl for prospects/tradevalues snapshot FROM PANEL",
-      "status": "done",
-      "merge_commit": "0915bf11a"
+      "id": "bureau-h2h-og-gate-c-snapshot",
+      "title": "Gate C curl evidence for H2H snapshot OG PNG",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T10:36:02Z",
-  "updated_at": "2026-05-31T11:17:14Z",
+  "next_atom_id": "bureau-h2h-og-exported-pytest",
+  "created_at": "2026-05-31T20:00:00Z",
+  "updated_at": "2026-05-31T20:30:00Z",
   "completed_epics": [
     {
-      "id": "room-l5-briefing-gtm-export",
+      "id": "league-l5-trade-finder-gtm",
       "status": "complete",
-      "last_atom": "room-briefing-watermark",
-      "merge_commit": "f6e0985f3"
-    },
-    {
-      "id": "lab-l5-og-empty-panel-states",
-      "status": "active",
-      "last_atom": "lab-gamelog-empty-weeks-export",
-      "merge_commit": "ac0280a20"
-    },
-    {
-      "id": "lab-l5-launch10-og-demo-trust-labels",
-      "status": "complete",
-      "last_atom": "lab-og-launch10-demo-blurbs",
-      "merge_commit": "f3c1c9466"
-    },
-    {
-      "id": "lab-l5-formula-sorted-og-live-parity",
-      "status": "complete",
-      "last_atom": "lab-og-from-panel-gate-c-rest",
-      "merge_commit": "0915bf11a"
+      "last_atom": "league-trade-finder-og-room-hallway",
+      "merge_commit": "c8091030c"
     }
   ]
 }

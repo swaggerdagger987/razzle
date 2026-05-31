@@ -1,26 +1,29 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG cards without a snapshot can rank by the wrong stat — formula-sorted panels export nflverse defaults instead of what the user sees.",
-  "epic": "Lab L5 — formula-sorted OG live parity",
-  "slice_title": "Gate C pytest + curl for prospects/tradevalues snapshot FROM PANEL",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "big_problem": "Lab OG watermarks omit default position filters — efficiency exports click back to an unscoped PPO board.",
+  "epic": "Lab L5 — OG hallway position defaults (atom 2/3)",
+  "slice_title": "Efficiency OG watermark includes default RB position in toLab",
+  "atom_id": "lab-og-tolab-efficiency-position",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/api/tests/test_og_from_panel_sticker.py",
-    "apps/api/tests/test_og_from_panel_gate_c_rest.py"
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/api/tests/test_lab_og_tolab_watermark.py"
   ],
-  "max_files": 3,
-  "max_lines": 120,
+  "max_files": 2,
+  "max_lines": 25,
   "acceptance_commands": [
-    "JWT_SECRET=ci-secret python3 -m pytest apps/api/tests/test_og_from_panel_sticker.py apps/api/tests/test_og_from_panel_gate_c_rest.py -q --noconftest",
+    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": [
-    "route.tsx behavior changes",
-    "new npm deps",
-    "NORTH_STAR edits"
-  ],
-  "builder_mode": "composer-surgical"
+  "out_of_scope": ["other renderers", "billing", "NORTH_STAR edits"],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  }
 }
