@@ -78,8 +78,12 @@ export function ProUpgradeGate({
         </div>
         <p className="mt-3 text-xs text-ink-light">dev? flip plan in the toolbar ↑</p>
         <ul className="pro-upgrade-perks mt-6 text-left text-sm text-ink-medium">
-          <li>10 launch Lab panels — trade values, breakouts, aging curves</li>
-          <li>7 Bureau behavioral tabs — H2H, pressure map, trade finder</li>
+          <li>
+            Launch Lab — rankings, trade values, breakouts, game log, efficiency, aging, buy/sell
+          </li>
+          <li>
+            Bureau — self-scout, H2H, pressure map, trade finder, trade network, power board, schedule
+          </li>
           <li>Situation Room — six pixel staff, your league in context</li>
         </ul>
       </div>
