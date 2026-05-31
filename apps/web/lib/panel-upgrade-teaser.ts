@@ -170,3 +170,10 @@ export function upgradePitchForPanel(slug: string, agentName: string): string {
   if (pitch) return `${agentName}: unlock ${pitch}.`;
   return `${agentName}: this panel is Pro — the screener stays free, the intel doesn't.`;
 }
+
+/** Pro checkout perks — names match Launch-10 Staff Picks + visible Bureau tabs (Lab L4). */
+export const PRO_UPGRADE_PERKS = [
+  "10 launch Lab panels — weekly, big board, dynasty ranks, trade values, breakouts, game log, efficiency, aging, buy/sell, dashboard",
+  "12 Bureau tabs — self-scout, roster depth, H2H, pressure map, trade finder, Monte Carlo, and more",
+  "Situation Room — six pixel staff, your league in context",
+] as const;
