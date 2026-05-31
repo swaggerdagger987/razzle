@@ -16,14 +16,22 @@ interface OgPlayer {
   stat: number;
 }
 
-async function fetchTopPlayers(params: {
-  universe: string;
-  sort: string;
-  dir: string;
-  q: string;
-  pos: string;
-}): Promise<OgPlayer[]> {
-  const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
+/** Edge OG must hit same-origin `/api/*` so Next rewrites reach FastAPI (dev/preview/CI). */
+function resolveApiOrigin(req: Request): string {
+  return new URL(req.url).origin;
+}
+
+async function fetchTopPlayers(
+  req: Request,
+  params: {
+    universe: string;
+    sort: string;
+    dir: string;
+    q: string;
+    pos: string;
+  },
+): Promise<OgPlayer[]> {
+  const apiOrigin = resolveApiOrigin(req);
   let sortKey = params.sort;
   if (params.universe === "college" && sortKey === "fantasy_points_ppr") {
     sortKey = "total_yards";
@@ -118,7 +126,7 @@ export async function GET(req: Request) {
   const exploreLink =
     universe === "college" ? "razzle.lol/explore?universe=college" : "razzle.lol/explore";
 
-  const players = await fetchTopPlayers({ universe, sort, dir, q, pos });
+  const players = await fetchTopPlayers(req, { universe, sort, dir, q, pos });
 
   return new ImageResponse(
     (
