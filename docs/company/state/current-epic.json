@@ -21,7 +21,7 @@
       "id": "room-briefing-watermark",
       "title": "Briefing OG — terracotta watermark + Room hallway link",
       "status": "done",
-      "merge_commit": "da33eafd"
+      "merge_commit": "eca00c3f0"
     }
   ],
   "next_atom_id": null,
@@ -56,7 +56,7 @@
       "id": "room-l5-briefing-gtm-export",
       "status": "complete",
       "last_atom": "room-briefing-watermark",
-      "merge_commit": "da33eafd"
+      "merge_commit": "eca00c3f0"
     }
   ]
 }

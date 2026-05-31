@@ -1,7 +1,7 @@
 # Memory — Reality Checker
 
 
-2026-05-31 | room-briefing-watermark Gate C | da33eafd | PASS | curl 51866B export; pytest 2; build exit 0.
+2026-05-31 | room-briefing-watermark Gate C | eca00c3f0 | PASS | curl 51866B export; pytest 2; build exit 0.
 
 2026-05-31 | lab-l4-pro-gate-dynasty-comps | a3f07d1e5 | PASS | pytest 9; web build exit 0; no OG slice.
 

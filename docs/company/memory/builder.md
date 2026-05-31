@@ -1,7 +1,7 @@
 # Memory — Builder
 
 
-2026-05-31 | room-briefing-watermark | da33eafd | SHIP | preview+copy+export on BriefingCard; OG watermark band.
+2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | preview+copy+export on BriefingCard; OG watermark band.
 
 2026-05-31 | lab-l4-pro-gate-error-dynasty-comps | a3f07d1e5 | SHIP | DynastyCompsRenderer ProGateFromPanelError; pytest 9.
 
