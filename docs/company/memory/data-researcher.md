@@ -50,4 +50,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles archetypes | 2ee04975 | keep | league construction tape for trade-DM screenshots
 2026-05-31 | Lab OG live sort | 7f78b631 | skip | no new Reddit intel this cycle
-2026-05-31 | launch-10 pro-gate teasers | da33eafd | keep | weekly/prospects/dashboard ROWS+PITCH; web build; pytest 59 passed
+2026-05-31 | launch-10 pro-gate teasers | e739a524 | keep | weekly/prospects/dashboard ROWS+PITCH; web build; pytest 59 passed

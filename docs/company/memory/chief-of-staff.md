@@ -67,4 +67,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory open cycle 1 Build Profiles tab | da33eafd | keep | new unhide epic; roster-depth dedup on base; atom 1/3 SHIP
 2026-05-31 | Factory open cycle 1 Schedule tab | da33eafd | keep | dedup waiver a2536dcc; HIDDEN empty; epic complete
 2026-05-31 | Factory cycle 1 Lab OG live sort | 7f78b631 | keep | workday open; Lab L5 epic atom 1/3
-2026-05-31 | launch-10 pro-gate teasers | da33eafd | keep | weekly/prospects/dashboard ROWS+PITCH; web build; pytest 59 passed
+2026-05-31 | launch-10 pro-gate teasers | e739a524 | keep | weekly/prospects/dashboard ROWS+PITCH; web build; pytest 59 passed
