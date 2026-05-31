@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-career-compare-live | f6e0985f3 | SHIP | 2-file contract; multi-fetch p1/p2/p3 capped at 3 players.
 2026-05-31 | lab-og-percentiles-live-extract | 454db1c1d | SHIP | 2-file contract; extractPercentilesRows mirrors strengths.
 2026-05-31 | lab-og-tolab-snapshot-player | aa5cc4b0d | SHIP | 3-file contract; backward-compat snapshot decode.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.

@@ -108,3 +108,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 149	aa5cc4b0d	depth+voice+simplicity	keep	Lab	L5 snapshot pid in OG toLab watermark	trust=T5,T6; pytest 4; curl snap-only 53042B; hallway epic 3/3 complete
 150	454db1c1d	depth+voice+simplicity	keep	Lab	L5 percentiles OG live peer bars	trust=T5,T6; pytest 2; curl percentiles 62517B; pro profile OG epic 1/4
 151	4bbdfe1e1	depth+voice+simplicity	keep	Lab	L5 career OG live season arc	trust=T5,T6; pytest 2; curl career 54171B; pro profile OG epic 2/4
+152	f6e0985f3	depth+voice+simplicity	keep	Lab	L5 career-compare OG overlay rows	trust=T5,T6; pytest 2; curl career-compare 52967B; pro profile OG epic 3/4

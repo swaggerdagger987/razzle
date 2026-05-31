@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-career-compare-live | f6e0985f3 | PASS | pytest 2; curl career-compare 52967B; web build exit 0.
 2026-05-31 | lab-og-percentiles-live-extract | 454db1c1d | PASS | pytest 2; curl percentiles 62517B; web build exit 0.
 2026-05-31 | lab-og-tolab-snapshot-player | aa5cc4b0d | PASS | pytest 4; curl snapshot-only 53042B; web build exit 0.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.

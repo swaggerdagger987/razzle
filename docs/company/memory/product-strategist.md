@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-career-compare-live | f6e0985f3 | SHIP | Career compare overlay completes pro profile OG trio before toLab atom.
 2026-05-31 | lab-og-percentiles-live-extract | 454db1c1d | SHIP | NEXT Lab OG live rows; percentiles before career atoms.
 2026-05-31 | lab-og-tolab-snapshot-player | aa5cc4b0d | SHIP | Lab L5 hallway epic complete; snapshot shares keep player in toLab.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
