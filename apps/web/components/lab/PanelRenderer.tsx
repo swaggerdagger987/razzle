@@ -3,7 +3,7 @@
 import { LoadingState } from "@razzle/ui";
 import type { PanelDefinition } from "@razzle/panels";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPanelData, isUpgradeRequiredError } from "@/lib/panel-api";
+import { fetchPanelData } from "@/lib/panel-api";
 import { CardsRenderer } from "./renderers/CardsRenderer";
 import { ChartRenderer } from "./renderers/ChartRenderer";
 import { DashboardRenderer } from "./renderers/DashboardRenderer";
@@ -26,7 +26,7 @@ import { BuySellRenderer } from "./renderers/BuySellRenderer";
 import { DynastyDashboardRenderer } from "./renderers/DynastyDashboardRenderer";
 import { DynastyCompsRenderer } from "./renderers/DynastyCompsRenderer";
 import { TierRenderer } from "./renderers/TierRenderer";
-import { ProUpgradeGate } from "./ProUpgradeGate";
+import { ProGateFromPanelError } from "./ProGateFromPanelError";
 
 interface Props {
   panel: PanelDefinition;
@@ -40,19 +40,11 @@ function GenericPanelRenderer({ panel }: Props) {
 
   if (q.isPending) return <LoadingState message="pulling film..." className="p-8" />;
   if (q.isError) {
-    const err = q.error;
-    if (isUpgradeRequiredError(err)) {
-      return (
-        <ProUpgradeGate
-          panelSlug={panel.slug}
-          panelTitle={panel.title}
-          required={err.required}
-          current={err.current}
-          message={err.message}
-        />
-      );
-    }
-    return <p className="p-6 text-red">something fumbled: {(err as Error).message}</p>;
+    const gate = ProGateFromPanelError({ panel, error: q.error });
+    if (gate) return gate;
+    return (
+      <p className="p-6 text-red">something fumbled: {(q.error as Error).message}</p>
+    );
   }
 
   const record = q.data as Record<string, unknown>;

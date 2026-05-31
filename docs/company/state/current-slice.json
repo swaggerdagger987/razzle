@@ -1,31 +1,29 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermarks omit default position filters — exported breakouts cards click back to an unscoped board while demo rows are WR-only.",
-  "epic": "Lab L5 — OG hallway position defaults (atom 3/3)",
-  "slice_title": "breakouts WR in OG toLab watermark",
-  "atom_id": "lab-og-tolab-breakouts-position",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "atom_id": "lab-og-percentiles-tolab",
+  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
+  "epic": "Lab L5 — pro profile OG live parity",
+  "slice_title": "Percentiles OG toLab default player hallway",
+  "parity_ref": "Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2",
+  "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
     "apps/api/tests/test_lab_og_tolab_watermark.py"
   ],
-  "max_files": 2,
-  "max_lines": 25,
+  "max_files": 1,
+  "max_lines": 20,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
-    "npm run build --workspace=apps/web"
+    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/pct-og.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/percentiles?download=1&force_demo=1'"
   ],
-  "out_of_scope": ["rankings default (cross-position by design)", "new panels", "billing"],
+  "out_of_scope": ["percentiles live extract (done)", "NORTH_STAR/DESIGN edits"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP 3/3"
-  },
-  "content_commit": "1ebb9dc73",
-  "reality": "PASS"
+  }
 }
