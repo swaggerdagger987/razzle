@@ -1,13 +1,10 @@
 # Memory — Product Strategist
 
-<<<<<<< HEAD
-2026-05-31 | lab-og-gamelog-player-default | Lab export URLs must carry player_id for Reddit copy-paste | SHIP | live-fetch epic 3/3.
-=======
+2026-05-31 | lab-l4-pro-gate-error-tradevalues | PLACEHOLDER_HASH | SHIP | L4 shared 402 gate on tradevalues+efficiency; next remaining renderers.
 2026-05-31 | lab-og-sample-labels-rankings-tv-breakouts | 54443bc8 | SHIP | SAMPLE stickers mirror LIVE dynasty/RBS/value curve; T1/T5/T6.
 
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | SHIP | Explore L5 export URL carries college season filter.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
->>>>>>> origin/razzle-v2-redesign
 
 2026-05-31 | lab-og-launch10-live-fetch-merge | 3f0411ec | SHIP | live-fetch epic atom 1/3; sticker+fetch on base merge.
 2026-05-31 | lab-og-launch10-snapshot-default | e2a3ce8a | SHIP | closes gamelog OG epic; live rows when no snapshot.

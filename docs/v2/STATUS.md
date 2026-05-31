@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 129 |
+| Cycle | 132 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L4 |
-| Next slice | lab-l4-pro-gate-error-tradevalues |
-| Last commit | `5721ee33` |
+| Next slice | lab-l4-pro-gate-error-remaining |
+| Last commit | `PLACEHOLDER_HASH` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
