@@ -72,3 +72,4 @@ cycle	commit	score	status	pillar	slice	description
 78	c4ce09b7	depth+voice+simplicity	keep	League	L5 Bureau Pressure Map copy link export row	trust=T5,T6; copy link + export; curl pressure-map OG 60661B
 79	0c5112c5	depth+voice+simplicity	keep	Lab	L5 OG snapshot gamelog comps weeks	trust=T5,T6; snapshotRows; curl gamelog 40520B comps 47292B
 80	b0808083	depth+voice+simplicity	keep	League	L5 Bureau H2H OG snapshot decode	trust=T1,T5,T6; OG route decodes snapshot param; H2H export epic complete
+80	b0808083	depth+voice+simplicity	keep	League	L5 Bureau H2H OG snapshot decode	trust=T1,T5,T6; OG route decodes snapshot param; H2H export epic complete
