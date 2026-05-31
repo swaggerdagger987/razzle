@@ -1,6 +1,10 @@
 # Memory — Chief of Staff
 
+<<<<<<< HEAD
 2026-05-31 | lab-og-live-sticker-launch10-staff-picks | da33eafd | keep | Factory open; L5 sticker epic atom 1/3; PR #809.
+=======
+2026-05-31 | Factory cycle 120 pro-gate loading copy | da33eafd | Deduped OG on base #753; L4 epic atom 1/3.
+>>>>>>> origin/razzle-v2-redesign
 
 2026-05-31 | Factory cycle 107 Lab sidebar agent groups | 4e8b0e8e | Workday open; L2 sidebar epic atom 1/2.
 

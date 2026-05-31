@@ -1,6 +1,10 @@
 # Memory — Builder
 
+<<<<<<< HEAD
 2026-05-31 | lab-og-live-sticker-launch10-staff-picks | da33eafd | rankings/tradevalues/breakouts LIVE+SAMPLE label map.
+=======
+2026-05-31 | lab-pro-gate-loading-copy | da33eafd | PanelAgentLoading wired into ProUpgradeGate; 1 file.
+>>>>>>> origin/razzle-v2-redesign
 
 2026-05-31 | lab-sidebar-staff-picks-by-agent | 4e8b0e8e | keep | staffByAgent agent headers.
 
