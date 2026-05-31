@@ -69,3 +69,8 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 100	1b769554	depth+hallway+voice+simplicity	keep	League	L5 Bureau Roster Depth share OG	trust=T2,T5,T6; ShareBar+OG route; curl roster-depth demo 54072B; share-export epic atom 2/3
 101	42069a46	depth+hallway+voice+simplicity	keep	League	L5 Bureau Waiver Tendencies tab unhidden	trust=T2,T5,T6; Hawkeye renderer; build+pytest pass; share-export epic complete 3/3
 102	634cb201	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles share OG merged to base	trust=T2,T5,T6; merge base+SOS; curl build-profiles 72409B; share-export ship epic atom 1/2
+103	5615a8df	depth+voice+simplicity	keep	Lab	L5 Dashboard top5 OG snapshot rows	trust=T5,T6; top5+movers snapshot; curl dashboard 57413B; pytest 51; web build; epic atom 1/4
+104	9d353d84	depth+voice+simplicity	keep	Lab	L5 Weekly heatmap hot-week OG snapshot	trust=T5,T6; hottest Wk N rows; curl weekly snap 51665B demo 63819B; pytest 51; web build; epic atom 2/4
+105	98ae0ef2	depth+voice+simplicity	keep	Lab	L5 Buy/sell combined OG snapshot lanes	trust=T5,T6; Buy/Sell labels 3+3; curl buysell snap 57884B demo 58072B; pytest 51; web build; epic atom 3/4
+106	5ed39e14	depth+voice+simplicity	keep	Lab	L5 Trade values formula-ranked OG rows	trust=T5,T6; rank·Value or rank·formula on snapshot; curl tradevalues snap 62441B demo 62488B; pytest 51; web build; epic atom 4/4 complete
+107	7ec8f82a	depth+voice+simplicity	keep	League	L5 H2H ShareBar canonical snapshot codec	trust=T5,T6; encodeBureauH2HOgSnapshot; curl h2h demo 71895B snap 70829B; pytest 51; web build; epic atom 1/3
