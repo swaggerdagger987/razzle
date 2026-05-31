@@ -1,8 +1,8 @@
-cycle: 158
+cycle: 159
 last_board_cycle: 54
 focus_pillar: Lab
-focus_layer: L4
-next_slice: lab-l4-formula-extraction-or-next-parity
-last_keep_cycle: 158
-last_commit: 5946f096c
-lab_l4_generic_pro_gate_epic: complete
+focus_layer: L5
+next_slice: lab-og-efficiency-live-extract
+last_keep_cycle: 159
+last_commit: f6e0985f3
+lab_l5_og_live_row_parity_epic: active

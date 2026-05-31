@@ -1,1 +1,1 @@
-2026-05-31 | lab-l4-catalog-teaser-batch-1 | 5946f096c | SHIP | Factory cycle 1; L4 epic complete; NO_LOCK_GUARDRAIL.
+2026-05-31 | lab-og-dashboard-live-extract | f6e0985f3 | SHIP | Factory open cycle 1; L5 epic atom 1/4; NO_LOCK_GUARDRAIL.

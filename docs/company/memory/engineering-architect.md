@@ -1,1 +1,1 @@
-2026-05-31 | lab-l4-catalog-teaser-batch-1 | 5946f096c | SHIP | 2-file contract; pytest domain markers for catalog slugs.
+2026-05-31 | lab-og-dashboard-live-extract | f6e0985f3 | SHIP | 2-file OG route contract; extract before generic top5 merge.

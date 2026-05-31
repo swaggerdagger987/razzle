@@ -1,1 +1,1 @@
-2026-05-31 | lab-l4-catalog-teaser-batch-1 | 5946f096c | SHIP | Catalog teaser batch-1 rows+pitches + isGenericCatalogProGateSlug.
+2026-05-31 | lab-og-dashboard-live-extract | f6e0985f3 | SHIP | extractDashboardRows + test_og_dashboard_live_extract.py.

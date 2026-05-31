@@ -1,26 +1,26 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Catalog pro panels still show raw errors instead of the shared L4 upgrade card.",
-  "epic": "Lab L4 — generic pro-gate polish (atom 3/3)",
-  "slice_title": "lab-l4-catalog-teaser-batch-1",
-  "parity_ref": "Lab L4 pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
-  "acceptance_ref": "GENERIC_CATALOG_PRO_GATE_SLUGS have distinct screenshot-worthy teaser rows + pitches",
-  "trust_pillars": ["T2", "T5"],
+  "big_problem": "Lab OG export cards without a snapshot can show generic merged rows instead of the dynasty dashboard leaders and movers users see in-product.",
+  "epic": "Lab L5 — OG live panel row parity (atom 1/4)",
+  "slice_title": "lab-og-dashboard-live-extract",
+  "parity_ref": "Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — /og/dashboard PNG ≥40KB with Value/Chg row labels",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/panel-upgrade-teaser.ts",
-    "apps/api/tests/test_panel_upgrade_teaser.py"
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/api/tests/test_og_dashboard_live_extract.py"
   ],
   "max_files": 2,
-  "max_lines": 80,
+  "max_lines": 120,
   "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q --noconftest",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_dashboard_live_extract.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
-    "PanelRenderer changes",
-    "OG routes",
-    "New catalog panels"
+    "DynastyDashboardRenderer changes",
+    "Other Launch-10 panels",
+    "Explore OG"
   ],
   "builder_mode": "composer-surgical"
 }

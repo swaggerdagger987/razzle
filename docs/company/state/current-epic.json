@@ -1,50 +1,44 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Catalog pro panels still show raw errors instead of the shared L4 upgrade card.",
-  "epic_title": "Lab L4 — generic pro-gate polish",
-  "parity_ref": "Lab L4 pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
+  "epic_status": "active",
+  "big_problem": "Lab OG export cards without a snapshot can show generic merged rows instead of the dynasty dashboard leaders and movers users see in-product.",
+  "epic_title": "Lab L5 — OG live panel row parity",
+  "parity_ref": "Explore L5 / Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-l4-pro-gate-generic-renderer",
-      "title": "GenericPanelRenderer uses ProGateFromPanelError",
-      "status": "done",
-      "merge_commit": "4c4f7d8f2"
+      "id": "lab-og-dashboard-live-extract",
+      "title": "Dashboard OG live extract mirrors DynastyDashboardRenderer rows",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-l4-pro-gate-surface-pytest-catalog",
-      "title": "Pytest guard catalog slugs use GenericPanelRenderer path",
-      "status": "done",
-      "merge_commit": "4c4f7d8f2"
+      "id": "lab-og-efficiency-live-extract",
+      "title": "Efficiency OG live extract uses most_efficient PPO board only",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-l4-catalog-teaser-batch-1",
-      "title": "Expand GENERIC_PRO_GATE_SLUGS teaser rows + pitch copy",
-      "status": "done",
-      "merge_commit": "5946f096c"
+      "id": "lab-og-aging-live-extract",
+      "title": "Aging OG live extract uses position tab past-peak PPG rows",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-dashboard-snapshot-rank-diff",
+      "title": "Dashboard snapshot OG prefers rank_diff on mover rows",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T13:00:00Z",
-  "updated_at": "2026-05-31T12:20:00Z",
+  "next_atom_id": "lab-og-dashboard-live-extract",
+  "created_at": "2026-05-31T14:00:00Z",
+  "updated_at": "2026-05-31T14:00:00Z",
   "completed_epics": [
     {
       "id": "lab-l4-generic-pro-gate-polish",
       "status": "complete",
       "last_atom": "lab-l4-catalog-teaser-batch-1",
       "merge_commit": "5946f096c"
-    },
-    {
-      "id": "lab-l5-og-watermark-display-names",
-      "status": "complete",
-      "last_atom": "lab-og-watermark-display-name",
-      "merge_commit": "338709883"
-    },
-    {
-      "id": "lab-l5-og-hallway-deep-links",
-      "status": "complete",
-      "last_atom": "lab-og-tolab-snapshot-player",
-      "merge_commit": "1a12d9c0b"
     }
   ]
 }

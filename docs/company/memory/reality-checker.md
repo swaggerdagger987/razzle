@@ -1,1 +1,1 @@
-2026-05-31 | lab-l4-catalog-teaser-batch-1 | 5946f096c | PASS | pytest 21; web build exit 0; no OG gate.
+2026-05-31 | lab-og-dashboard-live-extract | f6e0985f3 | PASS | pytest 2; curl dashboard 66547B; web build exit 0.
