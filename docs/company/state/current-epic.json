@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "epic_status": "complete",
   "big_problem": "Lab sidebar Staff Picks hide which specialist owns each launch panel — the hallway band should be visible in nav.",
   "epic_title": "Lab L2 — Staff Picks sidebar by agent",
@@ -40,5 +41,22 @@
       "last_atom": "lab-og-live-demo-fallback-copy",
       "merge_commit": "18d92f6b"
     }
+=======
+  "big_problem": "Lab Pro gates still feel like paywall errors — generic blur rows and no path back to the free screener break the conversion funnel.",
+  "epic_title": "Lab L4 — Pro gates feel like upgrade, not error",
+  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
+  "depth_ref": "Lab L4",
+  "atoms": [
+    {"id": "lab-pro-gate-hallway-teasers", "title": "Pro gate hallway screener link + teasers for comps/tiers/vorp/stocks", "status": "done", "merge_commit": "675044ea"},
+    {"id": "lab-pro-gate-launch10-teasers", "title": "Launch-10 pro panel teasers audit — fill any slug gaps in generic renderer", "status": "done", "merge_commit": "b0405d43"},
+    {"id": "lab-pro-gate-perks-copy", "title": "Pro gate perks list matches PARITY launch-10 + Bureau-7 names", "status": "done", "merge_commit": "73fdbf9c"}
+  ],
+  "next_atom_id": null,
+  "epic_status": "complete",
+  "created_at": "2026-05-31T09:15:00Z",
+  "updated_at": "2026-05-31T12:40:00Z",
+  "completed_epics": [
+    {"id": "lab-l4-pro-gate-polish", "status": "complete", "last_atom": "lab-pro-gate-perks-copy", "merge_commit": "73fdbf9c"}
+>>>>>>> origin/razzle-v2-redesign
   ]
 }
