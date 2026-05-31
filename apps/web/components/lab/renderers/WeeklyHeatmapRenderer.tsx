@@ -9,7 +9,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
+import { panelApiGet } from "@/lib/panel-api";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
+import { ProGateFromPanelError } from "../ProGateFromPanelError";
 
 const POSITIONS = ["QB", "RB", "WR", "TE"] as const;
 
@@ -51,9 +53,9 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
   const q = useQuery({
     queryKey: ["panel", panel.slug, position],
     queryFn: async () => {
-      const res = await fetch(`/api/panels/${panel.slug}?position=${position}&limit=25`);
-      if (!res.ok) throw new Error(`API ${res.status}`);
-      return res.json() as Promise<HeatmapData>;
+      return panelApiGet<HeatmapData>(
+        `/api/panels/${panel.slug}?position=${position}&limit=25`,
+      );
     },
   });
 
@@ -102,6 +104,8 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
   }
 
   if (q.isError) {
+    const gate = ProGateFromPanelError({ panel, error: q.error });
+    if (gate) return gate;
     return <p className="p-6 text-red">something fumbled: {(q.error as Error).message}</p>;
   }
 

@@ -13,6 +13,7 @@ import {
   sortPlayersByFormula,
   type WithFormulaScore,
 } from "@/lib/panel-formula-sort";
+import { panelApiGet } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
@@ -61,16 +62,7 @@ export function BreakoutsRenderer({ panel }: Props) {
     queryKey: ["panel", panel.slug, position],
     queryFn: async () => {
       const qs = position ? `?position=${position}` : "";
-      const res = await fetch(`/api/panels/${panel.slug}${qs}`);
-      if (res.status === 402) {
-        const body = await res.json().catch(() => ({}));
-        const detail = (body as { detail?: Record<string, string> }).detail ?? {};
-        throw Object.assign(new Error(detail.message ?? "Pro plan required"), {
-          upgrade: detail,
-        });
-      }
-      if (!res.ok) throw new Error(`API ${res.status}`);
-      return res.json() as Promise<BreakoutsData>;
+      return panelApiGet<BreakoutsData>(`/api/panels/${panel.slug}${qs}`);
     },
   });
 

@@ -8,7 +8,9 @@ import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
+import { panelApiGet } from "@/lib/panel-api";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
+import { ProGateFromPanelError } from "../ProGateFromPanelError";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
@@ -43,9 +45,7 @@ export function ProspectsRenderer({ panel }: Props) {
     queryKey: ["panel", panel.slug, position],
     queryFn: async () => {
       const qs = position ? `?position=${position}` : "";
-      const res = await fetch(`/api/panels/${panel.slug}${qs}`);
-      if (!res.ok) throw new Error(`API ${res.status}`);
-      return res.json() as Promise<ProspectsData>;
+      return panelApiGet<ProspectsData>(`/api/panels/${panel.slug}${qs}`);
     },
   });
 
@@ -70,6 +70,8 @@ export function ProspectsRenderer({ panel }: Props) {
   }
 
   if (q.isError) {
+    const gate = ProGateFromPanelError({ panel, error: q.error });
+    if (gate) return gate;
     return <p className="p-6 text-red">something fumbled: {(q.error as Error).message}</p>;
   }
 

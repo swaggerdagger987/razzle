@@ -9,7 +9,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
+import { panelApiGet } from "@/lib/panel-api";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
+import { ProGateFromPanelError } from "../ProGateFromPanelError";
 
 interface DashboardPlayer {
   player_id: string;
@@ -107,9 +109,7 @@ export function DynastyDashboardRenderer({ panel }: Props) {
     queryKey: ["panel", panel.slug, season],
     queryFn: async () => {
       const qs = season ? `?season=${season}` : "";
-      const res = await fetch(`/api/panels/${panel.slug}${qs}`);
-      if (!res.ok) throw new Error(`API ${res.status}`);
-      return res.json() as Promise<DashboardData>;
+      return panelApiGet<DashboardData>(`/api/panels/${panel.slug}${qs}`);
     },
   });
 
@@ -168,6 +168,8 @@ export function DynastyDashboardRenderer({ panel }: Props) {
   }
 
   if (q.isError) {
+    const gate = ProGateFromPanelError({ panel, error: q.error });
+    if (gate) return gate;
     return <p className="p-6 text-red">something fumbled: {(q.error as Error).message}</p>;
   }
 

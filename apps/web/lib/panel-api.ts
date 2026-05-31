@@ -26,22 +26,28 @@ export function isUpgradeRequiredError(err: unknown): err is UpgradeRequiredErro
   return err instanceof UpgradeRequiredError;
 }
 
+async function throwOnPanel402(res: Response): Promise<void> {
+  if (res.status !== 402) return;
+  const body = await res.json().catch(() => ({}));
+  const detailRaw = (body as { detail?: unknown }).detail;
+  const parsed = UpgradeDetailSchema.safeParse(detailRaw);
+  const detail = parsed.success ? parsed.data : {};
+  throw Object.assign(
+    new Error(detail.message ?? "Pro plan required — upgrade or use DEV toolbar"),
+    { upgrade: detail },
+  );
+}
+
+/** Panel fetch with 402 upgrade payload for ProGateFromPanelError. */
+export async function panelApiGet<T>(url: string): Promise<T> {
+  const res = await fetch(url);
+  await throwOnPanel402(res);
+  if (!res.ok) throw new Error(`API ${res.status}`);
+  return res.json() as Promise<T>;
+}
+
 export async function fetchPanelData(panel: PanelDefinition): Promise<unknown> {
-  // Slug route applies tier gating + catalog defaults
-  const res = await fetch(`/api/panels/${panel.slug}`);
-  if (res.status === 402) {
-    const body = await res.json().catch(() => ({}));
-    const detailRaw = (body as { detail?: unknown }).detail;
-    const parsed = UpgradeDetailSchema.safeParse(detailRaw);
-    const detail = parsed.success ? parsed.data : {};
-    throw new UpgradeRequiredError({
-      message: detail.message ?? "Pro plan required — upgrade or use DEV toolbar",
-      required: detail.required,
-      current: detail.current,
-    });
-  }
-  if (!res.ok) throw new Error(`API ${res.status} on ${panel.slug}`);
-  return res.json();
+  return panelApiGet(`/api/panels/${panel.slug}`);
 }
 
 export function extractItems(data: unknown): Array<Record<string, unknown>> {

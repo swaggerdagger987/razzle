@@ -13,11 +13,11 @@ import {
   sortPlayersByFormula,
   type WithFormulaScore,
 } from "@/lib/panel-formula-sort";
-import { isUpgradeRequiredError } from "@/lib/panel-api";
+import { panelApiGet } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
-import { ProUpgradeGate } from "../ProUpgradeGate";
+import { ProGateFromPanelError } from "../ProGateFromPanelError";
 import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
@@ -69,16 +69,7 @@ export function DynastyRankingsRenderer({ panel }: Props) {
     queryKey: ["panel", panel.slug, position],
     queryFn: async () => {
       const qs = position ? `?position=${position}` : "";
-      const res = await fetch(`/api/panels/${panel.slug}${qs}`);
-      if (res.status === 402) {
-        const body = await res.json().catch(() => ({}));
-        const detail = (body as { detail?: Record<string, string> }).detail ?? {};
-        throw Object.assign(new Error(detail.message ?? "Pro plan required"), {
-          upgrade: detail,
-        });
-      }
-      if (!res.ok) throw new Error(`API ${res.status}`);
-      return res.json() as Promise<RankingsData>;
+      return panelApiGet<RankingsData>(`/api/panels/${panel.slug}${qs}`);
     },
   });
 
@@ -114,30 +105,9 @@ export function DynastyRankingsRenderer({ panel }: Props) {
   }
 
   if (q.isError) {
-    const err = q.error as Error & { upgrade?: { required?: string; current?: string; message?: string } };
-    if (err.upgrade) {
-      return (
-        <ProUpgradeGate
-          panelSlug={panel.slug}
-          panelTitle={panel.title}
-          required={err.upgrade.required ?? "pro"}
-          current={err.upgrade.current ?? "free"}
-          message={err.upgrade.message}
-        />
-      );
-    }
-    if (isUpgradeRequiredError(err)) {
-      return (
-        <ProUpgradeGate
-          panelSlug={panel.slug}
-          panelTitle={panel.title}
-          required={err.required}
-          current={err.current}
-          message={err.message}
-        />
-      );
-    }
-    return <p className="p-6 text-red">something fumbled: {err.message}</p>;
+    const gate = ProGateFromPanelError({ panel, error: q.error });
+    if (gate) return gate;
+    return <p className="p-6 text-red">something fumbled: {(q.error as Error).message}</p>;
   }
 
   const data = q.data!;
