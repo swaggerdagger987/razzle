@@ -104,6 +104,7 @@ const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set([
   "dynasty-comps",
   "percentiles",
   "career",
+  "strengths",
 ]);
 
 /** Panels that default API position when URL omits position — mirror in OG watermark (T6). */
