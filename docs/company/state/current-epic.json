@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab OG export cards should label formula composites with the saved formula name — not generic Score.",
   "epic_title": "Lab L5 — OG snapshot row fidelity (formula labels)",
   "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
@@ -20,11 +20,11 @@
     {
       "id": "lab-og-rankings-formula-statlabel",
       "title": "Dynasty Rankings OG snapshot uses formula.name when formula active",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "c563ffce"
     }
   ],
-  "next_atom_id": "lab-og-rankings-formula-statlabel",
+  "next_atom_id": null,
   "created_at": "2026-05-31T12:00:00Z",
   "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
@@ -33,6 +33,12 @@
       "status": "complete",
       "last_atom": "explore-og-college-band-copy",
       "merge_commit": "1dd9d62f"
+    },
+    {
+      "id": "lab-l5-og-formula-labels",
+      "status": "complete",
+      "last_atom": "lab-og-rankings-formula-statlabel",
+      "merge_commit": "c563ffce"
     }
   ]
 }
