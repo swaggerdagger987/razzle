@@ -27,4 +27,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
 2026-05-31 | Lab OG snapshot rows atom 1/4 | 916ba843 | keep | base64url snapshot + request-origin API fallback
-2026-05-31 | Lab OG position filter OG route | 3d1c3883 | keep | 4 files ~75 lines; position apiParams + demo filter + badge
+2026-05-31 | Lab OG position filter OG route | 853ec05c | keep | 4 files ~75 lines; position apiParams + demo filter + badge

@@ -14,7 +14,7 @@
       "id": "lab-og-filter-breakouts-weekly",
       "title": "Position filter on breakouts and weekly heatmap OG exports",
       "status": "done",
-      "merge_commit": "3d1c3883"
+      "merge_commit": "853ec05c"
     },
     {
       "id": "lab-og-filter-prospects-tradevalues",
