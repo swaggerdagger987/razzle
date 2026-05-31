@@ -8,8 +8,8 @@
     {
       "id": "lab-og-panels-api-live",
       "title": "OG fetch via /api/panels/{slug} with dashboard/breakout extractors + live tape label",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "997c5e5f"
     },
     {
       "id": "lab-og-export-link-rankings-breakouts",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-panels-api-live",
+  "next_atom_id": "lab-og-export-link-rankings-breakouts",
   "created_at": "2026-05-31T04:15:00Z",
-  "updated_at": "2026-05-31T04:15:00Z"
+  "updated_at": "2026-05-31T04:25:00Z"
 }
