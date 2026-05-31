@@ -1,21 +1,9 @@
-<<<<<<< HEAD
-cycle: 98
+cycle: 99
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L4
 next_slice: lab-pro-gate-dashboard-teaser
-last_keep_cycle: 98
+last_keep_cycle: 99
 last_commit: ce0fb94e
 lab_l4_staff_picks_by_agent: complete
-league_l5_bureau_og_snapshot_epic: active
-league_l5_power_rankings_og_snapshot: shipped
-=======
-cycle: 96
-last_board_cycle: 54
-focus_pillar: League
-focus_layer: L5
-next_slice: league-strength-of-schedule-og-share
-last_keep_cycle: 96
-last_commit: 3f584f61
 league_l5_bureau_depth_og_epic: active
->>>>>>> origin/razzle-v2-redesign
