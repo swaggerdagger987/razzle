@@ -1,20 +1,8 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 132 explore college OG filename | b098d64c | PR #1039; Explore L5 universe epic atom 1/3.
+2026-05-31 | Factory cycle 129 SAMPLE OG labels | 54443bc8 | Workday open cycle 1; panel-labels epic atom 1/3 complete after merge.
 
-2026-05-31 | Factory cycle 132 FROM PANEL snapshot evidence | 164159413 | workday cycle 2; NO_LOCK_GUARDRAIL; trust-sticker epic 2/3.
-
-2026-05-31 | Factory cycle 131 FROM PANEL OG sticker | 7d49e4f0c | workday cycle 1; trust-sticker epic 1/3.
-
-2026-05-31 | Factory cycle 130 breakouts/dashboard OG evidence | 96d43d1b | workday cycle 1; NO_LOCK_GUARDRAIL; sticker epic 3/3 complete.
-
-2026-05-31 | Factory cycle 129 tradevalues/aging OG evidence | a74c2afe | workday cycle 1; gh rate limit NO_LOCK; sticker epic 2/3.
-
-2026-05-31 | Factory cycle 128 OG LIVE stickers | 444c7699 | workday cycle 1; lock #832; sticker epic 1/3.
-
-2026-05-31 | Factory cycle 125 OG LIVE labels | ad24a219 | merged on base; panel-native partial labels superseded by sticker epic.
-
-2026-05-31 | Factory cycle 118 perks copy | f56fdbd8 | keep | workday open cycle 1; L4 epic complete atom 3/3.
+2026-05-31 | Factory cycle 125 OG LIVE labels | ad24a219 | Workday open; panel-native LIVE epic 1/3; lock #842.
 
 2026-05-31 | Factory cycle 121 pro gate panel pitches | ad24a219 | L4 epic atom 2/3; factory open.
 
