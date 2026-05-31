@@ -1,4 +1,4 @@
-2026-05-31 | bureau-waiver-og-watermark-band | f6e0985f3 | 2 files; H2H band pattern on waiver OG.
+2026-05-31 | bureau-waiver-og-watermark-band | 3bb457789 | 2 files; H2H band pattern on waiver OG.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | 3 files; decodeOgSnapshot pid + labOgWatermarkLink snapshotPlayerId.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | 2 files; demo blurb parity.
@@ -6,7 +6,7 @@
 # Memory — Engineering Architect
 
 2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | 3 files; mirrors H2H atlasRoomPath pattern for Bones.
-2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | 2 files pytest-only; SNAPSHOT_FROM_PANEL_SLUGS extended.
+2026-05-31 | lab-og-from-panel-gate-c-rest | 3bb457789 | 2 files pytest-only; SNAPSHOT_FROM_PANEL_SLUGS extended.
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | 2 files; includeDefaultPlayer guard in labOgWatermarkLink.
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | 2 files; extractBuySellRows + buysellStatKeys.
 

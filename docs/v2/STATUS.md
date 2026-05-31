@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | bureau-sos-og-watermark-band |
-| Last commit | `f6e0985f3` |
+| Last commit | `3bb457789` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
