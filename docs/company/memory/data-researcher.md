@@ -1,5 +1,9 @@
 # Memory — Data Researcher
 
+2026-05-31 | Buy/sell mismatch + aging cliff OG angles | cycle 96 | logged | REDDIT-INTEL | ranked /og/buysell and /og/aging for trade-thread screenshots
+
+2026-05-31 | Trade-value + PPO OG screenshot angle | cycle 95 | logged | REDDIT-INTEL | Bones/Octo ranked export cards for trade threads
+
 2026-05-31 | trade values formula OG | cycle 95 | DynastyFF threads rank custom formulas before sharing trade boards
 
 Append-only log of recurring user pain patterns, language signals, and feature-gap
@@ -40,3 +44,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Bureau power OG | 9714bfa6 | keep | diff+luck bars match in-app power board story for screenshots
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles archetypes | 2ee04975 | keep | league construction tape for trade-DM screenshots
+- 2026-05-31 cycle 93: No new Reddit intel; SOS slate tone labels for share hooks.

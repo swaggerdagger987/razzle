@@ -203,21 +203,28 @@ export function AgingCurvesRenderer({ panel }: Props) {
   });
 
   const chartPlayers = useMemo(() => {
-    if (!formula || !statsQ.data) return rawPlayers;
-    return sortPlayersByFormula(rawPlayers, statsQ.data, formula);
+    if (formula && statsQ.data) return sortPlayersByFormula(rawPlayers, statsQ.data, formula);
+    return [...rawPlayers].sort((a, b) => b.ppg - a.ppg);
   }, [formula, rawPlayers, statsQ.data]);
 
   const pastPeak = useMemo(() => {
     const filtered = rawPlayers.filter((p) => peakAge != null && p.age > peakAge);
-    if (!formula || !statsQ.data) return filtered.slice(0, 5);
-    return [...sortPlayersByFormula(filtered, statsQ.data, formula)].reverse().slice(0, 5);
+    if (formula && statsQ.data) {
+      return [...sortPlayersByFormula(filtered, statsQ.data, formula)]
+        .reverse()
+        .slice(0, 5);
+    }
+    return [...filtered].sort((a, b) => b.ppg - a.ppg).slice(0, 5);
   }, [formula, rawPlayers, statsQ.data, peakAge]);
 
   const top = chartPlayers[0] ?? null;
 
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
     const source = pastPeak.length > 0 ? pastPeak : chartPlayers;
-    return source.slice(0, 6).map((p) => ({
+    return [...source]
+      .sort((a, b) => b.ppg - a.ppg)
+      .slice(0, 6)
+      .map((p) => ({
       name: p.name,
       position,
       team: p.team,

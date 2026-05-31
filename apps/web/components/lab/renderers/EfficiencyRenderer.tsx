@@ -164,8 +164,10 @@ export function EfficiencyRenderer({ panel }: Props) {
   });
 
   const efficient = useMemo(() => {
-    if (!formula || !statsQ.data) return rawEfficient;
-    return sortPlayersByFormula(rawEfficient, statsQ.data, formula);
+    if (formula && statsQ.data) {
+      return sortPlayersByFormula(rawEfficient, statsQ.data, formula);
+    }
+    return [...rawEfficient].sort((a, b) => (b.ppo ?? 0) - (a.ppo ?? 0));
   }, [formula, rawEfficient, statsQ.data]);
 
   const volume = useMemo(() => {
