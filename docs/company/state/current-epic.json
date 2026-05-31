@@ -7,8 +7,8 @@
     {
       "id": "league-mc-og-scenario-delta",
       "title": "Monte Carlo OG — what-if trade delta on snapshot export card",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "057f7f95c"
     },
     {
       "id": "league-mc-sharebar-scenario-encode",
@@ -23,7 +23,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-mc-og-scenario-delta",
+  "next_atom_id": "league-mc-sharebar-scenario-encode",
   "epic_status": "active",
   "created_at": "2026-05-31T12:00:00Z",
   "updated_at": "2026-05-31T12:00:00Z",
