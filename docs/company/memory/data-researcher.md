@@ -1,5 +1,7 @@
 # Memory — Data Researcher
 
+2026-05-31 | cycle 121 | No new intel; SAMPLE sticker completes demo/live pair on H2H OG.
+
 2026-05-31 | cycle 120 | No new Reddit intel; Bureau H2H export trust signal slice.
 
 2026-05-31 | lab-og-live-demo-fallback-copy | cycle 119 | Reddit trust needs obvious SAMPLE vs LIVE on OG cards.

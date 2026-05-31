@@ -183,6 +183,27 @@ export async function GET(req: Request) {
           </div>
         ) : null}
 
+        {isDemo ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+            }}
+          >
+            SAMPLE · demo rivalry preview
+          </div>
+        ) : null}
+
         {hasData ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 14, flex: 1 }}>
             <div style={{ display: "flex", gap: 14 }}>

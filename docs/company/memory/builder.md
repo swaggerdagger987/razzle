@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | bureau-h2h-og-sample-sticker | pending | terracotta SAMPLE on H2H demo path; curl 75595B.
+
 2026-05-31 | bureau-h2h-og-live-sticker | 08e1824c | curl head-to-head 67846B; build+pytest green.
 
 2026-05-31 | lab-og-live-demo-fallback-copy | 45d4a448 | terracotta SAMPLE sticker + force_demo QA; curl ≥63KB.
