@@ -15,6 +15,12 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:**
 ```
 
+## 2026-05-31 — Factory cycle 1 (Company OS)
+
+1. **Position-grade roster screenshots** still win trade threads — A–F grid + thinnest-spot callout beats prose rankings.
+2. **Hawkeye on Self-Scout OG** matches in-product agent ownership; keeps Bureau-7 hallway consistent.
+3. Standing pattern: sample preview on OG when Sleeper not linked — protects trust (T1).
+
 ## Standing gaps to validate
 
 - ~~College stats in same screener as NFL~~ → F-02 GREEN (Cycle 1)
@@ -266,6 +272,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 
 1. **Manager archetype labels are trade-DM shorthand** — PANIC SELLER / HOARDER badges travel faster than transaction counts in group chats.
 2. **Bureau OG series compounds** — Pressure Map + Manager Profiles give two screenshot hooks before trade-network atom.
+
+## 2026-05-31 — Cycle 63 (factory reopen cycle 1)
+
+1. **Trade partnership lanes are collusion bait** — "these two trade every week" screenshots spark DM threads; OG card must show partner pairs + trade counts, not a graph stub.
+2. **Bones trade-network OG closes atom 3/4** — Bureau export trilogy (pressure, managers, network) now screenshot-ready for deadline season.
 
 ## 2026-05-31 — Cycle 59
 

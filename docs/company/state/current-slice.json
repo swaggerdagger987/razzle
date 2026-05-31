@@ -2,25 +2,25 @@
   "date": "2026-05-31",
   "big_problem": "Bureau-7 moat tabs need shareable OG cards so league intel screenshots travel in trade group chats (PARITY League L5).",
   "epic": "League L5 — Bureau OG cards for Bureau-7",
-  "slice_title": "Manager Profiles OG export card with archetype rows",
+  "slice_title": "Self-Scout OG export card with depth grades snapshot",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3 — /og/manager-profiles PNG ≥40KB with archetype rows",
+  "acceptance_ref": "FACTORY-DOD Gate C2/C3 — /og/self-scout PNG ≥40KB with position grade rows",
   "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/manager-profiles/route.tsx",
-    "apps/web/components/league/BureauManagerProfiles.tsx"
+    "apps/web/app/og/self-scout/route.tsx",
+    "apps/web/components/league/BureauSelfScout.tsx"
   ],
   "max_files": 2,
   "max_lines": 280,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-managers.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/manager-profiles?download=1'"
+    "curl -s -o /tmp/og-self-scout.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/self-scout?download=1'"
   ],
   "out_of_scope": [
-    "Trade network / self-scout OG (next atoms)",
     "New API endpoints",
+    "Epic completion doc churn",
     "NORTH_STAR / DESIGN edits"
   ],
   "builder_mode": "composer-surgical"

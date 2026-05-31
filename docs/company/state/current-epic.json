@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Bureau-7 moat tabs need shareable OG cards so league intel screenshots travel in trade group chats (PARITY League L5).",
   "epic_title": "League L5 — Bureau OG cards for Bureau-7",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
@@ -20,17 +20,17 @@
     {
       "id": "league-og-trade-network",
       "title": "Trade Network OG export card with partner lanes",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "2bd28752"
     },
     {
       "id": "league-og-self-scout",
       "title": "Self-Scout OG export card with depth grades snapshot",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "e732f973"
     }
   ],
-  "next_atom_id": "league-og-trade-network",
+  "next_atom_id": null,
   "created_at": "2026-05-31T14:00:00Z",
-  "updated_at": "2026-05-31T02:12:00Z"
+  "updated_at": "2026-05-31T12:30:00Z"
 }
