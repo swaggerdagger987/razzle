@@ -38,7 +38,7 @@
       "id": "lab-l5-formula-og-live-parity",
       "status": "complete",
       "last_atom": "lab-og-from-panel-gate-c-rest",
-      "merge_commit": null
+      "merge_commit": "0b6730166"
     },
     {
       "id": "league-l5-trade-finder-gtm",
