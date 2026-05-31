@@ -1,26 +1,11 @@
 {
   "epic_status": "active",
-<<<<<<< HEAD
-  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — not arbitrary table order.",
-  "epic_title": "Lab L5 — OG snapshot row fidelity",
-=======
   "big_problem": "Lab OG export cards ignore position tabs — WR filter still exports the full board.",
   "epic_title": "Lab L5 — OG export honors position filters",
->>>>>>> 0081f4a4 (standup metadata: 2026-05-31 — record 02a35b95)
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-<<<<<<< HEAD
-      "id": "lab-og-prospects-rps-ranked",
-      "title": "Prospects OG export ranks top-6 by RPS with position filter",
-      "status": "done",
-      "merge_commit": "c0358ff3"
-    },
-    {
-      "id": "lab-og-weekly-ppg-ranked",
-      "title": "Weekly OG export ranks top-6 by PPG for active position tab",
-=======
       "id": "lab-og-position-tradevalues",
       "title": "Trade values export passes active position filter",
       "status": "in_progress",
@@ -29,31 +14,18 @@
     {
       "id": "lab-og-position-prospects",
       "title": "Prospects export passes active position filter",
->>>>>>> 0081f4a4 (standup metadata: 2026-05-31 — record 02a35b95)
       "status": "pending",
       "merge_commit": null
     },
     {
-<<<<<<< HEAD
-      "id": "lab-og-breakouts-score-ranked",
-      "title": "Breakouts OG export ranks top-6 by breakout score",
-=======
       "id": "lab-og-position-buysell",
       "title": "Buy/sell export passes active position filter",
->>>>>>> 0081f4a4 (standup metadata: 2026-05-31 — record 02a35b95)
       "status": "pending",
       "merge_commit": null
     }
   ],
-<<<<<<< HEAD
-  "next_atom_id": "lab-og-weekly-ppg-ranked",
-  "created_at": "2026-05-31T05:30:00Z",
-  "updated_at": "2026-05-31T05:50:00Z",
-  "last_cycle_commit": "c0358ff3"
-=======
   "next_atom_id": "lab-og-position-tradevalues",
   "created_at": "2026-05-31T05:30:00Z",
-  "updated_at": "2026-05-31T05:55:00Z",
+  "updated_at": "2026-05-31T05:58:00Z",
   "last_cycle_commit": null
->>>>>>> 0081f4a4 (standup metadata: 2026-05-31 — record 02a35b95)
 }
