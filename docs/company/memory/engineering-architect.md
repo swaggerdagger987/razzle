@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | H2H force_demo | da33eafd | Mirrors [panel] forceDemo skip-fetch; ≤20 lines.
+2026-05-31 | H2H force_demo | b4d91213 | Mirrors [panel] forceDemo skip-fetch; ≤20 lines.
 
 2026-05-31 | H2H OG SAMPLE badge | 7b9639d9 | isDemo terracotta block; symmetric to LIVE teal.
 

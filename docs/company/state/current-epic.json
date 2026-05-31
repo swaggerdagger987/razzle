@@ -20,7 +20,7 @@
       "id": "bureau-h2h-og-force-demo-qa",
       "title": "H2H OG — force_demo QA param for Gate C SAMPLE curl",
       "status": "done",
-      "merge_commit": "da33eafd"
+      "merge_commit": "b4d91213"
     }
   ],
   "next_atom_id": null,
@@ -32,7 +32,7 @@
       "id": "bureau-h2h-og-live-vs-sample-stickers",
       "status": "complete",
       "last_atom": "bureau-h2h-og-force-demo-qa",
-      "merge_commit": "da33eafd"
+      "merge_commit": "b4d91213"
     },
     {
       "id": "lab-l5-og-live-rows-launch10",

@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | H2H force_demo QA | da33eafd | Gate C curl with league params; h2h-stickers epic complete.
+2026-05-31 | H2H force_demo QA | b4d91213 | Gate C curl with league params; h2h-stickers epic complete.
 
 2026-05-31 | H2H OG SAMPLE sticker | 7b9639d9 | T1: demo vs live obvious; atom 2/3 h2h-stickers epic.
 

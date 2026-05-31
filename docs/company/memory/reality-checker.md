@@ -1,6 +1,6 @@
 # Memory — Reality Checker
 
-2026-05-31 | H2H force_demo PASS | da33eafd | curl force_demo 77736B; pytest 3 passed.
+2026-05-31 | H2H force_demo PASS | b4d91213 | curl force_demo 77736B; pytest 3 passed.
 
 2026-05-31 | H2H SAMPLE sticker PASS | 7b9639d9 | curl 75595B demo PNG; SAMPLE on isDemo only.
 
