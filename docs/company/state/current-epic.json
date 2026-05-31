@@ -1,31 +1,38 @@
 {
-  "epic_status": "active",
-  "big_problem": "Lab OG export cards must mirror in-panel position filters — snapshot-less exports still fetch unscoped live rows.",
-  "epic_title": "Lab L5 — OG export matches in-panel position filters",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "epic_status": "complete",
+  "big_problem": "Bureau Schedule tab is live but Octo verdict cards cannot travel — no OG export path for rest-of-season slate intel.",
+  "epic_title": "League L5 — Bureau Schedule SOS export",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-position-efficiency-aging",
-      "title": "Efficiency + aging export passes position filter to OG",
+      "id": "league-sos-og-export",
+      "title": "Bureau Schedule OG share card with snapshot rows",
       "status": "done",
-      "merge_commit": "f358349d"
-    },
-    {
-      "id": "lab-og-position-tradevalues-prospects",
-      "title": "Trade values + prospects export passes position filter",
-      "status": "pending",
-      "merge_commit": null
-    },
-    {
-      "id": "lab-og-position-buysell",
-      "title": "Buy/sell export passes position filter to OG",
-      "status": "pending",
-      "merge_commit": null
+      "merge_commit": "bf91c891"
     }
   ],
-  "next_atom_id": "lab-og-position-tradevalues-prospects",
-  "created_at": "2026-05-31T06:10:00Z",
-  "updated_at": "2026-05-31T06:15:00Z",
-  "last_cycle_commit": "f358349d"
+  "next_atom_id": null,
+  "created_at": "2026-05-31T06:20:00Z",
+  "updated_at": "2026-05-31T06:25:00Z",
+  "completed_epics": [
+    {
+      "id": "league-l5-unhide-bureau-tabs",
+      "status": "complete",
+      "last_atom": "league-strength-of-schedule-tab",
+      "merge_commit": "eb542d51"
+    },
+    {
+      "id": "league-l5-sos-export",
+      "status": "complete",
+      "last_atom": "league-sos-og-export",
+      "merge_commit": "bf91c891"
+    }
+  ],
+  "next_epic": {
+    "epic_status": "active",
+    "big_problem": "Lab OG export cards must mirror in-panel position filters — snapshot-less exports still fetch unscoped live rows.",
+    "epic_title": "Lab L5 — OG export matches in-panel position filters",
+    "next_atom_id": "lab-og-position-tradevalues-prospects"
+  }
 }

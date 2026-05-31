@@ -1,9 +1,11 @@
 "use client";
 
 import { AGENT_BY_ID } from "@razzle/agents";
+import { encodeBureauSosOgSnapshot } from "@/lib/bureau-sos-og-snapshot";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import { useCallback, useMemo, useState } from "react";
 
 interface Props {
   data: Record<string, unknown>;
@@ -16,10 +18,45 @@ export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
   const yourPpg = data.your_ppg != null ? Number(data.your_ppg) : null;
   const oppAvg = data.opponent_avg_ppg != null ? Number(data.opponent_avg_ppg) : null;
   const verdict = String(data.verdict ?? "");
+  const userId = String(data.user_id ?? "");
+  const leagueLabel = String(data.league_id ?? leagueId);
   const delta =
     yourPpg != null && oppAvg != null && !Number.isNaN(yourPpg) && !Number.isNaN(oppAvg)
       ? Math.round((yourPpg - oppAvg) * 10) / 10
       : null;
+  const [copied, setCopied] = useState(false);
+
+  const schedulePath = `/league/${leagueId}/strength-of-schedule`;
+
+  const ogSnapshot = useMemo(() => {
+    if (yourPpg == null || oppAvg == null || !verdict) return undefined;
+    return encodeBureauSosOgSnapshot({
+      verdict,
+      your_ppg: yourPpg,
+      opponent_avg_ppg: oppAvg,
+      your_rank: yourRank,
+      league_id: leagueLabel,
+    });
+  }, [verdict, yourPpg, oppAvg, yourRank, leagueLabel]);
+
+  const ogParams = useMemo(() => {
+    const params = new URLSearchParams({ league: leagueId, download: "1" });
+    if (userId) params.set("user", userId);
+    if (ogSnapshot) params.set("snapshot", ogSnapshot);
+    return params;
+  }, [leagueId, userId, ogSnapshot]);
+
+  const copyLink = useCallback(async () => {
+    const url =
+      typeof window !== "undefined" ? `${window.location.origin}${schedulePath}` : schedulePath;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }, [schedulePath]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -104,6 +141,20 @@ export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
           </Link>
         </section>
       )}
+
+      <div className="flex flex-wrap items-center gap-2">
+        <button type="button" className="btn-chunky text-xs" onClick={() => void copyLink()}>
+          {copied ? "copied!" : "copy schedule link"}
+        </button>
+        <a
+          href={`/og/strength-of-schedule?${ogParams.toString()}`}
+          download="razzle-strength-of-schedule.png"
+          className="btn-chunky active text-xs"
+          style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+        >
+          export card
+        </a>
+      </div>
 
       <footer className="flex flex-wrap gap-4 text-sm">
         <Link href={`/league/${leagueId}/power-rankings` as Route} className="text-orange underline">
