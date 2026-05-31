@@ -1,8 +1,8 @@
-cycle: 95
+cycle: 96
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-position-efficiency-aging
+next_slice: lab-og-position-tradevalues-prospects
 last_keep_cycle: 95
 last_commit: da33eafd
 league_l5_bureau_hidden_tabs_epic: shipping

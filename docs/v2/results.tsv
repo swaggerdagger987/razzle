@@ -59,3 +59,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 91	a2536dcc	depth+voice+simplicity	keep	League	L5 Bureau Waiver Tendencies tab unhidden	trust=T2,T5; Hawkeye renderer; waiver-tendencies nav visible; web build PASS; epic atom 2/3
 94	1d6b31b5	depth+hallway+voice+simplicity	keep	League	L5 Bureau Schedule SOS tab unhidden	trust=T2,T5,T6; Octo slate verdict; HIDDEN_BUREAU_SLUGS empty; build PASS pytest 51; epic atom 3/3 complete
 95	f15c4e52	depth+hallway+voice+simplicity	keep	League	L5 Bureau Schedule SOS publish	trust=T2,T5,T6; verify ship cycle 95; pytest 51 web build PASS; league hidden-tabs epic merge pending
+96	3cbd834f	depth+voice+simplicity	keep	Lab	L5 OG efficiency aging position filter	trust=T5,T6; LabOgExportLink position param; curl RB 45KB; pytest 51; epic atom 1/3

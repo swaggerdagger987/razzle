@@ -46,3 +46,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Bureau Trade Network share bar | 1616484c | keep | BureauTradeNetworkShareBar; curl trade-network OG 68090B
 2026-05-31 | Cycle 86 Trade Network copy link | 1d6b31b5 | keep | Bureau behavioral share atom 3
 2026-05-31 | league-build-profiles-tab | 1d6b31b5 | keep | BureauBuildProfiles Atlas archetype grid; unhide slug; build PASS pytest 51
+2026-05-31 | lab-og-position-efficiency-aging | 3cbd834f | keep | LabOgExportLink position on Efficiency+Aging; curl RB 45KB
