@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-from-panel-gate-c-curl | f6e0985f3 | PASS | curl breakouts 66331B buysell 63427B; pytest 4.
 2026-05-31 | lab-og-from-panel-gate-c-rest | 15a363f89 | PASS | pytest 3; web build exit 0.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Reality Checker

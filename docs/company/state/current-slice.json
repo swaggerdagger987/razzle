@@ -1,21 +1,24 @@
 {
   "date": "2026-05-31",
   "big_problem": "Lab OG snapshot exports only guard rankings/weekly in pytest — Launch-10 rest can lose FROM PANEL trust without CI.",
-  "epic": "Lab L5 — FROM PANEL Gate C (Launch-10 rest) (atom 1/3)",
-  "slice_title": "FROM PANEL pytest guard — remaining Launch-10 snapshot slugs",
-  "atom_id": "lab-og-from-panel-gate-c-rest",
+  "epic": "Lab L5 — FROM PANEL Gate C (Launch-10 rest) (atom 2/3)",
+  "slice_title": "Gate C curl evidence — breakouts + buysell snapshot PNG ≥40KB",
+  "atom_id": "lab-og-from-panel-gate-c-curl",
   "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2",
+  "acceptance_ref": "FACTORY-DOD Gate C2/C4",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/api/tests/test_og_from_panel_sticker.py"
+    "apps/api/tests/test_og_from_panel_gate_c_curl.py",
+    "docs/v2/evidence/2026-05-31-lab-og-from-panel-gate-c-curl.md"
   ],
-  "max_files": 1,
-  "max_lines": 80,
+  "max_files": 2,
+  "max_lines": 120,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_from_panel_sticker.py -q --noconftest",
-    "npm run build --workspace=apps/web"
+    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_from_panel_gate_c_curl.py -q --noconftest",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-breakouts-snap.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/breakouts?download=1&snapshot=<BREAKOUTS_SNAPSHOT>'",
+    "curl -s -o /tmp/og-buysell-snap.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/buysell?download=1&snapshot=<BUYSELL_SNAPSHOT>'"
   ],
   "out_of_scope": [
     "OG route behavior changes",
@@ -30,6 +33,5 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   },
-  "status": "shipped",
-  "content_commit": "15a363f89"
+  "status": "in_progress"
 }
