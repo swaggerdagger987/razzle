@@ -1,29 +1,32 @@
 {
   "date": "2026-05-31",
-  "atom_id": "explore-og-universe-query",
-  "big_problem": "Explore college screener shares look like NFL exports — Reddit can't tell dynasty vs college OG cards apart without opening the file.",
-  "epic": "Explore L5 — universe-aware share exports",
-  "slice_title": "Explore OG college export filename + pytest guard",
-  "parity_ref": "Explore L5 — share card matches screener universe",
-  "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — college explore OG contract",
+  "big_problem": "Launch-10 OG Reddit screenshots still read generic — panel-native LIVE labels missing on half the Staff Picks export set.",
+  "epic": "Lab L5 — Launch-10 OG panel-native LIVE labels",
+  "slice_title": "OG LIVE stickers — gamelog + dashboard",
+  "atom_id": "lab-og-live-sticker-gamelog-efficiency",
+  "parity_ref": "docs/v2/PARITY.md — Lab L5 OG card per panel",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "ACCEPTANCE Gate 6 — OG PNG ≥40KB with live rows",
   "trust_pillars": ["T5", "T6"],
-  "allowed_paths": [
-    "apps/web/components/explore/ExploreShareButton.tsx",
-    "apps/api/tests/test_explore_share_og_universe.py"
-  ],
-  "max_files": 2,
-  "max_lines": 60,
+  "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
+  "max_files": 1,
+  "max_lines": 12,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_explore_share_og_universe.py -q",
-    "npm run build --workspace=apps/web 2>&1 | tail -8"
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-gamelog.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/gamelog?download=1'",
+    "curl -s -o /tmp/og-dashboard.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/dashboard?download=1'"
   ],
-  "out_of_scope": ["OG route logic", "screener API", "NORTH_STAR/DESIGN/DECISIONS"],
+  "out_of_scope": [
+    "efficiency/aging/buysell (atom 2 — on branch, merges with PR)",
+    "API changes",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+    "verdict": "SHIP"
+  },
+  "status": "shipped"
 }

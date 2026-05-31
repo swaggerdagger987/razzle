@@ -9,13 +9,13 @@ ROUTE_TS = ROOT / "apps/web/app/og/[panel]/route.tsx"
 
 EXPECTED = {
     "rankings": "LIVE · dynasty values",
-    "gamelog": "LIVE · game log",
+    "gamelog": "LIVE · week tape",
     "efficiency": "LIVE · PPO board",
     "buysell": "LIVE · buy/sell board",
     "tradevalues": "LIVE · trade values",
     "aging": "LIVE · aging curve",
     "breakouts": "LIVE · breakout board",
-    "dashboard": "LIVE · roster grades",
+    "dashboard": "LIVE · dynasty pulse",
 }
 
 
@@ -33,4 +33,5 @@ def test_launch10_live_blurb_suffix_in_route():
     assert "live trade values" in source
     assert "live aging curve" in source
     assert "live breakout board" in source
-    assert "live roster grades" in source
+    assert "live week tape" in source
+    assert "live dynasty pulse" in source

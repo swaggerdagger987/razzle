@@ -102,7 +102,7 @@ function launch10LiveBlurbSuffix(slug: string): string {
     case "breakouts":
       return " · live breakout board";
     case "gamelog":
-      return " · live game log";
+      return " · live week tape";
     case "efficiency":
       return " · live PPO board";
     case "aging":
@@ -110,7 +110,7 @@ function launch10LiveBlurbSuffix(slug: string): string {
     case "buysell":
       return " · live buy/sell board";
     case "dashboard":
-      return " · live roster grades";
+      return " · live dynasty pulse";
     default:
       return " · live nflverse rows";
   }
@@ -129,7 +129,7 @@ function launch10LiveStickerLabel(slug: string): string {
     case "breakouts":
       return "LIVE · breakout board";
     case "gamelog":
-      return "LIVE · game log";
+      return "LIVE · week tape";
     case "efficiency":
       return "LIVE · PPO board";
     case "aging":
@@ -137,7 +137,7 @@ function launch10LiveStickerLabel(slug: string): string {
     case "buysell":
       return "LIVE · buy/sell board";
     case "dashboard":
-      return "LIVE · roster grades";
+      return "LIVE · dynasty pulse";
     default:
       return "LIVE · nflverse rows";
   }
