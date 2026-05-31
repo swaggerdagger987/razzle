@@ -1,8 +1,35 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-launch10-demo-blurbs",
-  "slice_title": "Panel-specific demo blurb + SAMPLE stickers for gamelog, efficiency, aging, buysell, dashboard",
-  "content_commit": "3705fdce8",
-  "reality": "PASS",
-  "merge": "merged"
+  "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
+  "epic": "Lab L5 — OG hallway deep links (atom 3/3)",
+  "slice_title": "Snapshot exports preserve player in watermark",
+  "atom_id": "lab-og-tolab-snapshot-player",
+  "parity_ref": "Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/api/tests/test_lab_og_tolab_watermark.py"
+  ],
+  "max_files": 2,
+  "max_lines": 45,
+  "acceptance_commands": [
+    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-gamelog-snap.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1&player_id=00-0036900&snapshot=eyJuIjoiSmEnTWFyciBDaGFzZSIsInAiOiJXUiIsInQiOiJDTUYiLCJzIjo0Mi4xLCJzbCI6IkZQVFMifV0'"
+  ],
+  "out_of_scope": [
+    "Launch-10 board panels without player_id",
+    "NORTH_STAR/DESIGN/DECISIONS"
+  ],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP"
+  },
+  "status": "shipped",
+  "content_commit": "f6e0985f3"
 }

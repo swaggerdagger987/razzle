@@ -857,13 +857,23 @@ async function fetchOgLiveRows(
 /** Typed hallway path for OG watermark band (T6 — click back into Lab). */
 function labOgWatermarkLink(
   slug: string,
-  opts: { positionFilter: string; playerId: string; playerScoped: boolean },
+  opts: {
+    positionFilter: string;
+    playerId: string;
+    playerScoped: boolean;
+    fromSnapshot?: boolean;
+  },
 ): string {
   const includeDefaultPlayer = TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS.has(slug);
+  const snapshotPreservesPlayer =
+    Boolean(opts.fromSnapshot) &&
+    Boolean(opts.playerId) &&
+    (PLAYER_SCOPED_SLUGS.has(slug) || includeDefaultPlayer);
   const usePlayer =
-    opts.playerScoped &&
-    opts.playerId &&
-    (opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer);
+    snapshotPreservesPlayer ||
+    (opts.playerScoped &&
+      opts.playerId &&
+      (opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer));
   let path = toLab(
     slug,
     usePlayer
@@ -968,6 +978,7 @@ export async function GET(
     positionFilter,
     playerId,
     playerScoped: PLAYER_SCOPED_SLUGS.has(slug),
+    fromSnapshot: isSnapshot,
   });
 
   return new ImageResponse(
