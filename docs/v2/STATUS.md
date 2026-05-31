@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | PARITY pick — Lab L5 OG live rows epic complete |
-| Last commit | `f6e0985f3` |
+| Last commit | `2512fcdf7` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

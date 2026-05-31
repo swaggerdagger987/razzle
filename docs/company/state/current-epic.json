@@ -19,13 +19,13 @@
     {
       "id": "lab-og-weekly-prospects-formula-live",
       "title": "Weekly + Prospects OG — formula_score priority on live fetch",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "2512fcdf7"
     }
   ],
-  "next_atom_id": "lab-og-weekly-prospects-formula-live",
-  "epic_status": "active",
+  "next_atom_id": null,
+  "epic_status": "complete",
   "created_at": "2026-05-31T13:00:00Z",
-  "updated_at": "2026-05-31T11:20:00Z",
+  "updated_at": "2026-05-31T11:22:01Z",
   "completed_epics": ["League L5 — Bureau Trade Finder GTM export"]
 }
