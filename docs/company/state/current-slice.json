@@ -1,28 +1,7 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau rivalry screens must travel in group chats like Explore — copy link plus export on the same row.",
-  "epic": "League L5 — Bureau share row parity",
-  "atom_id": "bureau-h2h-copy-link",
-  "slice_title": "H2H copy rivalry URL + export card with league/user/opponent params",
-  "parity_ref": "PARITY Explore L5 — Bureau H2H export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — /og/head-to-head PNG ≥40KB",
-  "trust_pillars": ["T2", "T5", "T6"],
-  "allowed_paths": [
-    "apps/web/components/league/BureauH2HShareBar.tsx",
-    "apps/web/components/league/BureauHeadToHead.tsx",
-    "apps/web/app/og/head-to-head/route.tsx"
-  ],
-  "max_files": 3,
-  "max_lines": 90,
-  "acceptance_commands": [
-    "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-h2h.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/head-to-head?download=1'"
-  ],
-  "out_of_scope": [
-    "Monte Carlo tab",
-    "NORTH_STAR / DESIGN edits"
-  ],
-  "builder_mode": "composer-surgical"
+  "atom_id": "league-power-rankings-tab",
+  "slice_title": "Unhide Power Rankings Bureau tab with Octo quant renderer",
+  "verdict": "SHIP",
+  "content_commit": "20c7940a"
 }

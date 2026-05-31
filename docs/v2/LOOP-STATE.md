@@ -1,9 +1,9 @@
-cycle: 76
+cycle: 78
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: bureau-monte-carlo-copy-link or league-roster-depth-tab
-last_keep_cycle: 76
+next_slice: PARITY — bureau-monte-carlo-copy-link or league-roster-depth-tab
+last_keep_cycle: 78
 last_commit: e62721a6
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
@@ -27,6 +27,9 @@ lab_l5_og_live_row_epic: complete
 lab_l5_og_snapshot_efficiency_aging: complete
 lab_l5_og_rankings_snapshot: complete
 lab_l5_og_live_data_label: complete
+lab_l5_og_rankings_position_filter: complete
+lab_l5_og_api_origin_rewrite: complete
 league_l5_bureau_h2h_copy_link: complete
 league_l5_bureau_share_row_epic: active
+league_l5_power_rankings_tab: complete
 league_l5_power_rankings_og: complete
