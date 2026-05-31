@@ -19,6 +19,8 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ## Entries
 
+2026-05-31 | lab-og-snapshot-tradevalues-prospects | ogSnapshotRows useMemo + LabOgExportLink | 70af534a | SHIP | keep | mirror Breakouts pattern | — | evidence 2026-05-31-lab-og-snapshot-tradevalues-prospects.md
+
 2026-05-31 | Bureau Schedule SOS tab | BureauStrengthOfSchedule Octo 3-file | da33eafd | keep | verdict+PPG bars; pytest 51; epic 3/3
 2026-05-31 | Lab OG weekly+breakouts snapshotRows | 98e51602 | keep | PPG weekly + RBS breakouts; curl weekly snap 64762B
 2026-05-31 | Bureau Pressure Map copy link | c4ce09b7 | keep | copyPressureLink row; curl pressure-map 60661B
