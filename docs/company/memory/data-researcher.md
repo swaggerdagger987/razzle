@@ -21,11 +21,6 @@
 2026-05-31 | room-briefing-watermark | cycle 139 | No new intel; Room hallway export parity with Explore.
 2026-05-31 | lab-og-tolab-watermark | b80512bb4 | No new Reddit intel; hallway slice only.
 
-2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | No new Reddit intel; empty-state export unblocks tape screenshots.
-
-2026-05-31 | room-briefing-watermark | cycle 139 | No new intel; Room hallway export parity with Explore.
-
-
 2026-05-31 | lab-og-sample-labels | 54443bc8 | No new intel; OG trust-label slice only.
 
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | No new intel; college season in export matches r/CFB screener shares.
@@ -88,3 +83,5 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Cycle 86 Trade Network copy link | 088cebc07 | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles archetypes | 2ee04975 | keep | league construction tape for trade-DM screenshots
 2026-05-31 | Lab OG live sort | 7f78b631 | skip | no new Reddit intel this cycle
+2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | PASS | No new Reddit intel.
+2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | PASS | No new Reddit intel.

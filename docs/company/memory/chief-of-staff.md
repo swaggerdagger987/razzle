@@ -14,3 +14,6 @@
 2026-05-31 | league-trade-finder-og-snapshot | 19a1af0e9 | SHIP | Trade Finder snapshot atom 2/3.
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | buy/sell formula OG parity.
 2026-05-31 | cycle 142 formula OG live | ceadf0402 | SHIP | Lab breakouts/rankings formula_score parity.
+2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | Factory cycle 1; H2H GTM epic 1/3; PR #1350.
+2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | Factory cycle 1; dedup snapshot on base.
+2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Factory cycle 153; weekly WR in OG watermark.

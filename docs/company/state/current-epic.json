@@ -20,8 +20,8 @@
     {
       "id": "lab-og-career-compare-live",
       "title": "Career compare OG multi-player overlay rows",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "9d19930cf"
     },
     {
       "id": "lab-og-percentiles-tolab",
@@ -30,9 +30,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-career-compare-live",
+  "next_atom_id": "lab-og-percentiles-tolab",
   "created_at": "2026-05-31T11:20:00Z",
-  "updated_at": "2026-05-31T12:50:00Z",
+  "updated_at": "2026-05-31T15:00:00Z",
   "completed_epics": [
     "lab-l5-og-export-live-panel-rows",
     "lab-l5-og-hallway-deep-links",

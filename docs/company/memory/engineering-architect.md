@@ -20,11 +20,6 @@
 2026-05-31 | room-briefing-watermark | eca00c3f0 | 3 files; BriefingCard mirrors ExploreShareButton; OG band uses roomPath.
 2026-05-31 | lab-og-tolab-watermark | b80512bb4 | 2 files; labOgWatermarkLink mirrors briefing toRoom pattern.
 
-2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | 1 file GamelogRenderer; footer LabOgExportLink ≤15 lines.
-
-2026-05-31 | room-briefing-watermark | eca00c3f0 | 3 files; BriefingCard mirrors ExploreShareButton; OG band uses roomPath.
-
-
 2026-05-31 | lab-og-sample-labels | 54443bc8 | 1 file route.tsx; launch10DemoStickerLabel + blurbs ≤30 lines.
 
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.
@@ -87,3 +82,5 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
 2026-05-31 | BureauBuildProfiles | 088cebc07 | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
 2026-05-31 | lab-og-rankings-tradevalues-live-sort | 7f78b631 | keep | 1 file route.tsx; PANEL_OG_STAT_KEY + tradevalues formula_score order
+2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | 2 files; isSnapshot EXPORTED sticker.
+2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | 2 files; generalized default position.
