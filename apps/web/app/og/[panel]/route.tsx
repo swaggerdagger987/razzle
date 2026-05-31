@@ -93,8 +93,8 @@ function launch10LiveBlurbSuffix(slug: string): string {
   if (slug === "prospects") return " · live RPS board";
   if (slug === "weekly") return " · live PPG heatmap";
   if (slug === "rankings") return " · live dynasty ranks";
-  if (slug === "breakouts") return " · live RBS board";
-  if (slug === "tradevalues") return " · live value curve";
+  if (slug === "tradevalues") return " · live trade values";
+  if (slug === "breakouts") return " · live breakout board";
   return " · live nflverse rows";
 }
 
@@ -102,9 +102,27 @@ function launch10LiveStickerLabel(slug: string): string {
   if (slug === "prospects") return "LIVE · RPS board";
   if (slug === "weekly") return "LIVE · PPG heatmap";
   if (slug === "rankings") return "LIVE · dynasty ranks";
-  if (slug === "breakouts") return "LIVE · RBS board";
-  if (slug === "tradevalues") return "LIVE · value curve";
+  if (slug === "tradevalues") return "LIVE · trade values";
+  if (slug === "breakouts") return "LIVE · breakout board";
   return "LIVE · nflverse rows";
+}
+
+function launch10DemoBlurbSuffix(slug: string): string {
+  if (slug === "prospects") return " · demo RPS board";
+  if (slug === "weekly") return " · demo PPG heatmap";
+  if (slug === "rankings") return " · demo dynasty ranks";
+  if (slug === "tradevalues") return " · demo trade values";
+  if (slug === "breakouts") return " · demo breakout board";
+  return " · demo nflverse rows";
+}
+
+function launch10DemoStickerLabel(slug: string): string {
+  if (slug === "prospects") return "SAMPLE · RPS board";
+  if (slug === "weekly") return "SAMPLE · PPG heatmap";
+  if (slug === "rankings") return "SAMPLE · dynasty ranks";
+  if (slug === "tradevalues") return "SAMPLE · trade values";
+  if (slug === "breakouts") return "SAMPLE · breakout board";
+  return "SAMPLE · demo rows";
 }
 
 function panelBlurbSuffix(
@@ -123,7 +141,7 @@ function panelBlurbSuffix(
   }
   if (showingDemoRows) {
     if (LAUNCH_10_OG_SLUGS.has(slug)) {
-      return `${pos} · SAMPLE rows — not live nflverse`;
+      return `${pos}${launch10DemoBlurbSuffix(slug)}`;
     }
     return `${pos} · sample preview`;
   }
@@ -776,7 +794,7 @@ export async function GET(
               fontWeight: 700,
             }}
           >
-            SAMPLE · not live data
+            {launch10DemoStickerLabel(slug)}
           </div>
         ) : null}
 
