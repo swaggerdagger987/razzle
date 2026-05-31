@@ -1,6 +1,6 @@
 # Memory — Data Researcher
 
-2026-05-31 | lab-sidebar-staff-picks-agent-order | da33eafd | No new intel; polish on merged grouping.
+2026-05-31 | lab-sidebar-staff-picks-agent-order | 4c09d766 | No new intel; polish on merged grouping.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | no new REDDIT-INTEL; copy-only slice.
 

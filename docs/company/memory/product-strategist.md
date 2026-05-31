@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | lab-sidebar-staff-picks-agent-order | da33eafd | SHIP | Completes merged L2 grouping with collapsed rail CSS.
+2026-05-31 | lab-sidebar-staff-picks-agent-order | 4c09d766 | SHIP | Completes merged L2 grouping with collapsed rail CSS.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
 

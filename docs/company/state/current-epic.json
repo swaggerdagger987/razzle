@@ -14,8 +14,8 @@
     {
       "id": "lab-sidebar-staff-picks-agent-order",
       "title": "Agent group CSS + scout-first order + collapsed avatar rail",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "4c09d766"
     },
     {
       "id": "lab-grid-staff-picks-agent-badges",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-sidebar-staff-picks-agent-order",
+  "next_atom_id": "lab-grid-staff-picks-agent-badges",
   "created_at": "2026-05-31T12:45:00Z",
   "updated_at": "2026-05-31T12:45:00Z",
   "completed_epics": [

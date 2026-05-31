@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | lab-sidebar-staff-picks-agent-order | da33eafd | agent-group CSS + collapsed rail.
+2026-05-31 | lab-sidebar-staff-picks-agent-order | 4c09d766 | agent-group CSS + collapsed rail.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | keep | launch10PerkLabels + bureau7PerkLabels in ProUpgradeGate; pytest 6.
 
