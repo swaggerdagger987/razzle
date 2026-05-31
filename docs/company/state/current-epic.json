@@ -27,7 +27,7 @@
       "id": "league-build-profiles-tab",
       "title": "Unhide Build Profiles tab with Atlas renderer",
       "status": "done",
-      "merge_commit": "da33eafd"
+      "merge_commit": "1f58a7ff"
     }
   ],
   "next_atom_id": null,
