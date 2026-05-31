@@ -1,9 +1,9 @@
 {
   "date": "2026-05-31",
   "big_problem": "Lab OG cards still flatten dynasty dashboard into one stat column — exports do not match the Value/Chg rows users see in-panel, so Reddit screenshots look generic.",
-  "epic": "Lab L5 — OG live panel rows parity (atom 2/3)",
-  "slice_title": "Efficiency + Aging OG — formula_score priority on live fetch",
-  "atom_id": "lab-og-efficiency-aging-formula-live",
+  "epic": "Lab L5 — OG live panel rows parity (atom 3/3)",
+  "slice_title": "Weekly + Prospects OG — formula_score priority on live fetch",
+  "atom_id": "lab-og-weekly-prospects-formula-live",
   "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C2",
@@ -13,16 +13,15 @@
     "apps/api/tests/test_og_launch10_formula_live.py"
   ],
   "max_files": 2,
-  "max_lines": 80,
+  "max_lines": 90,
   "acceptance_commands": [
     "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_launch10_formula_live.py -q --noconftest",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-efficiency.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/efficiency?download=1'",
-    "curl -s -o /tmp/og-aging.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/aging?download=1'"
+    "curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/weekly?download=1'",
+    "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/prospects?download=1'"
   ],
   "out_of_scope": [
-    "weekly/prospects atom",
-    "dashboard extract changes",
+    "dashboard/efficiency/aging changes",
     "NORTH_STAR/DESIGN/DECISIONS"
   ],
   "builder_mode": "composer-surgical",
@@ -32,6 +31,6 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   },
-  "status": "shipped",
-  "content_commit": "a17391fad"
+  "status": "in_progress",
+  "content_commit": null
 }

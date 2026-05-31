@@ -398,9 +398,12 @@ function extractWeeklyHeatmapRows(
           }
         }
       }
+      const formulaScore = Number(p.formula_score ?? 0);
       const ppg = Number(p.ppg ?? 0);
-      const stat = bestPts > 0 ? bestPts : ppg;
-      const statLabel = bestPts > 0 ? `Wk ${bestWeek}` : "PPG";
+      const stat =
+        formulaScore > 0 ? formulaScore : bestPts > 0 ? bestPts : ppg;
+      const statLabel =
+        formulaScore > 0 ? "Score" : bestPts > 0 ? `Wk ${bestWeek}` : "PPG";
       return {
         name: String(p.name ?? ""),
         position: String(p.position ?? ""),
@@ -424,12 +427,17 @@ function extractProspectsRows(
   let rows = prospects
     .map((p) => {
       const rank = p.rank != null ? Number(p.rank) : null;
+      const formulaScore = Number(p.formula_score ?? 0);
+      const rps = Number(p.rps ?? 0);
+      const stat = formulaScore > 0 ? formulaScore : rps;
+      const statLabel =
+        formulaScore > 0 ? "Score" : rank != null && rank > 0 ? `#${rank}` : "RPS";
       return {
         name: String(p.player_name ?? p.name ?? p.full_name ?? ""),
         position: String(p.position ?? p.pos ?? ""),
         team: String(p.school ?? p.team ?? p.team_abbr ?? ""),
-        stat: Number(p.rps ?? 0),
-        statLabel: rank != null && rank > 0 ? `#${rank}` : "RPS",
+        stat,
+        statLabel,
       };
     })
     .filter((r) => r.name.trim().length > 0 && r.stat > 0);
@@ -760,6 +768,16 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
     "ppg",
     ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "ppg"),
   ];
+  const weeklyStatKeys: string[] = [
+    "formula_score",
+    "ppg",
+    ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "ppg"),
+  ];
+  const prospectsStatKeys: string[] = [
+    "formula_score",
+    "rps",
+    ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "rps"),
+  ];
   const buysellStatKeys: string[] = [...BUYSELL_STAT_KEYS];
   const statKeys =
     slug === "tradevalues"
@@ -772,9 +790,13 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
             ? efficiencyStatKeys
             : slug === "aging"
               ? agingStatKeys
-              : slug === "buysell"
-                ? buysellStatKeys
-                : preferredKey
+              : slug === "weekly"
+                ? weeklyStatKeys
+                : slug === "prospects"
+                  ? prospectsStatKeys
+                  : slug === "buysell"
+                    ? buysellStatKeys
+                    : preferredKey
                   ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
                   : [...STAT_CANDIDATE_KEYS];
 
