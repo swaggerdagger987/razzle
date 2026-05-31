@@ -1,5 +1,6 @@
 # Memory — Builder
 
+2026-05-31 | launch10 snapshot-default | da33eafd | fetchOgLiveRows; OG_FETCH_HEADERS; curl rankings 62355B weekly 66512B.
 2026-05-31 | Cycle 118 prospects OG items | e00217d1 | items[] RPS extract when prospects empty; curl 60688B.
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | teal LIVE sticker on Launch-10 when showingLiveData.
 
