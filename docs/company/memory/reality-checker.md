@@ -1,4 +1,4 @@
-2026-05-31 | lab-gtm-share-bar-complete | f6e0985f3 | PASS | pytest 8; curl eff 59375B tv 61928B dash 66547B; build ok.
+2026-05-31 | lab-gtm-share-bar-complete | 35fe55044 | PASS | pytest 8; curl eff 59375B tv 61928B dash 66547B; build ok.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
 

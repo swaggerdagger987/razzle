@@ -1,4 +1,4 @@
-2026-05-31 | lab-gtm-share-bar-complete | f6e0985f3 | SHIP | Factory open cycle 1; Lab GTM share bar epic complete.
+2026-05-31 | lab-gtm-share-bar-complete | 35fe55044 | SHIP | Factory open cycle 1; Lab GTM share bar epic complete.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | Factory open; Explore margin epic 2/4; lock #1415.
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | Factory open cycle 1; Explore L5 margin epic 1/4; NO_LOCK_GUARDRAIL.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Factory open cycle 1; empty OG epic 3/3 complete; NO_LOCK_GUARDRAIL.
