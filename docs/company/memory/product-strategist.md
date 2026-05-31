@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | lab-pro-gate-launch10-teasers | da33eafd | SHIP | Lab L4 atom 2/3; perks name Launch-10 + Bureau-7 | KEEP | atom 3 | cycle 117
+
 2026-05-31 | H2H OG watermark | 44d05684 | League rivalry exports now match Lab/Explore screenshot brand — epic closed.
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | SHIP | Lab L5 live-sort epic closed; ppo beats efficiency_score for in-panel parity.

@@ -1,4 +1,5 @@
 {
+  "epic_status": "active",
   "big_problem": "Lab Pro gates still feel like paywall errors — generic blur rows and no path back to the free screener break the conversion funnel.",
   "epic_title": "Lab L4 — Pro gates feel like upgrade, not error",
   "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
@@ -7,13 +8,13 @@
     {
       "id": "lab-pro-gate-hallway-teasers",
       "title": "Pro gate hallway screener link + teasers for comps/tiers/vorp/stocks",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "675044ea"
     },
     {
       "id": "lab-pro-gate-launch10-teasers",
-      "title": "Launch-10 pro panel teasers audit — fill any slug gaps in generic renderer",
-      "status": "pending",
+      "title": "Launch-10 dashboard teasers + perks list match PARITY launch-10 + Bureau-7",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
@@ -23,10 +24,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-pro-gate-hallway-teasers",
-  "epic_status": "active",
+  "next_atom_id": "lab-pro-gate-perks-copy",
   "created_at": "2026-05-31T09:15:00Z",
-  "updated_at": "2026-05-31T09:15:00Z",
+  "updated_at": "2026-05-31T09:30:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-watermark-band",
@@ -36,21 +36,9 @@
     },
     {
       "id": "lab-l5-launch10-og-live-extract",
-      "status": "active",
+      "status": "complete",
       "last_atom": "lab-og-weekly-prospects-breakouts-live-extract",
       "merge_commit": "8d8b2635"
-    },
-    {
-      "id": "lab-l5-og-live-sort-keys",
-      "status": "complete",
-      "last_atom": "lab-og-buysell-dashboard-live-sort",
-      "merge_commit": "7afc0b03"
-    },
-    {
-      "id": "league-l5-bureau-depth-og",
-      "status": "complete",
-      "last_atom": "league-strength-of-schedule-og-share",
-      "merge_commit": "7f652a98"
     }
   ]
 }
