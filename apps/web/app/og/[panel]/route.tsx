@@ -192,6 +192,14 @@ function resolveApiOrigin(req: Request): string {
   return new URL(req.url).origin;
 }
 
+/** Omit sample/live suffix when API rows render; snapshot + demo paths only. */
+function ogBlurbSuffix(slug: string, isSnapshot: boolean, isDemo: boolean): string {
+  if (isSnapshot) return " · from your panel";
+  if (!isDemo) return "";
+  if (slug === "dynasty-comps") return " · comps for Ja'Marr Chase · sample preview";
+  return " · sample preview";
+}
+
 function extractRows(data: unknown): OgRow[] {
   if (!data || typeof data !== "object") return [];
 
@@ -380,10 +388,15 @@ export async function GET(
       liveRows = await fetchPanelData(req, slug, apiPath, panel.api.method, apiParams);
     }
   }
-  const liveHasRows = liveRows.length > 0 && liveRows.some((r) => r.name);
+  const namedLiveRows = liveRows.filter((r) => r.name.trim().length > 0);
+  const usingLiveData = namedLiveRows.length > 0;
   const isSnapshot = snapshotHasRows;
-  const isDemo = !isSnapshot && !liveHasRows;
-  let rows = isSnapshot ? snapshotRows : liveHasRows ? liveRows : demoRowsForPanel(slug);
+  const isDemo = !isSnapshot && !usingLiveData;
+  let rows = isSnapshot
+    ? snapshotRows.slice(0, 6)
+    : usingLiveData
+      ? namedLiveRows.slice(0, 6)
+      : demoRowsForPanel(slug);
   if (!isSnapshot && positionFilter) {
     rows = rows.filter((r) => r.position === positionFilter);
   }
@@ -444,17 +457,7 @@ export async function GET(
           {panel.title}
         </div>
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 16, maxWidth: 1000 }}>
-          {`${panel.blurb}${positionFilter ? ` · ${positionFilter} only` : ""}${
-            slug === "dynasty-comps" && isDemo
-              ? " · comps for Ja'Marr Chase · sample preview"
-              : isSnapshot
-                ? " · from your panel"
-                : isDemo
-                  ? " · sample preview"
-                  : liveHasRows
-                    ? " · live data"
-                    : ""
-          }`}
+          {`${panel.blurb}${positionFilter ? ` · ${positionFilter} only` : ""}${ogBlurbSuffix(slug, isSnapshot, isDemo)}`}
         </div>
 
         {query && (
