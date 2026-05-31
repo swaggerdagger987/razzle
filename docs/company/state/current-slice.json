@@ -1,21 +1,22 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-position-gamelog",
-  "big_problem": "Lab OG export URLs must respect in-panel position filters.",
-  "epic": "Lab L5 — OG export position filter parity (tail)",
-  "slice_title": "Gamelog export passes player position to OG",
+  "atom_id": "lab-og-efficiency-aging-live-sort",
+  "big_problem": "Lab OG share cards without panel stat keys sort by wrong fields when live API rows load — screenshots disagree with in-product Lab tables.",
+  "epic": "Lab L5 — OG live panel rows match in-product sort keys",
+  "slice_title": "Efficiency + Aging OG rank by efficiency_score / peak_age on live fetch",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/web/components/lab/renderers/GamelogRenderer.tsx"],
+  "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
-  "max_lines": 5,
+  "max_lines": 10,
   "acceptance_commands": [
     "npm run build --workspace=apps/web 2>&1 | tail -3",
-    "curl -s -o /tmp/gamelog-wr.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1&player_id=00-0036900&position=WR'"
+    "curl -s -o /tmp/eff.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/efficiency?download=1'",
+    "curl -s -o /tmp/aging.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/aging?download=1'"
   ],
-  "out_of_scope": ["OG route", "auth/billing", "live-sort epic atoms"],
+  "out_of_scope": ["gamelog position", "buysell/dashboard atoms", "auth/billing"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",

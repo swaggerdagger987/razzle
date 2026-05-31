@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | lab-og-efficiency-aging-live-sort | route.tsx PANEL_OG_STAT_KEY | da33eafd | SHIP | keep | efficiency_score peak_age labels
+
 2026-05-31 | lab-og-position-gamelog | GamelogRenderer position prop | 7e109165 | SHIP | keep | 1 line on LabOgExportLink
 
 2026-05-31 | league-strength-of-schedule-og-share | ShareBar + OG route | 7f652a98 | SHIP | keep | | | 3 files

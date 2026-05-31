@@ -14,7 +14,7 @@
     {
       "id": "lab-og-efficiency-aging-live-sort",
       "title": "Efficiency + Aging OG rank by efficiency_score / peak_age on live fetch",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
