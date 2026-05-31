@@ -3,7 +3,7 @@
   "epic_title": "Lab L5 — OG formula_score live extract",
   "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
-  "epic_status": "active",
+  "epic_status": "complete",
   "atoms": [
     {
       "id": "lab-og-breakouts-rankings-formula-live",
@@ -20,19 +20,25 @@
     {
       "id": "lab-og-efficiency-aging-tradevalues-formula-live",
       "title": "Trade values, efficiency, aging OG formula_score priority + pytest guards",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "792e9f77d"
     }
   ],
-  "next_atom_id": "lab-og-efficiency-aging-tradevalues-formula-live",
+  "next_atom_id": null,
   "created_at": "2026-05-31T11:15:08Z",
-  "updated_at": "2026-05-31T11:15:08Z",
+  "updated_at": "2026-05-31T11:20:00Z",
   "completed_epics": [
     {
       "id": "league-l5-trade-finder-gtm",
       "status": "complete",
       "last_atom": "league-trade-finder-room-hallway",
       "merge_commit": "33d29929a"
+    },
+    {
+      "id": "lab-l5-formula-og-live-extract",
+      "status": "complete",
+      "last_atom": "lab-og-efficiency-aging-tradevalues-formula-live",
+      "merge_commit": "792e9f77d"
     }
   ]
 }
