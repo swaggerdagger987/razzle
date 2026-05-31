@@ -119,6 +119,9 @@ def test_pro_upgrade_perks_list_launch10_and_bureau7_names():
     assert "BUREAU_7_FEATURE_SLUGS" in teaser
     assert "getPanel" in teaser
     assert "proUpgradePerkLines" in gate
+    assert "teaserRowsToOgSnapshot" in teaser
+    assert "LabOgExportLink" in gate
+    assert "export sample card" in gate
     assert len(BUREAU_7_FEATURE_SLUGS) == 7
     for slug in BUREAU_7_FEATURE_SLUGS:
         assert f'"{slug}"' in teaser

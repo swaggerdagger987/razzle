@@ -29,6 +29,12 @@
   "updated_at": "2026-05-31T09:50:00Z",
   "completed_epics": [
     {
+      "id": "lab-l4-pro-gate-upgrade",
+      "status": "complete",
+      "last_atom": "lab-pro-gate-og-sample-export",
+      "merge_commit": "1bed81fb"
+    },
+    {
       "id": "lab-l5-og-live-fetch-merge",
       "status": "complete",
       "last_atom": "lab-og-gamelog-player-default",
