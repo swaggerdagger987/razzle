@@ -1,0 +1,30 @@
+{
+  "date": "2026-05-31",
+  "big_problem": "Lab share cards must show real data, not loading shells.",
+  "epic": "Lab L5 depth — live OG and export cards",
+  "slice_title": "Lab panel in-product export-card button to /og/[panel]",
+  "atom_id": "atom-2",
+  "parity_ref": "F-Lab-OG",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "Gate 2 (Lab panels render real data) + FACTORY-DOD Gate C (export share-card path)",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/components/lab/LabShareButton.tsx",
+    "apps/web/components/lab/PanelCanvas.tsx"
+  ],
+  "max_files": 2,
+  "max_lines": 120,
+  "acceptance_commands": [
+    "npx tsc --noEmit --project apps/web/tsconfig.json",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/dynasty-rankings?download=1'"
+  ],
+  "out_of_scope": [
+    "API schema changes",
+    "new npm deps",
+    "redesign of /og/[panel] card",
+    "per-player panel OG defaults",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
+  "builder_mode": "composer-surgical"
+}

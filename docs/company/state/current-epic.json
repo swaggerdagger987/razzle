@@ -12,16 +12,32 @@
     },
     {
       "id": "atom-2",
-      "title": "Next Lab OG route — rankings or explore export live rows",
+      "title": "Lab panel in-product export-card button to /og/[panel]",
+      "parity_ref": "F-Lab-OG",
+      "depth_ref": "Lab L5",
+      "status": "done",
+      "merge_commit": "76dcc691"
+    },
+    {
+      "id": "atom-3",
+      "title": "Per-player panel OG defaults (dynasty-comps, player-compare) so parameterized panels render a card",
       "parity_ref": "F-Lab-OG",
       "depth_ref": "Lab L5",
       "status": "next",
       "merge_commit": null
+    },
+    {
+      "id": "atom-4",
+      "title": "OG snapshot test with fixture data to lock card layout",
+      "parity_ref": "F-Lab-OG",
+      "depth_ref": "Lab L5",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "completed_atom_ids": ["atom-1"],
-  "next_atom_id": "atom-2",
+  "completed_atom_ids": ["atom-1", "atom-2"],
+  "next_atom_id": "atom-3",
   "epic_status": "active",
-  "last_updated": "2026-05-30T22:30:00Z",
-  "last_merge_commit": "2e11270"
+  "last_updated": "2026-05-31T00:16:00Z",
+  "last_merge_commit": "76dcc691"
 }
