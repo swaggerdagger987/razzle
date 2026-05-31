@@ -41,3 +41,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | Factory open cycle 1 Build Profiles tab | da33eafd | keep | new unhide epic; roster-depth dedup on base; atom 1/3 SHIP
 - 2026-05-31 cycle 92: SOS BureauStrengthOfSchedule — mirror waiver/build 3-file pattern.
+- 2026-05-31 cycle 93: Rebase SOS onto Lab epic base; force-push bf03 for PR #456 merge.

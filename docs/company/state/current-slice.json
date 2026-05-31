@@ -1,7 +1,7 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows.",
-  "epic": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
+  "big_problem": "Schedule tab still hid behind HIDDEN_BUREAU_SLUGS while SOS API returned live slate rows.",
+  "epic": "League L5 — Bureau unhide (final tab)",
   "atom_id": "league-strength-of-schedule-tab",
   "slice_title": "Schedule tab unhidden with Octo SOS matchup renderer",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
@@ -33,5 +33,5 @@
     "verdict": "SHIP 3/3"
   },
   "verdict": "SHIP",
-  "content_commit": "cba3578f"
+  "content_commit": "0b9dfe7e"
 }

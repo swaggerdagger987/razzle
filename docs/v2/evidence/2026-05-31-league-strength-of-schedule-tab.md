@@ -13,7 +13,7 @@
 
 ```bash
 npm run build --workspace=apps/web  # exit 0
-JWT_SECRET=test .venv-v2/bin/python -m pytest apps/api/tests -q  # 55 passed, 1 snapshot drift (dynasty_top_30)
+JWT_SECRET=test .venv-v2/bin/python -m pytest apps/api/tests -q  # 51 passed, 5 skipped
 rg 'HIDDEN_BUREAU_SLUGS' apps/web/lib/bureau-features.ts
 # → export const HIDDEN_BUREAU_SLUGS = new Set<string>();
 ```

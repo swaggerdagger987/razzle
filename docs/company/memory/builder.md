@@ -45,3 +45,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | league-build-profiles-tab | da33eafd | keep | BureauBuildProfiles Atlas archetype grid; unhide slug; build PASS pytest 51
 - 2026-05-31 cycle 92: SOS BureauStrengthOfSchedule — mirror waiver/build 3-file pattern.
+- 2026-05-31 cycle 93: HIDDEN_BUREAU_SLUGS empty; BureauStrengthOfSchedule Octo bars; 0b9dfe7e.
