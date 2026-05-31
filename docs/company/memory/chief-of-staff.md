@@ -1,10 +1,11 @@
 # Memory — Chief of Staff
 
-2026-05-31 | lab-og-live-sticker-prospects-weekly | 642b37b0 | Factory open; live-rows epic atom 2/3.
+2026-05-31 | lab-og-live-sticker-prospects-weekly | da33eafd | PR #739 CI green; merge pending rate limit. | Factory open; live-rows epic atom 2/3.
 
 2026-05-31 | Factory cycle 117 prospects #rank OG | ab6ae8d7 | L5 live-fetch epic closes.
+2026-05-31 | Factory cycle 117 launch10 teasers | b0405d43 | keep | workday open; L4 epic atom 2/3; lock #723.
 
-2026-05-31 | Factory cycle 116 LIVE OG sticker | 4e905360 | Dedup H2H on base #666; live-rows epic 1/3.
+2026-05-31 | Factory cycle 106 gamelog weeks FPTS OG | 40c80f0e | Lab L5 live-extract epic atom 2/3 merged PR669; workday cycle 1.
 
 2026-05-31 | Factory cycle 115 H2H OG watermark band | 44d05684 | Watermark epic 2/2 complete; curl H2H 67846B.
 
@@ -14,7 +15,6 @@
 
 2026-05-31 | Factory cycle 110 efficiency/aging OG sort | aefbf6ef | Lab L5 live-sort epic complete; PR #643/#635 merged; ppo/ppg on base.
 
-2026-05-31 | Factory cycle 110 efficiency/aging OG sort | aefbf6ef | Lab live-sort epic atom 2/3; deduped rankings atom on base.
 
 2026-05-31 | Factory cycle 109 gamelog position OG | 228c4b59 | Lab L5 position epic gamelog atom; workday cycle 1.
 
