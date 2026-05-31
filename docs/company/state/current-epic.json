@@ -1,24 +1,30 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab dashboard export still points at dynasty-comps OG when generic dashboard renderers load pulse data.",
-  "epic_title": "Lab L5 — Dashboard OG cards match in-panel movers",
-  "parity_ref": "Explore L5 / Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Bureau roster depth is a Self-Scout hallway lane but has no screenshot-worthy export card for trade threads.",
+  "epic_title": "League L5 — Bureau roster depth export cards",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-dashboard-og-slug-snapshot",
-      "title": "DashboardRenderer export uses /og/dashboard with riser/faller snapshot rows",
-      "status": "done",
-      "merge_commit": "92fb53d0"
+      "id": "league-roster-depth-og-route",
+      "title": "/og/roster-depth route with demo + snapshot decode",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-dashboard-og-top5-fallback",
-      "title": "OG snapshot falls back to top5 when no risers/fallers",
-      "status": "done",
-      "merge_commit": "e55e982f"
+      "id": "league-roster-depth-share-bar",
+      "title": "BureauRosterDepth copy link + snapshot export bar",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "league-roster-depth-og-live-fetch",
+      "title": "OG route live API fetch when league+user params set",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T14:30:00Z",
-  "updated_at": "2026-05-31T15:15:00Z"
+  "next_atom_id": "league-roster-depth-og-route",
+  "created_at": "2026-05-31T16:00:00Z",
+  "updated_at": "2026-05-31T16:00:00Z"
 }
