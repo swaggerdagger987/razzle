@@ -1,9 +1,10 @@
-cycle: 130
+cycle: 131
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: League
 focus_layer: L5
-next_slice: lab-l4-pro-gate-error-tradevalues
-last_keep_cycle: 130
-last_commit: 4bc3913e
+next_slice: bureau-manager-profiles-sharebar-snapshot
+last_keep_cycle: 131
+last_commit: 3fcad494
+league_l5_self_scout_snapshot_epic: active
 lab_l5_og_live_fetch_epic: complete
 lab_l4_pro_gate_error_epic: active
