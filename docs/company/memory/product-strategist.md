@@ -1,4 +1,4 @@
-2026-05-31 | league-trade-finder-room-hallway | f6e0985f3 | SHIP | League L5 Trade Finder GTM epic complete; OG Bones hallway on hero.
+2026-05-31 | league-trade-finder-room-hallway | c947a331a | SHIP | League L5 Trade Finder GTM epic complete; OG Bones hallway on hero.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Product Strategist
 
@@ -8,7 +8,7 @@
 
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | Dynasty comps OG signals LIVE comp matches for Reddit trust.
 
-2026-05-31 | room-briefing-watermark | f6e0985f3 | SHIP | Briefing exports carry terracotta brand + deep Room link for Reddit.
+2026-05-31 | room-briefing-watermark | c947a331a | SHIP | Briefing exports carry terracotta brand + deep Room link for Reddit.
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | SHIP | Lab L5 empty OG epic atom 1/3; gamelog zero-week export for Reddit tape.
 2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | Room GTM epic closed; briefing screenshots deep-link to Situation Room.
 2026-05-31 | lab-og-tolab-watermark | b80512bb4 | SHIP | Lab OG exports click back via toLab; T6 hallway on Launch-10.
