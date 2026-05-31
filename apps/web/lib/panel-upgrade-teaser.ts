@@ -67,3 +67,24 @@ export function upgradePitchForPanel(slug: string, agentName: string): string {
   if (pitch) return `${agentName}: unlock ${pitch}.`;
   return `${agentName}: this panel is Pro — the screener stays free, the intel doesn't.`;
 }
+
+/** Turn API tier messages into invitation copy — never raw error strings. */
+export function friendlyUpgradeNote(
+  message: string | undefined,
+  required = "pro",
+  current = "free",
+): string | null {
+  if (!message || current === required) return null;
+  const lower = message.toLowerCase();
+  if (
+    lower.includes("required") ||
+    lower.includes("upgrade") ||
+    lower.includes("pro ") ||
+    lower.includes("tier") ||
+    lower.includes("plan")
+  ) {
+    const tier = required === "elite" ? "Elite" : "Pro";
+    return `You're on ${current} — ${tier} unlocks the full table and export.`;
+  }
+  return message.endsWith(".") ? message : `${message}.`;
+}

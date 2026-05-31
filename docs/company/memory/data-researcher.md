@@ -1,5 +1,7 @@
 # Memory — Data Researcher
 
+2026-05-31 | F-09 ProUpgradeGate | da33eafd | PASS | keep | Reddit intel: free screener + paid depth funnel expects upgrade invite not error chrome
+
 Append-only log of recurring user pain patterns, language signals, and feature-gap
 candidates that became (or didn't become) PARITY rows.
 

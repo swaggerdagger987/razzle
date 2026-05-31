@@ -4,7 +4,11 @@ import { toRoom } from "@razzle/hallway";
 import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
 import type { Route } from "next";
-import { teaserRowsForPanel, upgradePitchForPanel } from "@/lib/panel-upgrade-teaser";
+import {
+  friendlyUpgradeNote,
+  teaserRowsForPanel,
+  upgradePitchForPanel,
+} from "@/lib/panel-upgrade-teaser";
 import { PanelAgentHeader, panelAgent } from "./PanelAgentHeader";
 
 interface Props {
@@ -24,8 +28,10 @@ export function ProUpgradeGate({
 }: Props) {
   const agent = panelAgent(panelSlug);
   const pitch = upgradePitchForPanel(panelSlug, agent.name);
+  const tierNote = friendlyUpgradeNote(message, required, current);
   const rows = teaserRowsForPanel(panelSlug);
   const roomQuestion = `What should I know about ${panelTitle.toLowerCase()} for my dynasty roster?`;
+  const tierLabel = required === "elite" ? "Elite unlock" : "Pro unlock";
 
   return (
     <div className="pro-upgrade-gate">
@@ -41,27 +47,23 @@ export function ProUpgradeGate({
             </div>
           ))}
         </div>
-        <p className="pro-upgrade-preview-label">Pro preview — data blurred on free tier</p>
+        <p className="pro-upgrade-preview-label">Peek at Pro rows — full intel with {required}</p>
       </div>
 
       <div className="pro-upgrade-body chunky bg-bg-card p-6 text-center">
-        <span className="pro-upgrade-badge" aria-hidden>
-          {required.toUpperCase()}
-        </span>
+        <span className="pro-upgrade-badge">{tierLabel}</span>
         <h2 className="mt-4 text-2xl" style={{ fontFamily: "var(--font-display)" }}>
-          {panelTitle}
+          Unlock {panelTitle}
         </h2>
         <p className="mt-3 text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
           {pitch}
         </p>
-        {message && current !== required && (
-          <p className="mt-2 text-sm text-ink-light">
-            {message}
-          </p>
+        {tierNote && (
+          <p className="pro-upgrade-tier-note mt-2 text-sm text-ink-medium">{tierNote}</p>
         )}
         <div className="pro-upgrade-actions mt-6 flex flex-wrap items-center justify-center gap-3">
           <Link href="/pricing" className="chunky chunky-hover bg-orange px-6 py-3 text-white">
-            See Pro plans
+            See Pro plans →
           </Link>
           <Link
             href={toRoom({ agentId: agent.id, question: roomQuestion, panelSlug }) as Route}

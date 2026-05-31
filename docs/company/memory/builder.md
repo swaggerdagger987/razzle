@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | Lab ProUpgradeGate voice | da33eafd | SHIP | keep | friendlyUpgradeNote in panel-upgrade-teaser; badge Pro unlock not PRO uppercase
+
 Append-only log of implementation patterns, surgical wins, things to avoid.
 
 Format per entry:
