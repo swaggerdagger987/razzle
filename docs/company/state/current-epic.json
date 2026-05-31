@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows.",
   "epic_title": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
