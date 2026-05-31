@@ -1,8 +1,16 @@
 {
   "status": "open",
+<<<<<<< HEAD
+  "started_at": "2026-05-31T13:15:00Z",
+=======
   "started_at": "2026-05-31T10:35:00Z",
+>>>>>>> origin/razzle-v2-redesign
   "closed_at": null,
-  "cycle_count_today": 1,
+  "cycle_count_today": 2,
   "last_trigger": "good morning team",
+<<<<<<< HEAD
+  "last_cycle_commit": "fb4483341"
+=======
   "last_cycle_commit": "db6537faf"
+>>>>>>> origin/razzle-v2-redesign
 }

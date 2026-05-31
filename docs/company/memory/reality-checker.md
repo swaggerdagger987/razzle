@@ -1,11 +1,11 @@
 # Memory — Reality Checker
 
-<<<<<<< HEAD
+2026-05-31 | lab-og-buysell-formula-live | fb4483341 | PASS | pytest 3; curl buysell 55234B.
+
 2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | PASS | pytest 2; curl breakouts 66253B rankings 66806B.
-=======
+
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | PASS | curl dynasty-comps 54807B; pytest 2; web build exit 0.
 
->>>>>>> origin/razzle-v2-redesign
 2026-05-31 | room-briefing-watermark | f6e0985f3 | PASS | pytest 3; curl briefing OG 89235B PNG.
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | PASS | curl 200 59323B PNG; web build + pytest green.
 2026-05-31 | room-briefing-watermark Gate C | eca00c3f0 | PASS | curl 51866B export; pytest 5; build exit 0.
