@@ -25,20 +25,26 @@
     {
       "id": "explore-og-margin-note-gate-c",
       "title": "Explore OG margin notes Gate C pytest + curl",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "74990e08f"
     }
   ],
-  "next_atom_id": "explore-og-margin-note-gate-c",
-  "epic_status": "active",
+  "next_atom_id": null,
+  "epic_status": "complete",
   "created_at": "2026-05-31T14:00:00Z",
-  "updated_at": "2026-05-31T12:03:00Z",
+  "updated_at": "2026-05-31T12:04:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-panel-rows",
       "status": "complete",
       "last_atom": "lab-og-dashboard-live-gate-c",
       "merge_commit": "cf76b86ee"
+    },
+    {
+      "id": "explore-l5-og-margin-notes",
+      "status": "complete",
+      "last_atom": "explore-og-margin-note-gate-c",
+      "merge_commit": "74990e08f"
     }
   ]
 }
