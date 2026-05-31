@@ -1,50 +1,38 @@
 {
   "epic_status": "complete",
-  "big_problem": "Launch-10 OG cards still read generic on Reddit — only prospects/weekly say which panel you are sharing.",
-  "epic_title": "Lab L5 — Launch-10 OG panel-native trust labels (all 10)",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Explore college screener shares look like NFL exports \u2014 Reddit can't tell dynasty vs college OG cards apart without opening the file.",
+  "epic_title": "Explore L5 \u2014 universe-aware share exports",
+  "parity_ref": "Explore L5 \u2014 Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
-      "title": "Rankings + tradevalues + breakouts — SAMPLE panel-native stickers",
+      "id": "explore-og-universe-query",
+      "title": "Explore OG export/preview URLs carry universe; college download filename",
       "status": "done",
-      "merge_commit": "54443bc8"
+      "merge_commit": "b098d64c"
     },
     {
-      "id": "lab-og-launch10-gamelog-efficiency-aging-labels",
-      "title": "Gamelog + efficiency + aging — panel-native LIVE stickers",
+      "id": "explore-og-college-gate-c",
+      "title": "College explore OG PNG \u226540KB with fixture params",
       "status": "done",
-      "merge_commit": "adbf6c7"
+      "merge_commit": "89a90042b"
     },
     {
-      "id": "lab-og-launch10-buysell-dashboard-labels",
-      "title": "Buy-sell + dashboard — panel-native LIVE stickers",
+      "id": "explore-og-nfl-universe-default",
+      "title": "NFL explore OG omits redundant universe when default",
       "status": "done",
-      "merge_commit": "adbf6c7"
+      "merge_commit": "3e6e8c811"
     }
   ],
   "next_atom_id": null,
-  "created_at": "2026-05-31T09:00:00Z",
-  "updated_at": "2026-05-31T16:15:00Z",
+  "created_at": "2026-05-31T08:44:01Z",
+  "updated_at": "2026-05-31T10:30:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-og-live-labels-rankings-tv-breakouts",
+      "id": "explore-l5-universe-export",
       "status": "complete",
-      "last_atom": "cycle-125-merge",
-      "merge_commit": "5dcbbc01"
-    },
-    {
-      "id": "lab-l5-launch10-og-panel-native-trust-labels",
-      "status": "complete",
-      "last_atom": "lab-og-launch10-buysell-dashboard-labels",
-      "merge_commit": "adbf6c7"
-    },
-    {
-      "id": "lab-l4-pro-gate-error-surface",
-      "status": "complete",
-      "last_atom": "lab-l4-pro-gate-error-surface",
-      "merge_commit": "5721ee33"
+      "last_atom": "explore-og-nfl-universe-default",
+      "merge_commit": "3e6e8c811"
     }
   ]
 }
