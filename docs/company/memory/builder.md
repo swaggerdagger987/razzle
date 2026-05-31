@@ -1,4 +1,5 @@
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WEEKLY_SAMPLE_OG_ROWS + test_lab_og_export_link guard.
+2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | SHIP | watermarkPlayerIdForOg + encodeOgSnapshot anchor.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Builder
 

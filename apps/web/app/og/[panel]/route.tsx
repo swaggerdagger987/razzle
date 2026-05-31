@@ -357,25 +357,52 @@ function demoRowsForPanel(slug: string): OgRow[] {
 
 type CompactOgRow = { n: string; p: string; t: string; s: number; sl: string };
 
-function decodeOgSnapshot(param: string): OgRow[] {
+type DecodedOgSnapshot = { rows: OgRow[]; anchorPlayerId?: string };
+
+function mapCompactOgRows(arr: CompactOgRow[]): OgRow[] {
+  return arr
+    .filter((r) => r?.n)
+    .slice(0, 6)
+    .map((r) => ({
+      name: r.n,
+      position: r.p ?? "",
+      team: r.t ?? "",
+      stat: Number(r.s ?? 0),
+      statLabel: r.sl ?? "",
+    }));
+}
+
+function decodeOgSnapshot(param: string): DecodedOgSnapshot {
   try {
     const b64 = param.replace(/-/g, "+").replace(/_/g, "/");
     const json = atob(b64);
-    const arr = JSON.parse(json) as CompactOgRow[];
-    if (!Array.isArray(arr)) return [];
-    return arr
-      .filter((r) => r?.n)
-      .slice(0, 6)
-      .map((r) => ({
-        name: r.n,
-        position: r.p ?? "",
-        team: r.t ?? "",
-        stat: Number(r.s ?? 0),
-        statLabel: r.sl ?? "",
-      }));
+    const parsed = JSON.parse(json) as CompactOgRow[] | { anchor?: string; rows?: CompactOgRow[] };
+    if (Array.isArray(parsed)) {
+      return { rows: mapCompactOgRows(parsed) };
+    }
+    if (parsed && typeof parsed === "object" && Array.isArray(parsed.rows)) {
+      const anchor =
+        typeof parsed.anchor === "string" && parsed.anchor.trim()
+          ? parsed.anchor.trim()
+          : undefined;
+      return { rows: mapCompactOgRows(parsed.rows), anchorPlayerId: anchor };
+    }
+    return { rows: [] };
   } catch {
-    return [];
+    return { rows: [] };
   }
+}
+
+/** Snapshot-only shares may omit player_id — anchor in payload keeps toLab honest (T6). */
+function watermarkPlayerIdForOg(
+  urlPlayerId: string,
+  hasExplicitPlayerParam: boolean,
+  snapshotAnchor?: string,
+): string {
+  if (!snapshotAnchor) return urlPlayerId;
+  if (!hasExplicitPlayerParam) return snapshotAnchor;
+  if (urlPlayerId === DEFAULT_OG_PLAYER_ID) return snapshotAnchor;
+  return urlPlayerId;
 }
 
 /** Edge OG must hit same-origin `/api/*` so Next rewrites reach FastAPI (dev/preview/CI). */
@@ -895,6 +922,8 @@ export async function GET(
   const query = url.searchParams.get("q") ?? "";
   const positionFilter = url.searchParams.get("position") ?? "";
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
+  const hasExplicitPlayerParam =
+    url.searchParams.has("player_id") || url.searchParams.has("id");
   const playerId =
     url.searchParams.get("player_id") ??
     url.searchParams.get("id") ??
@@ -925,9 +954,17 @@ export async function GET(
     // Match WeeklyHeatmapRenderer default so /api/panels/weekly returns live rows for OG.
     apiParams.position = "WR";
   }
-  const snapshotRows = snapshotParam ? decodeOgSnapshot(snapshotParam) : [];
+  const decodedSnapshot = snapshotParam
+    ? decodeOgSnapshot(snapshotParam)
+    : { rows: [] as OgRow[], anchorPlayerId: undefined };
+  const snapshotRows = decodedSnapshot.rows;
   const snapshotHasRows =
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
+  const watermarkPlayerId = watermarkPlayerIdForOg(
+    playerId,
+    hasExplicitPlayerParam,
+    decodedSnapshot.anchorPlayerId,
+  );
   let liveRows: OgRow[] = [];
   if (apiPath && !snapshotHasRows && !forceDemo) {
     liveRows = await fetchOgLiveRows(
@@ -956,7 +993,7 @@ export async function GET(
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
   const labLink = labOgWatermarkLink(slug, {
     positionFilter,
-    playerId,
+    playerId: watermarkPlayerId,
     playerScoped: PLAYER_SCOPED_SLUGS.has(slug),
   });
 

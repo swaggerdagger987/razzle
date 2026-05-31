@@ -31,3 +31,19 @@ def test_default_og_player_tolab_rules():
     assert '"dynasty-comps"' in source
     assert "includeDefaultPlayer" in source
     assert "opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer" in source
+
+
+def test_snapshot_anchor_preserves_watermark_player():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "anchorPlayerId" in source
+    assert "watermarkPlayerIdForOg" in source
+    assert "watermarkPlayerId" in source
+    assert "playerId: watermarkPlayerId" in source
+
+
+def test_lab_export_link_embeds_snapshot_anchor():
+    link_ts = ROOT / "apps/web/components/lab/LabOgExportLink.tsx"
+    source = link_ts.read_text(encoding="utf-8")
+    assert "anchorPlayerId" in source
+    assert "{ anchor, rows: compact }" in source
+    assert "encodeOgSnapshot(" in source
