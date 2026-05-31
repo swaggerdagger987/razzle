@@ -1,6 +1,6 @@
 "use client";
 
-import { agentForPanel } from "@razzle/agents";
+import { AGENT_BY_ID, agentForPanel, type AgentDefinition, type AgentId } from "@razzle/agents";
 import {
   PANELS,
   panelsByCategory,
@@ -10,6 +10,8 @@ import {
 } from "@razzle/panels";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+
+const AGENT_SECTION_ORDER: AgentId[] = ["razzle", "hawkeye", "bones", "octo", "atlas", "dolphin"];
 
 const CATEGORY_LABELS: Record<PanelCategory, string> = {
   rankings: "Rankings",
@@ -63,6 +65,21 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
     return map;
   }, [panels]);
 
+  const staffByAgent = useMemo(() => {
+    const map = new Map<AgentId, PanelDefinition[]>();
+    for (const panel of PANELS) {
+      if (!STAFF_PICKS.has(panel.slug)) continue;
+      const owner = agentForPanel(panel.slug) ?? AGENT_BY_ID.razzle;
+      const arr = map.get(owner.id) ?? [];
+      arr.push(panel);
+      map.set(owner.id, arr);
+    }
+    return AGENT_SECTION_ORDER.filter((id) => map.has(id)).map((id) => ({
+      agent: AGENT_BY_ID[id],
+      panels: map.get(id)!,
+    }));
+  }, []);
+
   function toggleCategory(cat: string) {
     setCollapsedCats((prev) => {
       const next = new Set(prev);
@@ -88,20 +105,20 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
       </div>
 
       <div className="lab-sidebar-inner">
-        {!query && (
-          <div className="lab-sidebar-category">
-            <span className="cat-text">Staff Picks</span>
-          </div>
-        )}
         {!query &&
-          PANELS.filter((p) => STAFF_PICKS.has(p.slug)).map((panel) => (
-            <SidebarItem
-              key={`staff-${panel.slug}`}
-              panel={panel}
-              activeSlug={activeSlug}
-              badge="★"
-              onNavigate={onCloseMobile}
-            />
+          staffByAgent.map(({ agent, panels: agentPanels }) => (
+            <div key={agent.id} className="lab-sidebar-agent-section">
+              <AgentSectionHeader agent={agent} />
+              {agentPanels.map((panel) => (
+                <SidebarItem
+                  key={`staff-${agent.id}-${panel.slug}`}
+                  panel={panel}
+                  activeSlug={activeSlug}
+                  badge="★"
+                  onNavigate={onCloseMobile}
+                />
+              ))}
+            </div>
           ))}
 
         {Array.from(grouped.entries()).map(([category, items]) => (
@@ -133,6 +150,21 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
         </button>
       )}
     </aside>
+  );
+}
+
+function AgentSectionHeader({ agent }: { agent: AgentDefinition }) {
+  return (
+    <div className="lab-sidebar-category lab-sidebar-agent-header">
+      <img
+        src={`/agents/${agent.avatar}.svg`}
+        alt=""
+        className="lab-sidebar-agent"
+        width={16}
+        height={16}
+      />
+      <span className="cat-text">{agent.name}&apos;s Lab</span>
+    </div>
   );
 }
 

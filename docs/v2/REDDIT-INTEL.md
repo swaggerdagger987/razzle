@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab agent sidebar (cycle 93)
+- **Angle:** Launch-10 grouped under Hawkeye/Octo/Bones headers — screenshot the sidebar to show "six staff, not 100 panels."
+- **Trust:** T4 hallway ownership visible before users open a panel.
+
 ### 2026-05-31 — Lab launch-10 OG (cycle 77)
 - **Angle:** Screenshot cards without "sample preview" when API rows load — launch-10 exports read as live research, not demo shells.
 - **Trust:** T1 honest labeling; sample suffix only on demo fallback.

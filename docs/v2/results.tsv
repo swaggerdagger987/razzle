@@ -59,4 +59,5 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 90	c9151786	depth+voice+simplicity	keep	Lab	L5 Dashboard comps OG snapshot rows	trust=T5,T6; DashboardRenderer snapshotRows; curl dynasty-comps 65961B
 91	920304a2	depth+hallway+voice+simplicity	keep	League	L5 Bureau Waiver Tendencies tab unhidden	trust=T2,T5,T6; Hawkeye archetype grid; waiver-tendencies out of HIDDEN; build+pytest PASS; waiver epic atom 1/2
 92	12b51b1e	depth+hallway+voice+simplicity	keep	League	L5 Bureau Schedule tab unhidden	trust=T2,T5,T6; Octo SOS verdict+bars; strength-of-schedule out of HIDDEN; build+pytest PASS; waiver epic atom 2/2 complete
+93	da33eafd	depth+hallway+voice+simplicity	keep	Lab	L4 sidebar agent staff sections	trust=T4,T5,T6; launch-10 grouped by agentForPanel headers; build+pytest PASS; agent nav epic atom 1/3
 

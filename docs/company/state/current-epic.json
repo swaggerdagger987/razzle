@@ -1,25 +1,31 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Two Bureau intel tabs still hide while APIs return live waiver and schedule rows — Sunday prep can't see who hoards FAAB or chases streamers (PARITY League L5).",
-  "epic_title": "League L5 — Unhide waiver + schedule Bureau tabs",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
+  "epic_status": "active",
+  "big_problem": "Lab sidebar lists 100 panels by category but hides the six-agent ownership model — users can't find Hawkeye vs Octo research lanes (Hallway H-04, DEPTH Lab L4).",
+  "epic_title": "Lab L4 — Agent-owned sidebar navigation",
+  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
+  "depth_ref": "Lab L4",
   "atoms": [
     {
-      "id": "league-waiver-tendencies-tab",
-      "title": "Unhide Waiver Tendencies tab with Hawkeye renderer",
-      "status": "done",
-      "merge_commit": "920304a2"
+      "id": "lab-sidebar-agent-sections",
+      "title": "Group launch-10 Staff Picks by agent owner headers",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "league-strength-of-schedule-tab",
-      "title": "Unhide Schedule tab with bespoke renderer",
-      "status": "done",
-      "merge_commit": "12b51b1e"
+      "id": "lab-grid-agent-badges",
+      "title": "Agent avatars on /lab index grid cards",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-sidebar-agent-filter",
+      "title": "Agent filter chips above category browse",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T05:30:00Z",
-  "updated_at": "2026-05-31T12:15:00Z",
-  "last_cycle_commit": "12b51b1e"
+  "next_atom_id": "lab-sidebar-agent-sections",
+  "created_at": "2026-05-31T06:12:51Z",
+  "updated_at": "2026-05-31T06:12:51Z",
+  "last_cycle_commit": null
 }

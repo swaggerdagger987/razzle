@@ -36,3 +36,4 @@ new evidence.
 2026-05-31 | Lab prospects tradevalues snapshot | 69e4c732 | SHIP | keep | NEXT.md lead; closes launch-10 snapshot gap on prospects+tradevalues
 2026-05-31 | league-waiver-tendencies-tab atom 1/2 | SHIP | keep | Hawkeye archetype board; Sunday waiver screenshot fuel; schedule tab next
 2026-05-31 | league-strength-of-schedule-tab atom 2/2 | SHIP | keep | Octo slate verdict; Bureau nav fully honest; epic complete
+2026-05-31 | lab-sidebar-agent-sections atom 1/3 | SHIP | keep | Hallway H-04 visible; agent headers on launch-10; grid badges next

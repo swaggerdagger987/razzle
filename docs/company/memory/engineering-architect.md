@@ -37,3 +37,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | prospects tradevalues snapshot | 69e4c732 | keep | mirrors DynastyRankingsRenderer ogSnapshotRows pattern
 2026-05-31 | BureauWaiverTendencies | 920304a2 | keep | Hawkeye archetype cards; waiver-tendencies unhidden; mirrors roster-depth pattern
 2026-05-31 | BureauStrengthOfSchedule | 12b51b1e | keep | single-user SOS API → bars; empty HIDDEN set; 3-file contract
+2026-05-31 | LabSidebar agent sections | da33eafd | keep | staffByAgent via agentForPanel; 1 file; reuses lab-sidebar-agent CSS

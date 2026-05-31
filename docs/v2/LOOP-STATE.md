@@ -1,8 +1,8 @@
-cycle: 92
+cycle: 93
 last_board_cycle: 54
-focus_pillar: League
-focus_layer: L5
-next_slice: lab-og-live-data-rows
+focus_pillar: Lab
+focus_layer: L4
+next_slice: lab-grid-agent-badges
 last_keep_cycle: 92
 last_commit: 12b51b1e
 lab_l5_og_snapshot_weekly_breakouts: complete
@@ -42,3 +42,5 @@ league_l5_bureau_pressure_map_copy_link: complete
 league_l5_bureau_trade_network_share_bar: complete
 league_l5_bureau_h2h_export_epic: complete
 league_l5_bureau_monte_carlo_share: complete
+lab_l4_sidebar_agent_sections: complete
+lab_l4_agent_nav_epic: in_progress

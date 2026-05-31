@@ -39,3 +39,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Bureau H2H live API OG | 59a54b72 | keep | resolveApiOrigin on head-to-head route; curl params 62718B
 2026-05-31 | Bureau Waiver Tendencies tab | 920304a2 | keep | BureauWaiverTendencies Hawkeye archetype cards; HIDDEN removed waiver-tendencies
 2026-05-31 | Bureau Schedule tab | 12b51b1e | keep | BureauStrengthOfSchedule Octo verdict+bars; HIDDEN_BUREAU_SLUGS empty
+2026-05-31 | Lab sidebar agent sections | da33eafd | keep | AgentSectionHeader groups launch-10 by registry owner
