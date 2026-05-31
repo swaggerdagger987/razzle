@@ -1,5 +1,5 @@
 cycle: 100
-last_commit: da33eafd
+last_commit: b3a28baa
 focus_pillar: League
 focus_layer: L5
 next_slice: lab-og-fidelity-epic-or-parity-pick

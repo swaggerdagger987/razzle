@@ -73,4 +73,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 98	3f584f61	depth+voice+simplicity	keep	League	L5 Bureau Waiver Tendencies OG FAAB card	trust=T5,T6; /og/waiver-tendencies 73121B; share bar; pytest 51; depth OG epic atom 3/4
 99	d995676c	depth+voice+simplicity	keep	Lab	L5 Weekly OG PPG-ranked snapshot	trust=T5,T6; rankOgRowsForPanel ppg; curl weekly WR 53249B; fidelity epic atom 2/3
 99	01acc653	depth+voice+simplicity	keep	Lab	L5 OG breakouts position filter verify	trust=T1,T5,T6; dedup grep+curl WR 61718B RB 35543B; factory cycle 2
-100	da33eafd	depth+voice+simplicity	keep	League	L5 Bureau Schedule OG power verdict card	trust=T5,T6; /og/strength-of-schedule curl 64773B demo; share bar; depth OG epic 4/4 complete
+100	b3a28baa	depth+voice+simplicity	keep	League	L5 Bureau Schedule OG power verdict card	trust=T5,T6; /og/strength-of-schedule curl 64773B demo; share bar; depth OG epic 4/4 complete

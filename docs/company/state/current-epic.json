@@ -26,11 +26,13 @@
     {
       "id": "league-strength-of-schedule-og-share",
       "title": "Schedule tab OG power verdict card",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "b3a28baa"
     }
   ],
-  "next_atom_id": "league-strength-of-schedule-og-share",
+  "next_atom_id": null,
+  "epic_status": "complete",
   "created_at": "2026-05-31T06:00:00Z",
-  "updated_at": "2026-05-31T06:35:00Z"
+  "updated_at": "2026-05-31T07:05:00Z",
+  "last_cycle_commit": "b3a28baa"
 }

@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | Schedule OG Gate C | b3a28baa | curl 200 64773B PNG; web build exit 0.
+
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
 near-misses, and verification techniques that caught real issues.
 

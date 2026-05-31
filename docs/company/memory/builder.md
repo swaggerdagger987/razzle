@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | league-strength-of-schedule-og-share | b3a28baa | keep | OG route + ShareBar on BureauStrengthOfSchedule.
+
 2026-05-31 | league-power-rankings-og-snapshot | 26a22f69 | keep | compact encode/decode lib + ShareBar rows prop
 
 2026-05-31 | H2H canonical codec | da33eafd | BureauH2HShareBar uses encodeBureauH2HOgSnapshot; OG route decodeBureauH2HOgSnapshot.

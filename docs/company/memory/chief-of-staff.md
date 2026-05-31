@@ -1,6 +1,6 @@
 # Memory — Chief of Staff
 
-2026-05-31 | League Schedule OG share | da33eafd | Factory cycle 1; depth OG epic 4/4 complete; PR pending.
+2026-05-31 | League Schedule OG share | b3a28baa | Factory cycle 1; depth OG epic 4/4 complete; PR pending.
 
 2026-05-31 | Factory cycle 96 H2H codec | da33eafd | Workday open; League L5 codec epic atom 1/3 SHIP.
 
