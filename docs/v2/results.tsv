@@ -61,4 +61,4 @@ cycle	commit	score	status	pillar	slice	description
 68	6070c774	depth+voice+simplicity	keep	Lab	L5 OG export player-scoped gamelog comps	trust=T5,T6; LabOgExportLink playerId; DynastyCompsRenderer; curl gamelog 58408B comps 65961B scoped
 69	916ba843	depth+voice+simplicity	keep	Lab	L5 OG snapshot rows from panel	trust=T5,T6; snapshot query on LabOgExportLink; curl dashboard snapshot 45249B PNG
 70	32d682ab	depth+voice+simplicity	keep	Lab	L5 OG export links rankings breakouts	trust=T5,T6; LabOgExportLink footers; curl rankings 59509B breakouts 60649B; epic atom 2/3
-71	da33eafd	depth+voice+simplicity	keep	Lab	L5 OG export links prospects weekly tradevalues	trust=T5,T6; LabOgExportLink 3 renderers; curl tradevalues 62488B weekly 63819B prospects 58084B
+71	2b5ef212	depth+voice+simplicity	keep	Lab	L5 OG export links prospects weekly tradevalues	trust=T5,T6; LabOgExportLink 3 renderers; curl tradevalues 62488B weekly 63819B prospects 58084B
