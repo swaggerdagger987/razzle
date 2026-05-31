@@ -23,8 +23,5 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory reopen cycle 1 trade-network OG | 2bd28752 | keep | workday reopen; Bureau OG atom 3/4 SHIP; curl 67677B
 2026-05-31 | Factory open cycle 1 self-scout OG epic complete | e732f973 | keep | workday open; Bureau OG atom 4/4 SHIP; curl 66997B; epic complete
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
-2026-05-31 | Factory open dedup cycle | 8ce0463b | keep | epic complete on base ffccedf4; workday open for ticks
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
-2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
-2026-05-31 | Lab OG snapshot rows atom 1/4 | 916ba843 | keep | new epic; workday cycle 1
-2026-05-31 | Factory open cycle 1 breakouts weekly OG filter | 853ec05c | keep | workday open; Lab filter epic atom 2/4 SHIP; curl WR PNGs 54-62KB
+2026-05-31 | Factory open cycle 1 Lab live OG rows | 2cb898b6 | keep | workday open; epic atom 1/3 SHIP; PR standup 2026-05-31
