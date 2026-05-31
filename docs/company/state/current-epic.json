@@ -14,8 +14,8 @@
     {
       "id": "lab-og-tolab-snapshot-rankings-top-row",
       "title": "Rankings export passes top-row player_id into OG URL",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "892d34580"
     },
     {
       "id": "lab-og-tolab-strengths-default",
@@ -24,9 +24,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-tolab-snapshot-rankings-top-row",
+  "next_atom_id": "lab-og-tolab-strengths-default",
   "created_at": "2026-05-31T11:37:00Z",
-  "updated_at": "2026-05-31T11:40:00Z",
+  "updated_at": "2026-05-31T12:15:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-watermark-display-names",
@@ -45,6 +45,12 @@
       "status": "complete",
       "last_atom": "league-trade-finder-og-room-hallway",
       "merge_commit": "c8091030c"
+    },
+    {
+      "id": "league-l5-bureau-og-terraced-watermark",
+      "status": "complete",
+      "last_atom": "league-og-self-scout-watermark",
+      "merge_commit": "a76b2e4e0"
     }
   ]
 }

@@ -81,3 +81,9 @@ def test_rankings_export_passes_top_row_player_id():
     ).read_text(encoding="utf-8")
     assert "playerId={topPlayer.player_id}" in renderer
     assert "playerName={topPlayer.full_name}" in renderer
+
+
+def test_efficiency_og_watermark_includes_default_rb_position():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert 'efficiency: "RB"' in source
+    assert "TOLAB_DEFAULT_POSITION[slug]" in source
