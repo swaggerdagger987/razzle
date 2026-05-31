@@ -1,25 +1,25 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Aging curves default to RB in Lab but OG export omitted position=RB in toLab.",
-  "epic": "Lab L5 — OG hallway position defaults (Launch-10)",
-  "slice_title": "aging OG watermark includes default RB position in toLab",
-  "atom_id": "lab-og-tolab-aging-position",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "HALLWAY T6 + FACTORY-DOD Gate C",
+  "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
+  "epic": "Explore L5 — OG screener agent margin notes (atom 3/4)",
+  "slice_title": "LIVE staff sticker when Explore OG rows carry margin notes",
+  "atom_id": "explore-og-margin-note-sticker",
+  "parity_ref": "Explore L5 — agent margin notes on rows",
+  "depth_ref": "Explore L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py",
-    "docs/v2/evidence/2026-05-31-lab-og-tolab-aging-position.md"
+    "apps/web/app/og/explore/route.tsx",
+    "apps/api/tests/test_explore_og_margin_note_sticker.py",
+    "docs/v2/evidence/2026-05-31-explore-og-margin-note-sticker.md"
   ],
   "max_files": 3,
-  "max_lines": 40,
+  "max_lines": 80,
   "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_explore_og_margin_note_sticker.py apps/api/tests/test_explore_og_margin_note_rows.py apps/api/tests/test_explore_og_margin_note_lead.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["New panels", "NORTH_STAR/DESIGN/DECISIONS", "Bureau H2H"],
+  "out_of_scope": ["College OG margin notes", "NORTH_STAR/DESIGN/DECISIONS"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
@@ -27,6 +27,6 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   },
-  "status": "shipped",
-  "content_commit": "d56e382"
+  "status": "in_progress",
+  "content_commit": null
 }
