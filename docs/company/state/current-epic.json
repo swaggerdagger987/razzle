@@ -1,38 +1,86 @@
 {
-  "epic_status": "active",
-  "big_problem": "Self-Scout export cards still hit live API or demo — Reddit screenshots should mirror in-panel depth grades without Sleeper auth on the OG route.",
-  "epic_title": "League L5 — Bureau Self-Scout snapshot export",
-  "parity_ref": "League L5 — Scenario explorer / what-if outputs that travel",
-  "depth_ref": "League L5",
+  "big_problem": "Lab OG share cards still read generic on half of Launch-10 — Reddit cannot tell efficiency from gamelog at a glance.",
+  "epic_title": "Lab L5 — Launch-10 OG LIVE stickers name the board",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "bureau-self-scout-sharebar-snapshot",
-      "title": "Self-Scout ShareBar + OG snapshot codec matches panel grades",
-      "status": "in_progress",
-      "merge_commit": null
+      "id": "lab-og-live-sticker-efficiency-aging-buysell-dashboard-gamelog",
+      "title": "Launch-10 OG — panel-specific LIVE stickers for eff/aging/buysell/dashboard/gamelog",
+      "status": "done",
+      "merge_commit": "14c759de1"
     },
     {
-      "id": "bureau-manager-profiles-sharebar-snapshot",
-      "title": "Manager Profiles ShareBar + OG snapshot for archetype rows",
+      "id": "lab-og-live-blurb-efficiency-aging-buysell-dashboard-gamelog",
+      "title": "Launch-10 OG — matching live blurbs on export subtitle",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "bureau-self-scout-snapshot-roundtrip-test",
-      "title": "Pytest roundtrip for Self-Scout OG snapshot param",
+      "id": "lab-og-live-sticker-evidence-curl-suite",
+      "title": "Launch-10 OG — evidence curl for all five LIVE sticker panels",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-self-scout-sharebar-snapshot",
-  "created_at": "2026-05-31T09:30:00Z",
-  "updated_at": "2026-05-31T09:50:00Z",
+  "next_atom_id": "lab-og-live-blurb-efficiency-aging-buysell-dashboard-gamelog",
+  "epic_status": "active",
+  "created_at": "2026-05-31T09:16:24Z",
+  "updated_at": "2026-05-31T09:30:00Z",
   "completed_epics": [
     {
-      "id": "lab-l4-pro-gate-upgrade",
+      "id": "lab-l4-pro-gate-polish",
       "status": "complete",
-      "last_atom": "lab-pro-gate-og-sample-export",
-      "merge_commit": "1bed81fb"
+      "last_atom": "lab-pro-gate-perks-copy",
+      "merge_commit": "f56fdbd8"
+    },
+    {
+      "id": "lab-l5-og-live-rows-launch10",
+      "status": "complete",
+      "last_atom": "lab-og-live-demo-fallback-copy",
+      "merge_commit": "18d92f6b"
+    },
+    {
+      "id": "lab-l5-og-gamelog-live-week-rows",
+      "status": "complete",
+      "last_atom": "lab-og-launch10-snapshot-default",
+      "merge_commit": "e2a3ce8a"
+    },
+    {
+      "id": "lab-l5-launch10-og-live-sticker",
+      "status": "complete",
+      "last_atom": "lab-og-live-sticker-prospects-weekly",
+      "merge_commit": "5bb77346"
+    },
+    {
+      "id": "lab-l5-og-watermark-band",
+      "status": "complete",
+      "last_atom": "lab-og-watermark-band-panel-route",
+      "merge_commit": "742028c0"
+    },
+    {
+      "id": "lab-l5-og-live-sort-keys",
+      "status": "complete",
+      "last_atom": "lab-og-buysell-dashboard-live-sort",
+      "merge_commit": "7afc0b03"
+    },
+    {
+      "id": "league-l5-h2h-og-watermark",
+      "status": "complete",
+      "last_atom": "league-h2h-og-watermark-band",
+      "merge_commit": "945e4656"
+    },
+    {
+      "id": "lab-l2-sidebar-groups-by-agent",
+      "status": "complete",
+      "last_atom": "lab-sidebar-staff-picks-by-agent",
+      "merge_commit": "4e8b0e8e"
+    },
+    {
+      "id": "league-l5-self-scout-export",
+      "status": "complete",
+      "last_atom": "bureau-self-scout-snapshot-roundtrip-test",
+      "merge_commit": "7bc24c3a"
     },
     {
       "id": "lab-l5-og-live-fetch-merge",
@@ -41,14 +89,8 @@
       "merge_commit": "4bc3913e"
     },
     {
-      "id": "lab-l5-launch10-sample-labels",
-      "status": "complete",
-      "last_atom": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
-      "merge_commit": "54443bc8"
-    },
-    {
       "id": "lab-l4-pro-gate-error-surface",
-      "status": "partial",
+      "status": "active",
       "last_atom": "lab-l4-pro-gate-error-surface",
       "merge_commit": "5721ee33"
     }

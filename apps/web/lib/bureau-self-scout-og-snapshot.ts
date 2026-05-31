@@ -1,68 +1,74 @@
-/** Compact Self-Scout payload for OG export — mirrors Bureau Self-Scout panel grades. */
+/** Compact Self-Scout payload for OG export — mirrors in-product depth grades. */
 
-export type BureauSelfScoutOgPosRow = {
-  pos: string;
+export type BureauSelfScoutOgPos = {
+  position: string;
   grade: string;
   score: number;
   count: number;
   elite: number;
-  topName: string;
+  top_name: string;
 };
 
 export type BureauSelfScoutOgSnapshot = {
   team: string;
   record: string;
-  league: string;
-  season: string;
-  archetype: string;
-  rank: number;
-  total: number;
-  rows: BureauSelfScoutOgPosRow[];
+  league?: string;
+  season?: string;
+  archetype?: string;
+  rank?: number;
+  total?: number;
+  positions: BureauSelfScoutOgPos[];
 };
 
-type CompactPos = { p: string; g: string; s: number; c: number; e: number; n: string };
-type CompactScout = {
+type CompactPos = {
+  p: string;
+  g: string;
+  s: number;
+  c: number;
+  e: number;
+  n: string;
+};
+
+type CompactSelfScout = {
   tm: string;
   rc: string;
-  lg: string;
-  sn: string;
-  ar: string;
-  rk: number;
-  tt: number;
-  d: CompactPos[];
+  lg?: string;
+  sn?: string;
+  ar?: string;
+  rk?: number;
+  tt?: number;
+  pos: CompactPos[];
 };
 
-const POS_ORDER = ["QB", "RB", "WR", "TE"] as const;
-
 function hasSnapshotData(snap: BureauSelfScoutOgSnapshot): boolean {
-  return Boolean(snap.team) && snap.rows?.length > 0;
+  return Boolean(snap.team) && snap.positions?.length > 0;
 }
 
-function fromCompact(c: CompactScout): BureauSelfScoutOgSnapshot | null {
-  const rows = (c.d ?? [])
+function fromCompact(c: CompactSelfScout): BureauSelfScoutOgSnapshot | null {
+  const positions = (c.pos ?? [])
     .map((row) => ({
-      pos: row.p,
+      position: row.p,
       grade: row.g,
       score: row.s,
       count: row.c,
       elite: row.e,
-      topName: row.n,
+      top_name: row.n,
     }))
-    .filter((row) => row.pos);
-  if (!rows.length || !c.tm) return null;
+    .filter((row) => row.position);
+  if (!positions.length || !c.tm) return null;
   return {
     team: c.tm,
-    record: c.rc ?? "",
-    league: c.lg ?? "",
-    season: c.sn ?? "",
-    archetype: c.ar ?? "",
-    rank: c.rk ?? 0,
-    total: c.tt ?? 0,
-    rows,
+    record: c.rc,
+    league: c.lg,
+    season: c.sn,
+    archetype: c.ar,
+    rank: c.rk,
+    total: c.tt,
+    positions,
   };
 }
 
-function toCompact(snap: BureauSelfScoutOgSnapshot): CompactScout {
+function toCompact(snap: BureauSelfScoutOgSnapshot): CompactSelfScout {
   return {
     tm: snap.team,
     rc: snap.record,
@@ -71,16 +77,14 @@ function toCompact(snap: BureauSelfScoutOgSnapshot): CompactScout {
     ar: snap.archetype,
     rk: snap.rank,
     tt: snap.total,
-    d: snap.rows
-      .filter((row) => POS_ORDER.includes(row.pos as (typeof POS_ORDER)[number]))
-      .map((row) => ({
-        p: row.pos,
-        g: row.grade,
-        s: row.score,
-        c: row.count,
-        e: row.elite,
-        n: row.topName.slice(0, 32),
-      })),
+    pos: snap.positions.slice(0, 4).map((row) => ({
+      p: row.position,
+      g: row.grade,
+      s: row.score,
+      c: row.count,
+      e: row.elite,
+      n: row.top_name.slice(0, 24),
+    })),
   };
 }
 
@@ -102,7 +106,7 @@ export function decodeBureauSelfScoutOgSnapshot(
   try {
     const b64 = param.replace(/-/g, "+").replace(/_/g, "/");
     const json = atob(b64);
-    return fromCompact(JSON.parse(json) as CompactScout);
+    return fromCompact(JSON.parse(json) as CompactSelfScout);
   } catch {
     return null;
   }

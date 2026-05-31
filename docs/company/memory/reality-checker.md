@@ -1,7 +1,10 @@
 # Memory — Reality Checker
 
-2026-05-31 | bureau-self-scout-sharebar-snapshot Gate C | da33eafd | PASS curl demo 66997B snap 67600B; pytest 2.
-2026-05-31 | gamelog OG player default Gate C | da33eafd | PASS curl gamelog 60634B with/without player_id; build + pytest 58.
+2026-05-31 | lab-og-live-sticker-efficiency-aging-buysell-dashboard-gamelog | 14c759de1 | PASS | curl 5 OG panels 60-67KB; web build.
+
+2026-05-31 | bureau-self-scout-snapshot-roundtrip-test | 7bc24c3a | PASS | pytest 4 codec + 63 api.
+
+2026-05-31 | bureau-self-scout-snapshot-export | c2de8dad | PASS | curl self-scout 66997B PNG; web build ok; PR915 merged.
 
 2026-05-31 | explore-og-universe-query Gate C | 7dbd4b11 | PASS college OG 41427B; build + pytest 58.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | pytest 6; web build ok; Gate C N/A.

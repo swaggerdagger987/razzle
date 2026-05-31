@@ -90,57 +90,31 @@ const LAUNCH_10_OG_SLUGS = new Set([
 
 /** Panel-specific LIVE copy when `/api/panels/{slug}` returns real rows (Launch-10). */
 function launch10LiveBlurbSuffix(slug: string): string {
-  switch (slug) {
-    case "prospects":
-      return " · live RPS board";
-    case "weekly":
-      return " · live PPG heatmap";
-    case "rankings":
-      return " · live dynasty values";
-    case "tradevalues":
-      return " · live trade values";
-    case "breakouts":
-      return " · live breakout board";
-    case "gamelog":
-      return " · live game log";
-    case "efficiency":
-      return " · live PPO board";
-    case "aging":
-      return " · live aging curve";
-    case "buysell":
-      return " · live buy/sell board";
-    case "dashboard":
-      return " · live roster grades";
-    default:
-      return " · live nflverse rows";
-  }
+  if (slug === "prospects") return " · live RPS board";
+  if (slug === "weekly") return " · live PPG heatmap";
+  if (slug === "rankings") return " · live dynasty values";
+  if (slug === "breakouts") return " · live breakout board";
+  if (slug === "tradevalues") return " · live trade values";
+  if (slug === "efficiency") return " · live PPO board";
+  if (slug === "aging") return " · live aging curve";
+  if (slug === "buysell") return " · live buy/sell board";
+  if (slug === "dashboard") return " · live roster grades";
+  if (slug === "gamelog") return " · live game log";
+  return " · live nflverse rows";
 }
 
 function launch10LiveStickerLabel(slug: string): string {
-  switch (slug) {
-    case "prospects":
-      return "LIVE · RPS board";
-    case "weekly":
-      return "LIVE · PPG heatmap";
-    case "rankings":
-      return "LIVE · dynasty values";
-    case "tradevalues":
-      return "LIVE · trade values";
-    case "breakouts":
-      return "LIVE · breakout board";
-    case "gamelog":
-      return "LIVE · game log";
-    case "efficiency":
-      return "LIVE · PPO board";
-    case "aging":
-      return "LIVE · aging curve";
-    case "buysell":
-      return "LIVE · buy/sell board";
-    case "dashboard":
-      return "LIVE · roster grades";
-    default:
-      return "LIVE · nflverse rows";
-  }
+  if (slug === "prospects") return "LIVE · RPS board";
+  if (slug === "weekly") return "LIVE · PPG heatmap";
+  if (slug === "rankings") return "LIVE · dynasty values";
+  if (slug === "breakouts") return "LIVE · breakout board";
+  if (slug === "tradevalues") return "LIVE · trade values";
+  if (slug === "efficiency") return "LIVE · PPO board";
+  if (slug === "aging") return "LIVE · aging curve";
+  if (slug === "buysell") return "LIVE · buy/sell board";
+  if (slug === "dashboard") return "LIVE · roster grades";
+  if (slug === "gamelog") return "LIVE · game log";
+  return "LIVE · nflverse rows";
 }
 
 function launch10DemoBlurbSuffix(slug: string): string {

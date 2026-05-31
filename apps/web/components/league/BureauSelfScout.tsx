@@ -6,7 +6,6 @@ import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
 import type { Route } from "next";
 import { useParams } from "next/navigation";
-import { useMemo } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import type { BureauSelfScoutOgSnapshot } from "@/lib/bureau-self-scout-og-snapshot";
 import { BureauSelfScoutShareBar } from "./BureauSelfScoutShareBar";
@@ -65,34 +64,32 @@ export function BureauSelfScout({ data }: Props) {
     "QB" as (typeof POS_ORDER)[number],
   );
 
-  const ogSnapshot = useMemo((): BureauSelfScoutOgSnapshot | undefined => {
-    if (!team?.name || !userId) return undefined;
-    const rows = POS_ORDER.map((pos) => {
-      const block = depth[pos] ?? {};
-      const top = [...(block.depth ?? [])].sort(
-        (a, b) => (b.dynasty_value ?? 0) - (a.dynasty_value ?? 0),
-      )[0];
-      return {
-        pos,
-        grade: depthGrade(block),
-        score: depthScore(block),
-        count: block.count ?? 0,
-        elite: block.elite ?? 0,
-        topName: top?.name ?? "—",
-      };
-    });
-    if (!rows.some((r) => r.count > 0)) return undefined;
-    return {
-      team: String(team.name),
-      record: String(team.record ?? ""),
-      league: String(league?.name ?? ""),
-      season: String(league?.season ?? ""),
-      archetype: String(build?.archetype ?? ""),
-      rank: Number(rank?.rank ?? 0),
-      total: Number(rank?.total ?? 0),
-      rows,
-    };
-  }, [team, userId, depth, league, build, rank]);
+  const ogSnapshot: BureauSelfScoutOgSnapshot | undefined =
+    leagueId && userId && team?.name
+      ? {
+          team: String(team.name),
+          record: String(team.record ?? ""),
+          league: league?.name ? String(league.name) : undefined,
+          season: league?.season != null ? String(league.season) : undefined,
+          archetype: build?.archetype ? String(build.archetype) : undefined,
+          rank: rank?.rank != null ? Number(rank.rank) : undefined,
+          total: rank?.total != null ? Number(rank.total) : undefined,
+          positions: POS_ORDER.map((pos) => {
+            const block = depth[pos] ?? {};
+            const top = [...(block.depth ?? [])].sort(
+              (a, b) => (b.dynasty_value ?? 0) - (a.dynasty_value ?? 0),
+            )[0];
+            return {
+              position: pos,
+              grade: depthGrade(block),
+              score: depthScore(block),
+              count: block.count ?? 0,
+              elite: block.elite ?? 0,
+              top_name: top?.name ?? "—",
+            };
+          }),
+        }
+      : undefined;
 
   return (
     <div className="flex flex-col gap-6">
@@ -193,7 +190,7 @@ export function BureauSelfScout({ data }: Props) {
           <BureauSelfScoutShareBar
             leagueId={leagueId}
             userId={userId}
-            weakestPos={weakest}
+            weakestPosition={weakest}
             snapshot={ogSnapshot}
           />
         ) : null}

@@ -13,17 +13,23 @@ import {
 interface Props {
   leagueId: string;
   userId: string;
-  weakestPos: string;
-  /** In-panel depth grades — OG card matches Bureau view without live API. */
+  /** Thinnest position label for Hawkeye hallway CTA. */
+  weakestPosition: string;
+  /** Encodes in-panel depth grades so OG card matches Bureau view. */
   snapshot?: BureauSelfScoutOgSnapshot;
 }
 
-/** Copyable Self-Scout URL + OG export — mirrors BureauPowerRankingsShareBar. */
-export function BureauSelfScoutShareBar({ leagueId, userId, weakestPos, snapshot }: Props) {
+/** Copyable Self-Scout URL + OG export — mirrors BureauH2HShareBar. */
+export function BureauSelfScoutShareBar({
+  leagueId,
+  userId,
+  weakestPosition,
+  snapshot,
+}: Props) {
   const [copied, setCopied] = useState(false);
   const hawkeye = AGENT_BY_ID.hawkeye;
 
-  const scoutPath = `/league/${leagueId}/self-scout`;
+  const scoutPath = `/league/${leagueId}`;
 
   const ogParams = new URLSearchParams({
     league: leagueId,
@@ -32,6 +38,11 @@ export function BureauSelfScoutShareBar({ leagueId, userId, weakestPos, snapshot
   });
   const snap = snapshot ? encodeBureauSelfScoutOgSnapshot(snapshot) : undefined;
   if (snap) ogParams.set("snapshot", snap);
+
+  const hawkeyeRoomHref = toRoom({
+    agentId: "hawkeye",
+    question: `Self-Scout says ${weakestPosition} is my thinnest spot — who should I target?`,
+  }) as Route;
 
   const copyLink = useCallback(async () => {
     const url =
@@ -58,15 +69,7 @@ export function BureauSelfScoutShareBar({ leagueId, userId, weakestPos, snapshot
       >
         export card
       </a>
-      <Link
-        href={
-          toRoom({
-            agentId: "hawkeye",
-            question: `Self-Scout says ${weakestPos} is my thinnest spot — who should I target?`,
-          }) as Route
-        }
-        className="btn-chunky text-sm bg-bg"
-      >
+      <Link href={hawkeyeRoomHref} className="btn-chunky text-sm bg-bg">
         ask {hawkeye.name} in film room →
       </Link>
     </div>

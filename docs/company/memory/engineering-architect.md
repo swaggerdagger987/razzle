@@ -1,6 +1,13 @@
 # Memory — Engineering Architect
 
-2026-05-31 | LabOgExportLink scoped default | 1 file | PLAYER_SCOPED_LAB_OG_SLUGS mirrors route PLAYER_SCOPED_SLUGS.
+2026-05-31 | lab-og-live-sticker | 14c759de1 | keep | route.tsx only; ≤20 lines sticker+blurb.
+
+2026-05-31 | self-scout roundtrip | 7bc24c3a | keep | pytest mirror; H2H codec pattern.
+
+2026-05-31 | self-scout snapshot | c2de8dad | keep | 3-file contract; mirrors power-rankings codec pattern.
+
+2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.
+2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | route.tsx merge; sticker + fetchOgLiveRows + extractors.
 2026-05-31 | fetchOgLiveRows launch-10 | e2a3ce8a | panel API + pro header before panels slug; demo last.

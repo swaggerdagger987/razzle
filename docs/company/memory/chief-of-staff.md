@@ -1,15 +1,20 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 131 Self-Scout OG snapshot | 709660c | Workday open cycle 3; League L5 epic atom 1/3; PR #1018; NO_LOCK_GUARDRAIL.
-2026-05-31 | Factory cycle 122 gamelog OG player default | 96a69ddf | workday cycle 2; lock #881; live-fetch epic atom 3/3 complete.
+2026-05-31 | Factory cycle 130 Lab OG LIVE stickers | 14c759de1 | keep | Lab L5 sticker epic atom 1/3; workday cycle 1.
+
+2026-05-31 | Factory cycle 129 Self-Scout roundtrip | 7bc24c3a | keep | League L5 epic complete.
+
+2026-05-31 | Factory cycle 128 Self-Scout ShareBar | 0bbfc1bb | keep | League L5 epic atom 2/3.
+
+2026-05-31 | Factory cycle 124 Self-Scout snapshot | c2de8dad | keep | workday open; League L5 epic atom 1/3 merged PR915.
 
 2026-05-31 | Factory cycle 125 OG LIVE labels | ad24a219 | Workday open; panel-native LIVE epic 1/3; lock #842.
 
-2026-05-31 | Factory cycle 121 explore OG universe | d3c6c873 | workday cycle 1; lock #847; live-fetch epic atom 2/3.
+2026-05-31 | Factory cycle 118 perks copy | f56fdbd8 | keep | workday open cycle 1; L4 epic complete atom 3/3.
 
-2026-05-31 | Factory cycle 121 pro gate panel pitches | 0b59daee | L4 epic atom 2/3; factory open.
+2026-05-31 | Factory cycle 121 pro gate panel pitches | ad24a219 | L4 epic atom 2/3; factory open.
 
-2026-05-31 | Factory cycle 120 pro-gate loading copy | da33eafd | Deduped OG on base #753; L4 epic atom 1/3.
+2026-05-31 | Factory cycle 120 pro-gate loading copy | ad24a219 | Deduped OG on base #753; L4 epic atom 1/3.
 
 2026-05-31 | Factory cycle 107 Lab sidebar agent groups | 4e8b0e8e | Workday open; L2 sidebar epic atom 1/2.
 
@@ -93,3 +98,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory open cycle 1 Build Profiles tab | da33eafd | keep | new unhide epic; roster-depth dedup on base; atom 1/3 SHIP
 2026-05-31 | Factory open cycle 1 Schedule tab | da33eafd | keep | dedup waiver a2536dcc; HIDDEN empty; epic complete
 2026-05-31 | Factory cycle 1 Lab OG live sort | 7f78b631 | keep | workday open; Lab L5 epic atom 1/3
+2026-05-31 | Factory cycle 1 Self-Scout ShareBar | 0bbfc1bb | keep | workday open; League L5 epic atom 2/3

@@ -82,6 +82,20 @@ async function fetchSelfScout(leagueId: string, userId: string): Promise<SelfSco
   }
 }
 
+function rowsFromSnapshot(
+  snap: NonNullable<ReturnType<typeof decodeBureauSelfScoutOgSnapshot>>,
+) {
+  return snap.positions.map((row) => ({
+    pos: row.position,
+    grade: row.grade,
+    score: row.score,
+    count: row.count,
+    elite: row.elite,
+    topName: row.top_name,
+    color: POS_COLORS[row.position] ?? "#5c4a3d",
+  }));
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
@@ -91,33 +105,57 @@ export async function GET(req: Request) {
   const snapshot = snapshotParam ? decodeBureauSelfScoutOgSnapshot(snapshotParam) : null;
 
   const hawkeye = AGENT_BY_ID.hawkeye;
-  const live = snapshot?.rows?.length ? null : await fetchSelfScout(league, user);
-  const fromSnapshot = snapshot?.rows?.length ? snapshot : null;
-  const isDemo = !fromSnapshot?.rows?.length && (!live?.depth || Object.keys(live.depth).length === 0);
-  const depth = isDemo ? DEMO_DEPTH : fromSnapshot ? null : live!.depth!;
-  const teamName = fromSnapshot?.team ?? (isDemo ? DEMO_META.team : live!.team?.name ?? "Your Team");
-  const record = fromSnapshot?.record ?? (isDemo ? DEMO_META.record : live!.team?.record ?? "");
-  const leagueName = fromSnapshot?.league ?? (isDemo ? DEMO_META.league : live!.league?.name ?? "");
-  const season = fromSnapshot?.season ?? (isDemo ? DEMO_META.season : String(live!.league?.season ?? ""));
-  const archetype =
-    fromSnapshot?.archetype ?? (isDemo ? DEMO_META.archetype : live!.build_profile?.archetype ?? "");
-  const rank = fromSnapshot?.rank ?? (isDemo ? DEMO_META.rank : live!.power_rank?.rank ?? 0);
-  const total = fromSnapshot?.total ?? (isDemo ? DEMO_META.total : live!.power_rank?.total ?? 0);
-  const fromPanel = Boolean(fromSnapshot?.rows?.length);
+  const live = snapshot?.positions?.length ? null : await fetchSelfScout(league, user);
+  const fromPanel = Boolean(snapshot?.positions?.length);
+  const isDemo = !fromPanel && (!live?.depth || Object.keys(live.depth).length === 0);
+  const depth = fromPanel
+    ? null
+    : isDemo
+      ? DEMO_DEPTH
+      : live!.depth!;
+  const teamName = fromPanel
+    ? snapshot!.team
+    : isDemo
+      ? DEMO_META.team
+      : (live!.team?.name ?? "Your Team");
+  const record = fromPanel
+    ? snapshot!.record
+    : isDemo
+      ? DEMO_META.record
+      : (live!.team?.record ?? "");
+  const leagueName = fromPanel
+    ? (snapshot!.league ?? "")
+    : isDemo
+      ? DEMO_META.league
+      : (live!.league?.name ?? "");
+  const season = fromPanel
+    ? (snapshot!.season ?? "")
+    : isDemo
+      ? DEMO_META.season
+      : String(live!.league?.season ?? "");
+  const archetype = fromPanel
+    ? (snapshot!.archetype ?? "")
+    : isDemo
+      ? DEMO_META.archetype
+      : (live!.build_profile?.archetype ?? "");
+  const rank = fromPanel
+    ? (snapshot!.rank ?? 0)
+    : isDemo
+      ? DEMO_META.rank
+      : (live!.power_rank?.rank ?? 0);
+  const total = fromPanel
+    ? (snapshot!.total ?? 0)
+    : isDemo
+      ? DEMO_META.total
+      : (live!.power_rank?.total ?? 0);
 
-  const rows = fromSnapshot?.rows?.length
-    ? fromSnapshot.rows.map((row) => ({
-        pos: row.pos,
-        grade: row.grade,
-        score: row.score,
-        count: row.count,
-        elite: row.elite,
-        topName: row.topName,
-        color: POS_COLORS[row.pos] ?? "#5c4a3d",
-      }))
+  const rows = fromPanel
+    ? rowsFromSnapshot(snapshot!)
     : POS_ORDER.map((pos) => {
         const block = depth![pos] ?? {};
-        const top = [...(block.depth ?? [])].sort((a, b) => (b.dynasty_value ?? 0) - (a.dynasty_value ?? 0))[0];
+        const top = [...(block.depth ?? [])].sort(
+          (a, b) => (b.dynasty_value ?? 0) - (a.dynasty_value ?? 0),
+        )[0];
         return {
           pos,
           grade: depthGrade(block),
@@ -179,7 +217,7 @@ export async function GET(req: Request) {
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 8 }}>
           {`${teamName} · ${record} · #${rank} of ${total}`}
-          {fromPanel ? " · from your scout" : isDemo ? " · sample preview" : ""}
+          {fromPanel ? " · from your Self-Scout" : isDemo ? " · sample preview" : ""}
         </div>
 
         {archetype ? (
