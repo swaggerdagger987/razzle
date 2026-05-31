@@ -134,3 +134,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 162	12ba50588	depth+voice+simplicity	keep	League	L5 Power Rankings OG terracotta watermark	trust=T5,T6; pytest 1; curl 70764B; bureau OG watermark epic 3/4
 158	2c8629776	depth+voice+simplicity	keep	Lab	L5 dashboard empty board OG sample export	trust=T5,T6; curl 66547B
 160	1e2233908	depth+voice+simplicity	keep	League	L5 Bureau Monte Carlo preview card before export	trust=T5,T6; pytest 2; curl 49181B
+161	85f805c3a	depth+voice+simplicity	keep	Lab	L5 Breakouts empty-board OG sample export	trust=T5,T6; pytest 13; curl live WR 68849B; empty OG epic 1/5
