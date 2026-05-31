@@ -110,6 +110,7 @@ const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set([
 const TOLAB_DEFAULT_POSITION: Record<string, string> = {
   weekly: "WR",
   efficiency: "RB",
+  percentiles: "WR",
 };
 
 const LAUNCH_10_OG_SLUGS = new Set([
