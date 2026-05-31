@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | OG extractors most_efficient/positions | da33eafd | keep | positionFilter threads into extractRows for aging nested API.
+2026-05-31 | OG extractors most_efficient/positions | ccb58697 | keep | positionFilter threads into extractRows for aging nested API.
 
 2026-05-31 | PANEL_OG_STAT_KEY + rankOgRowsForPanel | 7f78b631 | keep | One-file OG route; formula_score before trade_value on tradevalues.
 
