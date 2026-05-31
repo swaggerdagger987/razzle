@@ -1,31 +1,50 @@
 {
-  "epic_status": "active",
-  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 handling across launch-10 renderers drifts from teaser/perks polish.",
-  "epic_title": "Lab L4 — shared pro-gate error surface",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
+  "big_problem": "Explore OG cards go blank when the screener API is cold — Reddit screenshots need universe-aware sample rows, not pulling film alone.",
+  "epic_title": "Explore L5 — OG universe query demo rows",
+  "parity_ref": "Explore L5 — screener OG export",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "lab-l4-pro-gate-error-surface",
-      "title": "ProGateFromPanelError — breakouts renderer + perks pytest guard",
-      "status": "done",
-      "merge_commit": "5721ee33"
+      "id": "explore-og-universe-demo",
+      "title": "Explore OG — NFL/college demo rows when screener query empty",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-l4-pro-gate-error-tradevalues",
-      "title": "Wire ProGateFromPanelError on tradevalues + efficiency",
+      "id": "explore-og-sample-sticker",
+      "title": "Explore OG — terracotta SAMPLE sticker on demo path",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "lab-l4-pro-gate-error-remaining",
-      "title": "Wire ProGateFromPanelError on remaining launch-10 renderers",
+      "id": "explore-og-live-sticker",
+      "title": "Explore OG — teal LIVE sticker when screener returns rows",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "explore-og-force-demo-qa",
+      "title": "Explore OG — force_demo QA param for Gate C curl",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-l4-pro-gate-error-tradevalues",
-  "created_at": "2026-05-31T09:25:00Z",
-  "updated_at": "2026-05-31T09:25:00Z",
-  "completed_epics": []
+  "next_atom_id": "explore-og-universe-demo",
+  "epic_status": "active",
+  "created_at": "2026-05-31T08:58:00Z",
+  "updated_at": "2026-05-31T09:30:00Z",
+  "completed_epics": [
+    {
+      "id": "lab-l5-og-live-fetch-sticker-parity",
+      "status": "complete",
+      "last_atom": "lab-og-gamelog-player-default",
+      "merge_commit": "e37cd230"
+    },
+    {
+      "id": "lab-l4-pro-gate-error-surface",
+      "status": "complete",
+      "last_atom": "lab-l4-pro-gate-error-surface",
+      "merge_commit": "5721ee33"
+    }
+  ]
 }
