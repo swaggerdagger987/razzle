@@ -48,6 +48,7 @@ const OG_PRO_PREVIEW_HEADER = "X-Razzle-Plan";
 
 /** Ja'Marr Chase — nflverse gsis_id for OG previews when no player_id in URL. */
 const DEFAULT_OG_PLAYER_ID = "00-0036900";
+const DEFAULT_OG_PLAYER_NAME = "Ja'Marr Chase";
 
 /** Lab panels that require player_id on the API (path or query). */
 const PLAYER_SCOPED_SLUGS = new Set([
@@ -84,6 +85,9 @@ const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set(["dynasty-comps", "strengths", 
 
 /** Panels where DEFAULT_OG_PLAYER_ID is the real export context — keep player in toLab (T6). */
 const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set(["gamelog", "dynasty-comps", "percentiles"]);
+
+/** Panels that default API position when URL omits position — mirror in OG watermark (T6). */
+const TOLAB_DEFAULT_POSITION: Record<string, string> = { weekly: "WR" };
 
 const LAUNCH_10_OG_SLUGS = new Set([
   "weekly",
@@ -167,6 +171,11 @@ function launch10DemoBlurbSuffix(slug: string): string {
   if (slug === "rankings") return " · demo dynasty ranks";
   if (slug === "breakouts") return " · demo RBS board";
   if (slug === "tradevalues") return " · demo value curve";
+  if (slug === "gamelog") return " · demo Wk tape";
+  if (slug === "efficiency") return " · demo PPO board";
+  if (slug === "aging") return " · demo aging curve";
+  if (slug === "buysell") return " · demo buy/sell board";
+  if (slug === "dashboard") return " · demo roster grades";
   return " · demo nflverse rows";
 }
 
@@ -176,6 +185,11 @@ function launch10DemoStickerLabel(slug: string): string {
   if (slug === "rankings") return "SAMPLE · dynasty ranks";
   if (slug === "breakouts") return "SAMPLE · RBS board";
   if (slug === "tradevalues") return "SAMPLE · value curve";
+  if (slug === "gamelog") return "SAMPLE · Wk tape";
+  if (slug === "efficiency") return "SAMPLE · PPO board";
+  if (slug === "aging") return "SAMPLE · aging curve";
+  if (slug === "buysell") return "SAMPLE · buy/sell board";
+  if (slug === "dashboard") return "SAMPLE · roster grades";
   return "SAMPLE · demo rows";
 }
 
@@ -372,10 +386,9 @@ function demoRowsForPanel(slug: string): OgRow[] {
 }
 
 type CompactOgRow = { n: string; p: string; t: string; s: number; sl: string };
+type SnapshotPayload = { r: CompactOgRow[]; pid?: string };
 
-type DecodedOgSnapshot = { rows: OgRow[]; playerId?: string };
-
-function compactRowsToOgRows(arr: CompactOgRow[]): OgRow[] {
+function mapCompactOgRows(arr: CompactOgRow[]): OgRow[] {
   return arr
     .filter((r) => r?.n)
     .slice(0, 6)
@@ -388,17 +401,21 @@ function compactRowsToOgRows(arr: CompactOgRow[]): OgRow[] {
     }));
 }
 
-function decodeOgSnapshot(param: string): DecodedOgSnapshot {
+function decodeOgSnapshot(param: string): { rows: OgRow[]; exportPlayerId?: string } {
   try {
     const b64 = param.replace(/-/g, "+").replace(/_/g, "/");
     const json = atob(b64);
-    const parsed = JSON.parse(json) as CompactOgRow[] | { pid?: string; rows?: CompactOgRow[] };
+    const parsed = JSON.parse(json) as CompactOgRow[] | SnapshotPayload;
     if (Array.isArray(parsed)) {
-      return { rows: compactRowsToOgRows(parsed) };
+      return { rows: mapCompactOgRows(parsed) };
     }
-    const pid = typeof parsed.pid === "string" ? parsed.pid.trim() : "";
-    const rows = Array.isArray(parsed.rows) ? compactRowsToOgRows(parsed.rows) : [];
-    return { rows, playerId: pid || undefined };
+    if (parsed && Array.isArray(parsed.r)) {
+      return {
+        rows: mapCompactOgRows(parsed.r),
+        exportPlayerId: typeof parsed.pid === "string" ? parsed.pid : undefined,
+      };
+    }
+    return { rows: [] };
   } catch {
     return { rows: [] };
   }
@@ -903,23 +920,39 @@ async function fetchOgLiveRows(
 }
 
 /** Typed hallway path for OG watermark band (T6 — click back into Lab). */
+function slugifyPlayerName(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
 function labOgWatermarkLink(
   slug: string,
-  opts: { positionFilter: string; playerId: string; playerScoped: boolean },
+  opts: {
+    positionFilter: string;
+    playerId: string;
+    playerScoped: boolean;
+    snapshotPlayerId?: string;
+    playerDisplayName?: string;
+  },
 ): string {
+  const watermarkPlayerId = opts.snapshotPlayerId ?? opts.playerId;
   const includeDefaultPlayer = TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS.has(slug);
   const usePlayer =
-    opts.playerScoped &&
-    opts.playerId &&
-    (opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer);
+    (opts.playerScoped || Boolean(opts.snapshotPlayerId)) &&
+    watermarkPlayerId &&
+    (watermarkPlayerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer);
+  const resolvedName =
+    opts.playerDisplayName?.trim() ||
+    (watermarkPlayerId === DEFAULT_OG_PLAYER_ID && includeDefaultPlayer
+      ? DEFAULT_OG_PLAYER_NAME
+      : "player");
   let path = toLab(
     slug,
     usePlayer
       ? {
           player: {
-            playerId: opts.playerId,
-            slug: opts.playerId,
-            name: "player",
+            playerId: watermarkPlayerId,
+            slug: slugifyPlayerName(resolvedName) || watermarkPlayerId,
+            name: resolvedName,
           },
         }
       : undefined,
@@ -981,14 +1014,13 @@ export async function GET(
     apiParams.position = positionFilter;
   } else if (slug === "weekly" && apiParams.position == null) {
     // Match WeeklyHeatmapRenderer default so /api/panels/weekly returns live rows for OG.
-    apiParams.position = "WR";
+    apiParams.position = TOLAB_DEFAULT_POSITION.weekly;
   }
-  const snapshotDecoded = snapshotParam ? decodeOgSnapshot(snapshotParam) : { rows: [] };
+  const snapshotDecoded = snapshotParam ? decodeOgSnapshot(snapshotParam) : { rows: [] as OgRow[] };
   const snapshotRows = snapshotDecoded.rows;
+  const snapshotExportPlayerId = snapshotDecoded.exportPlayerId;
   const snapshotHasRows =
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
-  const watermarkPlayerId =
-    snapshotDecoded.playerId?.trim() || playerId;
   let liveRows: OgRow[] = [];
   if (apiPath && !snapshotHasRows && !forceDemo) {
     liveRows = await fetchOgLiveRows(
@@ -1015,10 +1047,14 @@ export async function GET(
   const showingLiveData = !isSnapshot && liveHasRows && hasRows;
   const showingDemoRows = !isSnapshot && !showingLiveData && hasRows;
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
+  const watermarkPosition =
+    positionFilter || TOLAB_DEFAULT_POSITION[slug] || "";
   const labLink = labOgWatermarkLink(slug, {
-    positionFilter,
-    playerId: watermarkPlayerId,
+    positionFilter: watermarkPosition,
+    playerId,
     playerScoped: PLAYER_SCOPED_SLUGS.has(slug),
+    snapshotPlayerId: snapshotExportPlayerId,
+    playerDisplayName: url.searchParams.get("name") ?? undefined,
   });
 
   return new ImageResponse(
