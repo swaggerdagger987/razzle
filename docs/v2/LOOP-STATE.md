@@ -7,4 +7,9 @@ last_keep_cycle: 116
 last_commit: 675044ea
 lab_l4_pro_gate_epic: active
 lab_l5_og_watermark_epic: complete
-lab_l5_launch10_og_extract_epic: active
+lab_l5_og_live_sort_epic: complete
+lab_l5_og_position_epic: complete
+cycle: 116
+bureau_h2h_codec_epic: complete
+last_keep_cycle: 116
+last_commit: 5e75875e

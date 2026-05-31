@@ -1,33 +1,29 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Launch-10 Lab OG cards for weekly, prospects, and breakouts still mis-rank live API rows — Reddit screenshots disagree with in-product heatmaps and big boards.",
-  "epic": "Lab L5 — launch-10 OG live extract matches renderers",
-  "slice_title": "Weekly hot-week + prospects RPS + breakouts RBS live OG extract",
-  "atom_id": "lab-og-weekly-prospects-breakouts-live-extract",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "ACCEPTANCE Gate 6 — Share / OG export cards",
+  "atom_id": "bureau-h2h-snapshot-roundtrip-test",
+  "big_problem": "Bureau rivalry export cards still decode wrong when managers snapshot from Head-to-Head — ShareBar and OG route use mismatched snapshot codecs.",
+  "epic": "League L5 — Bureau H2H snapshot codec matches OG decode",
+  "slice_title": "pytest contract test — ShareBar snapshot y/m/pc round-trips",
+  "parity_ref": "Explore L5 — Bureau H2H export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
+  "allowed_paths": [
+    "apps/api/tests/test_bureau_h2h_og_snapshot_codec.py"
+  ],
   "max_files": 1,
   "max_lines": 120,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_bureau_h2h_og_snapshot_codec.py -q",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/weekly?position=WR&download=1'",
-    "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/prospects?position=WR&download=1'",
-    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/breakouts?position=WR&download=1'"
+    "npm run build --workspace=apps/web 2>&1 | tail -5"
   ],
-  "out_of_scope": [
-    "gamelog player-scoped weeks",
-    "NORTH_STAR/DESIGN/DECISIONS edits",
-    "new npm deps"
-  ],
+  "out_of_scope": ["OG route refactors", "ShareBar UI changes", "new npm deps"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   }
 }
