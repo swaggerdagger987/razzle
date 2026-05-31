@@ -2,9 +2,9 @@ cycle: 153
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: (pick from PARITY)
-last_keep_cycle: 153
-last_commit: 9be64d109
+next_slice: lab-l4-pro-gate-polish-or-bureau-h2h
+last_keep_cycle: 152
+last_commit: 1a12d9c0b
 lab_l5_empty_og_epic: complete
 lab_l5_og_hallway_epic: complete
 lab_l5_og_weekly_tolab_position: complete
