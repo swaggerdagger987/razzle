@@ -1,4 +1,5 @@
-2026-05-31 | lab-panel-share-bar-breakouts-buysell | f6e0985f3 | SHIP | Hawkeye/Bones panels get share bar; epic atom 2/4.
+2026-05-31 | lab-panel-share-bar-weekly-gamelog | f6e0985f3 | SHIP | Hawkeye weekly + Atlas gamelog share bar; epic atom 3/4.
+2026-05-31 | lab-panel-share-bar-breakouts-buysell | 33256d890 | SHIP | Hawkeye/Bones panels get share bar; epic atom 2/4.
 2026-05-31 | lab-panel-share-bar-rankings | 691bd5e1b | SHIP | NEXT GTM export bar; rankings copy/preview/export atom 1/4.
 2026-05-31 | lab-og-efficiency-aging-formula-live | 8db7cdf24 | SHIP | Closes formula OG epic; efficiency/aging formula_score on OG.
 2026-05-31 | league-trade-finder-og-snapshot | a319e8953 | SHIP | Bureau export mirrors in-panel Bones deals.

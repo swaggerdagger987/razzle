@@ -1,4 +1,5 @@
-2026-05-31 | lab-panel-share-bar-breakouts-buysell | f6e0985f3 | PASS | pytest 4; curl breakouts 66253B buysell 63936B.
+2026-05-31 | lab-panel-share-bar-weekly-gamelog | f6e0985f3 | PASS | pytest 6; curl weekly 65110B gamelog 61435B.
+2026-05-31 | lab-panel-share-bar-breakouts-buysell | 33256d890 | PASS | pytest 4; curl breakouts 66253B buysell 63936B.
 2026-05-31 | lab-panel-share-bar-rankings | 691bd5e1b | PASS | pytest 2; curl rankings 66806B.
 2026-05-31 | lab-og-efficiency-aging-formula-live | 8db7cdf24 | PASS | pytest 5; curl eff 64569B aging 63841B.
 2026-05-31 | league-trade-finder-og-snapshot | a319e8953 | PASS | pytest 3; curl snap 54790B demo 57910B.

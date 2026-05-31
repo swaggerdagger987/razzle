@@ -20,7 +20,7 @@
     {
       "id": "lab-panel-share-bar-weekly-gamelog",
       "title": "Weekly + Gamelog — player-scoped share bar",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
@@ -32,7 +32,7 @@
   ],
   "next_atom_id": "lab-panel-share-bar-weekly-gamelog",
   "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T11:40:00Z",
   "completed_epics": [
     "league-trade-finder-gtm-export-2026-05-31",
     "lab-formula-sorted-og-live-parity-2026-05-31"

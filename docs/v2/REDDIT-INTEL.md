@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab weekly + gamelog share bar (cycle 152)
+- **Angle:** Hawkeye heatmap + Atlas gamelog — copy player-scoped panel link before PNG; weekly WR filter rides on OG query string.
+- **Trust:** T5/T6 — curl weekly 65110B gamelog 61435B; pytest guards no LabOgExportLink regressions.
+
 ### 2026-05-31 — Lab breakouts + buy/sell share bar (cycle 151)
 - **Angle:** Hawkeye breakout + Bones buy-low cards now copy link + preview before PNG — dual-lane buy/sell snapshot matches the two-column panel.
 - **Trust:** T5/T6 — pytest guards share bar; curl breakouts 66253B buysell 63936B.

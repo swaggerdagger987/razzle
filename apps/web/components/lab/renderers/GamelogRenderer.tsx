@@ -9,7 +9,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
-import { DEFAULT_LAB_OG_PLAYER_ID, LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
+import { DEFAULT_LAB_OG_PLAYER_ID, type OgSnapshotRow } from "../LabOgExportLink";
+import { LabPanelShareBar } from "../LabPanelShareBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProGateFromPanelError } from "../ProGateFromPanelError";
 
@@ -284,12 +285,12 @@ export function GamelogRenderer({ panel }: Props) {
           <Link href="/explore" className="text-sm text-orange underline">
             pick a player in Explore →
           </Link>
-          <LabOgExportLink
+          <LabPanelShareBar
             slug="gamelog"
             downloadName="razzle-gamelog.png"
             playerId={DEFAULT_LAB_OG_PLAYER_ID}
             snapshotRows={sampleOgSnapshotRows.length ? sampleOgSnapshotRows : undefined}
-            label={sampleOgSnapshotRows.length ? "export card" : "export sample card"}
+            copyLabel="copy gamelog link"
           />
         </footer>
       </div>
@@ -384,12 +385,12 @@ export function GamelogRenderer({ panel }: Props) {
         <div className="p-6">
           <p className="text-ink-medium">{agent.emptyCopy}</p>
           <footer className="mt-4 flex flex-wrap items-center gap-4">
-            <LabOgExportLink
+            <LabPanelShareBar
               slug="gamelog"
               downloadName="razzle-gamelog.png"
               playerId={(data?.player_id ?? playerId) || DEFAULT_LAB_OG_PLAYER_ID}
               position={displayPos || undefined}
-              label="export sample card"
+              copyLabel="copy gamelog link"
             />
           </footer>
         </div>
@@ -465,12 +466,13 @@ export function GamelogRenderer({ panel }: Props) {
           >
             open in Explore
           </Link>
-          <LabOgExportLink
+          <LabPanelShareBar
             slug="gamelog"
             downloadName="razzle-gamelog.png"
             playerId={(data?.player_id ?? playerId) || DEFAULT_LAB_OG_PLAYER_ID}
             position={displayPos || undefined}
             snapshotRows={ogSnapshotRows}
+            copyLabel="copy gamelog link"
           />
         </footer>
       )}
