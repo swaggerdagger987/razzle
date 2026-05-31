@@ -1,7 +1,7 @@
 # Evidence — Lab L5 OG export links (player-scoped)
 
 **Date:** 2026-05-31  
-**Atom:** `lab-og-export-player-scoped`  
+**Atoms:** `lab-og-export-player-scoped` (ffccedf4 on base) + supplement (b7deed67 DynastyCompsPanel)  
 **Verdict:** PASS
 
 ## Build
@@ -18,6 +18,6 @@
 
 ## In-product
 
-- `LabOgExportLink` appends `player_id` when provided; `DEFAULT_LAB_OG_PLAYER_ID` for gamelog/dynasty-comps footers.
-- Gamelog footer passes selected or default Chase gsis_id.
-- Dynasty-comps panel footer adds export link with URL `id` or default.
+- `LabOgExportLink` appends `player_id` when provided (`ffccedf4`).
+- `DEFAULT_LAB_OG_PLAYER_ID` on gamelog export when no player selected (`b7deed67`).
+- `/lab/dynasty-comps` footer export via `DynastyCompsPanel` (`b7deed67`).

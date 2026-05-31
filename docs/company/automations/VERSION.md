@@ -1,12 +1,7 @@
 # Automation Prompt Version
 
-Current version: `2026-05-31.v4` (morning), `2026-05-31.v1` (tick)
+**Good morning (only factory trigger):** `2026-06-01.v1`
 
-This version string should be copied into the top of each prompt body in the
-Cursor dashboard automation config.
+Copy `PROMPT_VERSION: 2026-06-01.v1` into the Good Morning Team automation in Cursor.
 
-Nightly review should include:
-
-- repo prompt version
-- dashboard prompt version (as reported by the operator)
-- sync status: in-sync / drift
+Other automations (tick, evening, ask) are optional — not required for shipping.

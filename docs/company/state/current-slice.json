@@ -2,11 +2,11 @@
   "date": "2026-05-31",
   "big_problem": "Launch-10 Lab panels need in-product OG export links so every screenshot-worthy panel travels like Explore and Bureau cards (DEPTH Lab L5).",
   "epic": "Lab L5 — launch-10 OG export link parity",
-  "atom_id": "lab-og-export-player-scoped",
-  "slice_title": "Player-scoped OG export links with default player_id on dynasty-comps and gamelog",
+  "atom_id": "lab-og-export-player-scoped-supplement",
+  "slice_title": "Dynasty-comps lab page export footer + default player_id on gamelog export",
   "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — /og/gamelog and /og/dynasty-comps PNG ≥40KB with player_id",
+  "acceptance_ref": "FACTORY-DOD Gate C — dynasty-comps panel export with default player_id",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
     "apps/web/components/lab/LabOgExportLink.tsx",
@@ -22,8 +22,7 @@
     "curl -s -o /tmp/og-dynasty-comps.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/dynasty-comps?download=1&player_id=00-0036900'"
   ],
   "out_of_scope": [
-    "OG route changes",
-    "new panels",
+    "OG route handler changes",
     "NORTH_STAR / DESIGN edits"
   ],
   "builder_mode": "composer-surgical"

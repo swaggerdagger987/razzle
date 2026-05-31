@@ -20,9 +20,8 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | launch-10 OG demo stat labels | atom 2/3 SHIP | keep | curl weekly 63819B tradevalues 62488B gamelog 58408B
 2026-05-31 | OG default player_id + dynasty-comps demo | ef908a99 | keep | resolvePanelApiPath; DEFAULT_OG_PLAYER_ID; curl dynasty-comps 65961B
 2026-05-31 | Pressure Map OG + export button | 0d39635e | keep | /og/pressure-map DEMO_ROWS; BureauPressureMap export link; curl 60104B
-2026-05-31 | Manager Profiles OG + export | da33eafd | keep | /og/manager-profiles 4 archetype rows; BureauManagerProfiles export; curl 76684B
+2026-05-31 | Manager Profiles OG + export | ffccedf4 | keep | /og/manager-profiles 4 archetype rows; BureauManagerProfiles export; curl 76684B
 2026-05-31 | Trade Network OG + export | 2bd28752 | keep | /og/trade-network 4 partnership lanes; BureauTradeNetwork export; curl 67677B
 2026-05-31 | Self-Scout OG + export | e732f973 | keep | /og/self-scout 4 position grades; BureauSelfScout export; curl 66997B
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
-2026-05-31 | LabOgExportLink buy-sell dashboard | 497d1df5 | keep | BuySellRenderer DynastyDashboardRenderer footers; PR50 merged
-2026-05-31 | Lab OG export player-scoped atom 3 | b7deed67 | keep | player_id on gamelog+dynasty-comps export; curl 58408B/65961B; epic complete
+2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog

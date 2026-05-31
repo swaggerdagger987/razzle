@@ -1,9 +1,9 @@
-cycle: 68
+cycle: 69
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
 next_slice: Bureau H2H export or next Lab depth (epic complete)
-last_keep_cycle: 68
+last_keep_cycle: 69
 last_commit: b7deed67
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
@@ -15,6 +15,7 @@ lab_l5_og_epic: complete
 league_l5_og_pressure_map: complete
 league_l5_bureau_og_epic: complete
 lab_l5_og_export_link_epic: complete
-lab_l5_og_export_player_scoped: complete
 lab_l5_og_export_gamelog_efficiency_aging: complete
 lab_l5_og_export_buysell_dashboard: complete
+lab_l5_og_export_player_scoped: complete
+lab_l5_og_dynasty_comps_panel_export: complete

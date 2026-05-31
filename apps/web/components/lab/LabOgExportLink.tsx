@@ -11,7 +11,7 @@ export function LabOgExportLink({
   slug: string;
   downloadName?: string;
   label?: string;
-  /** When set, OG route renders that player's panel rows (player-scoped panels). */
+  /** When set, OG route uses this player for player-scoped panels (e.g. gamelog, dynasty-comps). */
   playerId?: string;
 }) {
   const file = downloadName ?? `razzle-${slug}.png`;
