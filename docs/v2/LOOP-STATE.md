@@ -1,10 +1,10 @@
-cycle: 96
+cycle: 98
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: bureau-h2h-og-route-lib-decode or Lab L4 pro-gate
-last_keep_cycle: 96
-last_commit: da33eafd
-lab_l5_og_mirror_rows_epic: complete
-bureau_h2h_codec_epic: active
-bureau_h2h_sharebar_canonical_codec: done
+next_slice: bureau-h2h-og-route-lib-decode
+last_keep_cycle: 98
+last_commit: 9f5ef781
+lab_l5_og_snapshot_row_fidelity_epic: complete
+league_l5_h2h_snapshot_codec_epic: active
+league_l5_unhide_bureau_tabs_epic: complete
