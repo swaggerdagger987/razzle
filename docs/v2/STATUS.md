@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | lab OG fidelity epic wrap |
-| Last commit | `da33eafd` |
+| Last commit | `98a4513e` |
 
 Recent completions (cycle 93): Breakouts OG ranks top-6 by RBS score; weekly PPG dedup on base.
 
