@@ -2,7 +2,8 @@ cycle: 109
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: Bureau H2H export per NEXT.md
+next_slice: lab-og-rankings-tradevalues-live-sort
 last_keep_cycle: 109
 last_commit: 228c4b59
 lab_l5_og_position_epic: complete
+lab_l5_og_live_sort_epic: active

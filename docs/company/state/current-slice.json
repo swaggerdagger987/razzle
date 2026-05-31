@@ -1,7 +1,7 @@
 {
   "date": "2026-05-31",
   "atom_id": "lab-og-position-gamelog",
-  "big_problem": "Lab OG export URLs must respect in-panel position filters.",
+  "big_problem": "Lab OG export cards must mirror in-panel position filters.",
   "epic": "Lab L5 — OG export position filter parity",
   "slice_title": "Gamelog export passes player position to OG",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
