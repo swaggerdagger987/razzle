@@ -1,24 +1,24 @@
 {
   "date": "2026-05-31",
-  "atom_id": "explore-og-margin-note-sticker",
+  "atom_id": "explore-og-margin-note-college",
   "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
-  "epic": "Explore L5 — OG screener agent margin notes (atom 3/4)",
-  "slice_title": "LIVE staff sticker when OG top rows carry margin notes",
+  "epic": "Explore L5 — OG screener agent margin notes (atom 4/4)",
+  "slice_title": "College universe Hawkeye margin notes on OG export",
   "parity_ref": "Explore L5 — agent margin notes on rows",
   "depth_ref": "Explore L5",
   "acceptance_ref": "FACTORY-DOD Gate C2/C3",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
     "apps/web/app/og/explore/route.tsx",
-    "apps/api/tests/test_explore_og_margin_note_sticker.py"
+    "apps/api/tests/test_explore_og_margin_note_college.py"
   ],
   "max_files": 2,
-  "max_lines": 45,
+  "max_lines": 80,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_explore_og_margin_note_sticker.py apps/api/tests/test_explore_og_margin_note_rows.py -q --noconftest",
+    "python3 -m pytest apps/api/tests/test_explore_og_margin_note_college.py apps/api/tests/test_explore_og_margin_note_rows.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["college-only margin rules", "rows 4-6 margin notes", "NORTH_STAR/DESIGN/DECISIONS"],
+  "out_of_scope": ["NFL margin rule changes", "LIVE sticker on demo cards", "NORTH_STAR/DESIGN/DECISIONS"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
@@ -27,5 +27,5 @@
     "verdict": "SHIP 3/3"
   },
   "status": "shipped",
-  "content_commit": "12831dd67"
+  "content_commit": "f6e0985f3"
 }

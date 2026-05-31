@@ -1,4 +1,5 @@
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | TOP_MARGIN_NOTE_ROWS=3 per-row margin on explore OG.
+2026-05-31 | explore-og-margin-note-college | f6e0985f3 | SHIP | College OG demo subtitle + pytest college margin contract.
 2026-05-31 | explore-og-margin-note-sticker | 12831dd67 | SHIP | showStaffLiveSticker + LIVE · staff notes on explore OG.
 2026-05-31 | explore-og-margin-note-lead | f6e0985f3 | SHIP | marginNoteForOgExploreRow + lead row on explore OG route.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WEEKLY_SAMPLE_OG_ROWS + test_lab_og_export_link guard.

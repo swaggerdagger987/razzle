@@ -334,7 +334,11 @@ export async function GET(req: Request) {
         <div style={{ fontSize: 22, color: "#5c4a3d", marginBottom: 20 }}>
           {isDemo
             ? `${subtitle} · SAMPLE rows — ${
-                universe === "college" ? "campus stats preview" : "not live nflverse"
+                universe === "college"
+                  ? hasStaffMarginNotes
+                    ? "campus stats preview · Hawkeye campus notes on ranks 1–3"
+                    : "campus stats preview"
+                  : "not live nflverse"
               }`
             : subtitle}
         </div>

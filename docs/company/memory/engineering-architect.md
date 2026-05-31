@@ -1,3 +1,4 @@
+2026-05-31 | explore-og-margin-note-college | f6e0985f3 | SHIP | 2 files; college demo subtitle + pytest guard.
 2026-05-31 | explore-og-margin-note-sticker | 12831dd67 | SHIP | 2 files; !isDemo && hasStaffMarginNotes gate.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | route map loop + pytest rows; ≤80 lines.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | TOLAB_DEFAULT_POSITION + watermarkPosition.
