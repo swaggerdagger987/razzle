@@ -20,7 +20,7 @@
     {
       "id": "league-strength-of-schedule-tab",
       "title": "Schedule tab unhidden with SOS renderer",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],
