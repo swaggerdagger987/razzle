@@ -8,12 +8,12 @@
     {"id": "league-waiver-tendencies-tab", "title": "Waiver Tendencies tab unhidden", "status": "done", "merge_commit": "a2536dcc"},
     {"id": "league-waiver-tendencies-og-live-watermark", "title": "Waiver Tendencies OG LIVE watermark band", "status": "done", "merge_commit": "dedup"},
     {"id": "league-waiver-tendencies-og-share", "title": "Waiver Tendencies OG share bar + demo rows", "status": "done", "merge_commit": "6dcb0f72"},
-    {"id": "league-waiver-tendencies-og-hawkeye-room", "title": "Hawkeye Room ask on hero hoarder in OG band", "status": "done", "merge_commit": "f9dca6183"}
+    {"id": "league-waiver-tendencies-og-hawkeye-room", "title": "Hawkeye Room ask on hero hoarder in OG band", "status": "done", "merge_commit": "e9edde1d5"}
   ],
   "next_atom_id": null,
   "created_at": "2026-05-31T12:00:00Z",
   "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
-    {"id": "league-l5-waiver-tendencies-gtm-export", "status": "complete", "last_atom": "league-waiver-tendencies-og-hawkeye-room", "merge_commit": "f9dca6183"}
+    {"id": "league-l5-waiver-tendencies-gtm-export", "status": "complete", "last_atom": "league-waiver-tendencies-og-hawkeye-room", "merge_commit": "e9edde1d5"}
   ]
 }
