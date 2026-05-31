@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (cycle 79 — Power Rankings OG share card)  
+**Last updated:** 2026-05-31 (cycle 80 — Roster Depth Bureau tab)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,14 +15,14 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 79 |
+| Cycle | 80 |
 | Last board | 54 |
 | Focus pillar | League |
 | Focus layer | L5 |
-| Next slice | Unhide Roster Depth tab |
-| Last commit | `46aeb445` |
+| Next slice | Unhide Build Profiles tab |
+| Last commit | `da33eafd` |
 
-Recent completions (cycle 79): Power Rankings OG share card at `/og/power-rankings` with demo fallback.
+Recent completions (cycle 80): Roster Depth Bureau tab unhidden with Dolphin renderer and position depth board.
 
 ---
 

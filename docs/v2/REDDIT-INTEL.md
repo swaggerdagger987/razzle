@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Roster Depth tab (cycle 80)
+- **Angle:** Position grade grid screenshots for trade-thread replies — Dolphin thin-spot callout when a room is ≤2 deep.
+- **Screenshot hook:** A/B/C/F grade cards with elite count + top player row.
+
 ### 2026-05-31 — Bureau H2H (cycle 73)
 - **Angle:** League rivalry cards with copyable URLs — managers share H2H dossiers in league group chats.
 - **Screenshot hook:** Atlas rivalry card with you/them records + position depth bars.
