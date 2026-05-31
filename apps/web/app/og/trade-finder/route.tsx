@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
-import { toLeague } from "@razzle/hallway";
+import { toLeague, toRoom } from "@razzle/hallway";
 import {
   bureauTradeFinderOgSnapshotToData,
   decodeBureauTradeFinderOgSnapshot,
@@ -76,6 +76,10 @@ function playerLabel(name: string): string {
   return name.length > 16 ? `${name.slice(0, 14)}…` : name;
 }
 
+function bonesTradeFinderRoomQuestion(hero: BureauTradeFinderOgMatch): string {
+  return `Should I offer ${hero.give.name} for ${hero.get.name} from ${hero.partner_team}? Value gap is ${hero.gap_pct}%.`;
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
@@ -100,6 +104,19 @@ export async function GET(req: Request) {
   const needs = panelData.needs ?? [];
   const surplus = panelData.surplus ?? [];
   const leagueDeepLink = league ? toLeague(league, "trade-finder") : "/league/trade-finder";
+  const bonesRoomPath = hero
+    ? toRoom({
+        agentId: "bones",
+        question: bonesTradeFinderRoomQuestion(hero),
+        panelSlug: "trade-finder",
+        player: {
+          playerId: hero.give.player_id,
+          name: hero.give.name,
+          slug: hero.give.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+          position: hero.give.position,
+        },
+      })
+    : "/room?agent=bones&from=trade-finder";
 
   return new ImageResponse(
     (
@@ -286,6 +303,12 @@ export async function GET(req: Request) {
             </div>
           ))}
         </div>
+
+        {hero ? (
+          <div style={{ display: "flex", fontSize: 18, color: "#d97757", marginTop: 10 }}>
+            {`razzle.lol${bonesRoomPath} · ask ${bones.name} about ${playerLabel(hero.partner_team)}`}
+          </div>
+        ) : null}
 
         {/* Always-on watermark band — matches H2H + Lab panel OG (T6 screenshot gravity) */}
         <div
