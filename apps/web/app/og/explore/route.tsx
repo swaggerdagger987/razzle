@@ -25,6 +25,7 @@ const DEMO_NFL_ROWS: OgPlayer[] = [
     age: 22,
     fantasy_points_ppr: 312.4,
   },
+<<<<<<< HEAD
   {
     full_name: "Ja'Marr Chase",
     position: "WR",
@@ -41,6 +42,10 @@ const DEMO_NFL_ROWS: OgPlayer[] = [
     age: 22,
     fantasy_points_ppr: 285.6,
   },
+=======
+  { full_name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 298.1, targets: 128 },
+  { full_name: "Bijan Robinson", position: "RB", team: "ATL", stat: 285.6 },
+>>>>>>> origin/razzle-v2-redesign
   { full_name: "Brock Bowers", position: "TE", team: "LV", stat: 241.2 },
   { full_name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 228.4 },
   { full_name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 215.8 },
@@ -393,6 +398,7 @@ export async function GET(req: Request) {
                   <div style={{ display: "flex" }}>
                     {p.full_name.length > 22 ? `${p.full_name.slice(0, 20)}…` : p.full_name}
                   </div>
+<<<<<<< HEAD
                   {(() => {
                     const note = i < MARGIN_NOTE_ROW_LIMIT ? marginNotesByIndex[i] : null;
                     const agent = note ? AGENT_BY_ID[note.agentId] : null;
@@ -414,6 +420,24 @@ export async function GET(req: Request) {
                       </div>
                     );
                   })()}
+=======
+                  {i === 0 && leadMarginNote && leadAgent ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        fontFamily: "Caveat",
+                        fontSize: 22,
+                        color: "#5c4a3d",
+                        marginTop: 2,
+                      }}
+                    >
+                      <span style={{ display: "flex" }}>{leadAgent.emoji}</span>
+                      <span style={{ display: "flex" }}>{leadMarginNote.text}</span>
+                    </div>
+                  ) : null}
+>>>>>>> origin/razzle-v2-redesign
                 </div>
                 <div style={{ width: 56, display: "flex" }}>
                   <span
