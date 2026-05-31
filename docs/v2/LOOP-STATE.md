@@ -1,11 +1,11 @@
-cycle: 153
+cycle: 154
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: PARITY next RED/YELLOW row
-last_keep_cycle: 153
-last_commit: 2210182a4
-room_l5_briefing_gtm_epic: complete
+next_slice: pick from PARITY/NEXT — Lab L4 or Explore
+last_keep_cycle: 154
+last_commit: d2fb42540
+last_merge_pr: 1302
 lab_l5_empty_og_epic: complete
 league_l5_trade_finder_gtm_epic: complete
-lab_l5_og_hallway_epic: active
+lab_l5_og_hallway_epic: complete
