@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | SHIP | 3 files; decodeOgSnapshot returns playerId.
+2026-05-31 | lab-og-tolab-snapshot-player | 60f3918b7 | SHIP | 3 files; decodeOgSnapshot returns playerId.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Engineering Architect
