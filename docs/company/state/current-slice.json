@@ -1,7 +1,7 @@
 {
   "date": "2026-05-31",
   "atom_id": "explore-og-demo-fallback-rows",
-  "big_problem": "Explore share cards still show empty pulling film when API is cold — Reddit screenshots need visible rows.",
+  "big_problem": "Explore share cards must stay screenshot-ready when API is cold.",
   "epic": "Explore L5 — screener OG cards always screenshot-ready",
   "slice_title": "Explore OG demo screener rows when API empty",
   "parity_ref": "Explore L5 — GTM export",
@@ -13,9 +13,9 @@
   "max_lines": 55,
   "acceptance_commands": [
     "npm run build --workspace=apps/web 2>&1 | tail -3",
-    "curl -s -o /tmp/og-explore-demo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?download=1&preview=demo'"
+    "curl -s -o /tmp/og-explore-demo.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/explore?download=1&preview=demo'"
   ],
-  "out_of_scope": ["screener API", "formula engine", "Lab routes"],
+  "out_of_scope": ["screener API", "Lab routes"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",

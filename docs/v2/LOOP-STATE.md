@@ -1,10 +1,9 @@
-cycle: 122
+cycle: 124
 last_board_cycle: 54
 focus_pillar: Explore
 focus_layer: L5
 next_slice: explore-og-formula-subtitle
-last_keep_cycle: 122
+last_keep_cycle: 124
 last_commit: b6a233e6
 explore_l5_og_screenshot_epic: active
 lab_l4_pro_gate_epic: complete
-lab_l5_og_live_rows_epic: complete
