@@ -1,44 +1,44 @@
 {
-  "big_problem": "Lab OG snapshot exports only whisper from your panel in blurb — Reddit cannot see at a glance that the card matches the user's filter.",
-  "epic_title": "Lab L5 — OG trust stickers for export cards",
+  "epic_status": "active",
+  "big_problem": "Launch-10 OG cards still read generic on Reddit — only prospects/weekly say which panel you are sharing.",
+  "epic_title": "Lab L5 — Launch-10 OG panel-native trust labels (all 10)",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-from-panel-sticker",
-      "title": "FROM PANEL sticker on Launch-10 OG when snapshot param present",
+      "id": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
+      "title": "Rankings + tradevalues + breakouts — SAMPLE panel-native stickers",
       "status": "done",
-      "merge_commit": "7d49e4f0c"
+      "merge_commit": "54443bc8"
     },
     {
-      "id": "lab-og-from-panel-sticker-evidence",
-      "title": "pytest + Gate C curl for rankings/weekly snapshot stickers",
-      "status": "done",
-      "merge_commit": "164159413"
+      "id": "lab-og-launch10-gamelog-efficiency-aging-labels",
+      "title": "Gamelog + efficiency + aging — panel-native LIVE/SAMPLE stickers",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-from-panel-sticker-gamelog",
-      "title": "FROM PANEL sticker on player-scoped gamelog snapshot export",
-      "status": "done",
-      "merge_commit": "fa71ce6ff"
+      "id": "lab-og-launch10-buysell-dashboard-labels",
+      "title": "Buy-sell + dashboard — panel-native LIVE/SAMPLE stickers",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T09:20:00Z",
-  "updated_at": "2026-05-31T09:25:00Z",
+  "next_atom_id": "lab-og-launch10-gamelog-efficiency-aging-labels",
+  "created_at": "2026-05-31T09:00:00Z",
+  "updated_at": "2026-05-31T09:55:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-og-live-sticker",
+      "id": "lab-l5-og-trust-sticker",
       "status": "complete",
-      "last_atom": "lab-og-live-sticker-breakouts-dashboard",
-      "merge_commit": "96d43d1b"
+      "last_atom": "lab-og-from-panel-sticker-gamelog",
+      "merge_commit": "fa71ce6ff"
     },
     {
-      "id": "lab-l5-og-live-fetch-merge",
+      "id": "lab-l4-pro-gate-error-surface",
       "status": "complete",
-      "last_atom": "lab-og-gamelog-player-default",
-      "merge_commit": "4bc3913e"
+      "last_atom": "lab-l4-pro-gate-error-remaining",
+      "merge_commit": "f8ab89f25"
     }
   ]
 }
