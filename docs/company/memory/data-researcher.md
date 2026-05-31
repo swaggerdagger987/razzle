@@ -28,4 +28,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | breakout OG candidates | 2cb898b6 | keep | Hawkeye names on share card when API live
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
-2026-05-31 | Lab OG label | da33eafd | PASS | no new intel; curl evidence only
+2026-05-31 | Lab OG label | d983a26e | PASS | no new intel; curl evidence only
