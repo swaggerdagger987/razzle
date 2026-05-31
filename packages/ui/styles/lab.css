@@ -111,6 +111,23 @@
   user-select: none;
 }
 
+.lab-sidebar-staff-banner {
+  color: var(--orange);
+  cursor: default;
+}
+
+.lab-sidebar-agent-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: default;
+  padding-top: 8px;
+}
+
+.lab-sidebar-staff-group .lab-sidebar-item {
+  padding-left: 24px;
+}
+
 .lab-sidebar-item {
   font-family: var(--font-mono);
   font-size: 12px;

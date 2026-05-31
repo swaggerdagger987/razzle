@@ -107,12 +107,16 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
       </div>
 
       <div className="lab-sidebar-inner">
+        {!query && (
+          <div className="lab-sidebar-category lab-sidebar-staff-banner">
+            <span className="cat-text">Staff Picks</span>
+          </div>
+        )}
         {!query &&
           staffByAgent.map(({ agent, panels: staffPanels }) => (
-            <div key={`staff-${agent.id}`}>
+            <div key={`staff-${agent.id}`} className="lab-sidebar-staff-group">
               <div
-                className="lab-sidebar-category"
-                style={{ display: "flex", alignItems: "center", gap: 8, cursor: "default" }}
+                className="lab-sidebar-category lab-sidebar-agent-group"
               >
                 <img
                   src={`/agents/${agent.avatar}.svg`}
@@ -129,6 +133,7 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
                   panel={panel}
                   activeSlug={activeSlug}
                   badge="★"
+                  hideOwnerAvatar
                   onNavigate={onCloseMobile}
                 />
               ))}
@@ -171,11 +176,13 @@ function SidebarItem({
   panel,
   activeSlug,
   badge,
+  hideOwnerAvatar = false,
   onNavigate,
 }: {
   panel: PanelDefinition;
   activeSlug?: string;
   badge?: string;
+  hideOwnerAvatar?: boolean;
   onNavigate?: () => void;
 }) {
   const active = activeSlug === panel.slug;
@@ -188,7 +195,7 @@ function SidebarItem({
       title={owner ? `${owner.name} · ${panel.blurb}` : panel.blurb}
       onClick={onNavigate}
     >
-      {owner && (
+      {owner && !hideOwnerAvatar && (
         <img
           src={`/agents/${owner.avatar}.svg`}
           alt=""
