@@ -8,8 +8,8 @@
     {
       "id": "bureau-self-scout-sharebar-snapshot",
       "title": "Self-Scout ShareBar + OG snapshot codec matches panel grades",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "1a1def3e"
     },
     {
       "id": "bureau-manager-profiles-sharebar-snapshot",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-self-scout-sharebar-snapshot",
+  "next_atom_id": "bureau-manager-profiles-sharebar-snapshot",
   "created_at": "2026-05-31T09:30:00Z",
   "updated_at": "2026-05-31T09:30:00Z",
   "completed_epics": [
@@ -32,7 +32,7 @@
       "id": "lab-l5-og-live-fetch-epic",
       "status": "complete",
       "last_atom": "lab-og-gamelog-player-default",
-      "merge_commit": "e37cd230"
+      "merge_commit": "4bc3913e"
     },
     {
       "id": "lab-l4-pro-gate-error-surface",
