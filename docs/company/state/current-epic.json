@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Bureau Head-to-Head export cards must show the same rivalry matchup users see in-product — not generic demo squads when the panel has live league context (DEPTH League L5).",
   "epic_title": "League L5 — Bureau H2H export matches in-product rivalry",
   "parity_ref": "Explore L5 — Bureau H2H export",
@@ -20,11 +20,11 @@
     {
       "id": "bureau-h2h-room-hallway",
       "title": "H2H export footer preserves Atlas room deep-link with opponent team name",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "389cab8e"
     }
   ],
-  "next_atom_id": "bureau-h2h-room-hallway",
+  "next_atom_id": null,
   "created_at": "2026-05-31T04:31:20Z",
-  "updated_at": "2026-05-31T12:00:00Z"
+  "updated_at": "2026-05-31T12:30:00Z"
 }

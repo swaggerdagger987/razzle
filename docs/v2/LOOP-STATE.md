@@ -1,10 +1,10 @@
-cycle: 78
+cycle: 79
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
 next_slice: league-power-rankings-og
 last_keep_cycle: 78
-last_commit: da33eafd
+last_commit: 389cab8e
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
