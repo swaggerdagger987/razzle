@@ -26,6 +26,15 @@
   ],
   "next_atom_id": "lab-og-position-tradevalues-prospects",
   "created_at": "2026-05-31T06:10:00Z",
-  "updated_at": "2026-05-31T06:15:00Z",
-  "last_cycle_commit": "f358349d"
+  "updated_at": "2026-05-31T06:20:00Z",
+  "last_cycle_commit": "f358349d",
+  "parallel_epics": [
+    {
+      "id": "lab-l5-og-snapshot-row-fidelity",
+      "status": "active",
+      "atoms_done": ["lab-og-prospects-rps-ranked", "lab-og-weekly-ppg-ranked"],
+      "next_atom_id": "lab-og-breakouts-score-ranked",
+      "last_atom_merge_commit": "f97c57fe"
+    }
+  ]
 }
