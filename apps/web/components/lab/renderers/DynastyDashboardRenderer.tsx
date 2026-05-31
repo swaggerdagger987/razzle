@@ -8,6 +8,7 @@ import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { LabOgExportLink } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 
 interface DashboardPlayer {
@@ -307,7 +308,7 @@ export function DynastyDashboardRenderer({ panel }: Props) {
       )}
 
       {topRiser && (
-        <footer className="mt-6 border-t border-ink pt-4">
+        <footer className="mt-6 flex flex-wrap items-center gap-4 border-t border-ink pt-4">
           <Link
             href={
               toRoom({
@@ -320,6 +321,7 @@ export function DynastyDashboardRenderer({ panel }: Props) {
           >
             Ask Razzle about {topRiser.full_name} (rising stock) →
           </Link>
+          <LabOgExportLink slug="dashboard" downloadName="razzle-dashboard.png" />
         </footer>
       )}
     </div>

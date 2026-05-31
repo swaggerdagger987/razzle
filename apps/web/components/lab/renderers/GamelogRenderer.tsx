@@ -424,7 +424,11 @@ export function GamelogRenderer({ panel }: Props) {
           >
             open in Explore
           </Link>
-          <LabOgExportLink slug="gamelog" downloadName="razzle-gamelog.png" />
+          <LabOgExportLink
+            slug="gamelog"
+            downloadName="razzle-gamelog.png"
+            playerId={(data?.player_id ?? playerId) || undefined}
+          />
         </footer>
       )}
     </div>
