@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 134 — Lab L4 pro gate OG sample export)
+**Last updated:** 2026-05-31 (factory cycle 134 — Lab L4 pro gate OG sample export; PR 1000)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read

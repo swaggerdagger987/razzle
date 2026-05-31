@@ -1,26 +1,29 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG snapshot exports only whisper from your panel in blurb — Reddit cannot see at a glance that the card matches the user's filter.",
-  "epic": "Lab L5 — OG trust stickers for export cards (atom 2/3)",
-  "slice_title": "pytest + Gate C curl for rankings/weekly FROM PANEL snapshot stickers",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
+  "atom_id": "explore-og-universe-query",
+  "big_problem": "Explore college screener shares look like NFL exports — Reddit can't tell dynasty vs college OG cards apart without opening the file.",
+  "epic": "Explore L5 — universe-aware share exports",
+  "slice_title": "Explore OG college export filename + pytest guard",
+  "parity_ref": "Explore L5 — share card matches screener universe",
+  "depth_ref": "Explore L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — college explore OG contract",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/api/tests/test_og_from_panel_sticker.py",
-    "docs/v2/evidence/2026-05-31-lab-og-from-panel-sticker-evidence.md"
+    "apps/web/components/explore/ExploreShareButton.tsx",
+    "apps/api/tests/test_explore_share_og_universe.py"
   ],
   "max_files": 2,
-  "max_lines": 40,
+  "max_lines": 60,
   "acceptance_commands": [
-    "JWT_SECRET=test .venv-v2/bin/python -m pytest apps/api/tests/test_og_from_panel_sticker.py -q",
-    "npm run build --workspace=apps/web"
+    "pytest apps/api/tests/test_explore_share_og_universe.py -q",
+    "npm run build --workspace=apps/web 2>&1 | tail -8"
   ],
-  "out_of_scope": [
-    "OG route sticker JSX (shipped atom 1)",
-    "LIVE/SAMPLE sticker changes",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
-  ],
-  "builder_mode": "composer-surgical"
+  "out_of_scope": ["OG route logic", "screener API", "NORTH_STAR/DESIGN/DECISIONS"],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  }
 }
