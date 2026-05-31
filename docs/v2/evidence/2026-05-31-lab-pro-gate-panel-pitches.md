@@ -9,11 +9,11 @@
 | Check | Result |
 |-------|--------|
 | `npm run build --workspace=apps/web` | exit 0 |
-| `pytest apps/api/tests/test_panel_upgrade_teaser.py -q` | 3 passed |
+| `pytest apps/api/tests/test_panel_upgrade_teaser.py -q` | 4 passed (post-merge) |
 
 ## Change summary
 
-- `panel-upgrade-teaser.ts`: sharpened upgrade pitches for launch-10 flagship pro gates **rankings** (Octo), **tradevalues** (Bones), **breakouts** (Hawkeye) — dynasty-specific outcomes, not generic “unlock Pro” blur.
+- `panel-upgrade-teaser.ts`: sharpened upgrade pitches for launch-10 flagship pro gates **rankings** (Octo), **tradevalues** (Bones), **breakouts** (Hawkeye).
 
 ## Sample pitches (via `upgradePitchForPanel`)
 

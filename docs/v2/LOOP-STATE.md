@@ -6,7 +6,4 @@ next_slice: explore-og-universe-query
 last_keep_cycle: 121
 last_commit: d63a4a0f
 lab_l5_og_live_fetch_epic: active
-lab_l5_og_watermark_epic: complete
-lab_l5_og_live_sort_epic: complete
 lab_l4_pro_gate_epic: complete
-bureau_h2h_codec_epic: complete
