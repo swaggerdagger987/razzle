@@ -1,5 +1,6 @@
 # Memory — Data Researcher
 
+2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | No new intel; pytest/curl contract only.
 2026-05-31 | lab-og-buysell-formula-live | 901120b3d | No new intel; OG parity slice only.
 2026-05-31 | lab-og-launch10-demo-blurbs | f3c1c9466 | No new intel; demo trust labels only.
 2026-05-31 | lab-og-dynasty-comps-live-sticker | — | PASS | No Reddit intel change this atom.

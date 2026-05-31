@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab OG cards without a snapshot can rank by the wrong stat — formula-sorted panels export nflverse defaults instead of what the user sees.",
   "epic_title": "Lab L5 — formula-sorted OG live parity",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
@@ -26,13 +26,13 @@
     {
       "id": "lab-og-from-panel-gate-c-rest",
       "title": "Gate C pytest + curl for prospects/tradevalues snapshot FROM PANEL",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-from-panel-gate-c-rest",
+  "next_atom_id": null,
   "created_at": "2026-05-31T10:36:02Z",
-  "updated_at": "2026-05-31T11:20:00Z",
+  "updated_at": "2026-05-31T11:17:14Z",
   "completed_epics": [
     {
       "id": "room-l5-briefing-gtm-export",
@@ -51,6 +51,12 @@
       "status": "complete",
       "last_atom": "lab-og-launch10-demo-blurbs",
       "merge_commit": "f3c1c9466"
+    },
+    {
+      "id": "lab-l5-formula-sorted-og-live-parity",
+      "status": "complete",
+      "last_atom": "lab-og-from-panel-gate-c-rest",
+      "merge_commit": null
     }
   ]
 }

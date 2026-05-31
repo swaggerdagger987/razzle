@@ -1,29 +1,26 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-buysell-formula-live",
   "big_problem": "Lab OG cards without a snapshot can rank by the wrong stat — formula-sorted panels export nflverse defaults instead of what the user sees.",
-  "epic": "Lab L5 — formula-sorted OG live parity (atom 3/4)",
-  "slice_title": "Buy/sell OG live extract prefers formula_score with Buy/Sell mismatch lanes",
+  "epic": "Lab L5 — formula-sorted OG live parity",
+  "slice_title": "Gate C pytest + curl for prospects/tradevalues snapshot FROM PANEL",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — live OG rows match in-product formula sort",
+  "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_og_launch10_formula_live.py"
+    "apps/api/tests/test_og_from_panel_sticker.py",
+    "apps/api/tests/test_og_from_panel_gate_c_rest.py"
   ],
-  "max_files": 2,
-  "max_lines": 55,
+  "max_files": 3,
+  "max_lines": 120,
   "acceptance_commands": [
-    "JWT_SECRET=ci-secret ENVIRONMENT=development python3 -m pytest apps/api/tests/test_og_launch10_formula_live.py -q",
-    "npm run build --workspace=apps/web 2>&1 | tail -5"
+    "JWT_SECRET=ci-secret python3 -m pytest apps/api/tests/test_og_from_panel_sticker.py apps/api/tests/test_og_from_panel_gate_c_rest.py -q --noconftest",
+    "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["API schema changes", "new OG routes", "gate C atom"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+  "out_of_scope": [
+    "route.tsx behavior changes",
+    "new npm deps",
+    "NORTH_STAR edits"
+  ],
+  "builder_mode": "composer-surgical"
 }

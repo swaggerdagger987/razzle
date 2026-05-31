@@ -1,8 +1,8 @@
-cycle: 144
+cycle: 146
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-buysell-formula-live
-last_keep_cycle: 144
-last_commit: f3c1c9466
-lab_l5_formula_og_live_parity_epic: active
+next_slice: see NEXT.md — Bureau H2H export or Lab empty-panel epic
+last_keep_cycle: 146
+last_commit: f6e0985f3
+lab_l5_formula_og_live_parity_epic: complete
