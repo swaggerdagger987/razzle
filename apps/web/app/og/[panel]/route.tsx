@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getPanel } from "@razzle/panels";
 import { agentForPanel } from "@razzle/agents";
+import { toLab } from "@razzle/hallway";
 import { teaserRowsForPanel } from "@/lib/panel-upgrade-teaser";
 
 export const runtime = "edge";
@@ -73,7 +74,11 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
   aging: "ppg",
   buysell: "mismatch_score",
   dashboard: "rank_diff",
+  "dynasty-comps": "similarity",
 };
+
+/** Pro player-scoped Lab panels (not Launch-10) — LIVE trust sticker when API returns rows. */
+const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set(["dynasty-comps"]);
 
 const LAUNCH_10_OG_SLUGS = new Set([
   "weekly",
@@ -114,6 +119,12 @@ function launch10LiveBlurbSuffix(slug: string): string {
     default:
       return " · live nflverse rows";
   }
+}
+
+function playerScopedLiveStickerLabel(slug: string): string {
+  if (slug === "dynasty-comps") return "LIVE · comp matches";
+  if (slug === "gamelog") return "LIVE · Wk tape";
+  return "LIVE · panel rows";
 }
 
 function launch10LiveStickerLabel(slug: string): string {
@@ -183,6 +194,9 @@ function panelBlurbSuffix(
   }
   if (showingLiveData && LAUNCH_10_OG_SLUGS.has(slug)) {
     return `${pos}${launch10LiveBlurbSuffix(slug)}`;
+  }
+  if (showingLiveData && slug === "dynasty-comps") {
+    return `${pos} · live comp matches`;
   }
   if (showingLiveData) {
     return `${pos} · live data`;
@@ -400,6 +414,24 @@ function extractProspectsRows(
   return [...rows].sort((a, b) => b.stat - a.stat).slice(0, 6);
 }
 
+/** Dynasty comps OG — match % sort (matches DynastyCompsRenderer ogSnapshotRows). */
+function extractDynastyCompsRows(comps: Record<string, unknown>[]): OgRow[] {
+  return [...comps]
+    .map((c) => ({
+      name: String(c.full_name ?? c.name ?? c.player_name ?? ""),
+      position: String(c.position ?? c.pos ?? ""),
+      team: String(c.team ?? c.team_abbr ?? ""),
+      stat:
+        c.similarity != null
+          ? Number(c.similarity) * (Number(c.similarity) <= 1 ? 100 : 1)
+          : 0,
+      statLabel: "Match %",
+    }))
+    .filter((r) => r.name.trim().length > 0 && r.stat > 0)
+    .sort((a, b) => b.stat - a.stat)
+    .slice(0, 6);
+}
+
 /** Gamelog OG — top weeks by FPTS (matches GamelogRenderer ogSnapshotRows). */
 function extractGamelogWeekRows(data: Record<string, unknown>): OgRow[] {
   const weeks = data.weeks as Array<{ week?: number; fpts?: number }> | undefined;
@@ -467,6 +499,11 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
   if (slug === "gamelog" && Array.isArray(obj.weeks)) {
     const gamelogRows = extractGamelogWeekRows(obj);
     if (gamelogRows.length > 0) return gamelogRows;
+  }
+
+  if (slug === "dynasty-comps" && Array.isArray(obj.comps) && obj.comps.length > 0) {
+    const compRows = extractDynastyCompsRows(obj.comps as Record<string, unknown>[]);
+    if (compRows.length > 0) return compRows;
   }
 
   let candidates: Record<string, unknown>[] = [];
@@ -538,12 +575,29 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
     "trade_value",
     ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "trade_value"),
   ];
+  const breakoutsStatKeys: string[] = [
+    "formula_score",
+    "rbs_score",
+    "breakout_score",
+    ...STAT_CANDIDATE_KEYS.filter(
+      (k) => k !== "formula_score" && k !== "rbs_score" && k !== "breakout_score",
+    ),
+  ];
+  const rankingsStatKeys: string[] = [
+    "formula_score",
+    "dynasty_value",
+    ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "dynasty_value"),
+  ];
   const statKeys =
     slug === "tradevalues"
       ? tradeValueStatKeys
-      : preferredKey
-        ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
-        : [...STAT_CANDIDATE_KEYS];
+      : slug === "breakouts"
+        ? breakoutsStatKeys
+        : slug === "rankings"
+          ? rankingsStatKeys
+          : preferredKey
+            ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
+            : [...STAT_CANDIDATE_KEYS];
 
   let statKey = "";
   let statLabel = "";
@@ -675,6 +729,32 @@ async function fetchOgLiveRows(
   return fetchPanelData(req, slug, apiPath, method, apiParams);
 }
 
+/** Typed hallway path for OG watermark band (T6 — click back into Lab). */
+function labOgWatermarkLink(
+  slug: string,
+  opts: { positionFilter: string; playerId: string; playerScoped: boolean },
+): string {
+  const usePlayer =
+    opts.playerScoped && opts.playerId && opts.playerId !== DEFAULT_OG_PLAYER_ID;
+  let path = toLab(
+    slug,
+    usePlayer
+      ? {
+          player: {
+            playerId: opts.playerId,
+            slug: opts.playerId,
+            name: "player",
+          },
+        }
+      : undefined,
+  );
+  if (opts.positionFilter) {
+    const sep = path.includes("?") ? "&" : "?";
+    path = `${path}${sep}position=${encodeURIComponent(opts.positionFilter)}`;
+  }
+  return `razzle.lol${path}`;
+}
+
 function formatStat(n: number, label?: string): string {
   if (n === 0) return "—";
   if (label === "Match %") {
@@ -756,6 +836,11 @@ export async function GET(
   const showingLiveData = !isSnapshot && liveHasRows && hasRows;
   const showingDemoRows = !isSnapshot && !showingLiveData && hasRows;
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
+  const labLink = labOgWatermarkLink(slug, {
+    positionFilter,
+    playerId,
+    playerScoped: PLAYER_SCOPED_SLUGS.has(slug),
+  });
 
   return new ImageResponse(
     (
@@ -876,6 +961,27 @@ export async function GET(
           </div>
         ) : null}
 
+        {showingLiveData && PLAYER_SCOPED_LIVE_STICKER_SLUGS.has(slug) ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+            }}
+          >
+            {playerScopedLiveStickerLabel(slug)}
+          </div>
+        ) : null}
+
         {query && (
           <div
             style={{
@@ -982,7 +1088,7 @@ export async function GET(
             fontSize: 20,
           }}
         >
-          <div style={{ display: "flex", fontWeight: 700 }}>razzle.lol/lab/{slug}</div>
+          <div style={{ display: "flex", fontWeight: 700 }}>{labLink}</div>
           <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
             {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
           </div>

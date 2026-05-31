@@ -6,6 +6,8 @@ next_slice: lab-og-prospects-gate-c-evidence
 last_keep_cycle: 141
 last_commit: e4bc2cc0c
 lab_l5_weekly_prospects_og_trust_epic: active
+lab_l5_formula_og_live_epic: active
+lab_l5_empty_og_epic: active
 room_l5_briefing_gtm_epic: complete
 explore_l5_universe_export_epic: complete
 lab_l4_pro_gate_error_epic: complete
