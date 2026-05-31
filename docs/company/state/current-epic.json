@@ -9,7 +9,7 @@
       "id": "lab-og-launch10-live-fetch-merge",
       "title": "Merge base LIVE sticker + fetchOgLiveRows for Launch-10 without snapshot",
       "status": "done",
-      "merge_commit": "da33eafd"
+      "merge_commit": "3f0411ec"
     },
     {
       "id": "explore-og-universe-query",
