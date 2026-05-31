@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 154 — League Pressure Map OG Bones Room hallway)
+**Last updated:** 2026-05-31 (factory cycle 158 — League Pressure Map OG Bones Room hallway)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,7 +15,7 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 154 |
+| Cycle | 158 |
 | Last board | 54 |
 | Focus pillar | League |
 | Focus layer | L5 |
