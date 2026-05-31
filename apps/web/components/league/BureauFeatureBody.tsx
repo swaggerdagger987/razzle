@@ -11,8 +11,8 @@ import { BureauHeadToHead } from "./BureauHeadToHead";
 import { BureauRosterDepth } from "./BureauRosterDepth";
 import { BureauBuildProfiles } from "./BureauBuildProfiles";
 import { BureauWaiverTendencies } from "./BureauWaiverTendencies";
-import { BureauPowerRankings } from "./BureauPowerRankings";
 import { BureauStrengthOfSchedule } from "./BureauStrengthOfSchedule";
+import { BureauPowerRankings } from "./BureauPowerRankings";
 
 interface Props {
   feature: BureauFeatureSlug;
