@@ -67,4 +67,8 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 105	8d8b2635	depth+voice+simplicity	keep	Lab	L5 Weekly+Prospects+Breakouts OG live extract	trust=T5,T6; hot-week+RPS+RBS; curl weekly 53249B prospects 48881B breakouts 61629B; epic atom 1/3
 113	010241ea	depth+voice+simplicity	keep	Lab	L5 Lab OG terracotta watermark band	trust=T5,T6; explore parity band on panel route; curl rankings 62355B buysell 60820B; watermark epic atom 1/2
 114	7afc0b03	depth+voice+simplicity	keep	Lab	L5 OG live sort keys restore	trust=T5,T6; value+efficiency_score+peak_age; curl buysell 58072B eff 59068B aging 57916B; live-sort epic complete
+<<<<<<< HEAD
 
+=======
+105	d3a469f8	depth+voice+simplicity	keep	Lab	L5 OG renderer sort parity fix	trust=T5,T6; mismatch_score+ppo+ppg; curl buysell 44258B; supersedes 114 wrong keys
+>>>>>>> origin/razzle-v2-redesign
