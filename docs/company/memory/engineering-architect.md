@@ -1,4 +1,4 @@
-2026-05-31 | explore-og-margin-note-college-lead | f6e0985f3 | SHIP | 3 files pytest-only; align lead test to rowMarginNote.
+2026-05-31 | explore-og-margin-note-college-lead | c633ba357 | SHIP | 3 files pytest-only; align lead test to rowMarginNote.
 2026-05-31 | explore-og-margin-note-row2 | 7793850a9 | SHIP | 3 files; marginNoteForOgRow on rows 0–1.
 2026-05-31 | lab-og-dashboard-live-gate-c | cf76b86ee | SHIP | Contract test only; top5/risers/fallers already in route.
 2026-05-31 | lab-og-from-panel-launch10-registry | a3d651b25 | SHIP | 2 files; registry parses route LAUNCH_10 set.

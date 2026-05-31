@@ -19,8 +19,8 @@
     {
       "id": "explore-og-margin-note-college-lead",
       "title": "Explore OG college lead-row campus margin note",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "c633ba357"
     },
     {
       "id": "explore-og-margin-note-gate-c",
@@ -29,10 +29,10 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "explore-og-margin-note-college-lead",
+  "next_atom_id": "explore-og-margin-note-gate-c",
   "epic_status": "active",
   "created_at": "2026-05-31T14:00:00Z",
-  "updated_at": "2026-05-31T14:00:00Z",
+  "updated_at": "2026-05-31T15:45:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-panel-rows",

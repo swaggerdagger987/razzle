@@ -1,4 +1,4 @@
-2026-05-31 | explore-og-margin-note-college-lead | f6e0985f3 | SHIP | Factory open cycle 1; margin epic 3/4; NO_LOCK_GUARDRAIL.
+2026-05-31 | explore-og-margin-note-college-lead | c633ba357 | SHIP | Factory open cycle 1; margin epic 3/4; NO_LOCK_GUARDRAIL.
 2026-05-31 | explore-og-margin-note-row2 | 7793850a9 | SHIP | Factory open cycle 1; margin epic 2/4; NO_LOCK_GUARDRAIL.
 2026-05-31 | lab-og-dashboard-live-gate-c | cf76b86ee | SHIP | Factory open cycle 1; live-rows epic 3/3; lock #1431.
 2026-05-31 | lab-og-from-panel-launch10-registry | a3d651b25 | SHIP | Factory open cycle 1; live-rows epic 2/3; NO_LOCK_GUARDRAIL.

@@ -1,4 +1,4 @@
-2026-05-31 | explore-og-margin-note-college-lead | f6e0985f3 | keep | college lead pytest; curl 74573B.
+2026-05-31 | explore-og-margin-note-college-lead | c633ba357 | keep | college lead pytest; curl 74573B.
 2026-05-31 | explore-og-margin-note-row2 | 7793850a9 | keep | i<2 row margins; pytest 4; curl 67971B.
 2026-05-31 | lab-og-dashboard-live-gate-c | cf76b86ee | keep | test_og_dashboard_gate_c.py; curl 66547B; epic complete.
 2026-05-31 | lab-og-from-panel-launch10-registry | a3d651b25 | SHIP | LAUNCH_10_OG_TRUST_REGISTRY; pytest 7; no route edit.

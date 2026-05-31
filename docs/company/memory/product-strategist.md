@@ -1,4 +1,4 @@
-2026-05-31 | explore-og-margin-note-college-lead | f6e0985f3 | SHIP | margin epic 3/4; college campus lead margin on OG.
+2026-05-31 | explore-og-margin-note-college-lead | c633ba357 | SHIP | margin epic 3/4; college campus lead margin on OG.
 2026-05-31 | explore-og-margin-note-row2 | 7793850a9 | SHIP | margin epic 2/4; row2 target-volume on OG matches screener.
 2026-05-31 | lab-og-dashboard-live-gate-c | cf76b86ee | SHIP | Gate C curl locks dashboard OG; live-rows epic 3/3 complete.
 2026-05-31 | lab-og-from-panel-launch10-registry | a3d651b25 | SHIP | Launch-10 trust registry prevents sticker drift; epic atom 2/3.
