@@ -4,6 +4,6 @@ focus_pillar: Explore
 focus_layer: L5
 next_slice: explore-og-demo-fallback-rows
 last_keep_cycle: 128
-last_commit: da33eafd
+last_commit: a7fdf9b3
 explore_l5_og_query_epic: active
 lab_l4_pro_gate_epic: complete

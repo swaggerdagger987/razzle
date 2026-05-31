@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Explore |
 | Focus layer | L5 |
 | Next slice | explore-og-demo-fallback-rows |
-| Last commit | `da33eafd` |
+| Last commit | `a7fdf9b3` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
