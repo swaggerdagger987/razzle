@@ -1,33 +1,29 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Situation Room briefings die in the chat — managers cannot share a formatted rivalry readout to league Slack or Reddit prep threads.",
-  "epic": "Room L5 — briefing GTM export",
-  "slice_title": "Briefing OG — terracotta watermark + Room hallway link",
-  "atom_id": "room-briefing-watermark",
-  "parity_ref": "Room L5 — GTM export slice",
-  "depth_ref": "Room L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB; hallway deep link in watermark band",
+  "big_problem": "Free Lab weekly OG exports lack Gate C regression guards — Reddit cannot trust PPG heatmap cards when nflverse rows load.",
+  "epic": "Lab L5 — weekly/prospects OG live trust (atom 1/3)",
+  "slice_title": "Weekly OG Gate C — curl fixture + evidence doc",
+  "atom_id": "lab-og-weekly-gate-c-evidence",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — weekly OG PNG ≥40KB with fixture params",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/briefing/route.tsx",
-    "apps/web/components/room/BriefingCard.tsx",
-    "apps/api/tests/test_briefing_og_route.py"
+    "apps/api/tests/test_lab_og_weekly_gate_c.py",
+    "docs/v2/evidence/2026-05-31-lab-og-weekly-gate-c.md"
   ],
-  "max_files": 3,
+  "max_files": 2,
   "max_lines": 120,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_briefing_og_route.py -q",
+    "python3 -m pytest apps/api/tests/test_lab_og_weekly_gate_c.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["NORTH_STAR/DESIGN/DECISIONS edits", "new npm deps"],
+  "out_of_scope": ["route.tsx changes", "NORTH_STAR/DESIGN/DECISIONS edits", "prospects atom"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
-  },
-  "content_commit": "eca00c3f0",
-  "reality": "PASS",
-  "merge": "pending"
+    "verdict": "SHIP 3/3"
+  }
 }

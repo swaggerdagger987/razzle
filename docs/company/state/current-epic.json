@@ -1,50 +1,38 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Situation Room briefings die in the chat — managers cannot share a formatted rivalry readout to league Slack or Reddit prep threads.",
-  "epic_title": "Room L5 — briefing GTM export",
-  "parity_ref": "Room L5 — GTM export slice",
-  "depth_ref": "Room L5",
+  "epic_status": "active",
+  "big_problem": "Free Lab weekly OG exports lack Gate C regression guards — Reddit cannot trust PPG heatmap cards when nflverse rows load.",
+  "epic_title": "Lab L5 — weekly/prospects OG live trust",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "room-briefing-copy-export",
-      "title": "Briefing card — copy formatted text for Slack/Reddit",
-      "status": "done",
-      "merge_commit": "612d9638"
+      "id": "lab-og-weekly-gate-c-evidence",
+      "title": "Weekly OG Gate C — curl fixture + evidence doc",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "room-briefing-og-card",
-      "title": "Briefing OG — /og/briefing snapshot route",
-      "status": "done",
-      "merge_commit": "75dc2d65a"
+      "id": "lab-og-prospects-gate-c-evidence",
+      "title": "Prospects OG Gate C — curl fixture + evidence doc",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "room-briefing-watermark",
-      "title": "Briefing OG — terracotta watermark + Room hallway link",
-      "status": "done",
-      "merge_commit": "eca00c3f0"
+      "id": "lab-og-weekly-prospects-live-sticker-guard",
+      "title": "Launch-10 pytest — weekly + prospects LIVE sticker labels",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T09:00:00Z",
-  "updated_at": "2026-05-31T12:30:00Z",
+  "next_atom_id": "lab-og-weekly-gate-c-evidence",
+  "created_at": "2026-05-31T12:45:00Z",
+  "updated_at": "2026-05-31T12:45:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-launch10-og-panel-native-trust-labels",
+      "id": "room-l5-briefing-gtm-export",
       "status": "complete",
-      "last_atom": "lab-og-launch10-buysell-dashboard-labels",
-      "merge_commit": "adbf6c7"
-    },
-    {
-      "id": "league-l5-bureau-h2h-deep-links",
-      "status": "complete",
-      "last_atom": "bureau-h2h-pick-opponent-preserve-user",
-      "merge_commit": "c7ad88bd3"
-    },
-    {
-      "id": "lab-l4-pro-gate-error-surface",
-      "status": "complete",
-      "last_atom": "lab-l4-pro-gate-error-dynasty-comps",
-      "merge_commit": "a3f07d1e5"
+      "last_atom": "room-briefing-watermark",
+      "merge_commit": "eca00c3f0"
     },
     {
       "id": "explore-l5-universe-aware-share-exports",
@@ -53,10 +41,10 @@
       "merge_commit": "c7b50c707"
     },
     {
-      "id": "room-l5-briefing-gtm-export",
+      "id": "lab-l4-pro-gate-error-surface",
       "status": "complete",
-      "last_atom": "room-briefing-watermark",
-      "merge_commit": "eca00c3f0"
+      "last_atom": "lab-l4-pro-gate-error-dynasty-comps",
+      "merge_commit": "a3f07d1e5"
     }
   ]
 }

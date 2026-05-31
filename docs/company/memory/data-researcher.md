@@ -1,6 +1,8 @@
 # Memory — Data Researcher
 
 
+2026-05-31 | lab-og-weekly-gate-c-evidence | cycle 141 | No new intel; weekly heatmap OG is Reddit screenshot target.
+
 2026-05-31 | room-briefing-watermark | cycle 139 | No new intel; Room hallway export parity with Explore.
 
 2026-05-31 | lab-og-sample-labels | 54443bc8 | No new intel; OG trust-label slice only.

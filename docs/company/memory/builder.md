@@ -1,6 +1,8 @@
 # Memory — Builder
 
 
+2026-05-31 | lab-og-weekly-gate-c-evidence | da33eafd | SHIP | test_lab_og_weekly_gate_c.py; pytest 6; curl 63603B.
+
 2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | preview+copy+export on BriefingCard; OG watermark band.
 
 2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | SHIP | NFL share URLs drop universe=nfl; college keeps param.
