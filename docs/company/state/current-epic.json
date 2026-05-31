@@ -8,8 +8,8 @@
     {
       "id": "bureau-h2h-share-bar",
       "title": "H2H copy rivalry URL + export card with league/user/opponent params",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "044ee1e8"
     },
     {
       "id": "bureau-h2h-og-live-label",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-h2h-share-bar",
+  "next_atom_id": "bureau-h2h-og-live-label",
   "created_at": "2026-05-31T04:35:00Z",
-  "updated_at": "2026-05-31T04:35:00Z"
+  "updated_at": "2026-05-31T04:45:00Z"
 }
