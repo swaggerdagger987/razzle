@@ -1,11 +1,11 @@
 {
-  "big_problem": "Bureau OG export cards dead-end without terracotta hallway bands — screenshots don't route back into league tabs.",
-  "epic_title": "League L5 — Bureau OG terracotta watermark parity",
-  "parity_ref": "League L5 — hidden Bureau renderers / watermarked export",
-  "depth_ref": "League L5",
+  "epic_status": "active",
+  "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
+  "epic_title": "Explore L5 — OG screener agent margin notes",
+  "parity_ref": "Explore L5 — agent margin notes on rows",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-<<<<<<< HEAD
       "id": "explore-og-margin-note-lead",
       "title": "Lead-row Hawkeye/Dolphin margin note on Explore OG card",
       "status": "done",
@@ -21,36 +21,18 @@
       "id": "explore-og-margin-note-sticker",
       "title": "LIVE staff sticker when OG rows carry margin notes",
       "status": "in_progress",
-=======
-      "id": "league-og-monte-carlo-watermark",
-      "title": "Monte Carlo OG terracotta watermark + LIVE/SAMPLE stickers",
-      "status": "pending",
->>>>>>> origin/razzle-v2-redesign
       "merge_commit": null
     },
     {
-      "id": "league-og-self-scout-watermark",
-      "title": "Self-Scout OG terracotta watermark band",
-      "status": "done",
-      "merge_commit": "a76b2e4e0"
-    },
-    {
-      "id": "league-og-pressure-map-watermark",
-      "title": "Pressure Map OG terracotta watermark band",
-      "status": "pending",
-      "merge_commit": null
-    },
-    {
-      "id": "league-og-power-rankings-watermark",
-      "title": "Power Rankings OG terracotta watermark band",
+      "id": "explore-og-margin-note-college",
+      "title": "College universe margin notes on OG export",
       "status": "pending",
       "merge_commit": null
     }
   ],
-<<<<<<< HEAD
   "next_atom_id": "explore-og-margin-note-sticker",
   "created_at": "2026-05-31T11:22:30Z",
-  "updated_at": "2026-05-31T11:52:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-watermark-display-names",
@@ -71,11 +53,4 @@
       "merge_commit": "1a12d9c0b"
     }
   ]
-=======
-  "next_atom_id": "league-og-pressure-map-watermark",
-  "epic_status": "active",
-  "created_at": "2026-05-31T11:45:03Z",
-  "updated_at": "2026-05-31T11:55:00Z",
-  "completed_epics": []
->>>>>>> origin/razzle-v2-redesign
 }
