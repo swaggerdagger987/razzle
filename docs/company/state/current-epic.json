@@ -15,7 +15,7 @@
       "id": "lab-og-watermark-band-head-to-head",
       "title": "Bureau H2H OG — match terracotta band styling",
       "status": "done",
-      "merge_commit": "4d84af9a"
+      "merge_commit": "44d05684"
     }
   ],
   "next_atom_id": null,
@@ -26,7 +26,7 @@
       "id": "lab-l5-og-watermark-band",
       "status": "complete",
       "last_atom": "lab-og-watermark-band-head-to-head",
-      "merge_commit": "4d84af9a"
+      "merge_commit": "44d05684"
     },
     {
       "id": "lab-l5-og-live-sort-keys",

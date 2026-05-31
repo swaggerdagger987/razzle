@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | PARITY next — Lab L4 formula or Room GTM export |
-| Last commit | `da33eafd` |
+| Last commit | `44d05684` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
