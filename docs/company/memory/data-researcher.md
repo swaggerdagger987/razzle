@@ -31,4 +31,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
 2026-05-31 | Bureau Pressure Map | 2c3cd3a2 | keep | deadline panic charts shareable via copy chart link
 2026-05-31 | Bureau Power Rankings | 131ee281 | keep | beyond W-L differential boards share in league chats
-2026-05-31 | Bureau Trade Finder | da33eafd | keep | fair-trade OG cards with give/get rows for league DMs
+2026-05-31 | Bureau Trade Finder | b11ed616 | keep | fair-trade OG cards with give/get rows for league DMs

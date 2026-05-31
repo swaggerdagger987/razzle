@@ -30,4 +30,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
 2026-05-31 | BureauPressureMap copy | 2c3cd3a2 | keep | inline copyChartLink; no new component file
 2026-05-31 | og/power-rankings | 131ee281 | keep | mirrors pressure-map fetch + demo rows; league-only params
-2026-05-31 | BureauTradeFinder share row | da33eafd | keep | header copy+export; OG route unchanged; optional sleeper user_id on export
+2026-05-31 | BureauTradeFinder share row | b11ed616 | keep | header copy+export; OG route unchanged; optional sleeper user_id on export

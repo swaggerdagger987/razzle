@@ -14,8 +14,8 @@
     {
       "id": "bureau-trade-finder-share",
       "title": "Trade Finder copy link + export card",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "b11ed616"
     },
     {
       "id": "bureau-trade-network-share",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-trade-finder-share",
+  "next_atom_id": "bureau-trade-network-share",
   "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T12:00:00Z"
+  "updated_at": "2026-05-31T14:45:00Z"
 }
