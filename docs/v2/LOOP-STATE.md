@@ -22,4 +22,5 @@ lab_l5_og_dynasty_comps_panel_export: complete
 lab_l5_og_snapshot_rows: complete
 lab_l5_og_export_rankings_breakouts: complete
 lab_l5_og_export_prospects_weekly_tradevalues: complete
+lab_l5_og_live_extractors: complete
 lab_l5_og_live_rows_epic: complete
