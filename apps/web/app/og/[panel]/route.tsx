@@ -237,18 +237,29 @@ function extractRows(data: unknown): OgRow[] {
   if (!data || typeof data !== "object") return [];
 
   const obj = data as Record<string, unknown>;
+  if (
+    obj.data &&
+    typeof obj.data === "object" &&
+    !Array.isArray(obj.data) &&
+    !Array.isArray(obj.items) &&
+    !Array.isArray(obj.players) &&
+    !Array.isArray(obj.tiers)
+  ) {
+    return extractRows(obj.data);
+  }
+
   let candidates: Record<string, unknown>[] = [];
 
   if (Array.isArray(obj.items)) {
     candidates = obj.items as Record<string, unknown>[];
+  } else if (Array.isArray(obj.players) && (obj.players as unknown[]).length > 0) {
+    candidates = obj.players as Record<string, unknown>[];
   } else if (Array.isArray(obj.tiers)) {
     for (const tier of obj.tiers as Record<string, unknown>[]) {
       if (Array.isArray(tier.players)) {
         candidates.push(...(tier.players as Record<string, unknown>[]));
       }
     }
-  } else if (Array.isArray(obj.players)) {
-    candidates = obj.players as Record<string, unknown>[];
   } else if (Array.isArray(obj.candidates)) {
     candidates = obj.candidates as Record<string, unknown>[];
   } else if (Array.isArray(obj.buy) || Array.isArray(obj.sell)) {
@@ -365,7 +376,9 @@ async function fetchPanelData(
         }
       }
       url.searchParams.set("limit", "6");
-      res = await fetch(url.toString());
+      res = await fetch(url.toString(), {
+        headers: { [OG_PRO_PREVIEW_HEADER]: "pro" },
+      });
     }
     if (!res.ok) return [];
     const data = await res.json();
@@ -430,6 +443,9 @@ export async function GET(
   if (apiPath && !snapshotHasRows) {
     if (slug === "aging" && !positionFilter) {
       apiParams.position = "RB";
+    }
+    if (slug === "rankings") {
+      apiParams.limit = 6;
     }
     liveRows = await fetchLiveOgRows(req, slug, apiParams);
     if (liveRows.length === 0) {

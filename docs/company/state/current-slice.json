@@ -2,21 +2,21 @@
   "date": "2026-05-31",
   "big_problem": "Launch-10 Lab OG cards still fall back to sample rows when live panel APIs return nested shapes the OG extractor cannot read.",
   "epic": "Lab L5 — Live OG rows for launch-10 panels without snapshot param",
-  "slice_title": "Aging OG extracts live players from positions map",
+  "slice_title": "Rankings OG live tier rows without sample-preview suffix",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with live rows",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB; launch-10 live blurb omits sample preview",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
     "apps/web/app/og/[panel]/route.tsx",
-    "docs/v2/evidence/2026-05-31-lab-aging-og-live-extract.md"
+    "docs/v2/evidence/2026-05-31-lab-rankings-og-live-blurb.md"
   ],
   "max_files": 2,
-  "max_lines": 80,
+  "max_lines": 60,
   "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "JWT_SECRET=test .venv-v2/bin/python -m pytest apps/api/tests -q",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/aging-og.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/aging?download=1&position=RB'"
+    "curl -s -o /tmp/rankings-og.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/rankings?download=1'"
   ],
   "out_of_scope": [
     "New panels",
