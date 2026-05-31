@@ -1,5 +1,6 @@
 # Memory — Product Strategist
 
+2026-05-31 | bureau-h2h-pick-opponent-preserve-user | da33eafd | SHIP | H2H deep-links epic complete; user= survives opponent change.
 2026-05-31 | bureau-self-scout-sharebar-snapshot | 709660c | SHIP | League L5 scout epic atom 1/3; Self-Scout OG mirrors panel grades.
 2026-05-31 | lab-og-gamelog-player-default | Lab export URLs must carry player_id for Reddit copy-paste | SHIP | live-fetch epic 3/3.
 

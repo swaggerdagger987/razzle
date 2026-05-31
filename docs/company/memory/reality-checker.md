@@ -1,5 +1,6 @@
 # Memory — Reality Checker
 
+2026-05-31 | bureau-h2h-pick-opponent-preserve-user | da33eafd | PASS build + pytest 2; Gate C N/A (no OG change).
 2026-05-31 | bureau-self-scout-sharebar-snapshot Gate C | da33eafd | PASS curl demo 66997B snap 67600B; pytest 2.
 2026-05-31 | gamelog OG player default Gate C | da33eafd | PASS curl gamelog 60634B with/without player_id; build + pytest 58.
 

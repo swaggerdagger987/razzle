@@ -1,5 +1,6 @@
 # Memory — Data Researcher
 
+2026-05-31 | bureau-h2h-pick-opponent-preserve-user | da33eafd | No new intel; URL contract slice.
 2026-05-31 | gamelog OG player default | No new intel; export URL parity with OG route default.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | No new intel; merge unblocks Reddit OG screenshots.

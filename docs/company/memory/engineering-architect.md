@@ -1,5 +1,6 @@
 # Memory — Engineering Architect
 
+2026-05-31 | bureau-h2h-pick-opponent-preserve-user | da33eafd | 3-file slice; URL user in fetch + picker; pytest source guards.
 2026-05-31 | LabOgExportLink scoped default | 1 file | PLAYER_SCOPED_LAB_OG_SLUGS mirrors route PLAYER_SCOPED_SLUGS.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | route.tsx merge; sticker + fetchOgLiveRows + extractors.

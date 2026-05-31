@@ -1,5 +1,6 @@
 # Memory — Builder
 
+2026-05-31 | bureau-h2h-pick-opponent-preserve-user | da33eafd | rivalryUserId in pickOpponent; LeagueDashboard urlUser; pytest 2.
 2026-05-31 | bureau-self-scout-sharebar-snapshot | 709660c | keep | ShareBar + snapshot lib + OG decode.
 2026-05-31 | LabOgExportLink player-scoped default | PLAYER_SCOPED_LAB_OG_SLUGS; gamelog export always has player_id | SHIP | keep | curl 60634B
 2026-05-31 | lab-l4-pro-gate-error-surface | 5721ee33 | ProGateFromPanelError on BreakoutsRenderer; pytest 7.
