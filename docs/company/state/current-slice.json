@@ -1,15 +1,15 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-build-profiles-tab",
+  "atom_id": "league-waiver-tendencies-tab",
   "big_problem": "Hidden Bureau tabs still dump raw JSON — users hit scaffolding instead of league intel cards.",
   "epic": "League L5 — Bureau hidden tabs to bespoke renderers",
-  "slice_title": "Build Profiles tab — Atlas renderer, unhide nav",
+  "slice_title": "Waiver Tendencies — Hawkeye renderer, unhide nav",
   "parity_ref": "League L5 — hidden Bureau renderers",
   "depth_ref": "League L5",
   "acceptance_ref": "FACTORY-DOD Gate C — Bureau page renders without generic table fallback",
   "trust_pillars": ["T2", "T5"],
   "allowed_paths": [
-    "apps/web/components/league/BureauBuildProfiles.tsx",
+    "apps/web/components/league/BureauWaiverTendencies.tsx",
     "apps/web/components/league/BureauFeatureBody.tsx",
     "apps/web/lib/bureau-features.ts"
   ],
@@ -20,8 +20,8 @@
     "cd apps/api && ../.venv-v2/bin/python -m pytest tests -q --maxfail=1"
   ],
   "out_of_scope": [
-    "OG export route for build-profiles",
-    "waiver-tendencies / SOS tabs",
+    "OG export route",
+    "strength-of-schedule tab",
     "API changes"
   ],
   "builder_mode": "composer-surgical"

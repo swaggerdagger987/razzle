@@ -1,11 +1,12 @@
-cycle: 89
+cycle: 90
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: league-waiver-tendencies-tab
-last_keep_cycle: 89
-last_commit: c23f4bd9
+next_slice: league-sos-tab
+last_keep_cycle: 90
+last_commit: da33eafd
 league_l5_bureau_build_profiles_tab: complete
+league_l5_bureau_waiver_tendencies_tab: in_progress
 league_l5_bureau_hidden_tabs_epic: in_progress
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
