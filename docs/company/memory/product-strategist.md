@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | lab-l4-percentiles-pro-teaser | da33eafd | SHIP | Lab L4 profile teasers epic; strengths next atom.
+2026-05-31 | lab-l4-percentiles-pro-teaser | 702a00d3 | SHIP | Lab L4 profile teasers epic; strengths next atom.
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | da33eafd | SHIP | Lab L5 live-sort epic closed; ppo beats efficiency_score for in-panel parity.
 

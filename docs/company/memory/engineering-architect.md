@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | lab-l4-percentiles-pro-teaser | 702a00d3 | 2-file contract; teaser map + Atlas panel ownership only.
+
 2026-05-31 | lab-og-efficiency-aging-live-sort | da33eafd | merge most_efficient + aging single-position unwrap; buysell/dashboard keys from base.
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | 1-file contract; pass position into extractRows for aging nested API.

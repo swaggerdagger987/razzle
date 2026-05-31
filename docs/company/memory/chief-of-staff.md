@@ -1,6 +1,6 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 116 L4 percentiles pro-teaser | da33eafd | Workday open; profile pro-gate epic atom 1/3.
+2026-05-31 | Factory cycle 116 L4 percentiles pro-teaser | 702a00d3 | Workday open; profile pro-gate epic atom 1/3.
 
 2026-05-31 | Factory cycle 114 OG sort keys restore | 7afc0b03 | Fixes merge regression ppo/ppg/dynasty_value; live-sort epic complete.
 

@@ -1,6 +1,6 @@
 # Memory — Data Researcher
 
-2026-05-31 | lab-l4-percentiles-pro-teaser | cycle 116 | No new intel; percentile copy matches DynastyFF peer-rank language.
+2026-05-31 | lab-l4-percentiles-pro-teaser | 702a00d3 | No new intel; percentile copy matches DynastyFF peer-rank language.
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | cycle 110 | No new Reddit intel; ppo/ppg sort matches in-panel export semantics.
 
