@@ -1,30 +1,11 @@
-# Evidence — lab-og-from-panel-gate-c-rest
+# Evidence — lab-og-from-panel-gate-c-rest (cycle 157)
 
-**Date:** 2026-05-31  
-**Atom:** `lab-og-from-panel-gate-c-rest` — Gate C pytest + curl for prospects/tradevalues FROM PANEL snapshot  
+**Atom:** Extend `SNAPSHOT_FROM_PANEL_SLUGS` from 4 → 10 Launch-10 panels  
 **Trust:** T5, T6
 
-## Build
-
-- `JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_from_panel_sticker.py -q --noconftest` — 5 passed
-- `npm run build --workspace=apps/web` — exit 0
-
-## Gate C — snapshot OG PNG
-
 ```bash
-curl -s -o /tmp/prospects-snap.png -w '%{http_code} %{size_download}\n' \
-  'http://127.0.0.1:3000/og/prospects?download=1&snapshot=<6-row RPS board>'
-# 200 63977
-
-curl -s -o /tmp/tradevalues-snap.png -w '%{http_code} %{size_download}\n' \
-  'http://127.0.0.1:3000/og/tradevalues?download=1&snapshot=<6-row value curve>'
-# 200 67179
+pytest apps/api/tests/test_og_from_panel_sticker.py -q  # 6 passed
+npm run build --workspace=apps/web  # exit 0
 ```
 
-## Code
-
-- `apps/api/tests/test_og_from_panel_sticker.py` — prospects + tradevalues in `SNAPSHOT_FROM_PANEL_SLUGS`; RPS extract + tradeValueStatKeys guards; snapshot codec fixture.
-
-## Verdict
-
-PASS — prospects/tradevalues snapshot exports ≥40KB PNG with FROM PANEL contract guarded in pytest; formula OG epic 3/3 complete.
+PASS — full Launch-10 FROM PANEL registry pytest.
