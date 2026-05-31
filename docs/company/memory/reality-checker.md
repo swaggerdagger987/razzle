@@ -1,4 +1,5 @@
 2026-05-31 | explore-og-margin-note-demo-college | f6e0985f3 | PASS | pytest 9; curl college OG 71510B.
+2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | PASS | pytest 6; curl h2h 76270B.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | PASS | pytest 7; curl efficiency 65774B.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
@@ -22,8 +23,6 @@
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | PASS | curl 200 59323B PNG; web build + pytest green.
 2026-05-31 | room-briefing-watermark Gate C | eca00c3f0 | PASS | curl 51866B export; pytest 5; build exit 0.
 2026-05-31 | lab-og-tolab-watermark | b80512bb4 | PASS | pytest 3; web build exit 0; curl rankings OG 66806B.
-2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | PASS | curl 200 59323B PNG; web build + pytest green.
-2026-05-31 | room-briefing-watermark Gate C | eca00c3f0 | PASS | curl 51866B export; pytest 5; build exit 0.
 
 2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | PASS | pytest 5; curl NFL OG 65431B without universe param.
 2026-05-31 | lab-l4-pro-gate-dynasty-comps | a3f07d1e5 | PASS | pytest 9; web build exit 0; no OG slice.

@@ -6,3 +6,4 @@ next_slice: explore-in-product-margin-parity
 last_keep_cycle: 155
 last_commit: f6e0985f3
 explore_l5_og_margin_notes_epic: active
+league_l5_trade_finder_gtm_epic: complete
