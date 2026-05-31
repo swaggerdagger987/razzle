@@ -1,18 +1,43 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG export cards must pass visible rows from in-product panels — not loading-copy-only shells (DEPTH Lab L5).",
-  "epic_title": "Lab L5 — OG snapshot parity (launch-10 + player-scoped)",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
+  "epic_title": "League L5 — Bureau behavioral share parity",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-snapshot-weekly-breakouts",
-      "title": "Weekly + breakouts export passes visible top-6 snapshotRows",
+      "id": "bureau-manager-profiles-copy-link",
+      "title": "Manager Profiles copy link beside export card",
       "status": "done",
+      "merge_commit": "04c19959"
+    },
+    {
+      "id": "bureau-pressure-map-copy-link",
+      "title": "Pressure Map copy link beside export card",
+      "status": "done",
+      "merge_commit": "c4ce09b7"
+    },
+    {
+      "id": "league-power-rankings-og",
+      "title": "Power Rankings OG + copy board link",
+      "status": "done",
+      "merge_commit": "90bf2dd5"
+    },
+    {
+      "id": "bureau-trade-network-copy-link",
+      "title": "Trade Network copy link beside export card",
+      "status": "pending",
       "merge_commit": null
+    },
+    {
+      "id": "bureau-monte-carlo-copy-link",
+      "title": "Monte Carlo copy link beside export card",
+      "status": "done",
+      "merge_commit": "30454811"
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T18:00:00Z",
-  "updated_at": "2026-05-31T18:30:00Z"
+  "next_atom_id": "bureau-trade-network-copy-link",
+  "created_at": "2026-05-31T04:44:00Z",
+  "updated_at": "2026-05-31T13:20:00Z",
+  "last_cycle_commit": "90bf2dd5"
 }
