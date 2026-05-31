@@ -16,6 +16,8 @@ explicit checks in the verification routine.
 
 ## Entries
 
+2026-05-31 | College OG band parity | curl | Explore L5 | PASS | OG size | keep | college 36128B PNG | evidence explore-og-college-band-copy
+
 2026-05-31 | Explore OG watermark band | curl explore 200 34KB PNG preview+download | PASS | keep | evidence/2026-05-31-explore-og-watermark-band.md
 2026-05-31 | explore-og-watermark-band factory cycle 1 | curl preview 32195B download 34471B | PASS | keep | Gate C2 satisfied
 2026-05-31 | Dashboard comps OG Gate C | c9151786 | PASS | curl dynasty-comps 65961B PNG | keep | evidence/2026-05-31-lab-dashboard-og-snapshot.md

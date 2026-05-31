@@ -2,22 +2,21 @@
   "date": "2026-05-31",
   "big_problem": "Explore share cards hide the Razzle watermark unless download=1 — OS screenshots miss the growth loop.",
   "epic": "Explore L5 — OG watermark band always visible on screener share cards",
-  "slice_title": "Explore toolbar preview URL includes watermark band on embed",
-  "atom_id": "explore-og-preview-watermark",
+  "slice_title": "College universe subtitle + band copy matches NFL screener",
+  "atom_id": "explore-og-college-band-copy",
   "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
   "depth_ref": "Explore L5",
   "acceptance_ref": "ACCEPTANCE Gate 5 — Explore OG export",
   "trust_pillars": ["T5", "T6"],
-  "allowed_paths": [
-    "apps/web/components/explore/ExploreShareButton.tsx"
-  ],
+  "allowed_paths": ["apps/web/app/og/explore/route.tsx"],
   "max_files": 1,
-  "max_lines": 40,
+  "max_lines": 45,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-college.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3001/og/explore?universe=college&sort=total_yards&dir=desc'"
   ],
-  "out_of_scope": ["og/explore route changes", "API schema", "NORTH_STAR/DESIGN/DECISIONS edits"],
+  "out_of_scope": ["ExploreShareButton changes", "API schema", "NORTH_STAR/DESIGN/DECISIONS edits"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
