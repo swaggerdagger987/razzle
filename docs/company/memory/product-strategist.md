@@ -1,6 +1,11 @@
 # Memory — Product Strategist
 
-2026-05-31 | explore-og-universe-query | 7dbd4b11 | SHIP | Explore L5 export URL carries college season filter.
+2026-05-31 | room-briefing-og-card | 2121055c | SHIP | keep | OG snapshot for Reddit threads; T5/T6 after copy path.
+
+2026-05-31 | room-briefing-copy-export | 612d9638 | SHIP | keep | Slack/Reddit paste before OG snapshot; T5/T6 GTM.
+
+2026-05-31 | lab-og-gamelog-player-default | 8e7297c8 | SHIP | keep | empty-state OG before player pick; next Room briefing GTM.
+
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
 
 2026-05-31 | lab-og-launch10-live-fetch-merge | 3f0411ec | SHIP | live-fetch epic atom 1/3; sticker+fetch on base merge.
