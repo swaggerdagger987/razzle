@@ -1,8 +1,7 @@
-import { PANELS } from "@razzle/panels";
+import { PANELS, getPanel } from "@razzle/panels";
+import type { OgSnapshotRow } from "@/components/lab/LabOgExportLink";
 
 /** Static blur-preview rows + staff voice for Pro upgrade gates (Lab L4). */
-
-import { getPanel } from "@razzle/panels";
 import { BUREAU_ENDPOINTS } from "./bureau-features";
 
 /** Launch-10 Staff Picks — mirrors `LabSidebar` STAFF_PICKS + PARITY Launch 10 table. */
@@ -170,6 +169,17 @@ export function hasCustomTeaser(slug: string): boolean {
 
 export function teaserRowsForPanel(slug: string): TeaserRow[] {
   return ROWS_BY_SLUG[slug] ?? DEFAULT_ROWS;
+}
+
+/** Map pro-gate blur preview rows to OG snapshot payload (sample export from gate). */
+export function teaserRowsToOgSnapshot(slug: string): OgSnapshotRow[] {
+  return teaserRowsForPanel(slug).map((row) => ({
+    name: row.name,
+    position: row.position,
+    team: "—",
+    stat: 0,
+    statLabel: row.detail,
+  }));
 }
 
 export function upgradePitchForPanel(slug: string, agentName: string): string {
