@@ -36,4 +36,4 @@ new evidence.
 2026-05-31 | Trade Network share atom 2/4 | da33eafd | SHIP | keep | partnership graphs travel in league group chats
 2026-05-31 | Bureau power rankings OG atom 2 | 9714bfa6 | SHIP | keep | Octo tab now has export card for trade DMs
 2026-05-31 | Build Profiles unhide atom 1/3 | da33eafd | SHIP | keep | Zero RB / Win Now labels for dynasty trade threads
-2026-05-31 | Waiver tendencies atom 2/3 | da33eafd | SHIP | keep | FAAB hoarder vs streamer for waiver wire screenshots
+2026-05-31 | Waiver tendencies atom 2/3 | f967ce82 | SHIP | keep | FAAB hoarder vs streamer for waiver wire screenshots
