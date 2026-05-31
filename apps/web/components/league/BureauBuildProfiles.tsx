@@ -155,6 +155,8 @@ export function BureauBuildProfiles({ data, leagueId }: Props) {
         ))}
       </section>
 
+      <BureauBuildProfilesShareBar leagueId={leagueId} />
+
       <footer className="flex flex-wrap gap-4 text-sm">
         <Link href={`/league/${leagueId}/roster-depth` as Route} className="text-orange underline">
           position depth grades →
