@@ -1,38 +1,38 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab panel exports hide behind a single underline link — GTM threads need Explore/Bureau-style copy, preview, and export so screenshots match the rows on screen.",
-  "epic_title": "Lab L5 — GTM panel share bar parity",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "big_problem": "Lab panel exports hide behind a single underline link \u2014 GTM threads need Explore/Bureau-style copy, preview, and export so screenshots match the rows on screen.",
+  "epic_title": "Lab L5 \u2014 GTM panel share bar parity",
+  "parity_ref": "Explore L5 \u2014 Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
       "id": "lab-panel-share-bar-rankings",
-      "title": "Dynasty Rankings — LabPanelShareBar copy/preview/export + snapshot",
+      "title": "Dynasty Rankings \u2014 LabPanelShareBar copy/preview/export + snapshot",
       "status": "done",
       "merge_commit": "81d081604"
     },
     {
       "id": "lab-panel-share-bar-breakouts-buysell",
-      "title": "Breakouts + Buy/Sell — share bar with formula snapshot rows",
+      "title": "Breakouts + Buy/Sell \u2014 share bar with formula snapshot rows",
       "status": "done",
       "merge_commit": "81d081604"
     },
     {
       "id": "lab-panel-share-bar-weekly-gamelog",
-      "title": "Weekly + Gamelog — player-scoped share bar",
-      "status": "in_progress",
-      "merge_commit": null
+      "title": "Weekly + Gamelog \u2014 player-scoped share bar",
+      "status": "done",
+      "merge_commit": "138614555"
     },
     {
       "id": "lab-panel-share-bar-launch10-rest",
-      "title": "Remaining Launch-10 panels — share bar rollout",
+      "title": "Remaining Launch-10 panels \u2014 share bar rollout",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-panel-share-bar-weekly-gamelog",
+  "next_atom_id": "lab-panel-share-bar-launch10-rest",
   "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T11:45:00Z",
+  "updated_at": "2026-05-31T12:25:00Z",
   "completed_epics": [
     "league-trade-finder-gtm-export-2026-05-31",
     "lab-formula-sorted-og-live-parity-2026-05-31",
