@@ -2,7 +2,8 @@ cycle: 161
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: PARITY next Lab/Explore slice
+next_slice: lab-panel-share-bar-weekly-gamelog
 last_keep_cycle: 161
 last_commit: c597d83d7
+lab_l5_gtm_share_bar_epic: active
 lab_l5_pro_profile_og_epic: complete
