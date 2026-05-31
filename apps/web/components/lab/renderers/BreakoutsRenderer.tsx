@@ -94,19 +94,34 @@ export function BreakoutsRenderer({ panel }: Props) {
 
   const top = candidates[0] ?? null;
 
+  /** Top breakout candidates — OG card matches in-product RBS leaders (Lab L5). */
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
-    const statLabel = formula?.name ?? "RBS";
-    return candidates.slice(0, 6).map((p) => ({
-      name: p.name,
-      position: p.position,
-      team: p.team,
-      stat:
-        formula && p.formula_score != null
-          ? p.formula_score
-          : (p.rbs_score ?? 0),
-      statLabel,
-    }));
-  }, [candidates, formula]);
+    const sorted = [...candidates].filter((p) => p.name);
+    if (formula) {
+      return sorted
+        .filter((p) => p.formula_score != null)
+        .sort((a, b) => (b.formula_score ?? 0) - (a.formula_score ?? 0))
+        .slice(0, 6)
+        .map((p) => ({
+          name: p.name,
+          position: p.position,
+          team: p.team,
+          stat: p.formula_score ?? 0,
+          statLabel: formula.name.slice(0, 8) || "Score",
+        }));
+    }
+    return sorted
+      .filter((p) => p.rbs_score != null)
+      .sort((a, b) => (b.rbs_score ?? 0) - (a.rbs_score ?? 0))
+      .slice(0, 6)
+      .map((p) => ({
+        name: p.name,
+        position: p.position,
+        team: p.team,
+        stat: p.rbs_score ?? 0,
+        statLabel: "RBS",
+      }));
+  }, [formula, candidates]);
 
   if (q.isPending) {
     return <PanelAgentLoading agent={agent} />;
