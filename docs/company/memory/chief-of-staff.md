@@ -1,11 +1,5 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 96 H2H codec | da33eafd | Workday open; League L5 codec epic atom 1/3 SHIP.
-
-2026-05-31 | Lab L5 OG epic complete | 5ed39e14 | Four atoms merged in one workday branch; next PARITY lead is Bureau H2H export.
-
-2026-05-31 | Factory open cycle 94 buysell OG | 98ae0ef2 | keep | workday open atom 3/4 Lab L5 epic
-
 Append-only log of coordination patterns, what worked, what didn't.
 
 Format per entry:
@@ -16,10 +10,7 @@ YYYY-MM-DD | hypothesis | outcome | keep | discard | revisit | evidence
 
 A good entry changes future behavior. A bad entry is a diary.
 
-2026-05-31 | factory cycle 1 | Lab weekly hot-week OG atom 2/4 | da33eafd | SHIP | KEEP epic atom chain | — | — | standup 2026-05-31 cycle 93
-
-2026-05-31 | factory cycle 1 | Lab epic after League unhide complete | da33eafd | SHIP | KEEP NEXT.md lead for slice pick | — | — | standup 2026-05-31 cycle 92
-
+2026-05-31 | factory cycle 1 monte-carlo OG | e0e61569 | SHIP | Bureau OG atom 2/3 stacked PR | — | — | standup 2026-05-31 cycle 95
 2026-05-31 | factory cycle 1 | H2H snapshot export atom 2/3 | da33eafd | SHIP | KEEP epic decomposition | — | — | standup 2026-05-31 cycle 77
 
 2026-05-31 | Factory cycle 1 dashboard OG snapshot | c9151786 | keep | dedup prospects+tradevalues on base 1a56450e
@@ -28,7 +19,6 @@ A good entry changes future behavior. A bad entry is a diary.
 
 ## Entries
 
-2026-05-31 | Factory open cycle 90 waiver tendencies | da33eafd | keep | League L5 epic atom 2/3 merged path
 2026-05-31 | Factory cycle 2 Pressure Map copy link | da33eafd | keep | workday open; behavioral share epic 2/4 SHIP
 2026-05-30 | NEXT.md eliminates slice selection ambiguity for morning standups | SHIP 3/3 on Lab L5 OG live data rows | keep | NEXT.md lead candidate matched PARITY/DEPTH/ACCEPTANCE; single-file touch kept scope tight
 2026-05-31 | Factory cycle 1 — epic.json + FACTORY-DOD Gate C for Lab OG | SHIP 3/3 demo rows atom | keep | Workday opened; curl PNG ~59KB proves Gate C; standup-pr-autopen on branch from PR #18
@@ -45,6 +35,7 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory open Monte Carlo share row | da33eafd | keep | workday cycle 1; H2H dedup on base; PR standup 2026-05-31
 2026-05-31 | Factory open Lab launch10 OG label | 6e98f4a2 | keep | workday cycle 1; epic atom 4/4; Lab L5 live row parity complete
 2026-05-31 | Factory cycle 1 Bureau H2H export | 044ee1e8 | keep | workday open; League L5 epic atom 1/3; copy link + export bar
+2026-05-31 | Factory open Bureau OG snapshot epic | 26a22f69 | keep | power-rankings snapshot atom 1/3; dedup H2H on base
 2026-05-31 | Factory cycle 1 Bureau MC share | 3392bc29 | keep | deduped lab-og-live-label; Bureau share epic 3/3
 2026-05-31 | Factory cycle 79 Power Rankings OG | 90bf2dd5 | keep | unhide epic atom 2/4; curl 68555B
 2026-05-31 | Factory cycle 1 Trade Network share | 1616484c | keep | workday open; behavioral share epic complete; PR #278
