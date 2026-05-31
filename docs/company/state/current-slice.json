@@ -1,25 +1,30 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau rivalry screens must travel in group chats like Explore — copy link plus export on the same row.",
-  "epic": "League L5 — Bureau share row parity",
-  "slice_title": "Self-Scout copy link beside export card",
-  "parity_ref": "Explore L5 — Bureau share row parity",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — /og/self-scout PNG ≥40KB",
+  "big_problem": "Launch-10 Lab panels need in-product OG export links on every screenshot-worthy panel.",
+  "epic": "Lab L5 — OG export link parity",
+  "atom_id": "lab-og-export-link-prospects-weekly-tradevalues",
+  "slice_title": "LabOgExportLink on prospects, weekly, tradevalues renderers",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB for three routes",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauSelfScout.tsx"
+    "apps/web/components/lab/renderers/ProspectsRenderer.tsx",
+    "apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx",
+    "apps/web/components/lab/renderers/TradeValuesRenderer.tsx"
   ],
-  "max_files": 1,
-  "max_lines": 35,
+  "max_files": 3,
+  "max_lines": 30,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-self-scout.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/self-scout?download=1'"
+    "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/prospects?download=1'"
   ],
-  "out_of_scope": [
-    "Monte Carlo tab",
-    "NORTH_STAR / DESIGN edits"
-  ],
-  "builder_mode": "composer-surgical"
+  "out_of_scope": ["OG route changes", "NORTH_STAR / DESIGN edits"],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "strategist": "SHIP",
+    "architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP"
+  }
 }
