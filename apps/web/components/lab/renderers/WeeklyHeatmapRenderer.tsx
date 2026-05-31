@@ -73,27 +73,15 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
   }, [players]);
 
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
-    const withPeak = players.map((p) => {
-      let peakWeek = 0;
-      let peakPts = 0;
-      for (const [wk, pts] of Object.entries(p.weeks ?? {})) {
-        if (pts != null && pts > peakPts) {
-          peakPts = pts;
-          peakWeek = Number(wk);
-        }
-      }
-      return { p, peakWeek, peakPts };
-    });
-    return withPeak
-      .filter((row) => row.peakPts > 0)
-      .sort((a, b) => b.peakPts - a.peakPts)
+    return [...players]
+      .sort((a, b) => (b.ppg ?? 0) - (a.ppg ?? 0))
       .slice(0, 6)
-      .map(({ p, peakWeek, peakPts }) => ({
+      .map((p) => ({
         name: p.name,
         position: p.position,
         team: p.team,
-        stat: peakPts,
-        statLabel: peakWeek ? `W${peakWeek}` : "FPTS",
+        stat: p.ppg ?? 0,
+        statLabel: "PPG",
       }));
   }, [players]);
 
@@ -208,6 +196,7 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
           <LabOgExportLink
             slug="weekly"
             downloadName="razzle-weekly-heatmap.png"
+            position={position}
             snapshotRows={ogSnapshotRows}
           />
         </footer>

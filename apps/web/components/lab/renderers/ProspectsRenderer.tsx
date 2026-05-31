@@ -57,8 +57,8 @@ export function ProspectsRenderer({ panel }: Props) {
       name: p.player_name,
       position: p.position,
       team: p.school,
-      stat: p.rps ?? 0,
-      statLabel: "RPS",
+      stat: p.rps ?? p.rank ?? 0,
+      statLabel: "Score",
     }));
   }, [prospects]);
 

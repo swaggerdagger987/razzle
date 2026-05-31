@@ -1,36 +1,30 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG export cards still fall back to generic demo rows when the in-panel table has live data — screenshots do not match what the user sees (NEXT.md + PARITY Explore/Lab L5).",
-  "epic_title": "Lab L5 — OG cards mirror in-panel snapshot rows",
-  "parity_ref": "Explore L5 / Lab — Bureau H2H export or Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows.",
+  "epic_title": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-breakouts-og-snapshot",
-      "title": "Breakouts panel passes snapshotRows to OG export link",
+      "id": "league-build-profiles-tab",
+      "title": "Build Profiles tab unhidden with Atlas renderer",
       "status": "done",
-      "merge_commit": "8c00227e"
+      "merge_commit": "2ee04975"
     },
     {
-      "id": "lab-weekly-og-snapshot",
-      "title": "Weekly heatmap passes snapshotRows from hot-week leaders",
+      "id": "league-waiver-tendencies-tab",
+      "title": "Waiver Tendencies tab unhidden with Hawkeye renderer",
       "status": "done",
-      "merge_commit": "e06f1820"
+      "merge_commit": "a2536dcc"
     },
     {
-      "id": "lab-prospects-og-snapshot",
-      "title": "Prospects panel passes snapshotRows from visible board",
-      "status": "done",
-      "merge_commit": "488d0053"
-    },
-    {
-      "id": "lab-tradevalues-og-snapshot",
-      "title": "Trade values panel passes snapshotRows from sorted list",
-      "status": "done",
-      "merge_commit": "caffc490"
+      "id": "league-strength-of-schedule-tab",
+      "title": "Schedule tab unhidden with SOS renderer",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T05:10:00Z",
-  "updated_at": "2026-05-31T05:25:00Z"
+  "next_atom_id": "league-strength-of-schedule-tab",
+  "created_at": "2026-05-31T12:05:00Z",
+  "updated_at": "2026-05-31T06:30:00Z"
 }
