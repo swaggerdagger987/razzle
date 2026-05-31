@@ -1,5 +1,7 @@
 # Memory — Data Researcher
 
+2026-05-31 | room-briefing-copy-export | 612d9638 | PASS | no new REDDIT-INTEL; Room share is paste not screenshot yet.
+
 2026-05-31 | lab-og-gamelog-player-default | 8e7297c8 | PASS | no new REDDIT-INTEL; gamelog screenshot path only.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | no new REDDIT-INTEL; copy-only slice.

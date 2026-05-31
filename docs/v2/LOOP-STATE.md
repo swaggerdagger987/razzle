@@ -4,6 +4,6 @@ focus_pillar: Room
 focus_layer: L5
 next_slice: room-briefing-og-card
 last_keep_cycle: 129
-last_commit: da33eafd
+last_commit: 612d9638
 lab_l5_og_gamelog_epic: complete
 room_l5_briefing_gtm_epic: active
