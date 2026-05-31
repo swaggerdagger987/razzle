@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | lab-og-gamelog-live-week-extract | da33eafd | 1-file extractRows branch for gamelog weeks[].
+
 2026-05-31 | Cycle 116 | 5e75875e | pytest mirrors bureau-h2h-og-snapshot.ts.
 
 

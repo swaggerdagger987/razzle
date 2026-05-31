@@ -286,6 +286,25 @@ function extractWeeklyHeatmapRows(
   return [...rows].sort((a, b) => b.stat - a.stat).slice(0, 6);
 }
 
+/** Game log OG — top weeks by PPR (matches GamelogRenderer ogSnapshotRows). */
+function extractGamelogWeekRows(obj: Record<string, unknown>): OgRow[] {
+  const weeks = obj.weeks;
+  if (!Array.isArray(weeks) || weeks.length === 0) return [];
+  const position = String(obj.position ?? "");
+  const team = String(obj.team ?? "");
+  return [...(weeks as Record<string, unknown>[])]
+    .map((w) => ({
+      name: `Wk ${Number(w.week ?? 0)}`,
+      position,
+      team,
+      stat: Number(w.fpts ?? 0),
+      statLabel: "PPR",
+    }))
+    .filter((r) => r.stat > 0)
+    .sort((a, b) => b.stat - a.stat)
+    .slice(0, 6);
+}
+
 /** Prospects big board — RPS sort (matches ProspectsRenderer). */
 function extractProspectsRows(
   prospects: Record<string, unknown>[],
@@ -341,6 +360,11 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
       positionFilter,
     );
     if (prospectRows.length > 0) return prospectRows;
+  }
+
+  if (slug === "gamelog" && Array.isArray(obj.weeks)) {
+    const gamelogRows = extractGamelogWeekRows(obj);
+    if (gamelogRows.length > 0) return gamelogRows;
   }
 
   let candidates: Record<string, unknown>[] = [];

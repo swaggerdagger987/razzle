@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab gamelog OG week tape (factory cycle 1)
+- **Angle:** Peak-week PPR on the share card (`Wk 14 · 28.4 PPR`) matches boom/bust threads — not a generic six-player leaderboard.
+- **Trust:** T5/T6 — live `weeks[]` extract mirrors in-panel export; snapshot path unchanged.
+
 ### 2026-05-31 — Lab trade values export (cycle 95)
 - **Angle:** Formula-ranked trade value card — rank + composite name on each row matches what Bones users sort before screenshotting.
 - **Trust:** T5/T6 — top 6 from visible sort; dynasty rank when no formula.
