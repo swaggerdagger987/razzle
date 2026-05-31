@@ -14,8 +14,8 @@
     {
       "id": "bureau-h2h-og-route-lib-decode",
       "title": "OG head-to-head route uses shared lib decode only",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "cd7f1b72"
     },
     {
       "id": "bureau-h2h-snapshot-roundtrip-test",
