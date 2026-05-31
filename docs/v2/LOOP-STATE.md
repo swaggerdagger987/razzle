@@ -1,10 +1,12 @@
-cycle: 91
+cycle: 92
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: League
 focus_layer: L5
-next_slice: league-bureau-h2h-export-or-next-parity
-last_keep_cycle: 91
-last_commit: f60168e1
+next_slice: league-roster-depth-share-og
+last_keep_cycle: 92
+last_commit: da33eafd
+league_l5_build_roster_share_epic: active
+league_l5_build_profiles_share_og: complete
 lab_l5_og_filtered_panel_epic: complete
 lab_l5_og_prospects_rps_position: complete
 lab_l5_og_efficiency_position_filter: complete

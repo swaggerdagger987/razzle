@@ -1,27 +1,26 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-weekly-og-snapshot-verify",
-  "big_problem": "Position-filtered Lab panels export OG cards with wrong stat labels or unfiltered rows — screenshots break trust (DEPTH Lab L5).",
-  "epic": "Lab L5 — OG snapshot fidelity on filtered panels",
-  "slice_title": "Weekly heatmap OG snapshot row parity audit",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "atom_id": "league-build-profiles-share-og",
+  "big_problem": "Newly unhidden Bureau tabs lack share/export cards — league construction intel doesn't travel to Reddit (DEPTH League L5).",
+  "epic": "League L5 — Bureau Build/Roster share-export parity",
+  "slice_title": "Build Profiles copy link + OG export card",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "acceptance_ref": "FACTORY-DOD Gate C2/C3",
-  "trust_pillars": ["T1", "T5", "T6"],
+  "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx",
-    "docs/v2/evidence/2026-05-31-lab-weekly-og-snapshot-verify.md"
+    "apps/web/components/league/BureauBuildProfilesShareBar.tsx",
+    "apps/web/app/og/build-profiles/route.tsx",
+    "apps/web/components/league/BureauBuildProfiles.tsx"
   ],
   "max_files": 3,
-  "max_lines": 40,
+  "max_lines": 280,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-weekly-rb.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/weekly?position=RB&download=1'",
-    "curl -s -o /tmp/og-weekly-snap.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/weekly?position=WR&download=1&snapshot=eyJuIjoiQW1vbi1SYSBTdC4gQnJvd24iLCJwIjoiV1IiLCJ0IjoiREVUIiwicyI6MTguNCwic2wiOiJQUEcifSx7Im4iOiJUZWVrIEhpbGwiLCJwIjoiV1IiLCJ0IjoiTUlBIiwicyI6MTcuMiwic2wiOiJQUEcifV0'"
+    "curl -s -o /tmp/og-build-profiles.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/build-profiles?league=demo&download=1'"
   ],
-  "out_of_scope": ["New panels", "API schema", "OG layout redesign"],
+  "out_of_scope": ["Roster Depth OG", "API changes", "waiver-tendencies unhide"],
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",

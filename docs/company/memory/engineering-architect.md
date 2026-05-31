@@ -37,3 +37,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauBuildProfiles | 2ee04975 | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
 2026-05-31 | Prospects RPS+position export | 17a40c65 | keep | statLabel RPS; position on LabOgExportLink
 2026-05-31 | Efficiency position on LabOgExportLink | b2d304e7 | keep | 1-line; OG route already filters by position param
+2026-05-31 | /og/build-profiles | da33eafd | keep | ShareBar + OG route; mirrors power-rankings; 3 files ≤280 lines
