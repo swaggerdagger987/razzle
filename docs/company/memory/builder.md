@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | lab-og-slug-sample-sticker | da33eafd | demoStickerLabel on OG demo rows; curl ≥51KB.
+2026-05-31 | lab-og-slug-sample-sticker | 7edea762 | demoStickerLabel on OG demo rows; curl ≥51KB.
 2026-05-31 | lab-sidebar-search-agent-labels | e75ec714 | keep | showOwnerInTitle prefixes search hits with agent name.
 
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | ExploreShareButton season/team → OG screener + band deep link.
