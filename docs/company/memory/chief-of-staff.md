@@ -1,6 +1,8 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 121 pro gate panel pitches | da33eafd | L4 epic atom 2/3; factory open.
+2026-05-31 | Factory cycle 128 Explore Razzle loading | 87c03e1b | Deduped L4 perks on base; Explore L2 voice epic atom 1/3.
+
+2026-05-31 | Factory cycle 118 perks copy | f56fdbd8 | keep | workday open cycle 1; L4 epic complete atom 3/3.
 
 2026-05-31 | Factory cycle 120 pro-gate loading copy | da33eafd | Deduped OG on base #753; L4 epic atom 1/3.
 

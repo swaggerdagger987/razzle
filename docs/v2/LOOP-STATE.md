@@ -1,11 +1,9 @@
-cycle: 118
+cycle: 128
 last_board_cycle: 54
-focus_pillar: Lab
-focus_layer: L4
-next_slice: (Strategist — L4 epic complete; pick from PARITY/NEXT)
-last_keep_cycle: 118
-last_commit: da33eafd
+focus_pillar: Explore
+focus_layer: L2
+next_slice: explore-feed-loading-voice
+last_keep_cycle: 128
+last_commit: 87c03e1b
+explore_l2_voice_epic: active
 lab_l4_pro_gate_epic: complete
-lab_l5_og_live_rows_epic: complete
-lab_l5_og_watermark_epic: complete
-lab_l5_launch10_og_extract_epic: complete

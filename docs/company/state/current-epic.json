@@ -1,18 +1,38 @@
 {
-  "big_problem": "Lab Pro gates still feel like paywall errors — generic blur rows and no path back to the free screener break the conversion funnel.",
-  "epic_title": "Lab L4 — Pro gates feel like upgrade, not error",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
+  "big_problem": "Explore screener loading copy is generic on NFL — college gets Hawkeye but the default universe still says pulling film without Razzle's voice.",
+  "epic_title": "Explore L2 — agent voice on screener loading",
+  "parity_ref": "Explore L2 — college toggle + combine/prospect bridge",
+  "depth_ref": "Explore L2",
   "atoms": [
-    {"id": "lab-pro-gate-hallway-teasers", "title": "Pro gate hallway screener link + teasers for comps/tiers/vorp/stocks", "status": "done", "merge_commit": "675044ea"},
-    {"id": "lab-pro-gate-launch10-teasers", "title": "Launch-10 pro panel teasers audit — fill any slug gaps in generic renderer", "status": "done", "merge_commit": "b0405d43"},
-    {"id": "lab-pro-gate-perks-copy", "title": "Pro gate perks list matches PARITY launch-10 + Bureau-7 names", "status": "done", "merge_commit": "73fdbf9c"}
+    {
+      "id": "explore-loading-razzle-nfl",
+      "title": "NFL screener count uses Razzle loadingCopyForAgent",
+      "status": "done",
+      "merge_commit": "87c03e1b"
+    },
+    {
+      "id": "explore-feed-loading-voice",
+      "title": "Mobile ExploreFeed empty/loading uses agent voice",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "explore-college-og-sticker",
+      "title": "College OG export shows COLLEGE badge on share card",
+      "status": "pending",
+      "merge_commit": null
+    }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T09:15:00Z",
-  "updated_at": "2026-05-31T12:40:00Z",
+  "next_atom_id": "explore-feed-loading-voice",
+  "epic_status": "active",
+  "created_at": "2026-05-31T08:45:00Z",
+  "updated_at": "2026-05-31T08:50:00Z",
   "completed_epics": [
-    {"id": "lab-l4-pro-gate-polish", "status": "complete", "last_atom": "lab-pro-gate-perks-copy", "merge_commit": "73fdbf9c"}
+    {
+      "id": "lab-l4-pro-gate-polish",
+      "status": "complete",
+      "last_atom": "lab-pro-gate-perks-copy",
+      "merge_commit": "73fdbf9c"
+    }
   ]
 }
