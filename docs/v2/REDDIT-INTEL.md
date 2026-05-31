@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab pro gate pitches (cycle 122)
+- **Angle:** DynastyFF upgrade copy wins when it names the screenshot moment ("before the thread", "market lag") — not generic unlock blurbs.
+- **Trust:** T2/T6 — rankings/tradevalues/breakouts pitches on free-tier gates.
+
 ### 2026-05-31 — Lab trade values export (cycle 95)
 - **Angle:** Formula-ranked trade value card — rank + composite name on each row matches what Bones users sort before screenshotting.
 - **Trust:** T5/T6 — top 6 from visible sort; dynasty rank when no formula.

@@ -65,3 +65,11 @@ def test_generic_pro_gate_slugs_have_custom_teasers():
     source = _teaser_source()
     missing = [s for s in GENERIC_PRO_GATE_SLUGS if not _slug_has_custom_teaser(source, s)]
     assert not missing, f"generic pro gate slugs missing teaser: {missing}"
+
+
+def test_launch_panel_pitches_are_screenshot_native():
+    """Lab L4 atom — sharpened copy on rankings, tradevalues, breakouts."""
+    source = _teaser_source()
+    assert "before the thread does" in source
+    assert "before your league posts the screenshot" in source
+    assert "beat the waiver wire" in source

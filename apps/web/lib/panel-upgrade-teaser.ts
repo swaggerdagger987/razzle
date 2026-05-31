@@ -114,9 +114,9 @@ const ROWS_BY_SLUG: Record<string, TeaserRow[]> = {
 };
 
 const PITCH_BY_SLUG: Record<string, string> = {
-  rankings: "full dynasty tiers and trade-value curves — not just the free screener",
-  tradevalues: "value curves and market inefficiencies your league mates can't see",
-  breakouts: "next-wave producers before the waiver wire notices",
+  rankings: "dynasty tiers with live trade-value curves — see who's movable before the thread does",
+  tradevalues: "value curves plus market-lag buys — price the trade before your league posts the screenshot",
+  breakouts: "next-wave usage spikes ranked — beat the waiver wire to the Reddit thread",
   efficiency: "points-per-opportunity ranks that separate luck from role",
   aging: "peak-age curves so you sell before the cliff, not after",
   buysell: "buy-low and sell-high mismatches ranked by market lag",

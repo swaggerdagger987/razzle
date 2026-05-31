@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | lab-pro-gate-panel-pitches | da33eafd | PITCH_BY_SLUG sharpened for launch-10 pro trio; 2 files.
+
 2026-05-31 | lab-pro-gate-loading-copy | da33eafd | PanelAgentLoading wired into ProUpgradeGate; 1 file.
 
 2026-05-31 | lab-sidebar-staff-picks-by-agent | 4e8b0e8e | keep | staffByAgent agent headers.
