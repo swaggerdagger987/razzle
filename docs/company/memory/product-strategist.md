@@ -29,4 +29,4 @@ new evidence.
 2026-05-31 | Bureau H2H export epic atom 1 | 044ee1e8 | SHIP | keep | PARITY Explore L5 H2H; Lab epic atoms deduped on base
 2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row
 2026-05-31 | league-power-rankings-og | epic atom 2/4 Bureau OG travel | da33eafd | SHIP
-2026-05-31 | league-roster-depth-tab | epic atom 3/4 closes hallway lie | da33eafd | SHIP
+2026-05-31 | league-roster-depth-tab | epic atom 3/4 closes hallway lie | d5fa72a7 | SHIP

@@ -30,4 +30,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
 2026-05-31 | league-power-rankings-og | no new intel | a796f350 | skip
-2026-05-31 | league-roster-depth-tab | no new intel | da33eafd | skip
+2026-05-31 | league-roster-depth-tab | no new intel | d5fa72a7 | skip
