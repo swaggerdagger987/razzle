@@ -1,10 +1,10 @@
-cycle: 61
+cycle: 66
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: league-og-manager-profiles (atom 2/4)
-last_keep_cycle: 61
-last_commit: 0d39635e
+next_slice: lab-og-export-buysell-dashboard (atom 2/3)
+last_keep_cycle: 66
+last_commit: da33eafd
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
@@ -13,4 +13,6 @@ lab_l5_og_launch10_demos: complete
 lab_l5_og_param_defaults: complete
 lab_l5_og_epic: complete
 league_l5_og_pressure_map: complete
-league_l5_bureau_og_epic: in_progress
+league_l5_bureau_og_epic: complete
+lab_l5_og_export_link_epic: in_progress
+lab_l5_og_export_gamelog_efficiency_aging: complete
