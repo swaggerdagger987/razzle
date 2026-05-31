@@ -24,3 +24,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory open cycle 1 self-scout OG epic complete | e732f973 | keep | workday open; Bureau OG atom 4/4 SHIP; curl 66997B; epic complete
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Workday cycle 1 atom 2 merged PR50 | 497d1df5 | keep | buy-sell dashboard LabOgExportLink; ON_BASE; tick→atom3 player-scoped
+2026-05-31 | Lab OG export player-scoped atom 3 | da33eafd | keep | player_id on gamelog+dynasty-comps export; curl 58408B/65961B; epic complete

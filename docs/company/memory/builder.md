@@ -25,3 +25,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Self-Scout OG + export | e732f973 | keep | /og/self-scout 4 position grades; BureauSelfScout export; curl 66997B
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | LabOgExportLink buy-sell dashboard | 497d1df5 | keep | BuySellRenderer DynastyDashboardRenderer footers; PR50 merged
+2026-05-31 | Lab OG export player-scoped atom 3 | da33eafd | keep | player_id on gamelog+dynasty-comps export; curl 58408B/65961B; epic complete
