@@ -103,4 +103,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 145	fb4483341	depth+voice+simplicity	keep	Lab	L5 buy/sell OG formula_score + Buy Sell lanes	trust=T5,T6; extractBuySellRows; pytest 3; curl buysell 55234B; formula epic 2/3
 143	1bc1f1e2b	depth+voice+simplicity	keep	Lab	L5 Strengths OG live grades + LIVE sticker	trust=T5,T6; curl 60203B; pytest 1
 146	252e421fa	depth+voice+simplicity	keep	Room	L5 Briefing OG preview copy link	trust=T5,T6; BriefingShareBar; pytest 7; curl 72168B; GTM share row
-147	f6e0985f3	depth+voice+simplicity	keep	Lab	L5 prospects+tradevalues FROM PANEL Gate C	trust=T5,T6; SNAPSHOT_FROM_PANEL_SLUGS; pytest 2; curl prospects 54559B tradevalues 54173B; formula epic 3/3 complete
+147	bab13fe0a	depth+voice+simplicity	keep	Lab	L5 prospects+tradevalues FROM PANEL Gate C	trust=T5,T6; SNAPSHOT_FROM_PANEL_SLUGS; pytest 2; curl prospects 54559B tradevalues 54173B; formula epic 3/3 complete
