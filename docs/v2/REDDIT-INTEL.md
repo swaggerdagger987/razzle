@@ -8,6 +8,7 @@
 
 ### 2026-05-31 — Lab rankings share bar (cycle 150)
 - **Angle:** Dynasty rankings GTM row — copy panel link + preview before export matches Explore/Bureau; formula snapshot rows ride on the PNG.
+- **Trust:** T5/T6 — Launch-10 Staff Picks now share copy/preview/export via `LabOgExportLink` → `LabPanelShareBar` wrapper (efficiency/tradevalues/dashboard curl ≥59KB).
 - **Trust:** T5/T6 — `LabPanelShareBar` encodes visible top-6; curl demo 66806B.
 
 ### 2026-05-31 — Lab efficiency + aging formula OG (cycle 149)

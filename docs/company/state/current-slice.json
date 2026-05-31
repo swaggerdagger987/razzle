@@ -1,28 +1,29 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-panel-share-bar-weekly-gamelog",
+  "atom_id": "lab-panel-share-bar-launch10-rest",
   "big_problem": "Lab panel exports hide behind a single underline link — GTM threads need Explore/Bureau-style copy, preview, and export so screenshots match the rows on screen.",
   "epic": "Lab L5 — GTM panel share bar parity",
-  "slice_title": "Weekly + Gamelog — LabPanelShareBar copy/preview/export + player-scoped snapshot",
+  "slice_title": "Launch-10 remainder — LabOgExportLink delegates to LabPanelShareBar",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with snapshot or live demo",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with snapshot or force_demo",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx",
-    "apps/web/components/lab/renderers/GamelogRenderer.tsx",
-    "apps/api/tests/test_lab_panel_share_bar.py"
+    "apps/web/components/lab/LabOgExportLink.tsx",
+    "apps/api/tests/test_lab_panel_share_bar.py",
+    "docs/v2/evidence/2026-05-31-lab-panel-share-bar-launch10-rest.md"
   ],
   "max_files": 3,
-  "max_lines": 90,
+  "max_lines": 80,
   "acceptance_commands": [
     "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_panel_share_bar.py -q --noconftest",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/weekly-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/weekly?download=1&force_demo=1&position=WR'",
-    "curl -s -o /tmp/gamelog-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1&force_demo=1'"
+    "curl -s -o /tmp/eff-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/efficiency?download=1&force_demo=1&position=WR'",
+    "curl -s -o /tmp/tv-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/tradevalues?download=1&force_demo=1&position=WR'",
+    "curl -s -o /tmp/dash-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/dashboard?download=1&force_demo=1'"
   ],
   "out_of_scope": [
-    "Launch-10 remainder panels",
+    "Per-renderer footer edits (delegation via LabOgExportLink)",
     "NORTH_STAR/DESIGN/DECISIONS edits",
     "LabPanelShareBar.tsx changes"
   ],

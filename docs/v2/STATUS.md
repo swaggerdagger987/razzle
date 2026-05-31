@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 150 — Lab Dynasty Rankings GTM share bar)
+**Last updated:** 2026-05-31 (factory cycle 153 — Lab Launch-10 GTM share bar complete)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,11 +15,11 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 150 |
+| Cycle | 153 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | lab-panel-share-bar-breakouts-buysell |
+| Next slice | (strategist picks from PARITY/NEXT — share bar epic done) |
 | Last commit | (pending publish) |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.

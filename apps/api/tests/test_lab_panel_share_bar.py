@@ -55,3 +55,23 @@ def test_gamelog_uses_share_bar():
     assert "copy gamelog link" in renderer
     assert "snapshotRows={ogSnapshotRows}" in renderer
     assert "<LabOgExportLink" not in renderer
+
+
+def test_lab_og_export_link_delegates_to_share_bar():
+    source = _read("apps/web/components/lab/LabOgExportLink.tsx")
+    assert "LabPanelShareBar" in source
+    assert "copy efficiency link" in source
+    assert 'className="text-sm text-ink-medium underline"' not in source
+
+
+def test_launch10_remainder_renderers_still_use_export_link():
+    """Footers keep LabOgExportLink import; wrapper renders GTM share bar."""
+    for path in (
+        "apps/web/components/lab/renderers/EfficiencyRenderer.tsx",
+        "apps/web/components/lab/renderers/AgingCurvesRenderer.tsx",
+        "apps/web/components/lab/renderers/ProspectsRenderer.tsx",
+        "apps/web/components/lab/renderers/TradeValuesRenderer.tsx",
+        "apps/web/components/lab/renderers/DynastyDashboardRenderer.tsx",
+    ):
+        renderer = _read(path)
+        assert "LabOgExportLink" in renderer
