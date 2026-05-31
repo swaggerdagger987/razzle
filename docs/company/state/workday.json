@@ -1,8 +1,8 @@
 {
   "status": "open",
-  "started_at": "2026-05-31T05:52:21Z",
+  "started_at": "2026-05-31T06:15:00Z",
   "closed_at": null,
-  "cycle_count_today": 1,
+  "cycle_count_today": 0,
   "last_trigger": "good morning team",
-  "last_cycle_commit": "1c007820"
+  "last_cycle_commit": null
 }
