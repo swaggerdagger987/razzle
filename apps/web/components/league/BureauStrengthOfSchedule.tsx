@@ -4,6 +4,8 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import { getSleeperUser } from "@/lib/sleeper";
+import { BureauStrengthOfScheduleShareBar } from "./BureauStrengthOfScheduleShareBar";
 
 interface Props {
   data: Record<string, unknown>;
@@ -12,6 +14,7 @@ interface Props {
 
 export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
   const octo = AGENT_BY_ID.octo;
+  const user = getSleeperUser();
   const yourRank = data.your_rank != null ? Number(data.your_rank) : null;
   const yourPpg = data.your_ppg != null ? Number(data.your_ppg) : null;
   const oppAvg = data.opponent_avg_ppg != null ? Number(data.opponent_avg_ppg) : null;
@@ -104,6 +107,10 @@ export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
           </Link>
         </section>
       )}
+
+      {user?.user_id ? (
+        <BureauStrengthOfScheduleShareBar leagueId={leagueId} userId={user.user_id} />
+      ) : null}
 
       <footer className="flex flex-wrap gap-4 text-sm">
         <Link href={`/league/${leagueId}/power-rankings` as Route} className="text-orange underline">
