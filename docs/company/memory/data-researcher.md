@@ -5,6 +5,7 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Data Researcher
 
+2026-05-31 | explore-og-margin-note-lead | — | PASS | No new Reddit intel; Explore OG margin slice only.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | PASS | No new Reddit intel; hallway snapshot pid slice.
 2026-05-31 | league-trade-finder-og-room-hallway | — | PASS | No new Reddit intel; Bureau export hallway only.
 2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | PASS | No new intel; pytest contract only.

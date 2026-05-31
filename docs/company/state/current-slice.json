@@ -1,32 +1,36 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Weekly OG heatmap defaults to WR but toLab watermark omitted position=WR.",
-  "epic": "Lab L5 — OG hallway position defaults",
-  "slice_title": "weekly OG watermark includes default WR position in toLab",
-  "atom_id": "lab-og-tolab-weekly-position",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "HALLWAY T6 + FACTORY-DOD Gate C",
+  "big_problem": "Explore OG exports miss staff margin notes — screenshots look like dead spreadsheets.",
+  "epic": "Explore L5 — OG screener agent margin notes (atom 1/4)",
+  "slice_title": "Lead-row Hawkeye/Dolphin margin note on Explore OG card",
+  "atom_id": "explore-og-margin-note-lead",
+  "parity_ref": "Explore L5 — agent margin notes",
+  "depth_ref": "Explore L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — explore OG PNG ≥40KB with margin note on #1 row",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py",
-    "docs/v2/evidence/2026-05-31-lab-og-tolab-weekly-position.md"
+    "apps/web/app/og/explore/route.tsx",
+    "apps/web/lib/margin-notes.ts",
+    "apps/api/tests/test_explore_og_margin_note_lead.py"
   ],
   "max_files": 3,
-  "max_lines": 80,
+  "max_lines": 120,
   "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "JWT_SECRET=test-secret .venv-v2/bin/pytest apps/api/tests/test_explore_og_margin_note_lead.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["New panels", "NORTH_STAR/DESIGN/DECISIONS"],
+  "out_of_scope": [
+    "Margin notes on rows 2–6",
+    "New API endpoints",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
+  "content_commit": "0fc4932b7",
+  "reality": "PASS",
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  },
-  "status": "shipped",
-  "content_commit": null
+  }
 }
