@@ -102,6 +102,7 @@ const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set([
 const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set([
   "gamelog",
   "dynasty-comps",
+  "strengths",
   "percentiles",
   "career",
 ]);
