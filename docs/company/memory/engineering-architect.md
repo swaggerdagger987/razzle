@@ -33,4 +33,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
 2026-05-31 | WeeklyHeatmap ogSnapshotRows | 2f2604c5 | keep | 1 file ≤25 lines; encodeOgSnapshot via LabOgExportLink
-2026-05-31 | ProspectsRenderer ogSnapshotRows | da33eafd | keep | 1 file; school as team; RPS sort top-6
+2026-05-31 | ProspectsRenderer ogSnapshotRows | a133199a | keep | 1 file; school as team; RPS sort top-6

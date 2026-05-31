@@ -33,4 +33,4 @@ new evidence.
 2026-05-31 | Bureau H2H export epic atom 1 | 044ee1e8 | SHIP | keep | PARITY Explore L5 H2H; Lab epic atoms deduped on base
 2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row
 2026-05-31 | Lab OG snapshot epic atom 1 | 2f2604c5 | SHIP | keep | weekly heatmap rows match OG card for Hawkeye screenshots
-2026-05-31 | Lab OG snapshot epic atom 2 | da33eafd | SHIP | keep | prospects RPS board matches OG for dynasty screenshot shares
+2026-05-31 | Lab OG snapshot epic atom 2 | a133199a | SHIP | keep | prospects RPS board matches OG for dynasty screenshot shares
