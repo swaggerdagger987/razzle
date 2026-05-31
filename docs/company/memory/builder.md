@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | explore-og-demo-fallback-rows | b6a233e6 | Explore OG demo rows; curl preview=demo 60867B.
+
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | keep | launch10PerkLabels + bureau7PerkLabels in ProUpgradeGate; pytest 6.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | merged base sticker + fetchOgLiveRows + prospects items.
