@@ -8,8 +8,8 @@
     {
       "id": "explore-og-watermark-band",
       "title": "Screener OG card shows always-on terracotta watermark band",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "3e96ab7f"
     },
     {
       "id": "explore-og-preview-watermark",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "explore-og-watermark-band",
+  "next_atom_id": "explore-og-preview-watermark",
   "created_at": "2026-05-31T12:00:00Z",
   "updated_at": "2026-05-31T12:00:00Z"
 }
