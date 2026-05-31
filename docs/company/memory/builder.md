@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | lab-og-efficiency-aging-live-sort | route.tsx PANEL_OG_STAT_KEY | da33eafd | SHIP | keep | efficiency_score peak_age labels
+2026-05-31 | lab-og-efficiency-aging-live-sort | route.tsx PANEL_OG_STAT_KEY | 2bba7622 | SHIP | keep | efficiency_score peak_age labels
 
 2026-05-31 | lab-og-position-gamelog | GamelogRenderer position prop | 7e109165 | SHIP | keep | 1 line on LabOgExportLink
 

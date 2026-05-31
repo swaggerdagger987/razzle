@@ -1,6 +1,6 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 111 efficiency+aging OG sort | da33eafd | Workday cycle 1; live-sort epic atom 2/3; PANEL_OG_STAT_KEY peak_age + efficiency_score.
+2026-05-31 | Factory cycle 111 efficiency+aging OG sort | 2bba7622 | Workday cycle 1; live-sort epic atom 2/3; PANEL_OG_STAT_KEY peak_age + efficiency_score.
 
 2026-05-31 | Factory cycle 110 gamelog position | 7e109165 | Workday open cycle 1; tail position filter on gamelog; live-sort epic atom 1 deduped on base.
 
