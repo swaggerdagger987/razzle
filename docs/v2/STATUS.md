@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L4 |
 | Next slice | (PARITY / NEXT — L4 pro-gate epic complete) |
-| Last commit | `f56fdbd8` |
+| Last commit | `2f931cff` |
 
 Recent completions: Lab L5 OG SAMPLE vs LIVE contrast; Lab L4 Pro gate perks.
 
