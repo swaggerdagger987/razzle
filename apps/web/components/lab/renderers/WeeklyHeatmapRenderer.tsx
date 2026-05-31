@@ -8,7 +8,8 @@ import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
-import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
+import { LabPanelShareBar } from "../LabPanelShareBar";
+import type { OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 
 const POSITIONS = ["QB", "RB", "WR", "TE"] as const;
@@ -144,12 +145,12 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
         <div className="p-6">
           <p className="text-ink-medium">{agent.emptyCopy}</p>
           <footer className="mt-4 flex flex-wrap items-center gap-4">
-            <LabOgExportLink
+            <LabPanelShareBar
               slug="weekly"
               downloadName="razzle-weekly-heatmap.png"
               position={position}
               snapshotRows={WEEKLY_SAMPLE_OG_ROWS}
-              label="export sample card"
+              copyLabel="copy weekly link"
             />
           </footer>
         </div>
@@ -226,11 +227,12 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
           >
             Ask Hawkeye about {hotPlayer.p.name} →
           </Link>
-          <LabOgExportLink
+          <LabPanelShareBar
             slug="weekly"
             downloadName="razzle-weekly-heatmap.png"
             position={position}
             snapshotRows={ogSnapshotRows}
+            copyLabel="copy weekly link"
           />
         </footer>
       )}

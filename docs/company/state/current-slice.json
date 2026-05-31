@@ -1,36 +1,32 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-career-compare-live",
-  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
-  "epic": "Lab L5 — pro profile OG live parity (atom 3/4)",
-  "slice_title": "Career compare OG multi-player overlay rows",
-  "parity_ref": "Lab panel OG data rows",
+  "big_problem": "Lab panel exports hide behind a single underline link — GTM threads need copy, preview, and export like Explore/Bureau.",
+  "epic": "Lab L5 — GTM panel share bar parity (atom 3/4)",
+  "slice_title": "Weekly + Gamelog LabPanelShareBar",
+  "atom_id": "lab-panel-share-bar-weekly-gamelog",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
+  "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_career_compare_live.py"
+    "apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx",
+    "apps/web/components/lab/renderers/GamelogRenderer.tsx",
+    "apps/api/tests/test_lab_panel_share_bar.py",
+    "docs/v2/evidence/2026-05-31-lab-panel-share-bar-weekly-gamelog.md"
   ],
-  "max_files": 2,
-  "max_lines": 180,
+  "max_files": 4,
+  "max_lines": 120,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_lab_og_career_compare_live.py -q --noconftest",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_panel_share_bar.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": [
-    "percentiles toLab atom",
-    "NORTH_STAR/DESIGN/DECISIONS",
-    "new npm deps"
-  ],
+  "out_of_scope": ["LabPanelShareBar.tsx API changes", "NORTH_STAR/DESIGN/DECISIONS"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
+    "verdict": "SHIP"
   },
-  "content_commit": "9d19930cf",
-  "reality": "PASS",
-  "status": "done"
+  "status": "in_progress"
 }
