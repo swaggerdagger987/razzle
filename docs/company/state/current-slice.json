@@ -16,7 +16,7 @@
   "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test pytest apps/api/tests -q",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
     "curl -s -o /tmp/og-gamelog-default.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1&player_id=00-0036900'",
     "curl -s -o /tmp/og-gamelog-noid.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1'"
   ],
@@ -31,5 +31,6 @@
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  }
+  },
+  "status": "shipped"
 }
