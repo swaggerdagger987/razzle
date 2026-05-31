@@ -18,7 +18,7 @@
 
 ```bash
 npm run build --workspace=apps/web   # exit 0
-JWT_SECRET=test python3 -m pytest apps/api/tests -q   # 52 passed; 4 failed (terminal.db snapshot/intel — env)
+JWT_SECRET=test python3 -m pytest apps/api/tests -q   # 51 passed, 5 skipped
 ```
 
 ## Verdict
