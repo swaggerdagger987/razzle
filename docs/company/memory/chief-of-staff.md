@@ -36,4 +36,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory open waiver epic atom 1 | 920304a2 | keep | workday cycle 1; Hawkeye Waiver Tendencies tab unhidden; schedule tab next
 2026-05-31 | Factory reopen schedule atom 2/2 | 12b51b1e | keep | Bureau hide-list cleared; epic complete; NEXT Lab OG lead
 2026-05-31 | Factory open Lab L4 agent nav | 51b37d6f | keep | workday cycle 1; sidebar agent sections; epic atom 1/3
-2026-05-31 | Factory reopen Lab grid badges | da33eafd | keep | workday cycle 1 atom 2/3; build+pytest PASS; filter chips next
+2026-05-31 | Factory reopen Lab grid badges | 9f0802fe | keep | workday cycle 1 atom 2/3; build+pytest PASS; filter chips next

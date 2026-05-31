@@ -38,4 +38,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauWaiverTendencies | 920304a2 | keep | Hawkeye archetype cards; waiver-tendencies unhidden; mirrors roster-depth pattern
 2026-05-31 | BureauStrengthOfSchedule | 12b51b1e | keep | single-user SOS API → bars; empty HIDDEN set; 3-file contract
 2026-05-31 | LabSidebar agent sections | 51b37d6f | keep | staffByAgent via agentForPanel; 1 file; reuses lab-sidebar-agent CSS
-2026-05-31 | LabPanelGrid agent badges | da33eafd | keep | 2 files; mirrors SidebarItem img pattern; globals .lab-grid-agent
+2026-05-31 | LabPanelGrid agent badges | 9f0802fe | keep | 2 files; mirrors SidebarItem img pattern; globals .lab-grid-agent

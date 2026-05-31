@@ -31,7 +31,7 @@ new evidence.
 2026-05-31 | Bureau H2H export epic atom 1 | 044ee1e8 | SHIP | keep | PARITY Explore L5 H2H; Lab epic atoms deduped on base
 2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row
 2026-05-31 | Bureau H2H live API atom 2 | 59a54b72 | SHIP | keep | live OG when params; snapshot on export
-2026-05-31 | Trade Network share atom 2/4 | da33eafd | SHIP | keep | partnership graphs travel in league group chats
+2026-05-31 | Trade Network share atom 2/4 | 9f0802fe | SHIP | keep | partnership graphs travel in league group chats
 2026-05-31 | Bureau power rankings OG atom 2 | 9714bfa6 | SHIP | keep | Octo tab now has export card for trade DMs
 2026-05-31 | Lab prospects tradevalues snapshot | 69e4c732 | SHIP | keep | NEXT.md lead; closes launch-10 snapshot gap on prospects+tradevalues
 2026-05-31 | league-waiver-tendencies-tab atom 1/2 | SHIP | keep | Hawkeye archetype board; Sunday waiver screenshot fuel; schedule tab next
