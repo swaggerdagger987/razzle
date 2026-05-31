@@ -116,6 +116,9 @@ function panelBlurbSuffix(
     return `${pos} · from your panel`;
   }
   if (showingDemoRows) {
+    if (LAUNCH_10_OG_SLUGS.has(slug)) {
+      return `${pos} · SAMPLE rows — not live nflverse`;
+    }
     return `${pos} · sample preview`;
   }
   if (showingLiveData && LAUNCH_10_OG_SLUGS.has(slug)) {
@@ -599,6 +602,7 @@ export async function GET(
   const { panel: slug } = await params;
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
+  const forceDemo = url.searchParams.get("force_demo") === "1";
   const query = url.searchParams.get("q") ?? "";
   const positionFilter = url.searchParams.get("position") ?? "";
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
@@ -636,7 +640,7 @@ export async function GET(
   const snapshotHasRows =
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
   let liveRows: OgRow[] = [];
-  if (apiPath && !snapshotHasRows) {
+  if (apiPath && !snapshotHasRows && !forceDemo) {
     liveRows = await fetchLiveOgRows(req, slug, apiParams);
     if (liveRows.length === 0) {
       liveRows = await fetchPanelData(req, slug, apiPath, panel.api.method, apiParams);
@@ -714,6 +718,27 @@ export async function GET(
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 16, maxWidth: 1000 }}>
           {`${panel.blurb}${panelBlurbSuffix(slug, positionFilter, isSnapshot, showingDemoRows, showingLiveData)}`}
         </div>
+
+        {showingDemoRows && LAUNCH_10_OG_SLUGS.has(slug) ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+            }}
+          >
+            SAMPLE · not live data
+          </div>
+        ) : null}
 
         {showingLiveData && LAUNCH_10_OG_SLUGS.has(slug) ? (
           <div
