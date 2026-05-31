@@ -1,35 +1,53 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 handling across launch-10 renderers drifts from teaser/perks polish.",
-  "epic_title": "Lab L4 — shared pro-gate error surface",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
+  "big_problem": "Launch-10 OG cards still read generic on Hawkeye panels — Reddit cannot tell breakouts from dynasty ranks at a glance.",
+  "epic_title": "Lab L5 — Launch-10 OG panel-specific LIVE labels",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-l4-pro-gate-error-surface",
-      "title": "ProGateFromPanelError — breakouts renderer + perks pytest guard",
+      "id": "lab-og-breakouts-live-sticker",
+      "title": "Breakouts OG LIVE sticker + blurb (RBS breakout board)",
       "status": "done",
+      "merge_commit": "ad24a219"
+    },
+    {
+      "id": "lab-og-gamelog-live-sticker",
+      "title": "Gamelog OG LIVE sticker + blurb (weeks PPR strip)",
+      "status": "in_progress",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-rankings-live-sticker",
+      "title": "Dynasty rankings OG LIVE sticker + blurb (value board)",
+      "status": "done",
+      "merge_commit": "ad24a219"
+    }
+  ],
+  "next_atom_id": "lab-og-gamelog-live-sticker",
+  "created_at": "2026-05-31T08:40:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
+  "completed_epics": [
+    {
+      "id": "lab-l2-sidebar-agent-groups",
+      "status": "complete",
+      "last_atom": "lab-sidebar-search-agent-labels",
+      "merge_commit": "e75ec714"
+    },
+    {
+      "id": "lab-l4-pro-gate-convert",
+      "status": "complete",
+      "last_atom": "lab-pro-gate-perks-copy",
+      "merge_commit": "0c46d46f"
+    },
+    {
+      "id": "lab-l4-pro-gate-error-surface",
+      "status": "complete",
+      "last_atom": "lab-l4-pro-gate-error-surface",
       "merge_commit": "5721ee33"
     },
     {
-      "id": "lab-l4-pro-gate-error-tradevalues",
-      "title": "Wire ProGateFromPanelError on tradevalues + efficiency",
-      "status": "pending",
-      "merge_commit": null
-    },
-    {
-      "id": "lab-l4-pro-gate-error-remaining",
-      "title": "Wire ProGateFromPanelError on remaining launch-10 renderers",
-      "status": "pending",
-      "merge_commit": null
-    }
-  ],
-  "next_atom_id": "lab-l4-pro-gate-error-tradevalues",
-  "created_at": "2026-05-31T09:25:00Z",
-  "updated_at": "2026-05-31T09:30:00Z",
-  "completed_epics": [
-    {
-      "id": "lab-l5-og-live-fetch-merge",
+      "id": "lab-l5-og-live-fetch-sticker",
       "status": "complete",
       "last_atom": "lab-og-gamelog-player-default",
       "merge_commit": "4bc3913e"
