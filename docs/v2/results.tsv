@@ -75,3 +75,4 @@ cycle	commit	score	status	pillar	slice	description
 83	04c19959	depth+voice+simplicity	keep	League	L5 Bureau Manager Profiles copy link export row	trust=T5,T6; copy link + export; curl manager-profiles OG 77194B; behavioral share epic atom 1
 84	8c00227e	depth+voice+simplicity	keep	Lab	L5 Breakouts OG snapshot rows	trust=T5,T6; snapshotRows on LabOgExportLink; curl breakouts snapshot 49199B; build PASS
 86	e06f1820	depth+voice+simplicity	keep	Lab	L5 Weekly heatmap OG snapshot rows	trust=T5,T6; snapshotRows peak-week leaders; curl weekly snapshot 47861B; build PASS
+87	da33eafd	depth+voice+simplicity	keep	Lab	L5 Prospects OG snapshot rows	trust=T5,T6; snapshotRows top-6 RPS; curl prospects snapshot 60628B; build PASS

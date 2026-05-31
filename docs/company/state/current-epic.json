@@ -20,7 +20,7 @@
     {
       "id": "lab-prospects-og-snapshot",
       "title": "Prospects panel passes snapshotRows from visible board",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
