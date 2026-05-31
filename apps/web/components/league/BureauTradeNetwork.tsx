@@ -91,7 +91,15 @@ export function BureauTradeNetwork({ data, leagueId }: Props) {
         </section>
       )}
 
-      <footer className="flex flex-wrap gap-4 text-sm">
+      <footer className="flex flex-wrap items-center gap-4 text-sm">
+        <a
+          href={`/og/trade-network?league=${encodeURIComponent(leagueId)}&download=1`}
+          download="razzle-trade-network.png"
+          className="btn-chunky active text-xs"
+          style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+        >
+          export card
+        </a>
         <Link href={`/league/${leagueId}/manager-profiles` as Route} className="text-orange underline">
           manager profiles →
         </Link>

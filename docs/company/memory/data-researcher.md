@@ -22,3 +22,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | default OG player_id | share links work without query params | keep | Chase anchor matches demo row culture
 2026-05-31 | deadline pressure OG | trade threads share desperation bars | pressure-map atom | keep | cycle 61 briefing
 2026-05-31 | manager archetype OG | PANIC SELLER labels are trade-DM shorthand | manager-profiles atom | keep | cycle 62 briefing
+2026-05-31 | trade partnership OG | collusion bait in trade threads | trade-network atom | keep | cycle 63 briefing

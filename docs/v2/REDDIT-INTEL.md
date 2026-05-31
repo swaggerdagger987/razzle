@@ -267,6 +267,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 1. **Manager archetype labels are trade-DM shorthand** — PANIC SELLER / HOARDER badges travel faster than transaction counts in group chats.
 2. **Bureau OG series compounds** — Pressure Map + Manager Profiles give two screenshot hooks before trade-network atom.
 
+## 2026-05-31 — Cycle 63 (factory reopen cycle 1)
+
+1. **Trade partnership lanes are collusion bait** — "these two trade every week" screenshots spark DM threads; OG card must show partner pairs + trade counts, not a graph stub.
+2. **Bones trade-network OG closes atom 3/4** — Bureau export trilogy (pressure, managers, network) now screenshot-ready for deadline season.
+
 ## 2026-05-31 — Cycle 59
 
 ### r/DynastyFF — panel-specific stat labels on share cards (pattern)
