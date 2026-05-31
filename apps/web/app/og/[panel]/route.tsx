@@ -160,6 +160,11 @@ function launch10DemoBlurbSuffix(slug: string): string {
   if (slug === "rankings") return " · demo dynasty ranks";
   if (slug === "breakouts") return " · demo RBS board";
   if (slug === "tradevalues") return " · demo value curve";
+  if (slug === "gamelog") return " · demo Wk tape";
+  if (slug === "efficiency") return " · demo PPO board";
+  if (slug === "aging") return " · demo aging curve";
+  if (slug === "buysell") return " · demo buy/sell board";
+  if (slug === "dashboard") return " · demo roster grades";
   return " · demo nflverse rows";
 }
 
@@ -169,6 +174,11 @@ function launch10DemoStickerLabel(slug: string): string {
   if (slug === "rankings") return "SAMPLE · dynasty ranks";
   if (slug === "breakouts") return "SAMPLE · RBS board";
   if (slug === "tradevalues") return "SAMPLE · value curve";
+  if (slug === "gamelog") return "SAMPLE · Wk tape";
+  if (slug === "efficiency") return "SAMPLE · PPO board";
+  if (slug === "aging") return "SAMPLE · aging curve";
+  if (slug === "buysell") return "SAMPLE · buy/sell board";
+  if (slug === "dashboard") return "SAMPLE · roster grades";
   return "SAMPLE · demo rows";
 }
 
