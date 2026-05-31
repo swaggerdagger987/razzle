@@ -2,6 +2,8 @@
 
 Append-only log of architecture decisions, boundary lessons, recurring failure modes.
 
+2026-05-31 | SOS contract 3 files | SHIP | KEEP empty HIDDEN set as completion signal | bureau-features.ts | cycle 93
+
 Format per entry:
 
 ```

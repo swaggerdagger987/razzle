@@ -2,6 +2,8 @@
 
 Append-only log of product hypotheses, slice picks, KILL verdicts, and outcomes.
 
+2026-05-31 | League SOS completes unhide epic | SHIP | KEEP Lab L5 share bars as next epic | NEXT.md lead | cycle 93
+
 Format per entry:
 
 ```

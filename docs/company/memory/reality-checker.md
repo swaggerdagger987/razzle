@@ -3,6 +3,8 @@
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
 near-misses, and verification techniques that caught real issues.
 
+2026-05-31 | cycle 93 SOS publish | PASS | KEEP pytest+build re-run on publish cycles | 51 passed | cycle 93 standup
+
 Format per entry:
 
 ```

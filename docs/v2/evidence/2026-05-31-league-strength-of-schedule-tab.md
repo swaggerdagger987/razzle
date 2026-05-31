@@ -14,7 +14,7 @@
 
 ```bash
 npm run build --workspace=apps/web   # exit 0
-JWT_SECRET=test python3 -m pytest apps/api/tests -q   # 51 passed, 5 skipped
+JWT_SECRET=test python3 -m pytest apps/api/tests -q   # 51 passed, 5 skipped (cycle 93 re-verify 2026-05-31T05:52Z)
 grep HIDDEN_BUREAU_SLUGS apps/web/lib/bureau-features.ts   # empty Set
 ```
 

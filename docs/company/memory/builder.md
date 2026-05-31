@@ -2,6 +2,8 @@
 
 Append-only log of implementation patterns, surgical wins, things to avoid.
 
+2026-05-31 | SOS tab publish cycle 93 | SHIP | KEEP 3-file Bureau slices | 2e764eed content | cycle 93
+
 Format per entry:
 
 ```

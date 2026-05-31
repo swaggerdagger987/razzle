@@ -1,6 +1,6 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 roster archetypes are invisible in-product.",
+  "big_problem": "Last hidden Bureau tab (Schedule/SOS) blocked nav while matchup API returns live PPG vs opponent lens.",
   "epic": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
   "atom_id": "league-strength-of-schedule-tab",
   "slice_title": "Schedule tab unhidden with SOS matchup renderer",
@@ -23,7 +23,7 @@
     "OG export",
     "API schema changes",
     "NORTH_STAR / DESIGN edits",
-    "Sleeper matchup week pull (Phase 5.5)"
+    "Lab share bars (next epic)"
   ],
   "builder_mode": "composer-surgical"
 }
