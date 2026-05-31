@@ -1,19 +1,36 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Launch Lab dashboard/comps panels still export OG cards without in-panel comp rows when data loads.",
-  "epic_title": "Lab L5 — Dashboard/comps OG snapshot parity",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Hidden Bureau tabs are hallway lies — Self-Scout and league URLs must land on real renderers, not scaffold dead-ends.",
+  "epic_title": "League L5 — unhide remaining Bureau tabs with real renderers",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-dashboard-og-snapshot",
-      "title": "DashboardRenderer passes top-6 comp rows into dynasty-comps OG snapshot",
+      "id": "league-bureau-roster-depth",
+      "title": "Unhide roster-depth tab with Dolphin depth-by-position renderer",
       "status": "done",
-      "merge_commit": "c9151786"
+      "merge_commit": "6dbe1ca1"
+    },
+    {
+      "id": "league-bureau-build-profiles",
+      "title": "Unhide build-profiles tab with Atlas renderer",
+      "status": "done",
+      "merge_commit": "b17887d0"
+    },
+    {
+      "id": "league-bureau-waiver-tendencies",
+      "title": "Unhide waiver-tendencies tab with Hawkeye renderer",
+      "status": "in_progress",
+      "merge_commit": null
+    },
+    {
+      "id": "league-bureau-strength-of-schedule",
+      "title": "Unhide strength-of-schedule tab with schedule renderer",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T12:45:00Z",
-  "updated_at": "2026-05-31T12:55:00Z",
-  "last_cycle_commit": "c9151786"
+  "next_atom_id": "league-bureau-waiver-tendencies",
+  "created_at": "2026-05-31T05:30:00Z",
+  "updated_at": "2026-05-31T05:45:00Z"
 }
