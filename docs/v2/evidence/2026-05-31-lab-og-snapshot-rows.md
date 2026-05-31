@@ -12,3 +12,5 @@
 | Subtitle | Card shows "from your panel" when snapshot param present |
 
 **Verdict:** PASS — snapshot rows render on OG card; demo fallback unchanged when no snapshot/live API.
+
+**Merge:** PR #88 → `razzle-v2-redesign` at `478fb9c5`; content hash `916ba843` on base.
