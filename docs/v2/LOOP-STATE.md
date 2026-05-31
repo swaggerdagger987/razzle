@@ -8,3 +8,5 @@ last_commit: 0bbfc1bb
 lab_l5_og_live_rows_epic: complete
 lab_l4_pro_gate_epic: complete
 league_l5_self_scout_export_epic: active
+lab_l5_og_panel_native_live_epic: active
+lab_l2_sidebar_agent_epic: complete
