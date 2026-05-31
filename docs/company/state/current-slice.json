@@ -26,5 +26,6 @@
     "NORTH_STAR / DESIGN edits"
   ],
   "builder_mode": "composer-surgical",
-  "verdict": "SHIP"
+  "verdict": "SHIP",
+  "content_commit": "92d53190"
 }

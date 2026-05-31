@@ -13,7 +13,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
-2026-05-31 | bureau-h2h-og-snapshot-decode | decodeBureauH2HOgSnapshot snapshot-first on /og/head-to-head | da33eafd | SHIP | KEEP decode next to encode in same lib | — | NEXT Lab OG live rows | evidence/2026-05-31-bureau-h2h-og-snapshot-decode.md
+2026-05-31 | bureau-h2h-og-snapshot-decode | decodeBureauH2HOgSnapshot snapshot-first on /og/head-to-head | 92d53190 | SHIP | KEEP decode next to encode in same lib | — | NEXT Lab OG live rows | evidence/2026-05-31-bureau-h2h-og-snapshot-decode.md
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | 6c8da85f | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
 
 ---
