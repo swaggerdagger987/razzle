@@ -27,3 +27,4 @@ new evidence.
 2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
 2026-05-31 | Lab OG live row parity epic atom 1 | 2cb898b6 | SHIP | keep | NEXT.md lead; panels slug + candidates on OG
 2026-05-31 | Lab OG launch10 live label atom 3 | 6737e6ae | SHIP | keep | T1 honest OG labels; epic complete
+2026-05-31 | Bureau H2H copy link atom 1 | da33eafd | SHIP | keep | League L5 share epic; NEXT after Lab OG complete

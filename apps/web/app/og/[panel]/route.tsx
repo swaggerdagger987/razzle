@@ -164,13 +164,13 @@ function demoRowsForPanel(slug: string): OgRow[] {
   return DEMO_ROWS_BY_SLUG[slug] ?? DEFAULT_DEMO_ROWS;
 }
 
-<<<<<<< HEAD
 /** Sample preview suffix only when demo fallback — launch-10 + all panel slugs. */
 function ogBlurbSuffix(slug: string, usingLiveData: boolean): string {
   if (usingLiveData) return "";
   if (slug === "dynasty-comps") return " · comps for Ja'Marr Chase · sample preview";
   return " · sample preview";
-=======
+}
+
 type CompactOgRow = { n: string; p: string; t: string; s: number; sl: string };
 
 function decodeOgSnapshot(param: string): OgRow[] {
@@ -198,7 +198,6 @@ function resolveApiOrigin(req: Request): string {
   const env = process.env.NEXT_PUBLIC_API_ORIGIN?.replace(/\/$/, "");
   if (env) return env;
   return new URL(req.url).origin;
->>>>>>> origin/razzle-v2-redesign
 }
 
 function extractRows(data: unknown): OgRow[] {

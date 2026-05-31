@@ -1,10 +1,10 @@
-cycle: 71
+cycle: 72
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: League
 focus_layer: L5
-next_slice: pick from PARITY/NEXT — Bureau H2H or next Lab depth
-last_keep_cycle: 71
-last_commit: 6737e6ae
+next_slice: bureau-self-scout-copy-link or next PARITY row
+last_keep_cycle: 72
+last_commit: da33eafd
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
@@ -22,3 +22,4 @@ lab_l5_og_dynasty_comps_panel_export: complete
 lab_l5_og_live_extractors: complete
 lab_l5_og_live_row_epic: complete
 lab_l5_og_launch10_live_label: complete
+league_l5_bureau_h2h_copy_link: complete

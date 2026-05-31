@@ -28,3 +28,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
 2026-05-31 | Lab OG live panel rows | 2cb898b6 | keep | fetchLiveOgRows panels slug + candidates extract; curl rankings 59509B breakouts 60649B
 2026-05-31 | Lab OG launch10 live label | 6737e6ae | keep | workday cycle 1; Lab L5 live-row epic complete; ogBlurbSuffix when usingLiveData
+2026-05-31 | Bureau H2H copy link | da33eafd | keep | League L5 share epic atom 1/3; copy link + export row; merged base OG snapshot+live

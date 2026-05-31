@@ -25,6 +25,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Self-Scout OG + export | e732f973 | keep | /og/self-scout 4 position grades; BureauSelfScout export; curl 66997B
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
+2026-05-31 | Bureau H2H copy link | da33eafd | keep | BureauHeadToHead copyRivalryLink; curl h2h OG 59305B
 2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
 2026-05-31 | Lab OG live panel rows | 2cb898b6 | keep | fetchLiveOgRows panels slug + candidates extract; curl rankings 59509B breakouts 60649B
 2026-05-31 | Lab OG launch10 live label | 6737e6ae | keep | ogBlurbSuffix empty when usingLiveData; curl weekly 63819B

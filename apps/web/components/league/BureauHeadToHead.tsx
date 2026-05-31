@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useState } from "react";
 import type { Route } from "next";
 
 interface Props {
@@ -30,6 +31,18 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
   const atlas = AGENT_BY_ID.atlas;
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [copied, setCopied] = useState(false);
+
+  const copyRivalryLink = useCallback(async () => {
+    if (typeof window === "undefined") return;
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }, []);
   const managers = (data.managers as Manager[]) ?? [];
   const opponentId = String(data.opponent_user_id ?? searchParams.get("opponent") ?? "");
   const you = data.you as TeamSummary;
@@ -171,16 +184,25 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
               open Trade Finder →
             </Link>
             {you?.user_id && (
-              <a
-                href={`/og/head-to-head?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(
-                  you.user_id,
-                )}${opponentId ? `&opponent=${encodeURIComponent(opponentId)}` : ""}&download=1`}
-                download="razzle-head-to-head.png"
-                className="btn-chunky active mt-3 inline-block text-xs"
-                style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
-              >
-                export card
-              </a>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  className="btn-chunky text-xs"
+                  onClick={() => void copyRivalryLink()}
+                >
+                  {copied ? "copied!" : "copy link"}
+                </button>
+                <a
+                  href={`/og/head-to-head?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(
+                    you.user_id,
+                  )}${opponentId ? `&opponent=${encodeURIComponent(opponentId)}` : ""}&download=1`}
+                  download="razzle-head-to-head.png"
+                  className="btn-chunky active text-xs"
+                  style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+                >
+                  export card
+                </a>
+              </div>
             )}
           </section>
         </>

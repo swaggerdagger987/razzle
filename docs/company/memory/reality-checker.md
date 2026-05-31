@@ -28,3 +28,4 @@ explicit checks in the verification routine.
 2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
 2026-05-31 | Lab OG live panel rows Gate C | 2cb898b6 | PASS | curl rankings 59509B breakouts 60649B | keep | docs/v2/evidence/2026-05-31-lab-og-live-extractors.md
 2026-05-31 | Lab OG launch10 live label Gate C | 6737e6ae | PASS | curl rankings 59509B breakouts 60649B weekly 63819B | keep | docs/v2/evidence/2026-05-31-lab-og-launch10-live-label.md
+2026-05-31 | Bureau H2H copy link Gate C | da33eafd | PASS | curl h2h OG 59305B | keep | docs/v2/evidence/2026-05-31-bureau-h2h-copy-link.md
