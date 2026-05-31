@@ -257,22 +257,28 @@ export async function GET(req: Request) {
           })}
         </div>
 
+        {/* Always-on watermark band — matches H2H + Lab panel OG (T6 screenshot gravity) */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-end",
+            alignItems: "center",
+            marginTop: 16,
+            padding: "10px 18px",
+            background: "#d97757",
+            color: "#f7efe5",
+            border: "3px solid #2d1f14",
+            borderRadius: 8,
+            boxShadow: "4px 4px 0 #2d1f14",
             fontSize: 20,
-            color: "#5c4a3d",
-            marginTop: 12,
           }}
         >
-          <div style={{ display: "flex" }}>{`razzle.lol/league${league ? `/${league}` : ""}/waiver-tendencies`}</div>
-          {isDownload ? (
-            <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
-              made with 🐯 razzle.lol
-            </div>
-          ) : null}
+          <div style={{ display: "flex", fontWeight: 700 }}>
+            {`razzle.lol/league${league ? `/${league}` : ""}/waiver-tendencies`}
+          </div>
+          <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
+            {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
+          </div>
         </div>
       </div>
     ),

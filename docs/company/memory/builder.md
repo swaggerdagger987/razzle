@@ -84,6 +84,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
+2026-05-31 | bureau-waiver-og-watermark-band | SOS/H2H terracotta band on waiver OG | f6e0985f3 | SHIP | KEEP demo rows + FAAB bars | — | — | evidence/2026-05-31-bureau-waiver-og-watermark-band.md
 2026-05-31 | weekly-hot-week-og | ogSnapshotRows max week pts + Wk label | 7f652a98 | SHIP | KEEP hottest-week not PPG | — | — | evidence/2026-05-31-lab-weekly-hot-week-snapshot.md
 
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | 7f652a98 | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
