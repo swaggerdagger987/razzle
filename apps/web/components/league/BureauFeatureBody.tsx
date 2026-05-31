@@ -8,7 +8,6 @@ import { BureauPressureMap } from "./BureauPressureMap";
 import { BureauTradeNetwork } from "./BureauTradeNetwork";
 import { BureauTradeFinder } from "./BureauTradeFinder";
 import { BureauHeadToHead } from "./BureauHeadToHead";
-import { BureauRosterDepth } from "./BureauRosterDepth";
 import { BureauPowerRankings } from "./BureauPowerRankings";
 import { BureauRosterDepth } from "./BureauRosterDepth";
 
@@ -26,7 +25,6 @@ export function BureauFeatureBody({ feature, data, leagueId }: Props) {
   if (feature === "trade-network") return <BureauTradeNetwork data={data} leagueId={leagueId} />;
   if (feature === "trade-finder") return <BureauTradeFinder data={data} leagueId={leagueId} />;
   if (feature === "head-to-head") return <BureauHeadToHead data={data} leagueId={leagueId} />;
-  if (feature === "roster-depth") return <BureauRosterDepth data={data} leagueId={leagueId} />;
   if (feature === "power-rankings") return <BureauPowerRankings data={data} leagueId={leagueId} />;
   if (feature === "roster-depth") return <BureauRosterDepth data={data} leagueId={leagueId} />;
 
