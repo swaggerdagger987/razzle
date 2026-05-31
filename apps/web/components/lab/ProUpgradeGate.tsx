@@ -41,27 +41,32 @@ export function ProUpgradeGate({
             </div>
           ))}
         </div>
-        <p className="pro-upgrade-preview-label">Pro preview — data blurred on free tier</p>
+        <p className="pro-upgrade-preview-label" style={{ fontFamily: "var(--font-hand)" }}>
+          {agent.name} pulled a preview — Pro unlocks the full panel
+        </p>
       </div>
 
       <div className="pro-upgrade-body chunky bg-bg-card p-6 text-center">
         <span className="pro-upgrade-badge" aria-hidden>
-          {required.toUpperCase()}
+          PRO UNLOCK
         </span>
         <h2 className="mt-4 text-2xl" style={{ fontFamily: "var(--font-display)" }}>
           {panelTitle}
         </h2>
+        <p className="mt-2 text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+          screener stays free · this intel is Pro
+        </p>
         <p className="mt-3 text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
           {pitch}
         </p>
         {message && current !== required && (
-          <p className="mt-2 text-sm text-ink-light">
+          <p className="mt-2 text-sm text-ink-medium" style={{ fontFamily: "var(--font-mono)" }}>
             {message}
           </p>
         )}
         <div className="pro-upgrade-actions mt-6 flex flex-wrap items-center justify-center gap-3">
           <Link href="/pricing" className="chunky chunky-hover bg-orange px-6 py-3 text-white">
-            See Pro plans
+            unlock Pro intel
           </Link>
           <Link
             href={toRoom({ agentId: agent.id, question: roomQuestion, panelSlug }) as Route}
