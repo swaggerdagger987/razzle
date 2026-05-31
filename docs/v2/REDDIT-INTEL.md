@@ -25,6 +25,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 2. **Gamelog / efficiency / aging** are tape-and-window panels — same footer pattern as weekly heatmap closes launch-10 export parity (atom 1/3).
 3. Standing: sample preview on OG when API empty — T1 trust.
 
+## 2026-05-31 — Bureau Pressure Map share row (cycle 77)
+
+1. **Deadline pressure bars travel** — managers paste "who's desperate" league URLs before trade offers; copy link + export matches H2H/Monte Carlo pattern.
+2. **Bones-owned surface** — trade-deadline intel screenshots should include share row, not export-only footer.
+
 ## 2026-05-31 — Factory cycle 1 (Company OS)
 
 1. **Position-grade roster screenshots** still win trade threads — A–F grid + thinnest-spot callout beats prose rankings.
