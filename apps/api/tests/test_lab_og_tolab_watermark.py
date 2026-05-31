@@ -58,3 +58,11 @@ def test_watermark_uses_player_display_name_from_export_url():
     assert "DEFAULT_OG_PLAYER_NAME" in route
     assert 'params.set("name"' in export
     assert "playerName={displayName}" in gamelog
+
+
+def test_weekly_og_watermark_includes_default_wr_position():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "TOLAB_DEFAULT_POSITION" in source
+    assert 'weekly: "WR"' in source
+    assert "watermarkPosition" in source
+    assert "positionFilter: watermarkPosition" in source

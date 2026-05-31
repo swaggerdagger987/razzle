@@ -1,30 +1,8 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG snapshot exports deep-link as generic \"player\" — Reddit shares lose recognizable hallway context.",
-  "epic": "Lab L5 — OG export display names in watermark",
-  "slice_title": "Gamelog export passes player name into OG watermark toLab",
   "atom_id": "lab-og-watermark-display-name",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
-  "trust_pillars": ["T5", "T6"],
-  "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/web/components/lab/LabOgExportLink.tsx",
-    "apps/web/components/lab/renderers/GamelogRenderer.tsx"
-  ],
-  "max_files": 3,
-  "max_lines": 80,
-  "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q",
-    "npm run build --workspace=apps/web"
-  ],
-  "out_of_scope": ["Dynasty comps renderer", "new API endpoints"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP"
-  }
+  "slice_title": "Gamelog export passes player name into OG watermark toLab",
+  "content_commit": "338709883",
+  "reality": "PASS",
+  "merge": "pending"
 }
