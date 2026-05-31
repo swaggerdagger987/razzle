@@ -6,8 +6,8 @@
 # Memory — Reality Checker
 
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | PASS | pytest 4; curl explore 65482B; web build exit 0.
-2026-05-31 | explore-og-margin-note-rows | f6e0985f3 | PASS | pytest 6; curl demo 67971B; web build exit 0.
-2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | PASS | pytest 5; web build; Gate C evidence on file.
+2026-05-31 | explore-og-margin-note-rows | 88f62c3c1 | PASS | pytest 6; curl demo 67971B; web build exit 0.
+2026-05-31 | lab-og-from-panel-gate-c-rest | 88f62c3c1 | PASS | pytest 5; web build; Gate C evidence on file.
 2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | PASS | pytest 2; curl 82365B; web build exit 0.
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | PASS | pytest 3; curl gamelog 62232B; web build exit 0.
 2026-05-31 | league-trade-finder-og-snapshot | 19a1af0e9 | PASS | pytest 4; curl 57910B + snapshot 55930B.
