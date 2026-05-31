@@ -1,28 +1,27 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import {
+  buildExploreOgExportParams,
+  type ExploreOgExportInput,
+} from "@/lib/explore-og-export-params";
 
-interface Props {
-  universe: string;
-  sort: string;
-  dir: string;
-  q: string;
-  pos: string[];
-  season?: number;
-  team?: string[];
-}
+type Props = Omit<ExploreOgExportInput, "download">;
 
-export function ExploreShareButton({ universe, sort, dir, q, pos, season = 0, team = [] }: Props) {
+export function ExploreShareButton({
+  universe,
+  sort,
+  dir,
+  q,
+  pos,
+  season = 0,
+  team = [],
+}: Props) {
   const [copied, setCopied] = useState(false);
 
-  const previewParams = new URLSearchParams({ universe, sort, dir });
-  if (q) previewParams.set("q", q);
-  if (pos.length) previewParams.set("pos", pos.join(","));
-  if (season > 0) previewParams.set("season", String(season));
-  if (team.length) previewParams.set("team", team.join(","));
-
-  const ogParams = new URLSearchParams(previewParams);
-  ogParams.set("download", "1");
+  const base = { universe, sort, dir, q, pos, season, team };
+  const previewParams = buildExploreOgExportParams(base);
+  const ogParams = buildExploreOgExportParams({ ...base, download: true });
 
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 
@@ -35,6 +34,8 @@ export function ExploreShareButton({ universe, sort, dir, q, pos, season = 0, te
       setCopied(false);
     }
   }, [shareUrl]);
+
+  const exportLabel = universe === "college" ? "export college card" : "export card";
 
   return (
     <div className="explore-share flex shrink-0 items-center gap-2">
@@ -54,8 +55,9 @@ export function ExploreShareButton({ universe, sort, dir, q, pos, season = 0, te
         download="razzle-explore.png"
         className="btn-chunky active text-xs"
         style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+        title={exportLabel}
       >
-        export card
+        {exportLabel}
       </a>
     </div>
   );
