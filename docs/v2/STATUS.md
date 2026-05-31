@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 129 — Lab L4 ProGateFromPanelError breakouts)
+**Last updated:** 2026-05-31 (factory cycle 132 — Lab L4 ProGate tradevalues + efficiency)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 129 |
+| Cycle | 132 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L4 |
-| Next slice | lab-l4-pro-gate-error-tradevalues |
-| Last commit | `5721ee33` |
+| Next slice | lab-l4-pro-gate-error-remaining |
+| Last commit | `08ca0573` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
