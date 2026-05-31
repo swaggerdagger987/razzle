@@ -7,7 +7,7 @@
 
 ```bash
 PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest
-# 5 passed
+# 6 passed (post base merge)
 
 npm run build --workspace=apps/web
 # exit 0
