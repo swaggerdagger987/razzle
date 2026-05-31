@@ -17,7 +17,8 @@ import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProGateFromPanelError } from "../ProGateFromPanelError";
-import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
+import type { OgSnapshotRow } from "../LabOgExportLink";
+import { LabPanelShareBar } from "../LabPanelShareBar";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
@@ -232,12 +233,12 @@ export function DynastyRankingsRenderer({ panel }: Props) {
         <div className="p-6">
           <p className="text-ink-medium">{agent.emptyCopy}</p>
           <footer className="mt-4 flex flex-wrap items-center gap-4">
-            <LabOgExportLink
+            <LabPanelShareBar
               slug="rankings"
               downloadName="razzle-dynasty-rankings.png"
               position={position || undefined}
               snapshotRows={RANKINGS_SAMPLE_OG_ROWS}
-              label="export sample card"
+              copyLabel="copy rankings link"
             />
           </footer>
         </div>
@@ -279,13 +280,14 @@ export function DynastyRankingsRenderer({ panel }: Props) {
           >
             Ask Octo about {topPlayer.full_name} →
           </Link>
-          <LabOgExportLink
+          <LabPanelShareBar
             slug="rankings"
             downloadName="razzle-dynasty-rankings.png"
             position={position || undefined}
             playerId={topPlayer.player_id}
             playerName={topPlayer.full_name}
             snapshotRows={ogSnapshotRows}
+            copyLabel="copy rankings link"
           />
         </footer>
       )}
