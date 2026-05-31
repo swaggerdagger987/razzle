@@ -284,6 +284,7 @@ export function DynastyRankingsRenderer({ panel }: Props) {
             slug="rankings"
             downloadName="razzle-dynasty-rankings.png"
             position={position || undefined}
+            playerId={topPlayer.player_id}
             snapshotRows={ogSnapshotRows}
             copyLabel="copy rankings link"
           />
