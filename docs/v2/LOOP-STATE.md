@@ -1,16 +1,10 @@
-cycle: 77
+cycle: 78
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-<<<<<<< HEAD
-next_slice: PARITY — league-power-rankings-og or bureau-monte-carlo-copy-link
-last_keep_cycle: 77
-last_commit: 20c7940a
-=======
-next_slice: (bureau share epic complete — pick from PARITY)
-last_keep_cycle: 77
-last_commit: da33eafd
->>>>>>> 4477a1e3 (standup: 2026-05-31 — PASS Bureau Monte Carlo share bar)
+next_slice: league-power-rankings-og
+last_keep_cycle: 78
+last_commit: 30454811
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
