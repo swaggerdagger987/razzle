@@ -59,5 +59,7 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 90	c9151786	depth+voice+simplicity	keep	Lab	L5 Dashboard comps OG snapshot rows	trust=T5,T6; DashboardRenderer snapshotRows; curl dynasty-comps 65961B; dedup prospects+tradevalues on base
 91	a2536dcc	depth+voice+simplicity	keep	League	L5 Bureau Waiver Tendencies tab unhidden	trust=T2,T5; Hawkeye renderer; waiver-tendencies nav visible; web build PASS; epic atom 2/3
 92	c0358ff3	depth+voice+simplicity	keep	Lab	L5 Prospects OG RPS-ranked snapshot	trust=T5,T6; sort top-6 RPS + position filter; curl 40842B; fidelity epic atom 1/3
-93	eb542d51	depth+hallway+voice+simplicity	keep	League	L5 Bureau Schedule tab unhidden	trust=T2,T5,T6; Octo SOS renderer; HIDDEN_BUREAU_SLUGS empty; bureau unhide epic complete; factory cycle 1
-95	f358349d	depth+voice+simplicity	keep	Lab	L5 OG position efficiency aging export	trust=T5,T6; LabOgExportLink position param; curl eff 45113B aging 44093B; epic atom 1/3
+93	eb542d51	depth+hallway+voice+simplicity	keep	League	L5 Bureau Schedule tab unhidden	trust=T2,T5,T6; Octo SOS renderer; HIDDEN_BUREAU_SLUGS empty; bureau unhide epic complete
+94	8068ab3f	depth+voice+simplicity	keep	Lab	L5 OG efficiency aging live extractors	trust=T5,T6; most_efficient+positions.players; curl eff 59068B aging 57934B
+95	f358349d	depth+voice+simplicity	keep	Lab	L5 OG position efficiency aging export	trust=T5,T6; LabOgExportLink position param; curl eff 45113B aging 44093B
+

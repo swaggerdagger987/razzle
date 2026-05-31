@@ -33,6 +33,7 @@ const STAT_CANDIDATE_KEYS = [
   "rank_diff",
   "composite_score",
   "efficiency_score",
+  "ppo",
   "total_yards",
   "pts",
   "rank",
@@ -259,6 +260,18 @@ function extractRows(data: unknown): OgRow[] {
     candidates = obj.data as Record<string, unknown>[];
   } else if (Array.isArray(obj.rankings)) {
     candidates = obj.rankings as Record<string, unknown>[];
+  } else if (Array.isArray(obj.most_efficient)) {
+    candidates = obj.most_efficient as Record<string, unknown>[];
+  } else if (Array.isArray(obj.volume_kings)) {
+    candidates = obj.volume_kings as Record<string, unknown>[];
+  } else if (obj.positions && typeof obj.positions === "object") {
+    const byPos = obj.positions as Record<string, Record<string, unknown>>;
+    for (const posBlock of Object.values(byPos)) {
+      if (Array.isArray(posBlock?.players)) {
+        candidates.push(...(posBlock.players as Record<string, unknown>[]));
+      }
+    }
+    candidates.sort((a, b) => Number(b.ppg ?? 0) - Number(a.ppg ?? 0));
   } else if (Array.isArray(obj.comps)) {
     candidates = obj.comps as Record<string, unknown>[];
   } else if (Array.isArray(obj.top5) || Array.isArray(obj.risers)) {
@@ -279,6 +292,7 @@ function extractRows(data: unknown): OgRow[] {
       statLabel = k.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
       if (k === "fantasy_points_ppr") statLabel = "FPTS";
       if (k === "ppg") statLabel = "PPG";
+      if (k === "ppo") statLabel = "PPO";
       if (k === "dynasty_value" || k === "trade_value" || k === "value") statLabel = "Value";
       if (k === "rbs_score" || k === "breakout_score") statLabel = "Score";
       if (k === "similarity") statLabel = "Match %";
