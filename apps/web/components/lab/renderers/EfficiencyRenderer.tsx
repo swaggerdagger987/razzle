@@ -21,6 +21,16 @@ import { ProGateFromPanelError } from "../ProGateFromPanelError";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
+/** Sample PPO board when the API returns no rows — OG export still screenshots. */
+const EFFICIENCY_SAMPLE_OG_ROWS: OgSnapshotRow[] = [
+  { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 0.82, statLabel: "PPO" },
+  { name: "Christian McCaffrey", position: "RB", team: "SF", stat: 0.79, statLabel: "PPO" },
+  { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 0.76, statLabel: "PPO" },
+  { name: "Justin Jefferson", position: "WR", team: "MIN", stat: 0.74, statLabel: "PPO" },
+  { name: "Travis Kelce", position: "TE", team: "KC", stat: 0.71, statLabel: "PPO" },
+  { name: "Josh Allen", position: "QB", team: "BUF", stat: 0.68, statLabel: "PPO" },
+];
+
 interface EfficiencyPlayer extends WithFormulaScore {
   player_id: string;
   name: string;
@@ -238,7 +248,18 @@ export function EfficiencyRenderer({ panel }: Props) {
       )}
 
       {!efficient.length && !volume.length ? (
-        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+        <div className="p-6">
+          <p className="text-ink-medium">{agent.emptyCopy}</p>
+          <footer className="mt-4 flex flex-wrap items-center gap-4">
+            <LabOgExportLink
+              slug="efficiency"
+              downloadName="razzle-efficiency.png"
+              position={position || undefined}
+              snapshotRows={EFFICIENCY_SAMPLE_OG_ROWS}
+              label="export sample card"
+            />
+          </footer>
+        </div>
       ) : (
         <>
           <PlayerTable

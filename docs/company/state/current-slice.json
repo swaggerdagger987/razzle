@@ -1,39 +1,25 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG cards still look generic when comps export — dynasty managers cannot tell live comp matches from demo teasers on Reddit screenshots.",
-  "epic": "Lab L5 — OG export live panel rows (atom 1/3)",
-  "slice_title": "Dynasty Comps OG — LIVE sticker + dedicated comp row extract",
-  "atom_id": "lab-og-dynasty-comps-live-sticker",
-  "parity_ref": "PARITY Explore L5 — Lab panel OG data rows",
+  "big_problem": "Lab export cards vanish when a panel has no rows yet — users can't screenshot an empty tape state for Reddit.",
+  "epic": "Lab L5 — OG export on empty panel states",
+  "slice_title": "Efficiency — export sample card on empty position board",
+  "atom_id": "lab-efficiency-empty-export",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2",
+  "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_og_dynasty_comps_live.py"
-  "big_problem": "Lab OG cards are screenshot dead-ends — dynasty Twitter can't click back into the panel with the same filters they exported.",
-  "epic": "Lab L5 — OG hallway deep links (atom 1/3)",
-  "slice_title": "lab-og-tolab-watermark — Launch-10 OG band uses typed toLab() path",
-  "parity_ref": "PARITY Explore L5 — Lab panel OG data rows + hallway",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with live rows",
-  "trust_pillars": ["T5", "T6"],
-  "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/web/components/lab/renderers/EfficiencyRenderer.tsx",
+    "apps/api/tests/test_lab_og_export_link.py"
   ],
   "max_files": 2,
-  "max_lines": 120,
+  "max_lines": 50,
   "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_dynasty_comps_live.py -q --noconftest",
-    "npm run build --workspace=apps/web"
+    "npm run build --workspace=apps/web",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_export_link.py -q --noconftest",
+    "curl -s -o /tmp/og-efficiency-empty.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/efficiency?download=1&position=QB&snapshot=eyJuIjoiQmlqYW4gUm9iaW5zb24iLCJwIjoiUkIiLCJ0IjoiQVRMIiwicyI6MC44Miwic2wiOiJQUE8ifV0'"
   ],
-  "out_of_scope": [
-    "Launch-10 panel refactors",
-    "NORTH_STAR/DESIGN/DECISIONS",
-    "new npm deps",
-    "Bureau H2H"
-  ],
+  "out_of_scope": ["Rankings empty export", "OG route refactor"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
@@ -41,16 +27,7 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   },
-  "status": "shipped",
-  "content_commit": "2e1dfea15"
-    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q",
-    "npm run build --workspace=apps/web"
-  ],
-  "out_of_scope": [
-    "New npm deps",
-    "NORTH_STAR/DESIGN/DECISIONS edits",
-    "Explore or Bureau OG routes",
-    "Snapshot query round-trip"
-  ],
-  "builder_mode": "composer-surgical"
+  "content_commit": "5283c3eb4",
+  "reality": "PASS",
+  "merge": "merged"
 }
