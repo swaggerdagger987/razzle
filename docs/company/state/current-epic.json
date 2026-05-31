@@ -14,13 +14,13 @@
       "id": "lab-panel-grid-agent-avatars",
       "title": "Lab panel grid cards show agent avatar + owner name",
       "status": "in_progress",
-      "merge_commit": null
+      "merge_commit": "1cecde2a"
     }
   ],
-  "next_atom_id": "lab-panel-grid-agent-avatars",
-  "epic_status": "active",
+  "next_atom_id": null,
+  "epic_status": "complete",
   "created_at": "2026-05-31T14:00:00Z",
-  "updated_at": "2026-05-31T14:00:00Z",
+  "updated_at": "2026-05-31T14:20:00Z",
   "completed_epics": [
     {
       "id": "lab-l4-pro-gate-polish",
