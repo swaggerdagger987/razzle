@@ -1,37 +1,40 @@
 {
-  "big_problem": "Bureau OG export cards dead-end without terracotta hallway bands — screenshots don't route back into league tabs.",
-  "epic_title": "League L5 — Bureau OG terracotta watermark parity",
-  "parity_ref": "League L5 — hidden Bureau renderers / watermarked export",
-  "depth_ref": "League L5",
+  "epic_status": "active",
+  "big_problem": "Lab panel exports hide behind a single underline link — GTM threads need Explore/Bureau-style copy, preview, and export so screenshots match the rows on screen.",
+  "epic_title": "Lab L5 — GTM panel share bar parity",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "league-og-monte-carlo-watermark",
-      "title": "Monte Carlo OG terracotta watermark + LIVE/SAMPLE stickers",
-      "status": "pending",
-      "merge_commit": null
-    },
-    {
-      "id": "league-og-self-scout-watermark",
-      "title": "Self-Scout OG terracotta watermark band",
+      "id": "lab-panel-share-bar-rankings",
+      "title": "Dynasty Rankings — LabPanelShareBar copy/preview/export + snapshot",
       "status": "done",
-      "merge_commit": "a76b2e4e0"
+      "merge_commit": "6c62faf8c"
     },
     {
-      "id": "league-og-pressure-map-watermark",
-      "title": "Pressure Map OG terracotta watermark band",
-      "status": "pending",
-      "merge_commit": null
+      "id": "lab-panel-share-bar-breakouts-buysell",
+      "title": "Breakouts + Buy/Sell — share bar with formula snapshot rows",
+      "status": "done",
+      "merge_commit": "d4cf33c26"
     },
     {
-      "id": "league-og-power-rankings-watermark",
-      "title": "Power Rankings OG terracotta watermark band",
+      "id": "lab-panel-share-bar-weekly-gamelog",
+      "title": "Weekly + Gamelog — player-scoped share bar",
+      "status": "done",
+      "merge_commit": "9f463c823"
+    },
+    {
+      "id": "lab-panel-share-bar-launch10-rest",
+      "title": "Remaining Launch-10 panels — share bar rollout",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-og-pressure-map-watermark",
-  "epic_status": "active",
-  "created_at": "2026-05-31T11:45:03Z",
-  "updated_at": "2026-05-31T11:55:00Z",
-  "completed_epics": []
+  "next_atom_id": "lab-panel-share-bar-launch10-rest",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T18:00:00Z",
+  "completed_epics": [
+    "league-trade-finder-gtm-export-2026-05-31",
+    "lab-formula-sorted-og-live-parity-2026-05-31"
+  ]
 }
