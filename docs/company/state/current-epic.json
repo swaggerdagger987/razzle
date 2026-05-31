@@ -32,7 +32,7 @@
       "id": "room-l5-briefing-gtm-export",
       "status": "complete",
       "last_atom": "room-briefing-watermark",
-      "merge_commit": "c82af7506"
+      "merge_commit": "f6e0985f3"
     },
     {
       "id": "league-l5-trade-finder-gtm-export",
@@ -42,3 +42,4 @@
     }
   ]
 }
+
