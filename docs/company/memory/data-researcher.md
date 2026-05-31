@@ -1,5 +1,7 @@
 # Memory — Data Researcher
 
+2026-05-31 | lab-og-gamelog-weeks-fpts-sort | cycle 116 | Peak-week PPR on OG card — boom-week screenshot hook for r/DynastyFF.
+
 2026-05-31 | lab-og-watermark-band-head-to-head | cycle 114 | No new intel; H2H watermark closes screenshot brand parity with Explore.
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | cycle 110 | No new Reddit intel; ppo/ppg sort matches in-panel export semantics.

@@ -1,33 +1,27 @@
 {
   "date": "2026-05-31",
+  "atom_id": "lab-og-gamelog-weeks-fpts-sort",
   "big_problem": "Launch-10 Lab OG cards for weekly, prospects, and breakouts still mis-rank live API rows — Reddit screenshots disagree with in-product heatmaps and big boards.",
   "epic": "Lab L5 — launch-10 OG live extract matches renderers",
-  "slice_title": "Weekly hot-week + prospects RPS + breakouts RBS live OG extract",
-  "atom_id": "lab-og-weekly-prospects-breakouts-live-extract",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
+  "slice_title": "Gamelog OG ranks peak weeks by FPTS on live fetch",
+  "parity_ref": "Lab L4/L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "ACCEPTANCE Gate 6 — Share / OG export cards",
+  "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
-  "max_lines": 120,
+  "max_lines": 55,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/weekly?position=WR&download=1'",
-    "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/prospects?position=WR&download=1'",
-    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/breakouts?position=WR&download=1'"
+    "npm run build --workspace=apps/web 2>&1 | tail -3",
+    "pytest apps/api/tests -q 2>&1 | tail -2",
+    "curl -s -o /tmp/og-gamelog-live.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1&player_id=00-0036900'"
   ],
-  "out_of_scope": [
-    "gamelog player-scoped weeks",
-    "NORTH_STAR/DESIGN/DECISIONS edits",
-    "new npm deps"
-  ],
+  "out_of_scope": ["GamelogRenderer", "dynasty-comps", "API schema"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   }
 }

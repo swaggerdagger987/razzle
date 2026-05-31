@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | lab-og-gamelog-weeks-fpts-sort | da33eafd | Wk N PPR rows on live gamelog OG; curl 61129B.
+
 2026-05-31 | lab-og-watermark-band-head-to-head | 44d05684 | H2H OG terracotta band; curl 67846B.
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | keep | ppo+most_efficient; aging ppg+positions unwrap; merged base buysell/dashboard keys.
