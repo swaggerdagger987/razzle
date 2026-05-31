@@ -63,4 +63,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 94	98ae0ef2	depth+voice+simplicity	keep	Lab	L5 Buy/sell combined OG snapshot lanes	trust=T5,T6; Buy/Sell labels 3+3; curl buysell snap 57884B demo 58072B; pytest 51; web build; epic atom 3/4
 95	5ed39e14	depth+voice+simplicity	keep	Lab	L5 Trade values formula-ranked OG rows	trust=T5,T6; rank·Value or rank·formula on snapshot; curl tradevalues snap 62441B demo 62488B; pytest 51; web build; epic atom 4/4 complete
 96	7ec8f82a	depth+voice+simplicity	keep	League	L5 H2H ShareBar canonical snapshot codec	trust=T5,T6; encodeBureauH2HOgSnapshot; curl h2h demo 71895B snap 70829B; pytest 51; web build; epic atom 1/3
-97	57f9ea63	depth+voice+simplicity	keep	Lab	L5 Trade values OG position filter	trust=T5,T6; tradevalues position on export; curl WR 51115B; lab position epic atom 2/3
+97	57f9ea63	depth+voice+simplicity	keep	Lab	L5 Trade values OG position filter	trust=T5,T6; tradevalues position on export; curl WR 51115B; PR 596; epic atom 2/3

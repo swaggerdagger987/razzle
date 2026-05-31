@@ -1,13 +1,19 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import {
+  encodeBureauPowerRankingsOgSnapshot,
+  type BureauPowerRankingsOgRow,
+} from "@/lib/bureau-power-rankings-og-snapshot";
 
 interface Props {
   leagueId: string;
+  /** Top rows visible in Bureau — OG card matches this board without live API. */
+  rows?: BureauPowerRankingsOgRow[];
 }
 
-/** Copyable power board URL + OG export — mirrors BureauMonteCarloShareBar. */
-export function BureauPowerRankingsShareBar({ leagueId }: Props) {
+/** Copyable power board URL + OG export — mirrors BureauH2HShareBar. */
+export function BureauPowerRankingsShareBar({ leagueId, rows }: Props) {
   const [copied, setCopied] = useState(false);
 
   const boardPath = `/league/${leagueId}/power-rankings`;
@@ -16,6 +22,9 @@ export function BureauPowerRankingsShareBar({ leagueId }: Props) {
     league: leagueId,
     download: "1",
   });
+  const snap =
+    rows?.length ? encodeBureauPowerRankingsOgSnapshot({ rows: rows.slice(0, 5) }) : undefined;
+  if (snap) ogParams.set("snapshot", snap);
 
   const copyLink = useCallback(async () => {
     const url =
