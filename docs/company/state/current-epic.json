@@ -14,13 +14,13 @@
     {
       "id": "explore-og-margin-note-rows",
       "title": "Margin notes on top-3 OG screener rows",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "cae3ed2aa"
     },
     {
       "id": "explore-og-margin-note-sticker",
       "title": "LIVE staff sticker when OG rows carry margin notes",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
@@ -30,9 +30,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "explore-og-margin-note-sticker",
+  "next_atom_id": "explore-og-margin-note-college",
   "created_at": "2026-05-31T11:22:30Z",
-  "updated_at": "2026-05-31T11:40:00Z",
+  "updated_at": "2026-05-31T15:00:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-watermark-display-names",
@@ -51,6 +51,18 @@
       "status": "complete",
       "last_atom": "lab-og-tolab-snapshot-player",
       "merge_commit": "1a12d9c0b"
+    },
+    {
+      "id": "lab-l5-og-hallway-position-defaults",
+      "status": "complete",
+      "last_atom": "lab-og-tolab-weekly-position",
+      "merge_commit": "9be64d109"
+    },
+    {
+      "id": "lab-l2-sidebar-staff-groups",
+      "status": "complete",
+      "last_atom": "lab-sidebar-staff-toggle",
+      "merge_commit": "026e7de6b"
     }
   ]
 }

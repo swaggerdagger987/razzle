@@ -1,32 +1,29 @@
 {
   "date": "2026-05-31",
   "big_problem": "Explore OG exports miss staff margin notes — screenshots look like dead spreadsheets.",
-  "epic": "Explore L5 — OG screener agent margin notes (atom 2/4)",
-  "slice_title": "Margin notes on top-3 OG screener rows",
-  "atom_id": "explore-og-margin-note-rows",
+  "epic": "Explore L5 — OG screener agent margin notes (atom 3/4)",
+  "slice_title": "LIVE staff sticker when OG rows carry margin notes",
+  "atom_id": "explore-og-margin-note-sticker",
   "parity_ref": "Explore L5 — agent margin notes on rows",
   "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — explore OG PNG ≥40KB with margin notes on rows 1–3",
+  "acceptance_ref": "FACTORY-DOD Gate C — explore OG PNG ≥40KB with LIVE staff sticker",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
     "apps/web/app/og/explore/route.tsx",
-    "apps/api/tests/test_explore_og_margin_note_rows.py",
-    "docs/v2/evidence/2026-05-31-explore-og-margin-note-rows.md"
+    "apps/api/tests/test_explore_og_margin_note_sticker.py",
+    "docs/v2/evidence/2026-05-31-explore-og-margin-note-sticker.md"
   ],
   "max_files": 3,
-  "max_lines": 120,
+  "max_lines": 80,
   "acceptance_commands": [
-    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_explore_og_margin_note_rows.py -q --noconftest",
+    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_explore_og_margin_note_sticker.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
-    "LIVE staff sticker atom",
-    "College-only atom",
+    "College-only margin atom",
+    "Lab sidebar changes",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
-  "content_commit": "cae3ed2aa",
-  "reality": "PASS",
-  "merge": "pending",
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
