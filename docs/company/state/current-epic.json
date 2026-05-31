@@ -1,8 +1,8 @@
 {
   "epic_status": "active",
-  "big_problem": "Explore college screener shares look like NFL exports — Reddit can't tell dynasty vs college OG cards apart without opening the file.",
-  "epic_title": "Explore L5 — universe-aware share exports",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "big_problem": "Explore college screener shares look like NFL exports \u2014 Reddit can't tell dynasty vs college OG cards apart without opening the file.",
+  "epic_title": "Explore L5 \u2014 universe-aware share exports",
+  "parity_ref": "Explore L5 \u2014 Bureau H2H export or Lab panel OG data rows",
   "depth_ref": "Explore L5",
   "atoms": [
     {
@@ -13,7 +13,7 @@
     },
     {
       "id": "explore-og-college-gate-c",
-      "title": "College explore OG PNG ≥40KB with fixture params",
+      "title": "College explore OG PNG \u226540KB with fixture params",
       "status": "pending",
       "merge_commit": null
     },
@@ -39,6 +39,12 @@
       "status": "complete",
       "last_atom": "lab-pro-gate-hallway-teasers",
       "merge_commit": "675044ea"
+    },
+    {
+      "id": "lab-l5-og-trust-sticker",
+      "status": "complete",
+      "last_atom": "lab-og-from-panel-sticker-gamelog",
+      "merge_commit": "fa71ce6ff"
     }
   ]
 }
