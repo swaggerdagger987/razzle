@@ -32,8 +32,8 @@
     {
       "id": "lab-og-snapshot-gamelog-comps",
       "title": "Snapshot rows on gamelog weeks and dynasty-comps comp list",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "75c88d30"
     },
     {
       "id": "lab-og-live-label",
@@ -42,7 +42,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-snapshot-gamelog-comps",
+  "next_atom_id": "lab-og-live-label",
   "created_at": "2026-05-31T02:13:03Z",
-  "updated_at": "2026-05-31T04:28:00Z"
+  "updated_at": "2026-05-31T04:33:00Z"
 }

@@ -62,4 +62,4 @@ cycle	commit	score	status	pillar	slice	description
 69	916ba843	depth+voice+simplicity	keep	Lab	L5 OG snapshot rows from panel	trust=T5,T6; snapshot query on LabOgExportLink; curl dashboard snapshot 45249B PNG
 70	32d682ab	depth+voice+simplicity	keep	Lab	L5 OG export links rankings breakouts	trust=T5,T6; LabOgExportLink footers; curl rankings 59509B breakouts 60649B; epic atom 2/3
 71	33808392	depth+voice+simplicity	keep	Lab	L5 OG snapshot buysell efficiency aging	trust=T5,T6; snapshotRows on 3 launch-10 panels; curl buysell snapshot 58072B PNG
-72	da33eafd	depth+voice+simplicity	keep	Lab	L5 OG snapshot gamelog comps weeks	trust=T5,T6; snapshotRows gamelog Wk rows + comps Match %; curl gamelog 40520B comps 47292B PNG
+72	75c88d30	depth+voice+simplicity	keep	Lab	L5 OG snapshot gamelog comps weeks	trust=T5,T6; snapshotRows gamelog Wk rows + comps Match %; curl gamelog 40520B comps 47292B PNG
