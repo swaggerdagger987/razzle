@@ -68,3 +68,13 @@ def test_aging_live_extract_prefers_formula_score():
     block = source[idx : idx + 240]
     assert '"formula_score"' in block
     assert block.index('"formula_score"') < block.index('"ppg"')
+
+
+def test_dashboard_live_extract_prefers_formula_score():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert 'slug === "dashboard"' in source
+    assert "dashboardStatKeys" in source
+    idx = source.index("dashboardStatKeys")
+    block = source[idx : idx + 260]
+    assert '"formula_score"' in block
+    assert block.index('"formula_score"') < block.index('"rank_diff"')
