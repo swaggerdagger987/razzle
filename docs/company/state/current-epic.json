@@ -1,31 +1,50 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 handling across launch-10 renderers drifts from teaser/perks polish.",
-  "epic_title": "Lab L4 — shared pro-gate error surface",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
+  "big_problem": "Launch-10 OG cards still read generic on Reddit — only prospects/weekly say which panel you are sharing.",
+  "epic_title": "Lab L5 — Launch-10 OG panel-native trust labels (all 10)",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-l4-pro-gate-error-surface",
-      "title": "ProGateFromPanelError — breakouts renderer + perks pytest guard",
-      "status": "done",
-      "merge_commit": "5721ee33"
+      "id": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
+      "title": "Rankings + tradevalues + breakouts — LIVE/SAMPLE panel-native stickers",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-l4-pro-gate-error-tradevalues",
-      "title": "Wire ProGateFromPanelError on tradevalues + efficiency",
+      "id": "lab-og-launch10-gamelog-efficiency-aging-labels",
+      "title": "Gamelog + efficiency + aging — panel-native LIVE/SAMPLE stickers",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "lab-l4-pro-gate-error-remaining",
-      "title": "Wire ProGateFromPanelError on remaining launch-10 renderers",
+      "id": "lab-og-launch10-buysell-dashboard-labels",
+      "title": "Buy-sell + dashboard — panel-native LIVE/SAMPLE stickers",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-launch10-demo-sticker-polish",
+      "title": "Terracotta SAMPLE blurbs on all Launch-10 demo paths",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-l4-pro-gate-error-tradevalues",
-  "created_at": "2026-05-31T09:25:00Z",
-  "updated_at": "2026-05-31T09:25:00Z",
-  "completed_epics": []
+  "next_atom_id": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
+  "created_at": "2026-05-31T09:00:42Z",
+  "updated_at": "2026-05-31T09:00:42Z",
+  "completed_epics": [
+    {
+      "id": "lab-l5-og-live-fetch-merge",
+      "status": "complete",
+      "last_atom": "lab-og-gamelog-player-default",
+      "merge_commit": "e37cd230"
+    },
+    {
+      "id": "lab-l4-pro-gate-error-surface",
+      "status": "complete",
+      "last_atom": "lab-l4-pro-gate-error-surface",
+      "merge_commit": "5721ee33"
+    }
+  ]
 }
