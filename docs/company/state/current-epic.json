@@ -29,6 +29,12 @@
   "updated_at": "2026-05-31T12:05:00Z",
   "completed_epics": [
     {
+      "id": "explore-l5-og-query-epic",
+      "status": "complete",
+      "last_atom": "explore-og-formula-sort-label",
+      "merge_commit": "710ec33e"
+    },
+    {
       "id": "lab-l4-pro-gate-epic",
       "status": "complete",
       "last_atom": "lab-pro-gate-perks-copy",
