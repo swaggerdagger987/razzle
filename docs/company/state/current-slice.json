@@ -1,26 +1,36 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-dashboard-og-snapshot",
-  "big_problem": "Launch Lab dashboard/comps panels still export OG cards without in-panel comp rows when data loads.",
-  "epic": "Lab L5 — Dashboard/comps OG snapshot parity",
-  "slice_title": "DashboardRenderer encodes top-6 comp match rows in dynasty-comps OG snapshot",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "atom_id": "lab-og-snapshot-tradevalues-prospects",
+  "big_problem": "Lab OG export cards for Trade Values and Big Board still fall back to generic demo rows — Reddit screenshots don't match the table the user filtered.",
+  "epic": "Lab L5 — OG export mirrors in-panel rows on Launch-10 panels",
+  "slice_title": "Trade Values + Prospects export cards encode in-panel snapshot rows",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2 — OG PNG ≥40KB",
+  "acceptance_ref": "ACCEPTANCE Lab OG PNG ≥40KB with real row layout",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/DashboardRenderer.tsx"
+    "apps/web/components/lab/renderers/TradeValuesRenderer.tsx",
+    "apps/web/components/lab/renderers/ProspectsRenderer.tsx"
   ],
-  "max_files": 1,
-  "max_lines": 40,
+  "max_files": 2,
+  "max_lines": 80,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-dynasty-comps.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/dynasty-comps?download=1'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-tradevalues.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/tradevalues?download=1&snapshot=eyJyb3dzIjpbeyJuIjoiSm9uYWggU3VwcGVyIiwicCI6IlFCIiwidCI6IkJGTiIsInMiOjExMiwibCI6IlZhbHVlIn1dfQ'",
+    "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/prospects?download=1&snapshot=eyJyb3dzIjpbeyJuIjoiTWFydmluIEhhcmlzb24iLCJwIjoiUkIiLCJ0IjoiT0hTVCIsInMiOjkyLCJsIjoiUlBTIn1dfQ'"
   ],
   "out_of_scope": [
     "OG route changes",
-    "DynastyCompsRenderer (already has snapshot)",
-    "NORTH_STAR / DESIGN edits"
+    "new panels",
+    "Bureau H2H (already on base)",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "strategist": "SHIP",
+    "architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP (3/3) — dedup atoms 2/3 on base; merge atom 1"
+  }
 }
