@@ -1,5 +1,5 @@
 cycle	hash	pillars	verdict	pillar	slice	notes
-124	84876dd1b	depth+voice+simplicity	keep	Lab	L4 ProGate gamelog rankings buysell	trust=T2,T6; 3 renderers; pytest 9; epic atom 3 partial; stacks tradevalues
+131	84876dd1b	depth+voice+simplicity	keep	Lab	L4 ProGate gamelog rankings buysell	trust=T2,T6; 3 renderers; pytest 9; epic atom 3 partial; PR #1044 rebased
 1	none	depth+voice+simplicity	keep	Explore	L1 screener URL state	nuqs filters in URL; shareable screener links
 2	none	depth+voice+simplicity	keep	Explore	L1 Player Sheet shell	PlayerSheet drawer; click row opens sheet
 3	none	depth+voice+simplicity	keep	Lab	L1 panel registry	@razzle/panels catalog; Lab index grid
@@ -80,4 +80,8 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 122	73fdbf9c	depth+voice+simplicity	keep	Lab	L4 Pro gate perks catalog names	trust=T2,T6; proUpgradePerkLines launch-10+Bureau-7; pytest 4; build ok; L4 epic atom 4/5
 123	7dbd4b11	depth+voice+simplicity	keep	Explore	L5 Explore OG universe season team export URL	trust=T5,T6; ShareButton+OG route; curl college 41427B; live-fetch epic atom 2/3
 123	9037b8e4	depth+voice+simplicity	keep	Lab	L4 ProGateFromPanelError tradevalues + efficiency	trust=T2,T6; shared 402 gate; pytest 8; error-surface epic atom 2/3
-122	684cc1c4	depth+voice+simplicity	keep	Lab	L4 ProGateFromPanelError breakouts + pytest	trust=T2,T6; shared 402 gate; pytest 7; error-surface epic atom 1/3
+130	4bc3913e	depth+voice+simplicity	keep	Lab	L5 LabOgExportLink default player_id for scoped OG	trust=T5,T6; PLAYER_SCOPED_OG_SLUGS; pytest 2; live-fetch epic complete
+129	5721ee33	depth+voice+simplicity	keep	Lab	L4 ProGateFromPanelError breakouts + pytest	trust=T2,T6; shared 402 gate; pytest 7; error-surface epic atom 1/3
+128	e37cd230	depth+voice+simplicity	keep	Lab	L5 Gamelog OG default player export	trust=T5,T6; empty state LabOgExportLink; curl gamelog 60634B; live-fetch epic atom 3/3
+127	e75ec714	depth+voice+simplicity	keep	Lab	L2 sidebar search agent owner labels	trust=T2,T6; Hawkeye · Rankings on search; web build PASS pytest 58; L2 sidebar epic 2/2 complete
+125	ad24a219	depth+voice+simplicity	keep	Lab	L5 rankings/breakouts/tradevalues OG LIVE labels	trust=T1,T5,T6; dynasty ranks RBS board value curve; curl 67083B 67621B 68974B; panel-native epic 1/3

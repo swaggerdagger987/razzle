@@ -1,9 +1,8 @@
 # Memory — Builder
 
-2026-05-31 | lab-l4-pro-gate-error-remaining | 84876dd1b | Gamelog + Rankings + BuySell ProGate; pytest 9; aging/comps next tick.
-2026-05-31 | lab-l4-pro-gate-error-tradevalues | 9037b8e4 | TradeValues + Efficiency use ProGateFromPanelError; pytest 8.
-2026-05-31 | lab-l4-pro-gate-error-surface | da33eafd | ProGateFromPanelError on BreakoutsRenderer; pytest surface guard.
-2026-05-31 | explore-og-universe-query | 7dbd4b11 | ExploreShareButton season/team → OG screener + band deep link.
+2026-05-31 | lab-l4-pro-gate-error-surface | 5721ee33 | ProGateFromPanelError on BreakoutsRenderer; pytest 7.
+2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | launch10LiveStickerLabel 3 slugs.
+
 2026-05-31 | lab-pro-gate-perks-copy | 73fdbf9c | keep | proUpgradePerkLines from getPanel + BUREAU_7 slugs.
 
 2026-05-31 | lab-pro-gate-loading-copy | 7236be3e | PanelAgentLoading wired into ProUpgradeGate.
@@ -94,3 +93,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | league-waiver-tendencies-og-share | 6dcb0f72 | SHIP | /og/waiver-tendencies 73121B; BureauWaiverTendenciesShareBar
 2026-05-31 | league-strength-of-schedule-tab | eb542d51 | keep | BureauStrengthOfSchedule; HIDDEN_BUREAU_SLUGS empty; epic 3/3
 2026-05-31 | lab-og-rankings-tradevalues-live-sort | 7f78b631 | keep | dynasty_value + trade_value OG sort; curl 50KB PNGs
+2026-05-31 | lab-l4-pro-gate-error-remaining | 84876dd1b | SHIP | ProGateFromPanelError on gamelog/rankings/buysell; pytest 9; rebase PR #1044

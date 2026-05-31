@@ -252,10 +252,16 @@ export function GamelogRenderer({ panel }: Props) {
             </ul>
           )}
         </div>
-        <footer className="mt-6">
+        <footer className="mt-6 flex flex-wrap items-center gap-4">
           <Link href="/explore" className="text-sm text-orange underline">
             pick a player in Explore →
           </Link>
+          <LabOgExportLink
+            slug="gamelog"
+            downloadName="razzle-gamelog.png"
+            playerId={DEFAULT_LAB_OG_PLAYER_ID}
+            label="export sample card"
+          />
         </footer>
       </div>
     );

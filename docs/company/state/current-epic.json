@@ -9,7 +9,7 @@
       "id": "lab-l4-pro-gate-error-surface",
       "title": "ProGateFromPanelError — breakouts renderer + perks pytest guard",
       "status": "done",
-      "merge_commit": "684cc1c4"
+      "merge_commit": "5721ee33"
     },
     {
       "id": "lab-l4-pro-gate-error-tradevalues",
@@ -26,13 +26,13 @@
   ],
   "next_atom_id": "lab-l4-pro-gate-error-remaining",
   "created_at": "2026-05-31T09:15:00Z",
-  "updated_at": "2026-05-31T09:15:00Z",
+  "updated_at": "2026-05-31T09:35:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-og-live-fetch-sticker",
+      "id": "lab-l5-og-live-fetch-merge",
       "status": "complete",
       "last_atom": "lab-og-gamelog-player-default",
-      "merge_commit": "c2dd447d"
+      "merge_commit": "4bc3913e"
     }
   ]
 }
