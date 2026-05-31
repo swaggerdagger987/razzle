@@ -1,10 +1,10 @@
-cycle: 78
+cycle: 76
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: league-power-rankings-og
-last_keep_cycle: 78
-last_commit: 30454811
+next_slice: PARITY — league-build-profiles-tab
+last_keep_cycle: 76
+last_commit: 059108d4
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
@@ -24,10 +24,7 @@ lab_l5_og_export_rankings_breakouts: complete
 lab_l5_og_export_prospects_weekly_tradevalues: complete
 lab_l5_og_live_extractors: complete
 lab_l5_og_live_rows_epic: complete
-lab_l5_og_snapshot_efficiency_aging: complete
-lab_l5_og_live_data_label: complete
-league_l5_bureau_h2h_copy_link: complete
-league_l5_bureau_self_scout_copy_link: complete
 league_l5_power_rankings_tab: complete
+league_l5_power_rankings_og: complete
+league_l5_roster_depth_tab: complete
 league_l5_unhide_bureau_epic: active
-league_l5_bureau_monte_carlo_share: complete

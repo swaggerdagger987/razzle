@@ -26,5 +26,11 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | fetchLiveOgRows + candidates | 2cb898b6 | keep | X-Razzle-Plan pro header; legacy API fallback chain
+2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
+2026-05-31 | Lab OG snapshot rows atom 1/4 | 916ba843 | keep | base64url snapshot + request-origin API fallback
+2026-05-31 | LabOgExportLink prospects weekly tradevalues | 8b5acdbe | keep | 3 files; replace raw og anchors
+2026-05-31 | power-rankings OG | e62721a6 | keep | 2 files; pressure-map pattern; POST power-rankings
+2026-05-31 | roster-depth tab | 059108d4 | keep | 3 files; Self-Scout depth grid pattern; Dolphin header
+2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
