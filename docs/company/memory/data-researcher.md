@@ -29,4 +29,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | breakout OG candidates | 2cb898b6 | keep | Hawkeye names on share card when API live
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
 2026-05-31 | build-profiles tab | 76545ad6 | keep | League L5 atom 1
-2026-05-31 | power-rankings luck framing | da33eafd | keep | buy-low on unlucky teams is dynasty thread shorthand
+2026-05-31 | power-rankings luck framing | 2ebb6ab0 | keep | buy-low on unlucky teams is dynasty thread shorthand

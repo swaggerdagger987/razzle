@@ -29,4 +29,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Lab OG live panel rows | 2cb898b6 | keep | fetchLiveOgRows panels slug + candidates extract; curl rankings 59509B breakouts 60649B
 2026-05-31 | Bureau H2H share bar | 044ee1e8 | keep | BureauH2HShareBar copy link + export; OG blurb Satori fix; curl 59305B
 2026-05-31 | build-profiles tab | 76545ad6 | keep | League L5 atom 1
-2026-05-31 | power-rankings tab | da33eafd | keep | BureauPowerRankings Octo luck board; atom 2/4
+2026-05-31 | power-rankings tab | 2ebb6ab0 | keep | BureauPowerRankings Octo luck board; atom 2/4
