@@ -1,20 +1,25 @@
-# Evidence — league-power-rankings-og (2026-05-31)
+# Evidence — League L5 Power Rankings OG
 
-## Route
+**Date:** 2026-05-31  
+**Atom:** `league-power-rankings-og`  
+**Route:** `/og/power-rankings?download=1&league=test`
 
-- `GET /og/power-rankings?download=1`
-- Bureau export link: `/og/power-rankings?league={id}&download=1`
+## Gate C
 
-## Curl (demo fallback, no league param)
-
-```bash
-curl -s -o /tmp/og-power-rankings.png -w "%{http_code} %{size_download}\n" \
-  "http://localhost:3000/og/power-rankings?download=1"
-# 200 66050
-file /tmp/og-power-rankings.png
-# PNG 1200x630
+```text
+curl -s -o /tmp/og-pr.png -w '%{http_code} %{size_download}\n' \
+  'http://localhost:3000/og/power-rankings?download=1&league=test'
+→ 200 59807
+file /tmp/og-pr.png → PNG 1200×630
 ```
+
+Demo rows render (#1 Dynasty Dukes, diff bars, luck index). Sample preview label when API empty.
+
+## Build
+
+- `npm run build --workspace=apps/web` — PASS
+- `JWT_SECRET=test python3 -m pytest apps/api/tests -q` — 51 passed
 
 ## Verdict
 
-PASS — Gate C2/C3: PNG ≥40KB with static demo power board rows (#1–#4 teams, differential bars, luck tags).
+**Reality: PASS** — FACTORY-DOD Gate C2 satisfied.

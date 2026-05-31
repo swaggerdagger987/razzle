@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import { BureauPowerRankingsShareBar } from "./BureauPowerRankingsShareBar";
 
 interface Props {
   data: Record<string, unknown>;
@@ -120,6 +121,8 @@ export function BureauPowerRankings({ data, leagueId }: Props) {
           </ul>
         )}
       </section>
+
+      <BureauPowerRankingsShareBar leagueId={leagueId} />
 
       <footer className="flex flex-wrap items-center gap-4 text-sm">
         <a
