@@ -8,8 +8,8 @@
     {
       "id": "lab-og-live-extractors",
       "title": "OG route extracts candidates/tiers via panels API with pro preview header",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "2cb898b6"
     },
     {
       "id": "lab-og-dynasty-comps-lab",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-live-extractors",
+  "next_atom_id": "lab-og-dynasty-comps-lab",
   "created_at": "2026-05-31T05:00:00Z",
   "updated_at": "2026-05-31T05:00:00Z"
 }
