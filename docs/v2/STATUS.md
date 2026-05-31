@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | Explore margin atom 2/4 or Lab OG live rows per NEXT.md |
-| Last commit | `f6e0985f3` |
+| Last commit | `1ebb9dc73` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
