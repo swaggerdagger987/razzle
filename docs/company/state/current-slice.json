@@ -1,24 +1,27 @@
 {
   "date": "2026-05-31",
-  "atom_id": "explore-og-universe-query",
-  "big_problem": "Explore college screener shares look like NFL exports — Reddit can't tell dynasty vs college OG cards apart without opening the file.",
-  "epic": "Explore L5 — universe-aware share exports",
-  "slice_title": "Explore OG college export filename + pytest guard",
-  "parity_ref": "Explore L5 — share card matches screener universe",
-  "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — college explore OG contract",
+  "atom_id": "bureau-self-scout-sharebar-snapshot",
+  "big_problem": "Self-Scout export cards still hit live API or demo — share URLs must encode in-panel depth grades so OG matches Bureau without Sleeper on curl.",
+  "epic": "League L5 — Bureau Self-Scout snapshot export (atom 1/3)",
+  "slice_title": "Self-Scout ShareBar + OG snapshot codec matches panel depth grades",
+  "parity_ref": "League L5 — watermarked export / Bureau H2H export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/explore/ExploreShareButton.tsx",
-    "apps/api/tests/test_explore_share_og_universe.py"
+    "apps/web/lib/bureau-self-scout-og-snapshot.ts",
+    "apps/web/components/league/BureauSelfScoutShareBar.tsx",
+    "apps/web/components/league/BureauSelfScout.tsx",
+    "apps/web/app/og/self-scout/route.tsx",
+    "apps/api/tests/test_bureau_self_scout_og_snapshot_codec.py"
   ],
-  "max_files": 2,
-  "max_lines": 60,
+  "max_files": 5,
+  "max_lines": 220,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_explore_share_og_universe.py -q",
+    "python3 -m pytest apps/api/tests/test_bureau_self_scout_og_snapshot_codec.py -q",
     "npm run build --workspace=apps/web 2>&1 | tail -8"
   ],
-  "out_of_scope": ["OG route logic", "screener API", "NORTH_STAR/DESIGN/DECISIONS"],
+  "out_of_scope": ["manager-profiles", "API schema changes", "new npm deps"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
