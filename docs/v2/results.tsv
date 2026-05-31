@@ -107,3 +107,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 148	c311a15a8	depth+voice+simplicity	keep	Lab	L5 gamelog default player in OG toLab band	trust=T5,T6; pytest 3; curl gamelog 62232B; hallway epic 2/3
 149	aa5cc4b0d	depth+voice+simplicity	keep	Lab	L5 snapshot pid in OG toLab watermark	trust=T5,T6; pytest 4; curl snap-only 53042B; hallway epic 3/3 complete
 150	454db1c1d	depth+voice+simplicity	keep	Lab	L5 percentiles OG live peer bars	trust=T5,T6; pytest 2; curl percentiles 62517B; pro profile OG epic 1/4
+151	4bbdfe1e1	depth+voice+simplicity	keep	Lab	L5 career OG live season arc	trust=T5,T6; pytest 2; curl career 54171B; pro profile OG epic 2/4
