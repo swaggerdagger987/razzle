@@ -1,29 +1,23 @@
 {
-  "epic_status": "active",
-  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 handling across launch-10 renderers drifts from teaser/perks polish.",
-  "epic_title": "Lab L4 — shared pro-gate error surface",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
+  "epic_status": "complete",
+  "big_problem": "Lab OG demo cards still read generic on Reddit — SAMPLE vs LIVE must be obvious at a glance.",
+  "epic_title": "Lab L5 — OG slug SAMPLE sticker polish",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-l4-pro-gate-error-surface",
-      "title": "ProGateFromPanelError — breakouts renderer + perks pytest guard",
+      "id": "lab-og-slug-sample-sticker",
+      "title": "Launch-10 OG — slug-specific SAMPLE sticker on demo fallback",
       "status": "done",
-      "merge_commit": "5721ee33"
-    },
-    {
-      "id": "lab-l4-pro-gate-error-tradevalues",
-      "title": "Wire ProGateFromPanelError on tradevalues + efficiency",
-      "status": "pending",
-      "merge_commit": null
-    },
-    {
-      "id": "lab-l4-pro-gate-error-remaining",
-      "title": "Wire ProGateFromPanelError on remaining launch-10 renderers",
-      "status": "pending",
-      "merge_commit": null
+      "merge_commit": "20b2bb06"
     }
   ],
+<<<<<<< HEAD
+  "next_atom_id": null,
+  "created_at": "2026-05-31T09:10:00Z",
+  "updated_at": "2026-05-31T09:10:00Z",
+  "completed_epics": []
+=======
   "next_atom_id": "lab-l4-pro-gate-error-tradevalues",
   "created_at": "2026-05-31T09:25:00Z",
   "updated_at": "2026-05-31T09:30:00Z",
@@ -35,4 +29,5 @@
       "merge_commit": "4bc3913e"
     }
   ]
+>>>>>>> origin/razzle-v2-redesign
 }
