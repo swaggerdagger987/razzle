@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab OG demo cards still read generic on Reddit — SAMPLE vs LIVE must be obvious at a glance.",
   "epic_title": "Lab L5 — OG SAMPLE vs LIVE sticker clarity",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
@@ -8,13 +8,13 @@
     {
       "id": "lab-og-slug-sample-sticker",
       "title": "Launch-10 OG — slug-specific SAMPLE sticker on demo fallback",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "7edea762"
     }
   ],
-  "next_atom_id": "lab-og-slug-sample-sticker",
+  "next_atom_id": null,
   "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T09:08:09Z",
   "completed_epics": [
     {
       "id": "lab-l2-sidebar-agent-groups",
@@ -27,6 +27,12 @@
       "status": "complete",
       "last_atom": "explore-og-universe-query",
       "merge_commit": "7dbd4b11"
+    },
+    {
+      "id": "lab-l5-og-sample-sticker",
+      "status": "complete",
+      "last_atom": "lab-og-slug-sample-sticker",
+      "merge_commit": "7edea762"
     }
   ]
 }
