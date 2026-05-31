@@ -1,23 +1,36 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau H2H export snapshot must decode on OG route (encode uses m-key, inline decode used t-key).",
-  "epic": "League L5 — Bureau H2H export parity",
-  "atom_id": "bureau-h2h-og-snapshot-decode",
-  "slice_title": "H2H OG wire shared snapshot decode",
-  "parity_ref": "League L5 — Bureau H2H export",
+  "big_problem": "Schedule tab still hid behind HIDDEN_BUREAU_SLUGS while SOS API returned live slate rows.",
+  "epic": "League L5 — Bureau unhide (final tab)",
+  "atom_id": "league-strength-of-schedule-tab",
+  "slice_title": "Schedule tab unhidden with Octo SOS matchup renderer",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
-  "trust_pillars": ["T1", "T5", "T6"],
+  "acceptance_ref": "ACCEPTANCE Bureau-7 tabs render without 404",
+  "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/bureau-h2h-og-snapshot.ts",
-    "apps/web/app/og/head-to-head/route.tsx"
+    "apps/web/lib/bureau-features.ts",
+    "apps/web/components/league/BureauStrengthOfSchedule.tsx",
+    "apps/web/components/league/BureauFeatureBody.tsx"
   ],
-  "max_files": 2,
-  "max_lines": 100,
+  "max_files": 3,
+  "max_lines": 200,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
+    "JWT_SECRET=test .venv-v2/bin/python -m pytest apps/api/tests -q",
+    "rg 'HIDDEN_BUREAU_SLUGS' apps/web/lib/bureau-features.ts"
   ],
-  "out_of_scope": ["Bureau UI", "NORTH_STAR / DESIGN"],
-  "builder_mode": "composer-surgical"
+  "out_of_scope": [
+    "OG export routes",
+    "API schema changes",
+    "Auth/billing"
+  ],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  },
+  "verdict": "SHIP"
 }
