@@ -95,6 +95,8 @@ function launch10LiveBlurbSuffix(slug: string): string {
   if (slug === "rankings") return " · live dynasty ranks";
   if (slug === "breakouts") return " · live RBS board";
   if (slug === "tradevalues") return " · live value curve";
+  if (slug === "gamelog") return " · live week log";
+  if (slug === "efficiency") return " · live efficiency ranks";
   return " · live nflverse rows";
 }
 
@@ -104,6 +106,8 @@ function launch10LiveStickerLabel(slug: string): string {
   if (slug === "rankings") return "LIVE · dynasty ranks";
   if (slug === "breakouts") return "LIVE · RBS board";
   if (slug === "tradevalues") return "LIVE · value curve";
+  if (slug === "gamelog") return "LIVE · week log";
+  if (slug === "efficiency") return "LIVE · efficiency ranks";
   return "LIVE · nflverse rows";
 }
 
@@ -643,10 +647,9 @@ export async function GET(
   const query = url.searchParams.get("q") ?? "";
   const positionFilter = url.searchParams.get("position") ?? "";
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
-  const playerId =
-    url.searchParams.get("player_id") ??
-    url.searchParams.get("id") ??
-    DEFAULT_OG_PLAYER_ID;
+  const rawPlayerId =
+    url.searchParams.get("player_id") ?? url.searchParams.get("id");
+  const playerId = rawPlayerId?.trim() || DEFAULT_OG_PLAYER_ID;
 
   const panel = getPanel(slug);
   if (!panel) {
