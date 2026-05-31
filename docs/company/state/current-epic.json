@@ -1,7 +1,6 @@
 {
-  "epic_status": "active",
-  "big_problem": "Five Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 depth is invisible in-product (PARITY League L5).",
-  "epic_title": "League L5 — Unhide Bureau tabs with screenshot-ready renderers",
+  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
+  "epic_title": "League L5 — Bureau behavioral share parity",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "atoms": [
@@ -18,10 +17,16 @@
       "merge_commit": null
     },
     {
-      "id": "league-roster-depth-tab",
-      "title": "Unhide Roster Depth tab with Dolphin renderer",
-      "status": "pending",
-      "merge_commit": null
+      "id": "league-power-rankings-og",
+      "title": "Power Rankings OG + copy board link",
+      "status": "done",
+      "merge_commit": "90bf2dd5"
+    },
+    {
+      "id": "bureau-trade-network-copy-link",
+      "title": "Trade Network copy link beside export card",
+      "status": "done",
+      "merge_commit": "e701e3bb"
     },
     {
       "id": "league-build-profiles-tab",
@@ -30,7 +35,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-power-rankings-og",
-  "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T05:15:00Z"
+  "next_atom_id": null,
+  "epic_status": "complete",
+  "created_at": "2026-05-31T04:44:00Z",
+  "updated_at": "2026-05-31T13:20:00Z",
+  "last_cycle_commit": "e701e3bb"
 }

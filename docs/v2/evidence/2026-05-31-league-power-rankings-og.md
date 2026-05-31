@@ -1,26 +1,25 @@
-# Evidence — 2026-05-31 league-power-rankings-og
+# Evidence — League L5 Power Rankings OG
 
-**Slice:** OG share card at `/og/power-rankings` with demo fallback + Bureau export row  
-**Atom:** `league-power-rankings-og` (League L5 epic atom 2/4)
+**Date:** 2026-05-31  
+**Atom:** `league-power-rankings-og`  
+**Route:** `/og/power-rankings`
 
-## Gate C — OG PNG
-
-```bash
-curl -s -o /tmp/og-pr.png -w '%{http_code} %{size_download}\n' \
-  'http://localhost:3000/og/power-rankings?download=1&league=test'
-file /tmp/og-pr.png
-```
+## Gate C
 
 | Check | Result |
 |-------|--------|
 | HTTP | 200 |
-| Size | 54939 bytes (≥40KB) |
-| Format | PNG 1200×630 |
-| Demo rows | 3 teams (#1 Dynasty Dukes …) when API empty |
+| PNG size | 68555 bytes |
+| Dimensions | 1200×630 PNG |
+| Demo rows | 5 teams with differential bars + luck tags when no league param |
+| Sample label | Subtitle includes "sample preview" when demo |
 
-**Verdict:** PASS — FACTORY-DOD Gate C2 satisfied.
+```bash
+curl -s -o /tmp/og-power-rankings.png -w '%{http_code} %{size_download}\n' \
+  'http://localhost:3000/og/power-rankings?download=1'
+# 200 68555
+file /tmp/og-power-rankings.png
+# PNG image data, 1200 x 630
+```
 
-## Build
-
-- `npm run build --workspace=apps/web` — exit 0, route listed `ƒ /og/power-rankings`
-- `JWT_SECRET=test python3 -m pytest apps/api/tests -q` — 51 passed, 5 skipped
+**Verdict:** PASS — FACTORY-DOD Gate C2/C3 satisfied.

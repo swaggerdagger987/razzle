@@ -123,6 +123,8 @@ export function BureauPowerRankings({ data, leagueId }: Props) {
         )}
       </section>
 
+      <BureauPowerRankingsShareBar leagueId={leagueId} />
+
       <footer className="flex flex-wrap items-center gap-4 text-sm">
         <Link href={`/league/${leagueId}/monte-carlo` as Route} className="text-orange underline">
           monte carlo →

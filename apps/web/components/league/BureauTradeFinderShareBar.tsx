@@ -4,22 +4,24 @@ import { useCallback, useState } from "react";
 
 interface Props {
   leagueId: string;
+  userId: string;
 }
 
-/** Copyable power board URL + OG export — mirrors BureauMonteCarloShareBar. */
-export function BureauPowerRankingsShareBar({ leagueId }: Props) {
+/** Copyable trade-finder URL + OG export — mirrors BureauH2HShareBar. */
+export function BureauTradeFinderShareBar({ leagueId, userId }: Props) {
   const [copied, setCopied] = useState(false);
 
-  const boardPath = `/league/${leagueId}/power-rankings`;
+  const tradePath = `/league/${leagueId}/trade-finder`;
 
   const ogParams = new URLSearchParams({
     league: leagueId,
+    user: userId,
     download: "1",
   });
 
   const copyLink = useCallback(async () => {
     const url =
-      typeof window !== "undefined" ? `${window.location.origin}${boardPath}` : boardPath;
+      typeof window !== "undefined" ? `${window.location.origin}${tradePath}` : tradePath;
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
@@ -27,16 +29,16 @@ export function BureauPowerRankingsShareBar({ leagueId }: Props) {
     } catch {
       setCopied(false);
     }
-  }, [boardPath]);
+  }, [tradePath]);
 
   return (
     <div className="mt-3 flex flex-wrap items-center gap-2">
       <button type="button" className="btn-chunky text-xs" onClick={() => void copyLink()}>
-        {copied ? "copied!" : "copy board link"}
+        {copied ? "copied!" : "copy trade link"}
       </button>
       <a
-        href={`/og/power-rankings?${ogParams.toString()}`}
-        download="razzle-power-rankings.png"
+        href={`/og/trade-finder?${ogParams.toString()}`}
+        download="razzle-trade-finder.png"
         className="btn-chunky active text-xs"
         style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
       >
