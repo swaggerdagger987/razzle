@@ -8,8 +8,8 @@
     {
       "id": "lab-og-weekly-snapshot",
       "title": "Weekly heatmap export passes top-6 PPG snapshot rows",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "650583a5"
     },
     {
       "id": "lab-og-prospects-snapshot",
@@ -30,7 +30,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-weekly-snapshot",
+  "next_atom_id": "lab-og-prospects-snapshot",
   "created_at": "2026-05-31T06:00:00Z",
   "updated_at": "2026-05-31T06:00:00Z"
 }
