@@ -91,12 +91,20 @@ jobs:
         continue-on-error: true
         with:
           script: |
-            await github.rest.pulls.enableAutoMerge({
+            const num = Number("${{ steps.pr.outputs.number }}");
+            const { data: pr } = await github.rest.pulls.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: Number("${{ steps.pr.outputs.number }}"),
-              merge_method: "merge",
+              pull_number: num,
             });
+            await github.graphql(
+              `mutation($id: ID!) {
+                enablePullRequestAutoMerge(input: { pullRequestId: $id, mergeMethod: MERGE }) {
+                  pullRequest { autoMergeRequest { enabledAt } }
+                }
+              }`,
+              { id: pr.node_id }
+            );
 
       - name: Summary
         run: |
