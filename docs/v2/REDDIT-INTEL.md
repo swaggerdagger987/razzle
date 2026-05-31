@@ -237,6 +237,10 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 53
 - **Screenshot potential:** Pill nudge with staff avatar + cross-room link — Pro/Elite conversion post without AI cringe
 
+## 2026-05-31 — Cycle 58
+
+- Dynasty tier/rankings screenshots remain high-signal on r/DynastyFF; dedicated `/og/rankings` with visible top-6 rows closes Lab export gap after generic panel route (cycle 57).
+
 ## 2026-05-23 — Cycle 55
 
 ### r/DynastyFF — filtered screener screenshot posts (pattern; live fetch 403)

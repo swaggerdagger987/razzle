@@ -17,3 +17,4 @@ anecdotes (>=3 independent threads = signal).
 ## Entries
 
 2026-05-30 | no web scraping | screenshot culture on r/DynastyFF remains the primary distribution engine | existing REDDIT-INTEL.md signals (cycles 31, 55) directly support Lab L5 OG — agent voice on screenshots and filtered data cards | keep | Lab OG live data card addresses standing gap "screenshot-worthy share cards"
+2026-05-31 | dynasty tier screenshots high-signal | atom-2 rankings OG shipped | keep | REDDIT-INTEL 2026-05-31 bullet; no new scrape

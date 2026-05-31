@@ -16,3 +16,4 @@ new evidence.
 ## Entries
 
 2026-05-30 | Lab L5 OG export cards with live data compound the Explore L5 watermarked export pattern | Lab L5 OG — DEPTH.md L5 "OG card per panel matches in-product export" | SHIP | keep | T5+T6 — screenshot gravity via real data rows not branding cards; agent badges differentiate from generic SaaS
+2026-05-31 | Epic atom-2: dedicated rankings OG after generic panel route | SHIP rankings OG atom-2/3 | keep | DynastyRankingsRenderer already links export; demo rows satisfy Gate C on CI

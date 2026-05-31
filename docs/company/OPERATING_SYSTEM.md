@@ -19,8 +19,8 @@ Razzle is in **deep build** stage:
 - **Product:** ~15% of V1 depth, ~5% of ceiling per `docs/v2/PARITY.md`. Pillars at L4-L5.
 - **Launch:** Not yet. Twitter and Reddit launches are deferred.
 - **Users:** None. No paid users. No public free users yet.
-- **Constraint:** Quality and velocity of **many atoms per open workday** at sustainable
-  token cost. Not distribution. Not revenue. See `docs/company/FACTORY-VISION.md`.
+- **Constraint:** Quality and velocity of slice production at sustainable token cost.
+  Not distribution. Not revenue. One atomic slice per morning trigger.
 
 The Company OS is build-coded by design. Distribution roles (Brand Guardian, Growth
 Operator, Launch Captain, Customer Voice) are explicitly deferred until launch readiness

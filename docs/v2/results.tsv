@@ -48,4 +48,4 @@ cycle	commit	score	status	pillar	slice	description
 55	5c19ee1	depth+hallway+reddit+voice+simplicity	keep	Explore	L5 watermarked export	/og/explore live top-6 screener rows position pills watermark ExploreShareButton dir param
 56	409a4ca0	gates+simplicity	keep	Lab	L5 OG export fix	Satori display:flex on /og/[panel] unblocks launch-10 export cards
 57	2e11270	depth+hallway+reddit+voice+simplicity	keep	Lab	L5 OG live data	/og/[panel] fetches live rows, agent badge, position pills, watermark, graceful fallback
-58	4d9668b	depth+hallway+reddit+voice+simplicity	keep	Lab	L5 rankings OG	/og/rankings dedicated route demo top-6 Octo badge Gate C 64KB PNG
+58	PENDING_HASH	depth+hallway+reddit+voice+simplicity	keep	Lab	L5 rankings OG	trust=T5,T6 /og/rankings demo top-6 Octo badge Gate C 64KB PNG
