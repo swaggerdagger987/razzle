@@ -2,6 +2,7 @@
 
 2026-05-31 | Factory cycle 119 SAMPLE demo sticker | c892dd56 | live-rows epic complete 3/3; NO_LOCK_GUARDRAIL.
 
+2026-05-31 | Factory cycle 119 SAMPLE demo sticker | c892dd56 | live-rows epic 3/3 complete; NO_LOCK_GUARDRAIL gh rate limit.
 2026-05-31 | Factory cycle 118 prospects/weekly LIVE sticker | 4cd32a84 | live-rows epic atom 2/3; lock #735.
 
 2026-05-31 | Factory cycle 117 prospects #rank OG | ab6ae8d7 | L5 live-fetch epic closes.
