@@ -1,5 +1,8 @@
 # Memory — Reality Checker
 
+2026-05-31 | lab-l4-pro-gate-error-remaining | 84876dd1b | PASS build + pytest 9; Gate C N/A (no OG).
+2026-05-31 | lab-l4-pro-gate-error-tradevalues | 9037b8e4 | PASS build + pytest 8; Gate C N/A (no OG).
+2026-05-31 | lab-l4-pro-gate-error-surface | da33eafd | PASS build + pytest 7; Gate C N/A (no OG).
 2026-05-31 | explore-og-universe-query Gate C | 7dbd4b11 | PASS college OG 41427B; build + pytest 58.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | pytest 6; web build ok; Gate C N/A.
 
