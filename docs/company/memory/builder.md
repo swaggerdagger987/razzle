@@ -28,3 +28,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
 2026-05-31 | Lab OG snapshot rows atom 1/4 | 916ba843 | keep | snapshot query; dashboard risers curl 45249B
 2026-05-31 | LabOgExportLink rankings+breakouts | 4b9d0464 | keep | 2 renderer footers on latest base; curl rankings 59509B breakouts 60649B
+2026-05-31 | LabOgExportLink prospects+weekly+tradevalues | da33eafd | keep | 3 renderer footers; curl 58084B/63819B/62488B; epic complete
