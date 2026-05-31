@@ -1,50 +1,38 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG share cards without panel stat keys sort by wrong fields when live API rows load — screenshots disagree with in-product Lab tables.",
-  "epic_title": "Lab L5 — OG live panel rows match in-product sort keys",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "epic_status": "active",
+  "big_problem": "Launch-10 Lab OG cards for weekly, prospects, and breakouts still mis-rank live API rows — Reddit screenshots disagree with in-product heatmaps and big boards.",
+  "epic_title": "Lab L5 — launch-10 OG live extract matches renderers",
+  "parity_ref": "Lab L4/L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-rankings-tradevalues-live-sort",
-      "title": "Rankings + Trade Values OG rank by dynasty_value / trade_value on live fetch",
-      "status": "done",
-      "merge_commit": "7f78b631"
+      "id": "lab-og-weekly-prospects-breakouts-live-extract",
+      "title": "Weekly hot-week + prospects RPS + breakouts RBS live OG extract",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-efficiency-aging-live-sort",
-      "title": "Efficiency + Aging OG rank by efficiency_score / peak_age on live fetch",
-      "status": "done",
-      "merge_commit": "2bba7622"
+      "id": "lab-og-gamelog-weeks-fpts-sort",
+      "title": "Gamelog OG ranks peak weeks by FPTS on live fetch",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-buysell-dashboard-live-sort",
-      "title": "Buy/Sell + Dashboard OG rank by value / rank_diff on live fetch",
-      "status": "done",
-      "merge_commit": "cb59494b"
+      "id": "lab-og-dynasty-comps-pro-teaser",
+      "title": "Dynasty comps Pro gate panel-specific teaser rows",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T07:42:00Z",
+  "next_atom_id": "lab-og-weekly-prospects-breakouts-live-extract",
+  "created_at": "2026-05-31T08:00:00Z",
+  "updated_at": "2026-05-31T08:00:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-sort-keys",
       "status": "complete",
       "last_atom": "lab-og-buysell-dashboard-live-sort",
       "merge_commit": "cb59494b"
-    },
-    {
-      "id": "league-l5-bureau-depth-og",
-      "status": "complete",
-      "last_atom": "league-strength-of-schedule-og-share",
-      "merge_commit": "7f652a98"
-    },
-    {
-      "id": "lab-l5-og-position-filter",
-      "status": "complete",
-      "last_atom": "lab-og-position-efficiency",
-      "merge_commit": "7fb236c5"
     }
   ]
 }

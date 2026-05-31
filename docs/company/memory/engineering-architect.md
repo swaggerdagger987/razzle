@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | lab-og-weekly-prospects-breakouts-live-extract | da33eafd | keep | extractWeeklyHeatmapRows + extractProspectsRows before generic extractRows
+
 2026-05-31 | lab-og-efficiency-aging-live-sort | 2bba7622 | 1 file route.tsx; PANEL_OG_STAT_KEY + statLabelForKey; mirrors rankings pattern
 
 2026-05-31 | tradevalues snapshot contract | 5ed39e14 | 1-file ≤25 lines; rank+formula statLabel pattern matches buysell

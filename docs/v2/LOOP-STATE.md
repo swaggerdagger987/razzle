@@ -1,9 +1,9 @@
-cycle: 104
+cycle: 105
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: PARITY next RED/YELLOW row
-last_keep_cycle: 104
-last_commit: cb59494b
-lab_l5_og_live_sort_epic: complete
-lab_l5_og_buysell_dashboard_live_sort: done
+next_slice: lab-og-gamelog-weeks-fpts-sort
+last_keep_cycle: 105
+last_commit: da33eafd
+lab_l5_og_live_extract_epic: active
+lab_og_weekly_prospects_breakouts_live_extract: in_progress
