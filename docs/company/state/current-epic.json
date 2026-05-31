@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Launch-10 Lab panels with zero API rows still cannot export a screenshot-worthy OG card from the empty state.",
   "epic_title": "Lab L5 — Launch-10 empty-board OG exports",
   "parity_ref": "Lab panel OG data rows",
@@ -20,14 +20,20 @@
     {
       "id": "lab-dashboard-empty-export",
       "title": "Dashboard empty risers export sample OG card",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-dashboard-empty-export",
+  "next_atom_id": null,
   "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T11:40:00Z",
+  "updated_at": "2026-05-31T12:20:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l5-launch10-empty-board-og-exports",
+      "status": "complete",
+      "last_atom": "lab-dashboard-empty-export",
+      "merge_commit": null
+    },
     {
       "id": "lab-l5-og-watermark-display-names",
       "status": "complete",
