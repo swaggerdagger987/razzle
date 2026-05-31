@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
-import { toLeague } from "@razzle/hallway";
+import { toLeague, toRoom } from "@razzle/hallway";
 import {
   bureauTradeFinderOgSnapshotToData,
   decodeBureauTradeFinderOgSnapshot,
@@ -76,6 +76,24 @@ function playerLabel(name: string): string {
   return name.length > 16 ? `${name.slice(0, 14)}…` : name;
 }
 
+function bonesTradeFinderRoomQuestion(match: BureauTradeFinderOgMatch): string {
+  return `Should I offer ${match.give.name} for ${match.get.name} from ${match.partner_team}? Value gap is ${match.gap_pct}%.`;
+}
+
+function bonesTradeFinderRoomPath(match: BureauTradeFinderOgMatch): string {
+  return toRoom({
+    agentId: "bones",
+    question: bonesTradeFinderRoomQuestion(match),
+    panelSlug: "trade-finder",
+    player: {
+      playerId: match.give.player_id,
+      name: match.give.name,
+      slug: match.give.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+      position: match.give.position,
+    },
+  });
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
@@ -100,6 +118,7 @@ export async function GET(req: Request) {
   const needs = panelData.needs ?? [];
   const surplus = panelData.surplus ?? [];
   const leagueDeepLink = league ? toLeague(league, "trade-finder") : "/league/trade-finder";
+  const bonesRoomPath = hero ? bonesTradeFinderRoomPath(hero) : "/room?agent=bones&from=trade-finder";
 
   return new ImageResponse(
     (
@@ -287,6 +306,12 @@ export async function GET(req: Request) {
           ))}
         </div>
 
+        {hero ? (
+          <div style={{ display: "flex", fontSize: 18, color: "#d97757", marginTop: 10 }}>
+            {`razzle.lol${bonesRoomPath} · ask ${bones.name} about ${hero.partner_team}`}
+          </div>
+        ) : null}
+
         {/* Always-on watermark band — matches H2H + Lab panel OG (T6 screenshot gravity) */}
         <div
           style={{
@@ -305,7 +330,9 @@ export async function GET(req: Request) {
         >
           <div style={{ display: "flex", fontWeight: 700 }}>{`razzle.lol${leagueDeepLink}`}</div>
           <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
-            {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
+            {hero
+              ? `ask ${bones.name} about ${hero.partner_team}${isDownload ? " · export" : ""}`
+              : `made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
           </div>
         </div>
       </div>
