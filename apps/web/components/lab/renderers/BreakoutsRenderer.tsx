@@ -17,8 +17,8 @@ import {
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
-import { ProUpgradeGate } from "../ProUpgradeGate";
 import { LabOgExportLink } from "../LabOgExportLink";
+import { ProUpgradeGate } from "../ProUpgradeGate";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
@@ -251,7 +251,11 @@ export function BreakoutsRenderer({ panel }: Props) {
           >
             Ask Hawkeye about {top.name} →
           </Link>
-          <LabOgExportLink slug="breakouts" downloadName="razzle-breakouts.png" />
+          <LabOgExportLink
+            slug="breakouts"
+            downloadName="razzle-breakouts.png"
+            position={position || undefined}
+          />
         </footer>
       )}
     </div>

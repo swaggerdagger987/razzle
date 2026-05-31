@@ -35,6 +35,7 @@ export function LabOgExportLink({
   label = "export card",
   playerId,
   snapshotRows,
+  position,
 }: {
   slug: string;
   downloadName?: string;
@@ -43,12 +44,15 @@ export function LabOgExportLink({
   playerId?: string;
   /** Top rows from the in-product panel — OG card matches what the user sees. */
   snapshotRows?: OgSnapshotRow[];
+  /** When set, OG route passes position to the panel API (matches in-panel filter). */
+  position?: string;
 }) {
   const file = downloadName ?? `razzle-${slug}.png`;
   const params = new URLSearchParams({ download: "1" });
   if (playerId) params.set("player_id", playerId);
   const snapshot = snapshotRows?.length ? encodeOgSnapshot(snapshotRows) : undefined;
   if (snapshot) params.set("snapshot", snapshot);
+  if (position) params.set("position", position);
   return (
     <a
       href={`/og/${slug}?${params.toString()}`}

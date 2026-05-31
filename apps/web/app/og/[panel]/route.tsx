@@ -343,6 +343,8 @@ export async function GET(
   const isDownload = url.searchParams.get("download") === "1";
   const query = url.searchParams.get("q") ?? "";
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
+  const positionFilter =
+    url.searchParams.get("position") ?? url.searchParams.get("pos") ?? "";
   const playerId =
     url.searchParams.get("player_id") ??
     url.searchParams.get("id") ??
@@ -367,6 +369,9 @@ export async function GET(
   if (PLAYER_SCOPED_SLUGS.has(slug)) {
     apiParams.player_id = playerId;
   }
+  if (positionFilter) {
+    apiParams.position = positionFilter;
+  }
   const snapshotRows = snapshotParam ? decodeOgSnapshot(snapshotParam) : [];
   const snapshotHasRows =
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
@@ -380,7 +385,13 @@ export async function GET(
   const liveHasRows = liveRows.length > 0 && liveRows.some((r) => r.name);
   const isSnapshot = snapshotHasRows;
   const isDemo = !isSnapshot && !liveHasRows;
-  const rows = isSnapshot ? snapshotRows : liveHasRows ? liveRows : demoRowsForPanel(slug);
+  let rows = isSnapshot ? snapshotRows : liveHasRows ? liveRows : demoRowsForPanel(slug);
+  if (positionFilter) {
+    rows = rows.filter((r) => r.position === positionFilter);
+    if (isDemo && rows.length === 0) {
+      rows = demoRowsForPanel(slug).filter((r) => r.position === positionFilter);
+    }
+  }
 
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
@@ -450,6 +461,26 @@ export async function GET(
                     : ""
           }`}
         </div>
+
+        {positionFilter && (
+          <div
+            style={{
+              display: "flex",
+              alignSelf: "flex-start",
+              fontSize: 18,
+              fontWeight: 700,
+              color: "#2d1f14",
+              background: POS_COLOR[positionFilter] ?? "#d97757",
+              padding: "4px 12px",
+              border: "3px solid #2d1f14",
+              borderRadius: 8,
+              marginBottom: 12,
+              boxShadow: "3px 3px 0 #2d1f14",
+            }}
+          >
+            {positionFilter} only
+          </div>
+        )}
 
         {query && (
           <div

@@ -1,10 +1,12 @@
-cycle: 73
+cycle: 70
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: bureau-monte-carlo-copy-link
-last_keep_cycle: 73
-last_commit: 3fc08ebc
+next_slice: lab-og-filter-position-rankings or lab-og-api-origin-rewrite
+last_keep_cycle: 70
+last_commit: 853ec05c
+lab_l5_og_filter_breakouts_weekly: complete
+lab_l5_og_snapshot_rows: in_progress
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
@@ -18,8 +20,5 @@ lab_l5_og_export_link_epic: complete
 lab_l5_og_export_gamelog_efficiency_aging: complete
 lab_l5_og_export_buysell_dashboard: complete
 lab_l5_og_export_player_scoped: complete
-lab_l5_og_live_extractors: complete
-lab_l5_og_live_row_epic: complete
-lab_l5_og_snapshot_efficiency_aging: complete
-league_l5_bureau_h2h_copy_link: complete
-league_l5_bureau_self_scout_copy_link: complete
+lab_l5_og_dynasty_comps_panel_export: complete
+lab_l5_og_snapshot_rows: complete

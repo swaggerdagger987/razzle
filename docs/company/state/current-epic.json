@@ -1,31 +1,36 @@
 {
-  "epic_status": "active",
-  "big_problem": "Bureau rivalry screens must travel in group chats like Explore — copy link plus export on the same row.",
-  "epic_title": "League L5 — Bureau share row parity",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
-  "depth_ref": "League L5",
+  "big_problem": "Lab OG export cards must mirror the filters on screen — position on the URL should drive API rows and demo fallbacks, not a generic top-six.",
+  "epic_title": "Lab L5 — OG cards match in-product filter state",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "bureau-h2h-copy-link",
-      "title": "Head-to-Head copy link + export row mirrors Explore",
+      "id": "lab-og-filter-position-rankings",
+      "title": "Position filter on dynasty rankings OG export + API wiring",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "bureau-self-scout-copy-link",
-      "title": "Self-Scout copy link beside export card",
+      "id": "lab-og-filter-breakouts-weekly",
+      "title": "Position filter on breakouts and weekly heatmap OG exports",
       "status": "done",
-      "merge_commit": "3fc08ebc"
+      "merge_commit": "853ec05c"
     },
     {
-      "id": "bureau-monte-carlo-copy-link",
-      "title": "Monte Carlo copy link beside export card",
+      "id": "lab-og-filter-prospects-tradevalues",
+      "title": "Filter params on prospects and trade-values OG exports",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-live-row-label",
+      "title": "OG card subtitle distinguishes live rows vs sample preview",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-monte-carlo-copy-link",
-  "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T12:00:00Z",
-  "last_cycle_commit": null
+  "next_atom_id": "lab-og-filter-position-rankings",
+  "epic_status": "active",
+  "created_at": "2026-05-31T04:20:00Z",
+  "updated_at": "2026-05-31T04:30:00Z"
 }
