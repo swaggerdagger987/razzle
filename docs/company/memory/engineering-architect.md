@@ -1,3 +1,4 @@
+2026-05-31 | league-og-power-rankings-watermark | f6e0985f3 | SHIP | Mirror pressure-map OG; resolveApiOrigin + toLeague.
 2026-05-31 | league-og-pressure-map-watermark | 7b942533a | SHIP | Mirror self-scout OG; resolveApiOrigin + toLeague.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | route map loop + pytest rows; ≤80 lines.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | TOLAB_DEFAULT_POSITION + watermarkPosition.

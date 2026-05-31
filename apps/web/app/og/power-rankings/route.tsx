@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { toLeague } from "@razzle/hallway";
 import { decodeBureauPowerRankingsOgSnapshot } from "@/lib/bureau-power-rankings-og-snapshot";
 
 export const runtime = "edge";
@@ -38,9 +39,14 @@ function diffColor(diff: number): string {
   return "#e63946";
 }
 
-async function fetchPowerRankings(leagueId: string): Promise<PowerData | null> {
-  const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
+/** Edge OG must hit same-origin `/api/*` so Next rewrites reach FastAPI (dev/preview/CI). */
+function resolveApiOrigin(req: Request): string {
+  return new URL(req.url).origin;
+}
+
+async function fetchPowerRankings(req: Request, leagueId: string): Promise<PowerData | null> {
   if (!leagueId) return null;
+  const apiOrigin = resolveApiOrigin(req);
 
   try {
     const res = await fetch(`${apiOrigin}/api/bureau/power-rankings`, {
@@ -69,12 +75,14 @@ export async function GET(req: Request) {
   const snapshot = snapshotParam ? decodeBureauPowerRankingsOgSnapshot(snapshotParam) : null;
 
   const octo = AGENT_BY_ID.octo;
-  const live = snapshot?.rows?.length ? null : await fetchPowerRankings(league);
   const fromSnapshot = snapshot?.rows?.length ? snapshot.rows : null;
-  const isDemo = !fromSnapshot?.length && !live?.rows?.length;
+  const live = fromSnapshot ? null : await fetchPowerRankings(req, league);
+  const isLive = Boolean(live?.rows?.length);
+  const isDemo = !fromSnapshot?.length && !isLive;
   const rows = (fromSnapshot ?? (isDemo ? DEMO_ROWS : live!.rows!)).slice(0, 5);
   const leader = rows[0] ?? DEMO_LEADER;
   const fromPanel = Boolean(fromSnapshot?.length);
+  const leagueDeepLink = league ? toLeague(league, "power-rankings") : "/league/power-rankings";
 
   return new ImageResponse(
     (
@@ -121,9 +129,53 @@ export async function GET(req: Request) {
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 14 }}>
           {`points differential · pythagorean luck${
-            fromPanel ? " · from your board" : isDemo ? " · sample preview" : ""
+            fromPanel ? " · from your board" : isLive ? " · live league data" : " · sample preview"
           }`}
         </div>
+
+        {isLive ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            LIVE · Sleeper power rankings
+          </div>
+        ) : null}
+
+        {isDemo && !fromPanel ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(1.5deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            SAMPLE · demo ranking rows
+          </div>
+        ) : null}
 
         {leader ? (
           <div
@@ -198,22 +250,26 @@ export async function GET(req: Request) {
           })}
         </div>
 
+        {/* Always-on watermark band — matches Pressure Map + Self-Scout OG (T6 screenshot gravity) */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-end",
+            alignItems: "center",
+            marginTop: 16,
+            padding: "10px 18px",
+            background: "#d97757",
+            color: "#f7efe5",
+            border: "3px solid #2d1f14",
+            borderRadius: 8,
+            boxShadow: "4px 4px 0 #2d1f14",
             fontSize: 20,
-            color: "#5c4a3d",
-            marginTop: 14,
           }}
         >
-          <div style={{ display: "flex" }}>{`razzle.lol/league${league ? `/${league}` : ""}/power-rankings`}</div>
-          {isDownload ? (
-            <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
-              made with 🐯 razzle.lol
-            </div>
-          ) : null}
+          <div style={{ display: "flex", fontWeight: 700 }}>{`razzle.lol${leagueDeepLink}`}</div>
+          <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
+            {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
+          </div>
         </div>
       </div>
     ),
