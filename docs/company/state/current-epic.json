@@ -1,30 +1,30 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG share cards must render the same player rows as in-product panels when the API returns data — not generic demo shells (DEPTH Lab L5).",
-  "epic_title": "Lab L5 — OG live panel row parity",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
+  "big_problem": "Bureau rivalry screens must travel in group chats like Explore — copy link plus export on the same row.",
+  "epic_title": "League L5 — Bureau share row parity",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-live-extractors",
-      "title": "OG route extracts candidates/tiers via panels API with pro preview header",
+      "id": "bureau-h2h-copy-link",
+      "title": "Head-to-Head copy link + export row mirrors Explore",
       "status": "done",
-      "merge_commit": "2cb898b6"
+      "merge_commit": "99f8a2aa"
     },
     {
-      "id": "lab-og-dynasty-comps-lab",
-      "title": "Dynasty-comps Lab renderer + scoped export footer",
-      "status": "pending",
-      "merge_commit": null
+      "id": "bureau-self-scout-copy-link",
+      "title": "Self-Scout copy link beside export card",
+      "status": "done",
+      "merge_commit": "3fc08ebc"
     },
     {
-      "id": "lab-og-launch10-live-label",
-      "title": "Launch-10 OG cards drop sample label when live rows render",
+      "id": "bureau-monte-carlo-copy-link",
+      "title": "Monte Carlo copy link beside export card",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-dynasty-comps-lab",
-  "created_at": "2026-05-31T05:00:00Z",
-  "updated_at": "2026-05-31T05:00:00Z"
+  "next_atom_id": "bureau-monte-carlo-copy-link",
+  "created_at": "2026-05-31T04:35:00Z",
+  "updated_at": "2026-05-31T04:50:00Z"
 }
