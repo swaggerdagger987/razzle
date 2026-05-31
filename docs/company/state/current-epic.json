@@ -26,14 +26,6 @@
   ],
   "next_atom_id": null,
   "created_at": "2026-05-31T05:30:00Z",
-  "updated_at": "2026-05-31T14:15:00Z",
-  "last_cycle_commit": "d9548870",
-  "completed_epics": [
-    {
-      "id": "league-l5-unhide-bureau-tabs",
-      "status": "complete",
-      "last_atom": "league-strength-of-schedule-tab",
-      "merge_commit": "eb542d51"
-    }
-  ]
+  "updated_at": "2026-05-31T14:20:00Z",
+  "last_cycle_commit": "d9548870"
 }
