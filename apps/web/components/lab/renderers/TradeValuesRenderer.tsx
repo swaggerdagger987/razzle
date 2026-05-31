@@ -101,13 +101,18 @@ export function TradeValuesRenderer({ panel }: Props) {
   const topPlayer = players[0] ?? null;
 
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
-    return players.slice(0, 6).map((p) => ({
-      name: p.full_name,
-      position: p.position,
-      team: p.team,
-      stat: formula ? (p.formula_score ?? 0) : (p.trade_value ?? 0),
-      statLabel: formula ? "Score" : "Value",
-    }));
+    return players.slice(0, 6).map((p, i) => {
+      const rank = formula ? i + 1 : (p.rank ?? i + 1);
+      const stat = formula ? (p.formula_score ?? 0) : (p.trade_value ?? 0);
+      const statLabel = formula ? `${rank} · ${formula.name}` : `${rank} · Value`;
+      return {
+        name: p.full_name,
+        position: p.position,
+        team: p.team,
+        stat,
+        statLabel,
+      };
+    });
   }, [players, formula]);
 
   if (q.isPending) {
