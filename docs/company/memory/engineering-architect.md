@@ -32,9 +32,9 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | encodeH2hSnapshot on ShareBar | 3d498394 | keep | BureauOgExportLink codec; OG from your panel label
 2026-05-31 | H2H OG Atlas hallway | 389cab8e | keep | toRoom on edge OG footer; ShareBar link; no new deps
 2026-05-31 | resolveApiOrigin H2H OG | 59a54b72 | keep | snapshot → live → demo; mirrors Lab panel OG
-2026-05-31 | BureauTradeNetworkShareBar | da33eafd | keep | mirrors MC share bar; league OG param unchanged
+2026-05-31 | BureauTradeNetworkShareBar | 51b37d6f | keep | mirrors MC share bar; league OG param unchanged
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
 2026-05-31 | prospects tradevalues snapshot | 69e4c732 | keep | mirrors DynastyRankingsRenderer ogSnapshotRows pattern
 2026-05-31 | BureauWaiverTendencies | 920304a2 | keep | Hawkeye archetype cards; waiver-tendencies unhidden; mirrors roster-depth pattern
 2026-05-31 | BureauStrengthOfSchedule | 12b51b1e | keep | single-user SOS API → bars; empty HIDDEN set; 3-file contract
-2026-05-31 | LabSidebar agent sections | da33eafd | keep | staffByAgent via agentForPanel; 1 file; reuses lab-sidebar-agent CSS
+2026-05-31 | LabSidebar agent sections | 51b37d6f | keep | staffByAgent via agentForPanel; 1 file; reuses lab-sidebar-agent CSS
