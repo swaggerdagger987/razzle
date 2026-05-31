@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | lab-og-gamelog-player-default | 9ff71715 | PASS | curl gamelog 60634B ×2; build ok; Gate C2; PR #1012 pending merge.
+
 2026-05-31 | lab-og-gamelog-player-default | cb757cc2 | PASS | curl gamelog 60634B ×2; pytest 59; Gate C2.
 
 2026-05-31 | explore-og-universe-query Gate C | 7dbd4b11 | PASS college OG 41427B; build + pytest 58.
