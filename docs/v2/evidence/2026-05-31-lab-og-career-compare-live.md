@@ -15,7 +15,7 @@ file /tmp/og-career-compare.png
 | Result | Value |
 |--------|-------|
 | HTTP | 200 |
-| Size | 52967 bytes |
+| Size | 52967 bytes (post-merge rebase verify) |
 | Type | PNG 1200×630 |
 
 ## Tests

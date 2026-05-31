@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-career-compare-live | PLACEHOLDER | PASS | Gate C curl career-compare 52967B.
+2026-05-31 | lab-og-career-compare-live | 1c6bd1172 | PASS | Gate C curl career-compare 52967B.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
 
