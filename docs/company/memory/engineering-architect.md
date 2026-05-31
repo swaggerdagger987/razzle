@@ -34,4 +34,5 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
 2026-05-31 | BureauTradeNetworkShareBar | da33eafd | keep | mirrors MC share bar; league OG param unchanged
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
-2026-05-31 | ProspectsRenderer ogSnapshotRows | bd680f03 | keep | school→team mapping; position passthrough
+2026-05-31 | prospects tradevalues snapshot | 69e4c732 | keep | mirrors DynastyRankingsRenderer pattern on base
+2026-05-31 | ProspectsRenderer ogSnapshotRows | da33eafd | keep | RPS statLabel; position passthrough on export

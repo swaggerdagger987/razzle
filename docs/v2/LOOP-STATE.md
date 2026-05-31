@@ -1,10 +1,10 @@
-cycle: 88
+cycle: 89
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-snapshot-tradevalues — trade values OG snapshot
-last_keep_cycle: 88
-last_commit: bd680f03
+next_slice: league L5 bureau build-profiles or new Lab epic from PARITY
+last_keep_cycle: 89
+last_commit: da33eafd
 lab_l5_og_snapshot_weekly_breakouts: complete
 explore_l5_watermarked_export: complete
 lab_l5_og_export_link_epic: complete
@@ -14,17 +14,21 @@ lab_l5_og_export_player_scoped: complete
 lab_l5_og_dynasty_comps_panel_export: complete
 lab_l5_og_snapshot_rows: complete
 lab_l5_og_export_rankings_breakouts: complete
-lab_l5_og_export_prospects_weekly_tradevalues: complete
 lab_l5_og_live_extractors: complete
 lab_l5_og_live_rows_epic: complete
 lab_l5_og_snapshot_efficiency_aging: complete
 lab_l5_og_live_data_label: complete
+lab_l5_og_mirror_rows_epic: complete
+lab_l5_og_snapshot_epic: complete
 league_l5_bureau_h2h_copy_link: complete
 league_l5_bureau_self_scout_copy_link: complete
 league_l5_bureau_h2h_og_live_label: complete
 league_l5_bureau_h2h_snapshot_export: complete
 league_l5_bureau_h2h_export_epic: complete
 league_l5_power_rankings_tab: complete
-league_l5_unhide_bureau_epic: active
+league_l5_unhide_bureau_epic: complete
 league_l5_bureau_monte_carlo_share_bar: complete
-lab_l5_og_snapshot_epic: active
+league_l5_bureau_share_row_epic: complete
+league_l5_bureau_manager_profiles_copy_link: complete
+league_l5_bureau_pressure_map_copy_link: complete
+league_l5_bureau_trade_network_share_bar: complete
