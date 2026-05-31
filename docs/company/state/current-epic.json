@@ -9,7 +9,7 @@
       "id": "league-sos-og-export",
       "title": "Bureau Schedule OG share card with snapshot rows",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "29b83712"
     }
   ],
   "next_atom_id": null,
@@ -26,7 +26,7 @@
       "id": "league-l5-sos-export",
       "status": "complete",
       "last_atom": "league-sos-og-export",
-      "merge_commit": null
+      "merge_commit": "29b83712"
     }
   ],
   "next_epic": {
