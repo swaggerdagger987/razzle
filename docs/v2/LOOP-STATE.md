@@ -1,9 +1,9 @@
-cycle: 90
+cycle: 91
 last_board_cycle: 54
 focus_pillar: Lab
-focus_layer: L5
-next_slice: league-waiver-tendencies-tab
-last_keep_cycle: 90
-last_commit: c9151786
+focus_layer: L4
+next_slice: lab-sidebar-agent-groups
+last_keep_cycle: 91
+last_commit: 8b4934f7
 lab_l5_dashboard_og_snapshot: complete
 lab_l5_og_snapshot_epic: complete
