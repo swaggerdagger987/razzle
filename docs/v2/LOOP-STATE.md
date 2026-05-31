@@ -1,9 +1,11 @@
-cycle: 90
+cycle: 93
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: league-waiver-tendencies-tab
-last_keep_cycle: 90
-last_commit: c9151786
-lab_l5_dashboard_og_snapshot: complete
-lab_l5_og_snapshot_epic: complete
+next_slice: lab-og-fidelity-epic-wrap
+last_keep_cycle: 93
+last_commit: da33eafd
+lab_l5_og_snapshot_fidelity_epic: active
+lab_l5_og_prospects_rps_ranked: complete
+lab_l5_og_weekly_ppg_ranked: complete
+lab_l5_og_breakouts_score_ranked: in_progress
