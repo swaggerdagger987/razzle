@@ -1,4 +1,4 @@
-# Evidence — lab-og-gamelog-player-default (cycle 129)
+# Evidence — lab-og-gamelog-player-default (cycle 130)
 
 **Date:** 2026-05-31  
 **Atom:** `lab-og-gamelog-player-default`  
@@ -8,7 +8,7 @@
 
 ```bash
 curl -s -o /tmp/gamelog-og.png -w "%{http_code} %{size_download}\n" \
-  "http://127.0.0.1:3001/og/gamelog?download=1&player_id=00-0036900"
+  "http://127.0.0.1:3000/og/gamelog?download=1&player_id=00-0036900"
 # 200 60634 — PNG 1200×630
 ```
 
