@@ -4,7 +4,7 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: lab-og-from-panel-gate-c-rest
 last_keep_cycle: 143
-last_commit: da33eafd
+last_commit: e4204015f
 lab_l5_formula_og_epic: active
 room_l5_briefing_gtm_epic: complete
 explore_l5_universe_share_epic: complete
