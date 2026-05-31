@@ -46,3 +46,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles archetypes | 2ee04975 | keep | league construction tape for trade-DM screenshots
 2026-05-31 | Lab OG live sort | 7f78b631 | skip | no new Reddit intel this cycle
+2026-05-31 | Bureau H2H watermark | da33eafd | skip | no new Reddit intel this cycle
