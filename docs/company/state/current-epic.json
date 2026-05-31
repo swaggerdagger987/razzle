@@ -14,8 +14,8 @@
     {
       "id": "lab-buysell-empty-export",
       "title": "Buy/sell empty lanes export sample OG card",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "d5af3acfe"
     },
     {
       "id": "lab-dashboard-empty-export",
