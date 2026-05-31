@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | lab-sidebar-search-agent-labels | 0ddf7f6b | showAgentInTitle when query set.
+
 2026-05-31 | lab-pro-gate-perks-copy | 73fdbf9c | keep | proUpgradePerkLines from getPanel + BUREAU_7 slugs.
 
 2026-05-31 | lab-pro-gate-loading-copy | 7236be3e | PanelAgentLoading wired into ProUpgradeGate.
