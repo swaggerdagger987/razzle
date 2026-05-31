@@ -2,14 +2,14 @@
   "date": "2026-05-31",
   "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 roster archetypes are invisible in-product.",
   "epic": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
-  "slice_title": "Build Profiles tab unhidden with Atlas roster archetype renderer",
-  "atom_id": "league-build-profiles-tab",
+  "slice_title": "Waiver Tendencies tab unhidden with transaction pattern renderer",
+  "atom_id": "league-waiver-tendencies-tab",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "acceptance_ref": "ACCEPTANCE Gate 3 — Bureau behavioral tabs return data",
   "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauBuildProfiles.tsx",
+    "apps/web/components/league/BureauWaiverTendencies.tsx",
     "apps/web/components/league/BureauFeatureBody.tsx",
     "apps/web/lib/bureau-features.ts"
   ],
@@ -18,9 +18,9 @@
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "node -e \"const fs=require('fs'); const s=fs.readFileSync('apps/web/lib/bureau-features.ts','utf8'); if(!/HIDDEN_BUREAU_SLUGS[^]*build-profiles/.test(s)) process.exit(0); else { console.error('build-profiles still hidden'); process.exit(1); }\""
+    "node -e \"const fs=require('fs'); const s=fs.readFileSync('apps/web/lib/bureau-features.ts','utf8'); if(!s.includes('waiver-tendencies')) process.exit(0); const m=s.match(/HIDDEN_BUREAU_SLUGS[^;]+/); if(m&&m[0].includes('waiver-tendencies')){console.error('waiver-tendencies still hidden');process.exit(1);} process.exit(0);\""
   ],
-  "out_of_scope": ["OG route", "API changes", "unhide waiver/SOS tabs", "NORTH_STAR/DESIGN/DECISIONS edits"],
+  "out_of_scope": ["OG route", "API changes", "unhide strength-of-schedule", "NORTH_STAR/DESIGN/DECISIONS edits"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
