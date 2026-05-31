@@ -16,6 +16,8 @@ A good entry changes future behavior. A bad entry is a diary.
 
 2026-05-31 | Factory cycle 1 dashboard OG snapshot | c9151786 | keep | dedup prospects+tradevalues on base 1a56450e
 
+2026-05-31 | factory cycle 1 | League L5 Bureau epic 3/3 complete — all tabs visible | da33eafd | SHIP | — | — | — | standup 2026-05-31 cycle 93
+
 ---
 
 ## Entries

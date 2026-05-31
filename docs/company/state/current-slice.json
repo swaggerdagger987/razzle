@@ -1,25 +1,28 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-dashboard-og-snapshot",
-  "big_problem": "Launch Lab dashboard/comps panels still export OG cards without in-panel comp rows when data loads.",
-  "epic": "Lab L5 — Dashboard/comps OG snapshot parity",
-  "slice_title": "DashboardRenderer encodes top-6 comp match rows in dynasty-comps OG snapshot",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2 — OG PNG ≥40KB",
-  "trust_pillars": ["T5", "T6"],
+  "atom_id": "league-strength-of-schedule-tab",
+  "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows.",
+  "epic": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
+  "slice_title": "Schedule tab unhidden with Octo SOS renderer",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD — Bureau tab visible, web build green",
+  "trust_pillars": ["T2", "T5"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/DashboardRenderer.tsx"
+    "apps/web/lib/bureau-features.ts",
+    "apps/web/components/league/BureauFeatureBody.tsx",
+    "apps/web/components/league/BureauStrengthOfSchedule.tsx"
   ],
-  "max_files": 1,
-  "max_lines": 40,
+  "max_files": 3,
+  "max_lines": 180,
   "acceptance_commands": [
+    "JWT_SECRET=test pytest apps/api/tests -q",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-dynasty-comps.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/dynasty-comps?download=1'"
+    "node -e \"const {HIDDEN_BUREAU_SLUGS}=require('./apps/web/lib/bureau-features.ts');\" 2>/dev/null || grep -q 'new Set\\(\\[\\]\\)' apps/web/lib/bureau-features.ts || ! grep -q strength-of-schedule apps/web/lib/bureau-features.ts | head -1; test $(grep -c strength-of-schedule apps/web/lib/bureau-features.ts) -ge 1"
   ],
   "out_of_scope": [
-    "OG route changes",
-    "DynastyCompsRenderer (already has snapshot)",
+    "API strength_of_schedule.py changes",
+    "OG export routes",
     "NORTH_STAR / DESIGN edits"
   ],
   "builder_mode": "composer-surgical"
