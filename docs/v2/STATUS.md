@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | Bureau OG hallway deep links atom 2/3 |
-| Last commit | `25a2d4e95` |
+| Last commit | `db7ec3ce6` |
 
 ---
 
