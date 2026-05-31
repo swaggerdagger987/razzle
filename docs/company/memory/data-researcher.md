@@ -30,3 +30,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
 2026-05-31 | Lab OG snapshot rows atom 1/4 | 916ba843 | keep | export must match on-screen rows REDDIT-INTEL
 2026-05-31 | launch-10 OG export sweep | 8b5acdbe | keep | college board + heatmap + trade chart shareable
+2026-05-31 | league power OG | e62721a6 | keep | differential boards share when record lies

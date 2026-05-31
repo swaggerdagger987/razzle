@@ -15,7 +15,7 @@
       "id": "league-power-rankings-og",
       "title": "OG share card at /og/power-rankings with demo fallback",
       "status": "done",
-      "merge_commit": "da33eafd"
+      "merge_commit": "e62721a6"
     },
     {
       "id": "league-roster-depth-tab",
