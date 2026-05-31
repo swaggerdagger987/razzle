@@ -8,14 +8,14 @@
     {
       "id": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
       "title": "Rankings + tradevalues + breakouts — LIVE/SAMPLE panel-native stickers",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "d01beef1"
     },
     {
       "id": "lab-og-launch10-gamelog-efficiency-aging-labels",
       "title": "Gamelog + efficiency + aging — panel-native LIVE/SAMPLE stickers",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "0807e792d"
     },
     {
       "id": "lab-og-launch10-buysell-dashboard-labels",
@@ -30,9 +30,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
+  "next_atom_id": "lab-og-launch10-buysell-dashboard-labels",
   "created_at": "2026-05-31T09:00:42Z",
-  "updated_at": "2026-05-31T09:00:42Z",
+  "updated_at": "2026-05-31T09:22:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-fetch-merge",
