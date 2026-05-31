@@ -1,7 +1,7 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Reality Checker
 
-2026-05-31 | league-trade-finder-og-snapshot | f6e0985f3 | PASS pytest 5; curl snapshot PNG 56868B; web build green.
+2026-05-31 | league-trade-finder-og-snapshot | c3a46f51b | PASS pytest 5; curl snapshot PNG 56868B; web build green.
 
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | PASS | pytest 3; curl buysell 55234B.
 

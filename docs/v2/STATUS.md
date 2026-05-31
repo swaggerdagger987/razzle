@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | league-trade-finder-room-hallway |
-| Last commit | `f6e0985f3` |
+| Last commit | `c3a46f51b` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

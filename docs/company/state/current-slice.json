@@ -2,27 +2,8 @@
   "date": "2026-05-31",
   "atom_id": "league-trade-finder-og-snapshot",
   "slice_title": "Trade Finder OG — snapshot param encodes in-panel trade rows",
-  "big_problem": "Trade Finder export cards can diverge from the Bureau panel when OG re-fetches API — Reddit screenshots need the same rows the user saw.",
-  "epic_ref": "League L5 — Bureau Trade Finder GTM export (atom 2/3)",
-  "allowed_paths": [
-    "apps/web/lib/bureau-trade-finder-og-snapshot.ts",
-    "apps/web/app/og/trade-finder/route.tsx",
-    "apps/web/components/league/BureauTradeFinderShareBar.tsx",
-    "apps/web/components/league/BureauTradeFinder.tsx",
-    "apps/api/tests/test_trade_finder_og_snapshot_codec.py"
-  ],
-  "acceptance_commands": [
-    "pytest apps/api/tests/test_trade_finder_og_snapshot_codec.py apps/api/tests/test_trade_finder_og_watermark.py -q",
-    "cd apps/web && npm run build"
-  ],
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP"
-  },
-  "trust_pillars": ["T5", "T6"],
-  "content_commit": null,
-  "status": "in_progress",
-  "reality": null,
-  "merge": null
+  "content_commit": "c3a46f51b",
+  "status": "shipped",
+  "reality": "PASS",
+  "merge": "pending"
 }
