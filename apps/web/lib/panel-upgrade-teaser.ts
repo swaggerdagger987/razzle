@@ -1,5 +1,8 @@
 /** Static blur-preview rows + staff voice for Pro upgrade gates (Lab L4). */
 
+import { getPanel } from "@razzle/panels";
+import { BUREAU_ENDPOINTS } from "./bureau-features";
+
 /** Launch-10 Staff Picks — mirrors `LabSidebar` STAFF_PICKS + PARITY Launch 10 table. */
 export const LAUNCH_10_STAFF_PICK_SLUGS = [
   "weekly",
@@ -24,6 +27,34 @@ export const LAUNCH_10_PRO_GATE_SLUGS = [
   "aging",
   "buysell",
 ] as const;
+
+/** Bureau-7 behavioral moat tabs — mirrors COUNCIL + `LeagueDashboard` screenshot set. */
+export const BUREAU_7_FEATURE_SLUGS = [
+  "self-scout",
+  "head-to-head",
+  "pressure-map",
+  "trade-network",
+  "trade-finder",
+  "manager-profiles",
+  "monte-carlo",
+] as const;
+
+function launch10PerkTitles(): string[] {
+  return LAUNCH_10_STAFF_PICK_SLUGS.map((slug) => getPanel(slug)?.title ?? slug);
+}
+
+function bureau7PerkLabels(): string[] {
+  return BUREAU_7_FEATURE_SLUGS.map((slug) => BUREAU_ENDPOINTS[slug]?.title ?? slug);
+}
+
+/** Three conversion bullets — catalog + Bureau labels, not marketing placeholders. */
+export function proUpgradePerkLines(): [string, string, string] {
+  return [
+    `10 launch Lab panels — ${launch10PerkTitles().join(", ")}`,
+    `7 Bureau behavioral tabs — ${bureau7PerkLabels().join(", ")}`,
+    "Situation Room — six pixel staff, your league in context",
+  ];
+}
 
 export type TeaserPosition = "QB" | "RB" | "WR" | "TE";
 
