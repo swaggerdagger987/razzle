@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | lab-og-dynasty-comps-pro-teaser | da33eafd | teaserOgRowsForPanel shared with ProUpgradeGate; 2 files ≤90 lines.
+2026-05-31 | lab-og-dynasty-comps-pro-teaser | ca2100fd | teaserOgRowsForPanel shared with ProUpgradeGate; 2 files ≤90 lines.
 
 2026-05-31 | lab-og-gamelog-weeks-fpts-sort | bc79925e | extractGamelogWeekRows mirrors GamelogRenderer; route.tsx only.
 

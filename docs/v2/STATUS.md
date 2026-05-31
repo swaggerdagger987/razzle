@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | (epic complete — see PARITY/NEXT) |
-| Last commit | `da33eafd` |
+| Last commit | `ca2100fd` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | dynasty-comps OG Pro teaser | da33eafd | Free OG preview matches Pro gate blur — live-extract epic 3/3 complete.
+2026-05-31 | dynasty-comps OG Pro teaser | ca2100fd | Free OG preview matches Pro gate blur — live-extract epic 3/3 complete.
 
 2026-05-31 | gamelog OG weeks FPTS | bc79925e | Atlas peak-week exports match in-panel sort — live-extract epic atom 2/3 done.
 

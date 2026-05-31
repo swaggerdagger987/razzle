@@ -21,7 +21,7 @@
       "id": "lab-og-dynasty-comps-pro-teaser",
       "title": "Dynasty comps Pro gate panel-specific teaser rows",
       "status": "done",
-      "merge_commit": "da33eafd"
+      "merge_commit": "ca2100fd"
     }
   ],
   "next_atom_id": null,
@@ -56,7 +56,7 @@
       "id": "lab-l5-og-live-extract-matches-renderers",
       "status": "complete",
       "last_atom": "lab-og-dynasty-comps-pro-teaser",
-      "merge_commit": "da33eafd"
+      "merge_commit": "ca2100fd"
     }
   ]
 }
