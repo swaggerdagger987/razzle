@@ -25,5 +25,7 @@
     "BureauHeadToHead layout changes",
     "NORTH_STAR / DESIGN edits"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "verdict": "SHIP",
+  "content_commit": "6c8da85f"
 }
