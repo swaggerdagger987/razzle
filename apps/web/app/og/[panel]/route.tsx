@@ -48,6 +48,7 @@ const OG_PRO_PREVIEW_HEADER = "X-Razzle-Plan";
 
 /** Ja'Marr Chase — nflverse gsis_id for OG previews when no player_id in URL. */
 const DEFAULT_OG_PLAYER_ID = "00-0036900";
+const DEFAULT_OG_PLAYER_NAME = "Ja'Marr Chase";
 
 /** Lab panels that require player_id on the API (path or query). */
 const PLAYER_SCOPED_SLUGS = new Set([
@@ -923,6 +924,10 @@ async function fetchOgLiveRows(
 }
 
 /** Typed hallway path for OG watermark band (T6 — click back into Lab). */
+function slugifyPlayerName(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
 function labOgWatermarkLink(
   slug: string,
   opts: {
@@ -930,6 +935,7 @@ function labOgWatermarkLink(
     playerId: string;
     playerScoped: boolean;
     snapshotPlayerId?: string;
+    playerDisplayName?: string;
   },
 ): string {
   const watermarkPlayerId = opts.snapshotPlayerId ?? opts.playerId;
@@ -938,14 +944,19 @@ function labOgWatermarkLink(
     (opts.playerScoped || Boolean(opts.snapshotPlayerId)) &&
     watermarkPlayerId &&
     (watermarkPlayerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer);
+  const resolvedName =
+    opts.playerDisplayName?.trim() ||
+    (watermarkPlayerId === DEFAULT_OG_PLAYER_ID && includeDefaultPlayer
+      ? DEFAULT_OG_PLAYER_NAME
+      : "player");
   let path = toLab(
     slug,
     usePlayer
       ? {
           player: {
             playerId: watermarkPlayerId,
-            slug: watermarkPlayerId,
-            name: "player",
+            slug: slugifyPlayerName(resolvedName) || watermarkPlayerId,
+            name: resolvedName,
           },
         }
       : undefined,
@@ -1047,6 +1058,7 @@ export async function GET(
     playerId,
     playerScoped: PLAYER_SCOPED_SLUGS.has(slug),
     snapshotPlayerId: snapshotExportPlayerId,
+    playerDisplayName: url.searchParams.get("name") ?? undefined,
   });
 
   return new ImageResponse(
