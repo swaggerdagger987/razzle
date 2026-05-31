@@ -27,10 +27,11 @@ const STAT_CANDIDATE_KEYS = [
   "ppg",
   "fpts",
   "score",
+  "breakout_score",
   "similarity",
+  "rank_diff",
   "composite_score",
   "efficiency_score",
-  "breakout_score",
   "total_yards",
   "pts",
   "rank",
@@ -51,10 +52,6 @@ const PLAYER_SCOPED_SLUGS = new Set([
   "fptsbreakdown",
   "archetypes",
 ]);
-
-function resolvePanelApiPath(path: string, playerId: string): string {
-  return path.replace(/\{player_id\}/g, encodeURIComponent(playerId));
-}
 
 /** Sample rows for OG preview when API/terminal.db unavailable (FACTORY-DOD Gate C). */
 const DEFAULT_DEMO_ROWS: OgRow[] = [
@@ -187,6 +184,12 @@ function extractRows(data: unknown): OgRow[] {
     candidates = obj.rankings as Record<string, unknown>[];
   } else if (Array.isArray(obj.comps)) {
     candidates = obj.comps as Record<string, unknown>[];
+  } else if (Array.isArray(obj.candidates)) {
+    candidates = obj.candidates as Record<string, unknown>[];
+  } else if (Array.isArray(obj.top5) || Array.isArray(obj.risers)) {
+    const top5 = Array.isArray(obj.top5) ? (obj.top5 as Record<string, unknown>[]) : [];
+    const risers = Array.isArray(obj.risers) ? (obj.risers as Record<string, unknown>[]) : [];
+    candidates = [...top5, ...risers];
   } else if (Array.isArray(data)) {
     candidates = data as Record<string, unknown>[];
   }
@@ -203,6 +206,8 @@ function extractRows(data: unknown): OgRow[] {
       if (k === "ppg") statLabel = "PPG";
       if (k === "dynasty_value" || k === "trade_value" || k === "value") statLabel = "Value";
       if (k === "similarity") statLabel = "Match %";
+      if (k === "rank_diff") statLabel = "Chg";
+      if (k === "breakout_score") statLabel = "Score";
       break;
     }
   }
@@ -221,31 +226,41 @@ function extractRows(data: unknown): OgRow[] {
   }));
 }
 
+function ogFetchHeaders(): HeadersInit {
+  const headers: Record<string, string> = { Accept: "application/json" };
+  const plan = process.env.RAZZLE_OG_CARD_PLAN?.toLowerCase();
+  if (plan === "free" || plan === "pro" || plan === "elite") {
+    headers["X-Razzle-Plan"] = plan;
+  }
+  return headers;
+}
+
+/** Same panels API the Lab uses — keeps OG rows aligned with in-product tape. */
 async function fetchPanelData(
   slug: string,
-  apiPath: string,
   method: string,
   params?: Record<string, unknown>,
 ): Promise<OgRow[]> {
   const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
+  const headers = ogFetchHeaders();
 
   try {
     let res: Response;
     if (method === "POST") {
-      res = await fetch(`${apiOrigin}${apiPath}`, {
+      res = await fetch(`${apiOrigin}/api/panels/${encodeURIComponent(slug)}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { ...headers, "Content-Type": "application/json" },
         body: JSON.stringify({ limit: 6, ...(params ?? {}) }),
       });
     } else {
-      const url = new URL(`${apiOrigin}${apiPath}`);
+      const url = new URL(`${apiOrigin}/api/panels/${encodeURIComponent(slug)}`);
       if (params) {
         for (const [k, v] of Object.entries(params)) {
           if (v != null) url.searchParams.set(k, String(v));
         }
       }
       url.searchParams.set("limit", "6");
-      res = await fetch(url.toString());
+      res = await fetch(url.toString(), { headers });
     }
     if (!res.ok) return [];
     const data = await res.json();
@@ -288,19 +303,13 @@ export async function GET(
   const agentEmoji = agent?.emoji ?? "🐯";
   const agentName = agent?.name ?? "Razzle";
 
-  const rawPath = panel.api.path;
-  const apiPath = rawPath.includes("{player_id}")
-    ? resolvePanelApiPath(rawPath, playerId)
-    : rawPath;
   const apiParams: Record<string, unknown> = {
     ...(panel.api.params as Record<string, unknown> | undefined),
   };
-  if (PLAYER_SCOPED_SLUGS.has(slug)) {
+  if (PLAYER_SCOPED_SLUGS.has(slug) || panel.api.path.includes("{player_id}")) {
     apiParams.player_id = playerId;
   }
-  const liveRows = apiPath
-    ? await fetchPanelData(slug, apiPath, panel.api.method, apiParams)
-    : [];
+  const liveRows = await fetchPanelData(slug, panel.api.method, apiParams);
   const liveHasRows = liveRows.length > 0 && liveRows.some((r) => r.name);
   const isDemo = !liveHasRows;
   const rows = isDemo ? demoRowsForPanel(slug) : liveRows;
@@ -366,7 +375,7 @@ export async function GET(
               ? " · comps for Ja'Marr Chase · sample preview"
               : isDemo
                 ? " · sample preview"
-                : ""
+                : " · live tape"
           }`}
         </div>
 

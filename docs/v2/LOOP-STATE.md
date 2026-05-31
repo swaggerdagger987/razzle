@@ -1,10 +1,10 @@
-cycle: 68
+cycle: 69
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: epic complete — pick next from PARITY/NEXT
-last_keep_cycle: 68
-last_commit: ffccedf4
+next_slice: lab-og-export-link-rankings-breakouts (epic atom 2/3)
+last_keep_cycle: 69
+last_commit: da33eafd
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
@@ -18,3 +18,5 @@ lab_l5_og_export_link_epic: complete
 lab_l5_og_export_gamelog_efficiency_aging: complete
 lab_l5_og_export_buysell_dashboard: complete
 lab_l5_og_export_player_scoped: complete
+lab_l5_og_panels_api_live: complete
+lab_l5_og_live_rows_epic: in_progress
