@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import { BureauPressureMapShareBar } from "./BureauPressureMapShareBar";
 
 interface Props {
   data: Record<string, unknown>;
@@ -120,7 +121,8 @@ export function BureauPressureMap({ data, leagueId }: Props) {
         </ul>
       </section>
 
-      <footer className="flex flex-wrap gap-4 text-sm">
+      <footer className="flex flex-wrap items-center gap-4 text-sm">
+        <BureauPressureMapShareBar leagueId={leagueId} />
         <Link href={`/league/${leagueId}/manager-profiles` as Route} className="text-orange underline">
           manager profiles →
         </Link>

@@ -1,6 +1,6 @@
 "use client";
 
-import { agentForPanel } from "@razzle/agents";
+import { AGENT_BY_ID, agentForPanel, type AgentDefinition, type AgentId } from "@razzle/agents";
 import {
   PANELS,
   panelsByCategory,
@@ -25,19 +25,10 @@ const CATEGORY_LABELS: Record<PanelCategory, string> = {
   college: "College",
 };
 
-/** Launch-10 panels — agent-owned in sidebar Staff Picks */
-const STAFF_PICKS = new Set([
-  "weekly",
-  "prospects",
-  "rankings",
-  "tradevalues",
-  "breakouts",
-  "gamelog",
-  "efficiency",
-  "aging",
-  "buysell",
-  "dashboard",
-]);
+/** Display order for staff desk groups (hallway H-04). */
+const STAFF_AGENT_ORDER: AgentId[] = ["hawkeye", "octo", "bones", "atlas", "dolphin", "razzle"];
+
+type SidebarView = "category" | "staff";
 
 interface Props {
   activeSlug?: string;
@@ -49,7 +40,8 @@ interface Props {
 
 export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, onCloseMobile, onToggle }: Props) {
   const [query, setQuery] = useState("");
-  const [collapsedCats, setCollapsedCats] = useState<Set<string>>(new Set());
+  const [viewMode, setViewMode] = useState<SidebarView>("category");
+  const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set());
 
   const panels = useMemo(() => (query ? searchPanels(query) : PANELS), [query]);
 
@@ -63,14 +55,36 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
     return map;
   }, [panels]);
 
-  function toggleCategory(cat: string) {
-    setCollapsedCats((prev) => {
+  const staffByAgent = useMemo(() => {
+    const map = new Map<AgentId, PanelDefinition[]>();
+    for (const panel of panels) {
+      const owner = agentForPanel(panel.slug);
+      const id = owner?.id ?? "razzle";
+      const arr = map.get(id) ?? [];
+      arr.push(panel);
+      map.set(id, arr);
+    }
+    const ordered = STAFF_AGENT_ORDER.filter((id) => map.has(id)).map((id) => ({
+      agent: AGENT_BY_ID[id] as AgentDefinition,
+      panels: map.get(id) ?? [],
+    }));
+    for (const [id, agentPanels] of map) {
+      if (STAFF_AGENT_ORDER.includes(id)) continue;
+      ordered.push({ agent: AGENT_BY_ID[id] as AgentDefinition, panels: agentPanels });
+    }
+    return ordered;
+  }, [panels]);
+
+  function toggleGroup(key: string) {
+    setCollapsedGroups((prev) => {
       const next = new Set(prev);
-      if (next.has(cat)) next.delete(cat);
-      else next.add(cat);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
       return next;
     });
   }
+
+  const showStaffView = viewMode === "staff" && !query;
 
   return (
     <aside
@@ -85,46 +99,85 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
           onChange={(e) => setQuery(e.target.value)}
           aria-label="Search panels"
         />
+        {!query && !collapsed && (
+          <div className="lab-sidebar-view-toggle" role="group" aria-label="Sidebar grouping">
+            <button
+              type="button"
+              className={`lab-sidebar-view-btn${viewMode === "category" ? " active" : ""}`}
+              onClick={() => setViewMode("category")}
+              aria-pressed={viewMode === "category"}
+            >
+              Category
+            </button>
+            <button
+              type="button"
+              className={`lab-sidebar-view-btn${viewMode === "staff" ? " active" : ""}`}
+              onClick={() => setViewMode("staff")}
+              aria-pressed={viewMode === "staff"}
+            >
+              Staff
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="lab-sidebar-inner">
-        {!query && (
-          <div className="lab-sidebar-category">
-            <span className="cat-text">Staff Picks</span>
-          </div>
-        )}
-        {!query &&
-          PANELS.filter((p) => STAFF_PICKS.has(p.slug)).map((panel) => (
-            <SidebarItem
-              key={`staff-${panel.slug}`}
-              panel={panel}
-              activeSlug={activeSlug}
-              badge="★"
-              onNavigate={onCloseMobile}
-            />
-          ))}
-
-        {Array.from(grouped.entries()).map(([category, items]) => (
-          <div key={category}>
-            <button
-              type="button"
-              className="lab-sidebar-category"
-              onClick={() => toggleCategory(category)}
-            >
-              <span className="cat-text">{CATEGORY_LABELS[category]}</span>
-              <span aria-hidden>{collapsedCats.has(category) ? "▸" : "▾"}</span>
-            </button>
-            {!collapsedCats.has(category) &&
-              items.map((panel) => (
-                <SidebarItem
-                  key={panel.slug}
-                  panel={panel}
-                  activeSlug={activeSlug}
-                  onNavigate={onCloseMobile}
-                />
-              ))}
-          </div>
-        ))}
+        {showStaffView
+          ? staffByAgent.map(({ agent, panels: agentPanels }) => {
+              const groupKey = `desk-${agent.id}`;
+              return (
+                <div key={groupKey}>
+                  <button
+                    type="button"
+                    className="lab-sidebar-category lab-sidebar-desk"
+                    onClick={() => toggleGroup(groupKey)}
+                  >
+                    <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <img
+                        src={`/agents/${agent.avatar}.svg`}
+                        alt=""
+                        className="lab-sidebar-agent"
+                        width={20}
+                        height={20}
+                      />
+                      <span className="cat-text">{agent.name}</span>
+                    </span>
+                    <span aria-hidden>{collapsedGroups.has(groupKey) ? "▸" : "▾"}</span>
+                  </button>
+                  {!collapsedGroups.has(groupKey) &&
+                    agentPanels.map((panel) => (
+                      <SidebarItem
+                        key={panel.slug}
+                        panel={panel}
+                        activeSlug={activeSlug}
+                        onNavigate={onCloseMobile}
+                      />
+                    ))}
+                </div>
+              );
+            })
+          : Array.from(grouped.entries()).map(([category, items]) => (
+              <div key={category}>
+                <button
+                  type="button"
+                  className="lab-sidebar-category"
+                  onClick={() => toggleGroup(category)}
+                >
+                  <span className="cat-text">{CATEGORY_LABELS[category]}</span>
+                  <span aria-hidden>{collapsedGroups.has(category) ? "▸" : "▾"}</span>
+                </button>
+                {!collapsedGroups.has(category) &&
+                  items.map((panel) => (
+                    <SidebarItem
+                      key={panel.slug}
+                      panel={panel}
+                      activeSlug={activeSlug}
+                      showOwnerInTitle={Boolean(query)}
+                      onNavigate={onCloseMobile}
+                    />
+                  ))}
+              </div>
+            ))}
       </div>
 
       {onToggle && (
@@ -140,15 +193,20 @@ function SidebarItem({
   panel,
   activeSlug,
   badge,
+  showOwnerInTitle = false,
   onNavigate,
 }: {
   panel: PanelDefinition;
   activeSlug?: string;
   badge?: string;
+  /** When searching, prefix visible title with agent owner (hallway H-04). */
+  showOwnerInTitle?: boolean;
   onNavigate?: () => void;
 }) {
   const active = activeSlug === panel.slug;
   const owner = agentForPanel(panel.slug);
+  const label =
+    showOwnerInTitle && owner ? `${owner.name} · ${panel.title}` : panel.title;
   return (
     <Link
       href={`/lab/${panel.slug}`}
@@ -166,7 +224,7 @@ function SidebarItem({
           height={18}
         />
       )}
-      {panel.title}
+      {label}
       {panel.tier === "pro" && <span className="lab-pro-lock"> 🔒</span>}
       {badge && <span className="lab-staff-pick"> {badge}</span>}
     </Link>

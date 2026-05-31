@@ -1,4 +1,61 @@
+import { PANELS, getPanel } from "@razzle/panels";
+import type { OgSnapshotRow } from "@/components/lab/LabOgExportLink";
+
 /** Static blur-preview rows + staff voice for Pro upgrade gates (Lab L4). */
+import { BUREAU_ENDPOINTS } from "./bureau-features";
+
+/** Launch-10 Staff Picks — mirrors `LabSidebar` STAFF_PICKS + PARITY Launch 10 table. */
+export const LAUNCH_10_STAFF_PICK_SLUGS = [
+  "weekly",
+  "prospects",
+  "rankings",
+  "tradevalues",
+  "breakouts",
+  "gamelog",
+  "efficiency",
+  "aging",
+  "buysell",
+  "dashboard",
+] as const;
+
+/** Pro-tier launch panels (generic `ProUpgradeGate` + dedicated renderers). */
+export const LAUNCH_10_PRO_GATE_SLUGS = [
+  "rankings",
+  "tradevalues",
+  "breakouts",
+  "gamelog",
+  "efficiency",
+  "aging",
+  "buysell",
+] as const;
+
+/** Bureau-7 behavioral moat tabs — mirrors COUNCIL + `LeagueDashboard` screenshot set. */
+export const BUREAU_7_FEATURE_SLUGS = [
+  "self-scout",
+  "head-to-head",
+  "pressure-map",
+  "trade-network",
+  "trade-finder",
+  "manager-profiles",
+  "monte-carlo",
+] as const;
+
+function launch10PerkTitles(): string[] {
+  return LAUNCH_10_STAFF_PICK_SLUGS.map((slug) => getPanel(slug)?.title ?? slug);
+}
+
+function bureau7PerkLabels(): string[] {
+  return BUREAU_7_FEATURE_SLUGS.map((slug) => BUREAU_ENDPOINTS[slug]?.title ?? slug);
+}
+
+/** Three conversion bullets — catalog + Bureau labels, not marketing placeholders. */
+export function proUpgradePerkLines(): [string, string, string] {
+  return [
+    `10 launch Lab panels — ${launch10PerkTitles().join(", ")}`,
+    `7 Bureau behavioral tabs — ${bureau7PerkLabels().join(", ")}`,
+    "Situation Room — six pixel staff, your league in context",
+  ];
+}
 
 export type TeaserPosition = "QB" | "RB" | "WR" | "TE";
 
@@ -46,24 +103,97 @@ const ROWS_BY_SLUG: Record<string, TeaserRow[]> = {
     { name: "Josh Allen", position: "QB", detail: "Wk 11 · 28.1 pts" },
     { name: "Josh Allen", position: "QB", detail: "Wk 10 · 41.2 pts" },
   ],
+  tiers: [
+    { name: "CeeDee Lamb", position: "WR", detail: "Tier S · win-now anchor" },
+    { name: "Bijan Robinson", position: "RB", detail: "Tier S · youth + volume" },
+    { name: "Brock Bowers", position: "TE", detail: "Tier A · positional scarcity" },
+  ],
+  vorp: [
+    { name: "Christian McCaffrey", position: "RB", detail: "VORP +4.2 · RB1 gap" },
+    { name: "Tyreek Hill", position: "WR", detail: "VORP +3.1 · spike weeks" },
+    { name: "Travis Kelce", position: "TE", detail: "VORP +2.8 · TE cliff" },
+  ],
+  stocks: [
+    { name: "Garrett Wilson", position: "WR", detail: "Rising · +12 rank wk" },
+    { name: "Deebo Samuel", position: "WR", detail: "Falling · sell window" },
+    { name: "James Cook", position: "RB", detail: "Rising · market lag" },
+  ],
+  waivers: [
+    { name: "Jayden Higgins", position: "WR", detail: "FAAB 18% · snap climb" },
+    { name: "Cam Skattebo", position: "RB", detail: "FAAB 12% · role emerging" },
+    { name: "Elic Ayomanor", position: "WR", detail: "FAAB 9% · targets ↑" },
+  ],
+  "dynasty-comps": [
+    { name: "Ja'Marr Chase", position: "WR", detail: "Comp: CeeDee Lamb · 94% match" },
+    { name: "Bijan Robinson", position: "RB", detail: "Comp: Jonathan Taylor · 91%" },
+    { name: "Marvin Harrison Jr.", position: "WR", detail: "Comp: Mike Evans · 88%" },
+  ],
+  weekly: [
+    { name: "Tyreek Hill", position: "WR", detail: "Wk 12 · 31.4 pts · hot cell" },
+    { name: "Amon-Ra St. Brown", position: "WR", detail: "Wk 11 · 28.2 pts" },
+    { name: "Garrett Wilson", position: "WR", detail: "Wk 10 · 9.1 pts · cold streak" },
+  ],
+  prospects: [
+    { name: "Travis Hunter", position: "WR", detail: "RPS 94 · combine 4.4" },
+    { name: "Cam Ward", position: "QB", detail: "RPS 91 · draft capital 1.01" },
+    { name: "Omarion Hampton", position: "RB", detail: "RPS 88 · workload path" },
+  ],
+  dashboard: [
+    { name: "Bijan Robinson", position: "RB", detail: "Riser · +8 rank · 24.1 PPG" },
+    { name: "Davante Adams", position: "WR", detail: "Faller · sell window" },
+    { name: "Garrett Wilson", position: "WR", detail: "Value pick · market lag" },
+  ],
 };
 
 const PITCH_BY_SLUG: Record<string, string> = {
   rankings: "full dynasty tiers and trade-value curves — not just the free screener",
-  tradevalues: "value curves and market inefficiencies your league mates can't see",
-  breakouts: "next-wave producers before the waiver wire notices",
+  tradevalues: "trade-value curves and deal inefficiencies — price trades before you send the offer",
+  breakouts: "RBS breakout scores and usage spikes before the waiver wire notices",
   efficiency: "points-per-opportunity ranks that separate luck from role",
   aging: "peak-age curves so you sell before the cliff, not after",
   buysell: "buy-low and sell-high mismatches ranked by market lag",
   gamelog: "week-by-week game logs with peak-week context for trades",
+  tiers: "S/A/B/C tiers so trades stop feeling random",
+  vorp: "value-over-replacement ranks that show who actually moves the needle",
+  stocks: "rising and falling dynasty assets before your league reacts",
+  waivers: "waiver-wire risers ranked by recent production and role",
+  "dynasty-comps": "statistical comp cards with match % — price any dynasty asset like a desk",
+  weekly: "weekly heatmap streaks before your league mates spot the run",
+  prospects: "rookie big board with combine and college context",
+  dashboard: "dynasty pulse — risers, fallers, and value picks in one view",
 };
+
+export function hasCustomTeaser(slug: string): boolean {
+  return slug in ROWS_BY_SLUG && slug in PITCH_BY_SLUG;
+}
 
 export function teaserRowsForPanel(slug: string): TeaserRow[] {
   return ROWS_BY_SLUG[slug] ?? DEFAULT_ROWS;
+}
+
+/** Map pro-gate blur preview rows to OG snapshot payload (sample export from gate). */
+export function teaserRowsToOgSnapshot(slug: string): OgSnapshotRow[] {
+  return teaserRowsForPanel(slug).map((row) => ({
+    name: row.name,
+    position: row.position,
+    team: "—",
+    stat: 0,
+    statLabel: row.detail,
+  }));
 }
 
 export function upgradePitchForPanel(slug: string, agentName: string): string {
   const pitch = PITCH_BY_SLUG[slug];
   if (pitch) return `${agentName}: unlock ${pitch}.`;
   return `${agentName}: this panel is Pro — the screener stays free, the intel doesn't.`;
+}
+
+/** Launch-10 panel titles in PARITY table order — for Pro gate perks copy. */
+export function launch10PerkLabels(): string[] {
+  const bySlug = Object.fromEntries(PANELS.map((p) => [p.slug, p.title]));
+  return LAUNCH_10_STAFF_PICK_SLUGS.map((slug) => bySlug[slug] ?? slug);
+}
+
+export function formatPerkNameList(labels: readonly string[]): string {
+  return labels.join(", ");
 }

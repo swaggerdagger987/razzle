@@ -8,6 +8,7 @@ import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 
 interface DashboardPlayer {
@@ -113,6 +114,40 @@ export function DynastyDashboardRenderer({ panel }: Props) {
   });
 
   const topRiser = q.data?.risers?.[0];
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const top5 = q.data?.top5 ?? [];
+    const movers = [...(q.data?.risers ?? []), ...(q.data?.fallers ?? [])];
+    const valuePicks = q.data?.value_picks ?? [];
+    const seen = new Set<string>();
+    const rows: OgSnapshotRow[] = [];
+
+    const push = (p: DashboardPlayer, stat: number, statLabel: string) => {
+      if (!p.full_name || seen.has(p.player_id)) return;
+      seen.add(p.player_id);
+      rows.push({
+        name: p.full_name,
+        position: p.position,
+        team: p.team,
+        stat,
+        statLabel,
+      });
+    };
+
+    for (const p of top5) {
+      push(p, p.trade_value ?? 0, "Value");
+      if (rows.length >= 6) break;
+    }
+    for (const p of movers) {
+      push(p, p.rank_diff ?? 0, "Chg");
+      if (rows.length >= 6) break;
+    }
+    for (const p of valuePicks) {
+      push(p, p.trade_value ?? 0, "Value");
+      if (rows.length >= 6) break;
+    }
+
+    return rows.slice(0, 6);
+  }, [q.data?.top5, q.data?.risers, q.data?.fallers, q.data?.value_picks]);
   const maxDropoff = useMemo(() => {
     const rows = q.data?.position_scarcity ?? {};
     return Math.max(0, ...Object.values(rows).map((s) => s.dropoff ?? 0));
@@ -307,7 +342,7 @@ export function DynastyDashboardRenderer({ panel }: Props) {
       )}
 
       {topRiser && (
-        <footer className="mt-6 border-t border-ink pt-4">
+        <footer className="mt-6 flex flex-wrap items-center gap-4 border-t border-ink pt-4">
           <Link
             href={
               toRoom({
@@ -320,6 +355,11 @@ export function DynastyDashboardRenderer({ panel }: Props) {
           >
             Ask Razzle about {topRiser.full_name} (rising stock) →
           </Link>
+          <LabOgExportLink
+            slug="dashboard"
+            downloadName="razzle-dashboard.png"
+            snapshotRows={ogSnapshotRows}
+          />
         </footer>
       )}
     </div>

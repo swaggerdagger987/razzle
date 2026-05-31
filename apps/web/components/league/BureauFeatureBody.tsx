@@ -8,6 +8,11 @@ import { BureauPressureMap } from "./BureauPressureMap";
 import { BureauTradeNetwork } from "./BureauTradeNetwork";
 import { BureauTradeFinder } from "./BureauTradeFinder";
 import { BureauHeadToHead } from "./BureauHeadToHead";
+import { BureauRosterDepth } from "./BureauRosterDepth";
+import { BureauBuildProfiles } from "./BureauBuildProfiles";
+import { BureauWaiverTendencies } from "./BureauWaiverTendencies";
+import { BureauPowerRankings } from "./BureauPowerRankings";
+import { BureauStrengthOfSchedule } from "./BureauStrengthOfSchedule";
 
 interface Props {
   feature: BureauFeatureSlug;
@@ -23,6 +28,12 @@ export function BureauFeatureBody({ feature, data, leagueId }: Props) {
   if (feature === "trade-network") return <BureauTradeNetwork data={data} leagueId={leagueId} />;
   if (feature === "trade-finder") return <BureauTradeFinder data={data} leagueId={leagueId} />;
   if (feature === "head-to-head") return <BureauHeadToHead data={data} leagueId={leagueId} />;
+  if (feature === "roster-depth") return <BureauRosterDepth data={data} leagueId={leagueId} />;
+  if (feature === "build-profiles") return <BureauBuildProfiles data={data} leagueId={leagueId} />;
+  if (feature === "power-rankings") return <BureauPowerRankings data={data} leagueId={leagueId} />;
+  if (feature === "waiver-tendencies") return <BureauWaiverTendencies data={data} leagueId={leagueId} />;
+  if (feature === "strength-of-schedule")
+    return <BureauStrengthOfSchedule data={data} leagueId={leagueId} />;
 
   return null;
 }

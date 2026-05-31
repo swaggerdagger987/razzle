@@ -1,0 +1,111 @@
+# Opens standup PRs after Slack Automation push (Gate A). Uses GITHUB_TOKEN in Actions.
+name: standup-pr-autopen
+
+on:
+  push:
+    branches:
+      - "cursor/**"
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch name to open a standup PR for (retry stuck runs)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  open-standup-pr:
+    runs-on: ubuntu-latest
+    # Only factory standup pushes — not doc/cloud-agent branches (docs:, feat:, etc.)
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      contains(github.event.head_commit.message, 'standup:') ||
+      contains(github.event.head_commit.message, 'standup metadata:')
+    steps:
+      - name: Resolve branch
+        id: meta
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "branch=${{ github.event.inputs.branch }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "branch=${GITHUB_REF#refs/heads/}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.meta.outputs.branch }}
+          fetch-depth: 1
+
+      - name: Open or find standup PR
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const head = `${owner}:${{ steps.meta.outputs.branch }}`;
+            const base = "razzle-v2-redesign";
+
+            const existing = await github.rest.pulls.list({
+              owner,
+              repo,
+              head,
+              base,
+              state: "open",
+            });
+            if (existing.data.length > 0) {
+              const pr = existing.data[0];
+              core.setOutput("number", String(pr.number));
+              core.setOutput("url", pr.html_url);
+              core.setOutput("created", "false");
+              return;
+            }
+
+            const today = new Date().toISOString().slice(0, 10);
+            const sha = context.sha.slice(0, 7);
+            const { data: pr } = await github.rest.pulls.create({
+              owner,
+              repo,
+              title: `standup: ${today}`,
+              head: "${{ steps.meta.outputs.branch }}",
+              base,
+              body: [
+                "## Standup",
+                "",
+                `- **Date:** ${today}`,
+                `- **Branch:** \`${{ steps.meta.outputs.branch }}\``,
+                `- **Content commit:** \`${sha}\``,
+                "",
+                "See `docs/company/standups/" + today + ".md` on this branch.",
+              ].join("\n"),
+            });
+            core.setOutput("number", String(pr.number));
+            core.setOutput("url", pr.html_url);
+            core.setOutput("created", "true");
+
+      - name: Enable auto-merge when checks pass
+        uses: actions/github-script@v7
+        continue-on-error: true
+        with:
+          script: |
+            const num = Number("${{ steps.pr.outputs.number }}");
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: num,
+            });
+            await github.graphql(
+              `mutation($id: ID!) {
+                enablePullRequestAutoMerge(input: { pullRequestId: $id, mergeMethod: MERGE }) {
+                  pullRequest { autoMergeRequest { enabledAt } }
+                }
+              }`,
+              { id: pr.node_id }
+            );
+
+      - name: Summary
+        run: |
+          echo "PR ${{ steps.pr.outputs.url }} (created=${{ steps.pr.outputs.created }})"

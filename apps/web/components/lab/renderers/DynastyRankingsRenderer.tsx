@@ -13,13 +13,23 @@ import {
   sortPlayersByFormula,
   type WithFormulaScore,
 } from "@/lib/panel-formula-sort";
-import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
-import { ProUpgradeGate } from "../ProUpgradeGate";
+import { ProGateFromPanelError } from "../ProGateFromPanelError";
+import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
+
+/** Sample dynasty ranks when filter returns zero rows — OG export still screenshots. */
+const RANKINGS_SAMPLE_OG_ROWS: OgSnapshotRow[] = [
+  { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 1, statLabel: "Rank" },
+  { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 2, statLabel: "Rank" },
+  { name: "Brock Bowers", position: "TE", team: "LV", stat: 3, statLabel: "Rank" },
+  { name: "Jayden Daniels", position: "QB", team: "WAS", stat: 4, statLabel: "Rank" },
+  { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 5, statLabel: "Rank" },
+  { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 6, statLabel: "Rank" },
+];
 
 interface PlayerRow extends WithFormulaScore {
   player_id: string;
@@ -97,39 +107,31 @@ export function DynastyRankingsRenderer({ panel }: Props) {
 
   const topPlayer = sortedPlayers[0] ?? null;
 
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const players = formula ? sortedPlayers : rawPlayers;
+    return players.slice(0, 6).map((p, i) => ({
+      name: p.full_name,
+      position: p.position,
+      team: p.team,
+      stat: formula ? (p.formula_score ?? 0) : (p.dynasty_value ?? i + 1),
+      statLabel: formula ? "Score" : "Value",
+    }));
+  }, [formula, sortedPlayers, rawPlayers]);
+
   if (q.isPending) {
     return <PanelAgentLoading agent={agent} />;
   }
 
   if (q.isError) {
-    const err = q.error as Error & { upgrade?: { required?: string; current?: string; message?: string } };
-    if (err.upgrade) {
-      return (
-        <ProUpgradeGate
-          panelSlug={panel.slug}
-          panelTitle={panel.title}
-          required={err.upgrade.required ?? "pro"}
-          current={err.upgrade.current ?? "free"}
-          message={err.upgrade.message}
-        />
-      );
-    }
-    if (isUpgradeRequiredError(err)) {
-      return (
-        <ProUpgradeGate
-          panelSlug={panel.slug}
-          panelTitle={panel.title}
-          required={err.required}
-          current={err.current}
-          message={err.message}
-        />
-      );
-    }
+    const gate = ProGateFromPanelError({ panel, error: q.error });
+    if (gate) return gate;
+    const err = q.error as Error;
     return <p className="p-6 text-red">something fumbled: {err.message}</p>;
   }
 
   const data = q.data!;
   const tiers = data.tiers ?? [];
+  const isEmptyBoard = formula ? !sortedPlayers.length : !tiers.length;
 
   const renderPlayerRow = (p: PlayerRow, rank?: number) => {
     const age = p.age != null ? Number(p.age) : null;
@@ -226,21 +228,28 @@ export function DynastyRankingsRenderer({ panel }: Props) {
         </p>
       )}
 
-      {formula ? (
-        !sortedPlayers.length ? (
-          <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
-        ) : (
-          <section className="tier-block chunky bg-bg-card p-4">
-            <h3 className="tier-label" style={{ fontFamily: "var(--font-display)" }}>
-              Sorted by {formula.name}
-            </h3>
-            <ul className="tier-players">
-              {sortedPlayers.slice(0, 60).map((p, i) => renderPlayerRow(p, i + 1))}
-            </ul>
-          </section>
-        )
-      ) : !tiers.length ? (
-        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+      {isEmptyBoard ? (
+        <div className="p-6">
+          <p className="text-ink-medium">{agent.emptyCopy}</p>
+          <footer className="mt-4 flex flex-wrap items-center gap-4">
+            <LabOgExportLink
+              slug="rankings"
+              downloadName="razzle-dynasty-rankings.png"
+              position={position || undefined}
+              snapshotRows={RANKINGS_SAMPLE_OG_ROWS}
+              label="export sample card"
+            />
+          </footer>
+        </div>
+      ) : formula ? (
+        <section className="tier-block chunky bg-bg-card p-4">
+          <h3 className="tier-label" style={{ fontFamily: "var(--font-display)" }}>
+            Sorted by {formula.name}
+          </h3>
+          <ul className="tier-players">
+            {sortedPlayers.slice(0, 60).map((p, i) => renderPlayerRow(p, i + 1))}
+          </ul>
+        </section>
       ) : (
         <div className="tier-stack">
           {tiers.map((tier) => (
@@ -270,13 +279,12 @@ export function DynastyRankingsRenderer({ panel }: Props) {
           >
             Ask Octo about {topPlayer.full_name} →
           </Link>
-          <a
-            href={`/og/rankings?download=1`}
-            className="text-sm text-ink-medium underline"
-            download="razzle-dynasty-rankings.png"
-          >
-            export card
-          </a>
+          <LabOgExportLink
+            slug="rankings"
+            downloadName="razzle-dynasty-rankings.png"
+            position={position || undefined}
+            snapshotRows={ogSnapshotRows}
+          />
         </footer>
       )}
     </div>

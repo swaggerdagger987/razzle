@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import { useCallback, useState } from "react";
 
 interface Props {
   data: Record<string, unknown>;
@@ -30,6 +31,18 @@ const ARCHETYPE_COLORS: Record<string, string> = {
 };
 
 export function BureauManagerProfiles({ data, leagueId }: Props) {
+  const [copied, setCopied] = useState(false);
+  const copyProfilesLink = useCallback(async () => {
+    if (typeof window === "undefined") return;
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }, []);
+
   const bones = AGENT_BY_ID.bones;
   const rows = (data.rows as ProfileRow[]) ?? [];
   const hero = rows.find((r) => r.archetype === "PANIC SELLER") ?? rows[0] ?? null;
@@ -117,7 +130,20 @@ export function BureauManagerProfiles({ data, leagueId }: Props) {
         ))}
       </section>
 
-      <footer className="flex flex-wrap gap-4 text-sm">
+      <footer className="flex flex-wrap items-center gap-4 text-sm">
+        <div className="flex flex-wrap items-center gap-2">
+          <button type="button" className="btn-chunky text-xs" onClick={() => void copyProfilesLink()}>
+            {copied ? "copied!" : "copy link"}
+          </button>
+          <a
+            href={`/og/manager-profiles?league=${encodeURIComponent(leagueId)}&download=1`}
+            download="razzle-manager-profiles.png"
+            className="btn-chunky active text-xs"
+            style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+          >
+            export card
+          </a>
+        </div>
         <Link href={`/league/${leagueId}/pressure-map` as Route} className="text-orange underline">
           deadline pressure map →
         </Link>

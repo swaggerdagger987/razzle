@@ -1,11 +1,5 @@
 /** Scaffolded tabs hidden until bespoke renderers ship (board cycle 43). */
-export const HIDDEN_BUREAU_SLUGS = new Set([
-  "roster-depth",
-  "build-profiles",
-  "power-rankings",
-  "waiver-tendencies",
-  "strength-of-schedule",
-]);
+export const HIDDEN_BUREAU_SLUGS = new Set<string>([]);
 
 export const BUREAU_FEATURES = [
   { slug: "self-scout", label: "Self-Scout", default: true },
@@ -23,6 +17,22 @@ export const BUREAU_FEATURES = [
 ] as const;
 
 export const VISIBLE_BUREAU_FEATURES = BUREAU_FEATURES.filter((f) => !HIDDEN_BUREAU_SLUGS.has(f.slug));
+
+/** Bureau-7 behavioral tabs — bespoke renderers (PARITY / ACCEPTANCE). */
+export const BUREAU_7_SLUGS = [
+  "self-scout",
+  "monte-carlo",
+  "manager-profiles",
+  "pressure-map",
+  "trade-network",
+  "trade-finder",
+  "head-to-head",
+] as const;
+
+export function bureau7PerkLabels(): string[] {
+  const bySlug = Object.fromEntries(BUREAU_FEATURES.map((f) => [f.slug, f.label]));
+  return BUREAU_7_SLUGS.map((slug) => bySlug[slug] ?? slug);
+}
 
 export type BureauFeatureSlug = (typeof BUREAU_FEATURES)[number]["slug"];
 

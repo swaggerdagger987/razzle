@@ -12,6 +12,8 @@ from pathlib import Path
 
 from .registry import LAUNCH_AGENTS
 
+__all__ = ["LAUNCH_AGENTS", "load"]
+
 logger = logging.getLogger("razzle.agents.personas")
 
 _DIR = Path(__file__).resolve().parents[4] / "agent-personas"

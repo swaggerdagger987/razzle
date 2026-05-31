@@ -1,9 +1,8 @@
-cycle: 56
+cycle: 157
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: Bureau H2H export or Lab panel OG live data rows
-last_keep_cycle: 56
-last_commit: 409a4ca0
-explore_l5_watermarked_export: complete
-lab_l5_og_export_fix: complete
+next_slice: lab-og-percentiles-tolab
+last_keep_cycle: 157
+last_commit: 9d19930cf
+lab_l5_pro_profile_og_epic: atom 4/4 percentiles-tolab next

@@ -73,4 +73,4 @@ Pay for **depth of understanding**, not tokens:
 
 **Opus brand audit (every cycle):** grep user-facing strings for `\bAI\b`, `powered by`, `chatbot`, `LLM`. FAIL if found in `apps/web/` copy without explicit exception.
 
-See also: `docs/DESIGN.md`, `docs/BRAND_VOICE_REVIEW.md`, `docs/plans/2026-03-20-agent-connective-tissue-design.md` (Layer 1: users don't realize these are AI — they feel personality).
+See also: `docs/DESIGN.md`, `graveyard/top-level/BRAND_VOICE_REVIEW.md` (historical voice calibration), `docs/plans/2026-03-20-agent-connective-tissue-design.md` (Layer 1: users don't realize these are AI — they feel personality).

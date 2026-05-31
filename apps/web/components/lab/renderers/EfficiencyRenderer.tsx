@@ -7,7 +7,6 @@ import Link from "next/link";
 import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { isUpgradeRequiredError } from "@/lib/panel-api";
 import type { SavedFormula } from "@/lib/formulas";
 import {
   fetchPlayerStatsForFormula,
@@ -16,10 +15,21 @@ import {
 } from "@/lib/panel-formula-sort";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
+import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
-import { ProUpgradeGate } from "../ProUpgradeGate";
+import { ProGateFromPanelError } from "../ProGateFromPanelError";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
+
+/** Sample PPO board when the API returns no rows — OG export still screenshots. */
+const EFFICIENCY_SAMPLE_OG_ROWS: OgSnapshotRow[] = [
+  { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 0.82, statLabel: "PPO" },
+  { name: "Christian McCaffrey", position: "RB", team: "SF", stat: 0.79, statLabel: "PPO" },
+  { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 0.76, statLabel: "PPO" },
+  { name: "Justin Jefferson", position: "WR", team: "MIN", stat: 0.74, statLabel: "PPO" },
+  { name: "Travis Kelce", position: "TE", team: "KC", stat: 0.71, statLabel: "PPO" },
+  { name: "Josh Allen", position: "QB", team: "BUF", stat: 0.68, statLabel: "PPO" },
+];
 
 interface EfficiencyPlayer extends WithFormulaScore {
   player_id: string;
@@ -174,6 +184,16 @@ export function EfficiencyRenderer({ panel }: Props) {
 
   const top = efficient[0] ?? volume[0] ?? null;
 
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    return efficient.slice(0, 6).map((p) => ({
+      name: p.name,
+      position: p.position,
+      team: p.team,
+      stat: p.ppo ?? p.formula_score ?? 0,
+      statLabel: "PPO",
+    }));
+  }, [efficient]);
+
   const open = (p: EfficiencyPlayer) =>
     openPlayer({
       playerId: p.player_id,
@@ -188,29 +208,9 @@ export function EfficiencyRenderer({ panel }: Props) {
   }
 
   if (q.isError) {
-    const err = q.error as Error & { upgrade?: { required?: string; current?: string; message?: string } };
-    if (err.upgrade) {
-      return (
-        <ProUpgradeGate
-          panelSlug={panel.slug}
-          panelTitle={panel.title}
-          required={err.upgrade.required ?? "pro"}
-          current={err.upgrade.current ?? "free"}
-          message={err.upgrade.message}
-        />
-      );
-    }
-    if (isUpgradeRequiredError(err)) {
-      return (
-        <ProUpgradeGate
-          panelSlug={panel.slug}
-          panelTitle={panel.title}
-          required={err.required}
-          current={err.current}
-          message={err.message}
-        />
-      );
-    }
+    const gate = ProGateFromPanelError({ panel, error: q.error });
+    if (gate) return gate;
+    const err = q.error as Error;
     return <p className="p-6 text-red">something fumbled: {err.message}</p>;
   }
 
@@ -248,7 +248,18 @@ export function EfficiencyRenderer({ panel }: Props) {
       )}
 
       {!efficient.length && !volume.length ? (
-        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+        <div className="p-6">
+          <p className="text-ink-medium">{agent.emptyCopy}</p>
+          <footer className="mt-4 flex flex-wrap items-center gap-4">
+            <LabOgExportLink
+              slug="efficiency"
+              downloadName="razzle-efficiency.png"
+              position={position || undefined}
+              snapshotRows={EFFICIENCY_SAMPLE_OG_ROWS}
+              label="export sample card"
+            />
+          </footer>
+        </div>
       ) : (
         <>
           <PlayerTable
@@ -282,6 +293,12 @@ export function EfficiencyRenderer({ panel }: Props) {
           >
             Ask Octo about {top.name} →
           </Link>
+          <LabOgExportLink
+            slug="efficiency"
+            downloadName="razzle-efficiency.png"
+            position={position || undefined}
+            snapshotRows={ogSnapshotRows}
+          />
         </footer>
       )}
     </div>

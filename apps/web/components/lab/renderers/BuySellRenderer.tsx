@@ -13,11 +13,11 @@ import {
   sortPlayersByFormula,
   type WithFormulaScore,
 } from "@/lib/panel-formula-sort";
-import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
-import { ProUpgradeGate } from "../ProUpgradeGate";
+import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
+import { ProGateFromPanelError } from "../ProGateFromPanelError";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
@@ -172,6 +172,30 @@ export function BuySellRenderer({ panel }: Props) {
   const topBuy = buyLow[0] ?? null;
   const topSell = sellHigh[0] ?? null;
 
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const statFor = (p: Candidate) =>
+      formula && p.formula_score != null
+        ? p.formula_score
+        : Number(p.efficiency_pct ?? p.dynasty_rank_pct ?? 0);
+    const buyLabel = formula ? `Buy · ${formula.name}` : "Buy";
+    const sellLabel = formula ? `Sell · ${formula.name}` : "Sell";
+    const buyRows = buyLow.slice(0, 3).map((p) => ({
+      name: p.name,
+      position: p.position,
+      team: p.team,
+      stat: statFor(p),
+      statLabel: buyLabel,
+    }));
+    const sellRows = sellHigh.slice(0, 3).map((p) => ({
+      name: p.name,
+      position: p.position,
+      team: p.team,
+      stat: statFor(p),
+      statLabel: sellLabel,
+    }));
+    return [...buyRows, ...sellRows].slice(0, 6);
+  }, [buyLow, sellHigh, formula]);
+
   const open = (p: Candidate) =>
     openPlayer({
       playerId: p.player_id,
@@ -186,23 +210,9 @@ export function BuySellRenderer({ panel }: Props) {
   }
 
   if (q.isError) {
-    const err = q.error as Error & { upgrade?: { required?: string; current?: string; message?: string } };
-    if (err.upgrade) {
-      return (
-        <ProUpgradeGate
-          panelSlug={panel.slug}
-          panelTitle={panel.title}
-          required={err.upgrade.required ?? "pro"}
-          current={err.upgrade.current ?? "free"}
-          message={err.upgrade.message}
-        />
-      );
-    }
-    if (isUpgradeRequiredError(err)) {
-      return (
-        <ProUpgradeGate panelSlug={panel.slug} panelTitle={panel.title} required={err.required} current={err.current} message={err.message} />
-      );
-    }
+    const gate = ProGateFromPanelError({ panel, error: q.error });
+    if (gate) return gate;
+    const err = q.error as Error;
     return <p className="p-6 text-red">something fumbled: {err.message}</p>;
   }
 
@@ -315,6 +325,12 @@ export function BuySellRenderer({ panel }: Props) {
               Ask Bones about {topSell.name} (sell) →
             </Link>
           )}
+          <LabOgExportLink
+            slug="buysell"
+            downloadName="razzle-buy-sell.png"
+            position={position || undefined}
+            snapshotRows={ogSnapshotRows}
+          />
         </footer>
       )}
     </div>

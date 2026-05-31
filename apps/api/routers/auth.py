@@ -6,7 +6,7 @@ backend/auth.py). The router only handles HTTP concerns.
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, Request
 from pydantic import BaseModel, EmailStr, Field
 
 from ..services import auth as auth_service

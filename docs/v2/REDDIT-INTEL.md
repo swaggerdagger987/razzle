@@ -2,6 +2,29 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab trade values export (cycle 95)
+- **Angle:** Formula-ranked trade value card — rank + composite name on each row matches what Bones users sort before screenshotting.
+- **Trust:** T5/T6 — top 6 from visible sort; dynasty rank when no formula.
+
+### 2026-05-31 — Lab buy/sell export (cycle 94)
+- **Angle:** Buy-low vs sell-high on one share card — Bones lane labels match the two-column panel Reddit traders screenshot.
+- **Trust:** T5/T6 — top 3 per lane in snapshot; formula name on label when composite sort active.
+
+### 2026-05-31 — Lab dashboard export (cycle 92)
+- **Angle:** Dynasty pulse export shows top5 trade values on the card — matches the hero grid users screenshot, not only rank movers.
+- **Trust:** T5/T6 — snapshot encodes what was on screen; demo fallback unchanged when API empty.
+
+### 2026-05-31 — Lab launch-10 OG (cycle 77)
+- **Angle:** Screenshot cards without "sample preview" when API rows load — launch-10 exports read as live research, not demo shells.
+- **Trust:** T1 honest labeling; sample suffix only on demo fallback.
+
+### 2026-05-31 — Bureau H2H codec (cycle 96)
+- **Angle:** League group chats break when export PNG shows demo rows after a real rivalry snapshot — canonical y/m/pc codec keeps ShareBar honest.
+
+### 2026-05-31 — Bureau H2H (cycle 73)
+- **Angle:** League rivalry cards with copyable URLs — managers share H2H dossiers in league group chats.
+- **Screenshot hook:** Atlas rivalry card with you/them records + position depth bars.
+
 Opus updates this on odd cycles. Link real threads — no invented research.
 
 ## Template
@@ -14,6 +37,28 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Feature ID:** F-XX
 - **Council cycle:**
 ```
+
+## 2026-05-31 — Cycle 76 (Bureau roster depth tab)
+
+1. **Hidden tabs were a trust leak** — users who found Bureau via Self-Scout could not see depth chart as its own lane; unhide + bespoke renderer restores moat narrative.
+2. **Full player lists beat grade-only cards** for trade DM screenshots — roster-depth complements Self-Scout summary.
+
+## 2026-05-31 — Workday cycle 1 (Lab OG export parity)
+
+1. **Export must live on the panel** — users screenshot from the tool they are in; buried OG routes without an "export card" link do not travel.
+2. **Gamelog / efficiency / aging** are tape-and-window panels — same footer pattern as weekly heatmap closes launch-10 export parity (atom 1/3).
+3. Standing: sample preview on OG when API empty — T1 trust.
+
+## 2026-05-31 — Bureau Pressure Map share row (cycle 77)
+
+1. **Deadline pressure bars travel** — managers paste "who's desperate" league URLs before trade offers; copy link + export matches H2H/Monte Carlo pattern.
+2. **Bones-owned surface** — trade-deadline intel screenshots should include share row, not export-only footer.
+
+## 2026-05-31 — Factory cycle 1 (Company OS)
+
+1. **Position-grade roster screenshots** still win trade threads — A–F grid + thinnest-spot callout beats prose rankings.
+2. **Hawkeye on Self-Scout OG** matches in-product agent ownership; keeps Bureau-7 hallway consistent.
+3. Standing pattern: sample preview on OG when Sleeper not linked — protects trust (T1).
 
 ## Standing gaps to validate
 
@@ -247,3 +292,50 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 55
 - **Screenshot potential:** RB-only FPTS card droppable in r/DynastyFF trade/value threads — data-first, not SaaS promo
 - **Bot-fact potential:** `!razzle confirm top RB PPR FPTS` — future intel layer
+
+## 2026-05-31 — Cycle 58
+
+### r/DynastyFF — panel OG cards need rows, not loading shells (pattern)
+- **Pattern:** Users share **data-dense** tool screenshots. A panel title + "pulling film..." reads as a broken export, not a teaser.
+- **Razzle gap:** Cycle 57 live fetch works with `terminal.db`; CI and cold OG previews still empty. H2H solved with labeled sample rivalry rows.
+- **Slice:** Lab L5 — `/og/[panel]` demo player rows + "sample preview" when API empty.
+- **Council cycle:** 58
+- **Screenshot potential:** Dynasty rankings / breakout cards droppable in threads even before API sync on preview hosts
+
+## 2026-05-31 — Cycle 61 (workday cycle 1)
+
+1. **Deadline pressure screenshots travel.** Trade threads share "who's desperate" bar charts before deadline — Pressure Map OG completes Bureau export parity with H2H/MC/Trade Finder.
+2. **Bones owns trade-deadline intel** — OG card shows Bones badge + desperation labels (desperate/motivated/comfortable) matching in-product Bureau tab.
+
+## 2026-05-31 — Cycle 62 (workday cycle 2)
+
+1. **Manager archetype labels are trade-DM shorthand** — PANIC SELLER / HOARDER badges travel faster than transaction counts in group chats.
+2. **Bureau OG series compounds** — Pressure Map + Manager Profiles give two screenshot hooks before trade-network atom.
+
+## 2026-05-31 — Cycle 63 (factory reopen cycle 1)
+
+1. **Trade partnership lanes are collusion bait** — "these two trade every week" screenshots spark DM threads; OG card must show partner pairs + trade counts, not a graph stub.
+2. **Bones trade-network OG closes atom 3/4** — Bureau export trilogy (pressure, managers, network) now screenshot-ready for deadline season.
+
+## 2026-05-31 — Cycle 69 (workday cycle 1 — 1299)
+
+1. **Breakout cards must show names users recognize** — `candidates` extraction on OG `/og/breakouts` aligns share cards with Hawkeye's in-panel list when API data exists.
+2. **Same API path as Lab** — `/api/panels/{slug}` prevents OG drift from tier/breakout response shapes.
+
+## 2026-05-31 — Cycle 77 (workday cycle 1)
+
+1. **Manager archetype cards travel with copy+export** — PANIC SELLER / exploit-window screenshots need the same share row as Self-Scout and H2H.
+2. **Bureau behavioral epic continues** — Pressure Map and Trade Network are next atoms in share-parity epic.
+
+## 2026-05-31 — Cycle 59
+
+### r/DynastyFF — panel-specific stat labels on share cards (pattern)
+- **Pattern:** Users screenshot **tool-specific** views — weekly FPTS grids, prospect scores, aging curves — and comment using that vocabulary. Generic "Value" columns on a heatmap card read as lazy export.
+- **Razzle slice:** Lab L5 atom 2 — launch-10 OG demo rows with FPTS/Score/Rank/Peak Age/Chg stat headers per panel slug.
+- **Council cycle:** 59
+- **Screenshot potential:** Weekly heatmap + prospect big board cards now match in-product column semantics on preview hosts
+
+## 2026-05-31 — Strengths OG shares
+
+- **Pattern:** Dynasty Twitter shares graded strength callouts (A+/B tiers) more than raw percentile tables.
+- **Razzle slice:** Lab L5 atom 2 — `/og/strengths` LIVE · top strengths sticker + graded demo rows.

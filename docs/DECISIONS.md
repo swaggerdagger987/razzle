@@ -131,7 +131,7 @@ The bar for changing one of these: produce a 1-page memo with a concrete reason,
 
 These are not blocking V2 ship, but should be answered before the first paid user:
 
-- **Domain cutover**: when does `razzle.lol` flip from V1 to V2 — at full panel parity, or behind a feature flag per user from day one? (See `docs/v2/PLAN.md` "next devs do first.")
+- **Domain cutover**: when does `razzle.lol` flip from V1 to V2 — at full panel parity, or behind a feature flag per user from day one? Track in `docs/v2/STATUS.md`.
 - **First three Bureau v.5 pickups**: roster-depth player-position lookup, real Monte Carlo distributions, real strength-of-schedule from `/league/{id}/matchups/{week}`. All are one-file changes, ordering is a product call.
 - **`!razzle` bot launch subreddit**: the four listed in `apps/api/bots/reddit_bot.py::SUBREDDITS` are educated guesses. Mod relationships in r/DynastyFF may want a quiet beta first.
 - **Trial offer**: V2 starts every checkout with a 7-day trial (`apps/api/services/billing.py::create_checkout_session`). Confirm that's the launch posture or switch to no-trial.

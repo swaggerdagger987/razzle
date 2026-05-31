@@ -215,9 +215,12 @@ export function ExplorePageClient() {
         <ExploreShareButton
           universe={universe}
           sort={sortKey}
+          apiSort={apiSortKey}
           dir={params.dir}
           q={params.q}
           pos={params.pos}
+          season={params.season}
+          team={params.team}
         />
       </div>
 

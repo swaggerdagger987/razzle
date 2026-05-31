@@ -6,7 +6,10 @@ import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
 import type { Route } from "next";
 import { useParams } from "next/navigation";
+import { useMemo } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import type { BureauSelfScoutOgSnapshot } from "@/lib/bureau-self-scout-og-snapshot";
+import { BureauSelfScoutShareBar } from "./BureauSelfScoutShareBar";
 
 interface Props {
   data: Record<string, unknown>;
@@ -50,6 +53,7 @@ export function BureauSelfScout({ data }: Props) {
   const dolphin = AGENT_BY_ID.dolphin;
 
   const team = data.team as Record<string, unknown> | undefined;
+  const userId = String(team?.user_id ?? "");
   const league = data.league as Record<string, unknown> | undefined;
   const build = data.build_profile as Record<string, unknown> | undefined;
   const rank = data.power_rank as Record<string, unknown> | undefined;
@@ -60,6 +64,35 @@ export function BureauSelfScout({ data }: Props) {
     (min, pos) => ((depth[pos]?.count ?? 0) < (depth[min]?.count ?? 0) ? pos : min),
     "QB" as (typeof POS_ORDER)[number],
   );
+
+  const ogSnapshot = useMemo((): BureauSelfScoutOgSnapshot | undefined => {
+    if (!team?.name || !userId) return undefined;
+    const rows = POS_ORDER.map((pos) => {
+      const block = depth[pos] ?? {};
+      const top = [...(block.depth ?? [])].sort(
+        (a, b) => (b.dynasty_value ?? 0) - (a.dynasty_value ?? 0),
+      )[0];
+      return {
+        pos,
+        grade: depthGrade(block),
+        score: depthScore(block),
+        count: block.count ?? 0,
+        elite: block.elite ?? 0,
+        topName: top?.name ?? "—",
+      };
+    });
+    if (!rows.some((r) => r.count > 0)) return undefined;
+    return {
+      team: String(team.name),
+      record: String(team.record ?? ""),
+      league: String(league?.name ?? ""),
+      season: String(league?.season ?? ""),
+      archetype: String(build?.archetype ?? ""),
+      rank: Number(rank?.rank ?? 0),
+      total: Number(rank?.total ?? 0),
+      rows,
+    };
+  }, [team, userId, depth, league, build, rank]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -156,21 +189,14 @@ export function BureauSelfScout({ data }: Props) {
             );
           })}
         </div>
-        {leagueId && (
-          <div className="mt-4 flex flex-wrap gap-3">
-            <Link
-              href={
-                toRoom({
-                  agentId: "hawkeye",
-                  question: `Self-Scout says ${weakest} is my thinnest spot — who should I target?`,
-                }) as Route
-              }
-              className="btn-chunky text-sm bg-bg"
-            >
-              ask {hawkeye.name} in film room →
-            </Link>
-          </div>
-        )}
+        {leagueId && userId ? (
+          <BureauSelfScoutShareBar
+            leagueId={leagueId}
+            userId={userId}
+            weakestPos={weakest}
+            snapshot={ogSnapshot}
+          />
+        ) : null}
       </section>
 
       {build && (

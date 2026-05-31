@@ -6,7 +6,7 @@ etc. Used to predict what waiver moves each opponent will make next.
 
 from __future__ import annotations
 
-from collections import Counter, defaultdict
+from collections import defaultdict
 from typing import Any
 
 from ..context.store import get_or_refresh

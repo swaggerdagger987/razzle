@@ -7,7 +7,6 @@ import Link from "next/link";
 import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { isUpgradeRequiredError } from "@/lib/panel-api";
 import type { SavedFormula } from "@/lib/formulas";
 import {
   fetchPlayerStatsForFormula,
@@ -17,7 +16,8 @@ import {
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
-import { ProUpgradeGate } from "../ProUpgradeGate";
+import { ProGateFromPanelError } from "../ProGateFromPanelError";
+import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
@@ -93,34 +93,33 @@ export function BreakoutsRenderer({ panel }: Props) {
 
   const top = candidates[0] ?? null;
 
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const statLabel = formula?.name ?? "RBS";
+    const ranked = [...candidates].sort((a, b) => {
+      const aScore = formula && a.formula_score != null ? a.formula_score : (a.rbs_score ?? 0);
+      const bScore = formula && b.formula_score != null ? b.formula_score : (b.rbs_score ?? 0);
+      return bScore - aScore;
+    });
+    return ranked.slice(0, 6).map((p) => ({
+      name: p.name,
+      position: p.position,
+      team: p.team,
+      stat:
+        formula && p.formula_score != null
+          ? p.formula_score
+          : (p.rbs_score ?? 0),
+      statLabel,
+    }));
+  }, [candidates, formula]);
+
   if (q.isPending) {
     return <PanelAgentLoading agent={agent} />;
   }
 
   if (q.isError) {
-    const err = q.error as Error & { upgrade?: { required?: string; current?: string; message?: string } };
-    if (err.upgrade) {
-      return (
-        <ProUpgradeGate
-          panelSlug={panel.slug}
-          panelTitle={panel.title}
-          required={err.upgrade.required ?? "pro"}
-          current={err.upgrade.current ?? "free"}
-          message={err.upgrade.message}
-        />
-      );
-    }
-    if (isUpgradeRequiredError(err)) {
-      return (
-        <ProUpgradeGate
-          panelSlug={panel.slug}
-          panelTitle={panel.title}
-          required={err.required}
-          current={err.current}
-          message={err.message}
-        />
-      );
-    }
+    const gate = ProGateFromPanelError({ panel, error: q.error });
+    if (gate) return gate;
+    const err = q.error as Error;
     return <p className="p-6 text-red">something fumbled: {err.message}</p>;
   }
 
@@ -250,9 +249,12 @@ export function BreakoutsRenderer({ panel }: Props) {
           >
             Ask Hawkeye about {top.name} →
           </Link>
-          <a href="/og/breakouts?download=1" className="text-sm text-ink-medium underline" download="razzle-breakouts.png">
-            export card
-          </a>
+          <LabOgExportLink
+            slug="breakouts"
+            downloadName="razzle-breakouts.png"
+            position={position || undefined}
+            snapshotRows={ogSnapshotRows}
+          />
         </footer>
       )}
     </div>

@@ -8,10 +8,10 @@ import type { Route } from "next";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { DEFAULT_LAB_OG_PLAYER_ID, LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
-import { ProUpgradeGate } from "../ProUpgradeGate";
+import { ProGateFromPanelError } from "../ProGateFromPanelError";
 
 interface WeekRow {
   week: number;
@@ -165,6 +165,50 @@ export function GamelogRenderer({ panel }: Props) {
     return best;
   }, [q.data?.weeks]);
 
+  function gamelogWeeksToSnapshotRows(
+    weeks: WeekRow[],
+    pos: string,
+    team: string,
+  ): OgSnapshotRow[] {
+    return [...weeks]
+      .sort((a, b) => b.fpts - a.fpts)
+      .slice(0, 6)
+      .map((w) => ({
+        name: `Wk ${w.week}`,
+        position: pos,
+        team,
+        stat: w.fpts,
+        statLabel: "PPR",
+      }));
+  }
+
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const weekRows = q.data?.weeks ?? [];
+    const pos = q.data?.position ?? playerPos ?? "WR";
+    const team = q.data?.team ?? "";
+    return gamelogWeeksToSnapshotRows(weekRows, pos, team);
+  }, [q.data?.weeks, q.data?.position, q.data?.team, playerPos]);
+
+  const sampleGamelogQ = useQuery({
+    queryKey: ["panel", "gamelog", "sample-export", DEFAULT_LAB_OG_PLAYER_ID],
+    queryFn: async () => {
+      const res = await fetch(
+        `/api/panels/gamelog?player_id=${encodeURIComponent(DEFAULT_LAB_OG_PLAYER_ID)}`,
+      );
+      if (!res.ok) throw new Error(`API ${res.status}`);
+      return res.json() as GamelogData;
+    },
+    enabled: !playerId,
+    staleTime: 60_000,
+  });
+
+  const sampleOgSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const weekRows = sampleGamelogQ.data?.weeks ?? [];
+    const pos = sampleGamelogQ.data?.position ?? "WR";
+    const team = sampleGamelogQ.data?.team ?? "";
+    return gamelogWeeksToSnapshotRows(weekRows, pos, team);
+  }, [sampleGamelogQ.data?.weeks, sampleGamelogQ.data?.position, sampleGamelogQ.data?.team]);
+
   function selectPlayer(hit: SearchHit) {
     const q = new URLSearchParams(searchParams.toString());
     q.set("id", hit.player_id);
@@ -236,10 +280,17 @@ export function GamelogRenderer({ panel }: Props) {
             </ul>
           )}
         </div>
-        <footer className="mt-6">
+        <footer className="mt-6 flex flex-wrap items-center gap-4">
           <Link href="/explore" className="text-sm text-orange underline">
             pick a player in Explore →
           </Link>
+          <LabOgExportLink
+            slug="gamelog"
+            downloadName="razzle-gamelog.png"
+            playerId={DEFAULT_LAB_OG_PLAYER_ID}
+            snapshotRows={sampleOgSnapshotRows.length ? sampleOgSnapshotRows : undefined}
+            label={sampleOgSnapshotRows.length ? "export card" : "export sample card"}
+          />
         </footer>
       </div>
     );
@@ -250,29 +301,9 @@ export function GamelogRenderer({ panel }: Props) {
   }
 
   if (q.isError) {
-    const err = q.error as Error & { upgrade?: { required?: string; current?: string; message?: string } };
-    if (err.upgrade) {
-      return (
-        <ProUpgradeGate
-          panelSlug={panel.slug}
-          panelTitle={panel.title}
-          required={err.upgrade.required ?? "pro"}
-          current={err.upgrade.current ?? "free"}
-          message={err.upgrade.message}
-        />
-      );
-    }
-    if (isUpgradeRequiredError(err)) {
-      return (
-        <ProUpgradeGate
-          panelSlug={panel.slug}
-          panelTitle={panel.title}
-          required={err.required}
-          current={err.current}
-          message={err.message}
-        />
-      );
-    }
+    const gate = ProGateFromPanelError({ panel, error: q.error });
+    if (gate) return gate;
+    const err = q.error as Error;
     return <p className="p-6 text-red">something fumbled: {err.message}</p>;
   }
 
@@ -350,7 +381,18 @@ export function GamelogRenderer({ panel }: Props) {
       )}
 
       {!weeks.length ? (
-        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+        <div className="p-6">
+          <p className="text-ink-medium">{agent.emptyCopy}</p>
+          <footer className="mt-4 flex flex-wrap items-center gap-4">
+            <LabOgExportLink
+              slug="gamelog"
+              downloadName="razzle-gamelog.png"
+              playerId={(data?.player_id ?? playerId) || DEFAULT_LAB_OG_PLAYER_ID}
+              position={displayPos || undefined}
+              label="export sample card"
+            />
+          </footer>
+        </div>
       ) : (
         <div className="table-wrap chunky bg-bg-card overflow-x-auto">
           <table className="screener-table">
@@ -423,6 +465,14 @@ export function GamelogRenderer({ panel }: Props) {
           >
             open in Explore
           </Link>
+          <LabOgExportLink
+            slug="gamelog"
+            downloadName="razzle-gamelog.png"
+            playerId={(data?.player_id ?? playerId) || DEFAULT_LAB_OG_PLAYER_ID}
+            playerName={displayName}
+            position={displayPos || undefined}
+            snapshotRows={ogSnapshotRows}
+          />
         </footer>
       )}
     </div>

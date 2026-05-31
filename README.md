@@ -2,7 +2,7 @@
 
 A fantasy football research lab at [razzle.lol](https://razzle.lol), disguised as a Sunday comic strip. Bengal-tiger mascot, chunky borders, dynasty intelligence with teeth.
 
-> **Status:** Razzle V2 is in active development on the `razzle-v2-redesign` branch. The V1 code is staged in `legacy/` during the strangler-fig migration. See `docs/v2/PLAN.md` for the rebuild plan and `docs/DECISIONS.md` for locked-in architecture calls.
+> **Status:** Razzle V2 is in active development on the `razzle-v2-redesign` branch. The V1 code is staged in `legacy/` during the strangler-fig migration. See `docs/v2/STATUS.md` for live status, `docs/company/STAGE.md` for company stage, and `docs/DECISIONS.md` for locked-in architecture calls.
 
 ## Quickstart
 
@@ -39,7 +39,7 @@ razzle/
     ui/              design tokens + shared primitives (used by apps/web)
     types/           shared Zod schemas + TS types (mirrors apps/api/models)
   data/              terminal.db, users.db (gitignored; production lives on /data)
-  docs/              NORTH_STAR, ROADMAP, DESIGN, DECISIONS — read these first
+  docs/              NORTH_STAR, DESIGN, DECISIONS, v2/STATUS — see docs/README.md
   agent-personas/    Markdown system prompts for the six Situation Room agents
   infra/             Dockerfile, fly.toml, render.yaml
   legacy/            V1 frontend/backend, removed at the end of Phase 7
@@ -59,8 +59,13 @@ razzle/
 
 ## Reading order
 
-1. `docs/NORTH_STAR.md` — the endgame.
-2. `docs/ROADMAP.md` — the phased plan.
+1. `docs/README.md` — docs index.
+2. `docs/NORTH_STAR.md` — the endgame.
 3. `docs/DESIGN.md` — visual language and voice.
 4. `docs/DECISIONS.md` — V2 architectural calls.
-5. `PRESERVE.md` — what survives from V1.
+5. `docs/v2/STATUS.md` — live operational status.
+6. `docs/v2/PARITY.md` — vertical backlog (what to build next).
+7. `docs/v2/ACCEPTANCE.md` — localhost finish-line gates.
+8. `docs/company/STAGE.md` — company stage (deep build, no users).
+9. `docs/company/OPERATING_SYSTEM.md` — how the company runs.
+10. `PRESERVE.md` — what survives from V1.

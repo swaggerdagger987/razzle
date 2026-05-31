@@ -1,6 +1,7 @@
 "use client";
 
 import type { Urgency } from "@razzle/types";
+import { BriefingShareBar } from "./BriefingShareBar";
 
 interface Props {
   question: string;
@@ -30,6 +31,8 @@ export function BriefingCard({
   error,
   cost,
 }: Props) {
+  const canExport = !pending && !error && Boolean(briefing?.trim());
+
   return (
     <article className={`briefing-card chunky bg-bg-card p-4 ${URGENCY_CLASS[urgency]}`}>
       <header className="briefing-header">
@@ -47,6 +50,14 @@ export function BriefingCard({
         <p className="briefing-cross-trigger text-ink-medium mt-2 text-sm">
           {crossTriggers.map((t) => `${t.agent}: ${t.label}`).join(" · ")}
         </p>
+      )}
+      {canExport && (
+        <BriefingShareBar
+          question={question}
+          briefing={briefing}
+          urgency={urgency}
+          specialists={specialists}
+        />
       )}
     </article>
   );

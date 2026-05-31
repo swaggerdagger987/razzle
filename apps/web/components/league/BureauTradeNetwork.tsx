@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import { BureauTradeNetworkShareBar } from "./BureauTradeNetworkShareBar";
 
 interface Props {
   data: Record<string, unknown>;
@@ -91,7 +92,8 @@ export function BureauTradeNetwork({ data, leagueId }: Props) {
         </section>
       )}
 
-      <footer className="flex flex-wrap gap-4 text-sm">
+      <footer className="flex flex-wrap items-center gap-4 text-sm">
+        <BureauTradeNetworkShareBar leagueId={leagueId} />
         <Link href={`/league/${leagueId}/manager-profiles` as Route} className="text-orange underline">
           manager profiles →
         </Link>

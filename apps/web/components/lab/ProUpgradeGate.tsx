@@ -1,11 +1,19 @@
 "use client";
 
-import { toRoom } from "@razzle/hallway";
+import { toExplore, toRoom } from "@razzle/hallway";
 import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
 import type { Route } from "next";
-import { teaserRowsForPanel, upgradePitchForPanel } from "@/lib/panel-upgrade-teaser";
-import { PanelAgentHeader, panelAgent } from "./PanelAgentHeader";
+import {
+  proUpgradePerkLines,
+  teaserRowsForPanel,
+  teaserRowsToOgSnapshot,
+  upgradePitchForPanel,
+} from "@/lib/panel-upgrade-teaser";
+import { DEFAULT_LAB_OG_PLAYER_ID, LabOgExportLink } from "./LabOgExportLink";
+import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "./PanelAgentHeader";
+
+const PLAYER_SCOPED_OG_SLUGS = new Set(["gamelog", "dynasty-comps"]);
 
 interface Props {
   panelSlug: string;
@@ -25,11 +33,15 @@ export function ProUpgradeGate({
   const agent = panelAgent(panelSlug);
   const pitch = upgradePitchForPanel(panelSlug, agent.name);
   const rows = teaserRowsForPanel(panelSlug);
+  const perks = proUpgradePerkLines();
+  const ogSnapshot = teaserRowsToOgSnapshot(panelSlug);
+  const ogPlayerId = PLAYER_SCOPED_OG_SLUGS.has(panelSlug) ? DEFAULT_LAB_OG_PLAYER_ID : undefined;
   const roomQuestion = `What should I know about ${panelTitle.toLowerCase()} for my dynasty roster?`;
 
   return (
     <div className="pro-upgrade-gate">
       <PanelAgentHeader agent={agent} slug={panelSlug} />
+      <PanelAgentLoading agent={agent} />
 
       <div className="pro-upgrade-preview-wrap chunky bg-bg-card">
         <div className="pro-upgrade-preview" aria-hidden>
@@ -69,12 +81,27 @@ export function ProUpgradeGate({
           >
             ask {agent.name} →
           </Link>
+          <Link
+            href={toExplore({}) as Route}
+            className="chunky chunky-hover bg-bg-card px-4 py-3 text-sm"
+          >
+            free screener →
+          </Link>
         </div>
         <p className="mt-3 text-xs text-ink-light">dev? flip plan in the toolbar ↑</p>
+        <p className="mt-4">
+          <LabOgExportLink
+            slug={panelSlug}
+            downloadName={`razzle-${panelSlug}-sample.png`}
+            label="export sample card →"
+            playerId={ogPlayerId}
+            snapshotRows={ogSnapshot}
+          />
+        </p>
         <ul className="pro-upgrade-perks mt-6 text-left text-sm text-ink-medium">
-          <li>10 launch Lab panels — trade values, breakouts, aging curves</li>
-          <li>7 Bureau behavioral tabs — H2H, pressure map, trade finder</li>
-          <li>Situation Room — six pixel staff, your league in context</li>
+          {perks.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
         </ul>
       </div>
     </div>

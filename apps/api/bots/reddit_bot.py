@@ -18,13 +18,11 @@ Environment: see apps/api/.env.example for REDDIT_* vars.
 
 from __future__ import annotations
 
-import asyncio
 import logging
 import re
 import sys
 import time
 from collections import defaultdict
-from typing import Iterable
 
 import praw
 

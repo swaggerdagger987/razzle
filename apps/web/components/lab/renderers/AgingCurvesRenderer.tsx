@@ -12,13 +12,24 @@ import {
   sortPlayersByFormula,
   type WithFormulaScore,
 } from "@/lib/panel-formula-sort";
-import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
+import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
-import { ProUpgradeGate } from "../ProUpgradeGate";
+import { ProGateFromPanelError } from "../ProGateFromPanelError";
 
 const POSITIONS = ["QB", "RB", "WR", "TE"] as const;
+
+/** Sample PPG board when aging curve API returns no rows — OG export still screenshots. */
+const AGING_SAMPLE_OG_ROWS: OgSnapshotRow[] = [
+  { name: "Christian McCaffrey", position: "RB", team: "SF", stat: 18.2, statLabel: "PPG" },
+  { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 17.4, statLabel: "PPG" },
+  { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 16.8, statLabel: "PPG" },
+  { name: "Justin Jefferson", position: "WR", team: "MIN", stat: 16.1, statLabel: "PPG" },
+  { name: "Travis Kelce", position: "TE", team: "KC", stat: 12.4, statLabel: "PPG" },
+  { name: "Josh Allen", position: "QB", team: "BUF", stat: 22.1, statLabel: "PPG" },
+];
+
 const POS_COLORS: Record<(typeof POSITIONS)[number], string> = {
   QB: "#5b7fff",
   RB: "#2ec4b6",
@@ -214,6 +225,17 @@ export function AgingCurvesRenderer({ panel }: Props) {
 
   const top = chartPlayers[0] ?? null;
 
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const source = pastPeak.length > 0 ? pastPeak : chartPlayers;
+    return source.slice(0, 6).map((p) => ({
+      name: p.name,
+      position,
+      team: p.team,
+      stat: p.ppg,
+      statLabel: "PPG",
+    }));
+  }, [pastPeak, chartPlayers, position]);
+
   const open = (p: AgingPlayer) =>
     openPlayer({
       playerId: p.player_id,
@@ -228,29 +250,9 @@ export function AgingCurvesRenderer({ panel }: Props) {
   }
 
   if (q.isError) {
-    const err = q.error as Error & { upgrade?: { required?: string; current?: string; message?: string } };
-    if (err.upgrade) {
-      return (
-        <ProUpgradeGate
-          panelSlug={panel.slug}
-          panelTitle={panel.title}
-          required={err.upgrade.required ?? "pro"}
-          current={err.upgrade.current ?? "free"}
-          message={err.upgrade.message}
-        />
-      );
-    }
-    if (isUpgradeRequiredError(err)) {
-      return (
-        <ProUpgradeGate
-          panelSlug={panel.slug}
-          panelTitle={panel.title}
-          required={err.required}
-          current={err.current}
-          message={err.message}
-        />
-      );
-    }
+    const gate = ProGateFromPanelError({ panel, error: q.error });
+    if (gate) return gate;
+    const err = q.error as Error;
     return <p className="p-6 text-red">something fumbled: {err.message}</p>;
   }
 
@@ -308,7 +310,18 @@ export function AgingCurvesRenderer({ panel }: Props) {
       )}
 
       {!posData?.curve?.length ? (
-        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+        <div className="p-6">
+          <p className="text-ink-medium">{agent.emptyCopy}</p>
+          <footer className="mt-4 flex flex-wrap items-center gap-4">
+            <LabOgExportLink
+              slug="aging"
+              downloadName="razzle-aging-curves.png"
+              position={position}
+              snapshotRows={AGING_SAMPLE_OG_ROWS}
+              label="export sample card"
+            />
+          </footer>
+        </div>
       ) : (
         <>
           <AgingChart
@@ -387,6 +400,12 @@ export function AgingCurvesRenderer({ panel }: Props) {
           >
             Ask Octo about {position} aging →
           </Link>
+          <LabOgExportLink
+            slug="aging"
+            downloadName="razzle-aging-curves.png"
+            position={position}
+            snapshotRows={ogSnapshotRows}
+          />
         </footer>
       )}
     </div>

@@ -1,0 +1,51 @@
+"""Briefing OG route — contract guard for Room L5 export atom."""
+
+from pathlib import Path
+
+BRIEFING_OG_GATE_C_PARAMS = "download=1"
+
+
+def _repo_root() -> Path:
+    return Path(__file__).resolve().parents[3]
+
+
+def test_briefing_og_route_exists():
+    path = _repo_root() / "apps/web/app/og/briefing/route.tsx"
+    assert path.is_file()
+    text = path.read_text(encoding="utf-8")
+    assert "export async function GET" in text
+    assert "DEMO" in text
+    assert "ImageResponse" in text
+    assert "toRoom" in text
+    assert "Always-on watermark band" in text
+    assert "razzle.lol${roomPath}" in text
+    assert "#d97757" in text
+
+
+def test_briefing_card_export_link():
+    card = _repo_root() / "apps/web/components/room/BriefingCard.tsx"
+    share = _repo_root() / "apps/web/components/room/BriefingShareBar.tsx"
+    assert "BriefingShareBar" in card.read_text(encoding="utf-8")
+    share_text = share.read_text(encoding="utf-8")
+    assert "/og/briefing" in share_text
+    assert "export card" in share_text
+    assert "preview card" in share_text
+    assert "copy briefing link" in share_text
+
+
+def test_briefing_og_terracotta_watermark_band():
+    """Briefing OG must include terracotta watermark band — matches Explore/Lab/H2H exports."""
+    text = (_repo_root() / "apps/web/app/og/briefing/route.tsx").read_text(encoding="utf-8")
+    assert 'background: "#d97757"' in text
+    assert "made with 🐯 razzle.lol" in text
+    assert "razzle.lol${roomPath}" in text
+
+
+def test_briefing_og_room_hallway_link():
+    text = (_repo_root() / "apps/web/app/og/briefing/route.tsx").read_text(encoding="utf-8")
+    assert "toRoom" in text
+    assert "continue in the Room" in text
+
+
+def test_briefing_og_gate_c_fixture_params_documented():
+    assert "download=1" in BRIEFING_OG_GATE_C_PARAMS
