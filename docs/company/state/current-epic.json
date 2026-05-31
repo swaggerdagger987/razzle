@@ -20,7 +20,7 @@
       "id": "lab-pro-gate-perks-copy",
       "title": "Pro gate perks list matches PARITY launch-10 + Bureau-7 names",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "05a6dc12"
     }
   ],
   "next_atom_id": null,
@@ -32,7 +32,7 @@
       "id": "lab-l4-pro-gate-upgrade",
       "status": "complete",
       "last_atom": "lab-pro-gate-perks-copy",
-      "merge_commit": null
+      "merge_commit": "05a6dc12"
     },
     {
       "id": "lab-l5-og-live-rows-launch10",
