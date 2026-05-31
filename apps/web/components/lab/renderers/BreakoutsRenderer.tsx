@@ -22,6 +22,13 @@ import { LabPanelShareBar } from "../LabPanelShareBar";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
+/** Sample rows for OG when position filter returns zero breakout candidates (T5/T6). */
+const BREAKOUTS_SAMPLE_OG_ROWS: OgSnapshotRow[] = [
+  { name: "Bucky Irving", position: "RB", team: "TB", stat: 82.4, statLabel: "RBS" },
+  { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 78.1, statLabel: "RBS" },
+  { name: "Malachi Corley", position: "WR", team: "NYJ", stat: 74.6, statLabel: "RBS" },
+];
+
 interface Candidate extends WithFormulaScore {
   player_id: string;
   name: string;
@@ -158,7 +165,18 @@ export function BreakoutsRenderer({ panel }: Props) {
       )}
 
       {!candidates.length ? (
-        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+        <div className="p-6">
+          <p className="text-ink-medium">{agent.emptyCopy}</p>
+          <footer className="mt-4 flex flex-wrap items-center gap-4">
+            <LabPanelShareBar
+              slug="breakouts"
+              downloadName="razzle-breakouts.png"
+              position={position || undefined}
+              snapshotRows={BREAKOUTS_SAMPLE_OG_ROWS}
+              copyLabel="copy breakouts link"
+            />
+          </footer>
+        </div>
       ) : (
         <div className="panel-cards">
           {candidates.slice(0, 40).map((p) => {
