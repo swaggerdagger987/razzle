@@ -32,7 +32,13 @@ export function BureauH2HShareBar({ leagueId, userId, opponentId, snapshot }: Pr
   });
   if (opponentId) ogParams.set("opponent", opponentId);
   // Export card encodes in-panel rivalry; direct OG URLs with league/user try live API first.
-  const snap = snapshot ? encodeBureauH2HOgSnapshot(snapshot) : undefined;
+  const snap = snapshot
+    ? encodeBureauH2HOgSnapshot(snapshot, {
+        leagueId,
+        userId,
+        opponentId,
+      })
+    : undefined;
   if (snap) ogParams.set("snapshot", snap);
 
   const offer = (snapshot?.trade_fit?.you_could_offer ?? []).join(", ") || "—";

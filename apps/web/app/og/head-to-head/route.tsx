@@ -74,13 +74,21 @@ function atlasH2hRoomQuestion(
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
-  const league = url.searchParams.get("league") ?? "";
-  const user = url.searchParams.get("user") ?? "";
-  const opponent = url.searchParams.get("opponent") ?? "";
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
+  const decodedSnapshot = snapshotParam ? decodeBureauH2HOgSnapshot(snapshotParam) : null;
+  const snapshot = decodedSnapshot?.snapshot ?? null;
+  const snapshotLeague = decodedSnapshot?.leagueContext;
+
+  let league = url.searchParams.get("league") ?? "";
+  let user = url.searchParams.get("user") ?? "";
+  let opponent = url.searchParams.get("opponent") ?? "";
+  if (snapshotLeague) {
+    if (!league) league = snapshotLeague.leagueId;
+    if (!user) user = snapshotLeague.userId;
+    if (!opponent && snapshotLeague.opponentId) opponent = snapshotLeague.opponentId;
+  }
 
   const atlas = AGENT_BY_ID.atlas;
-  const snapshot = snapshotParam ? decodeBureauH2HOgSnapshot(snapshotParam) : null;
   const isSnapshot = Boolean(snapshot);
   const hasLeagueParams = Boolean(league && user);
   const live = isSnapshot ? null : await fetchH2H(req, { league, user, opponent });
