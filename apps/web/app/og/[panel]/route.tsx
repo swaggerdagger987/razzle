@@ -76,13 +76,18 @@ function panelBlurbSuffix(
   isSnapshot: boolean,
   showingDemoRows: boolean,
   showingLiveData: boolean,
+  highlightWeek?: number,
 ): string {
   const pos = positionFilter ? ` · ${positionFilter} only` : "";
+  const weekSpike =
+    slug === "weekly" && highlightWeek != null && highlightWeek > 0
+      ? ` · week ${highlightWeek} spike`
+      : "";
   if (slug === "dynasty-comps" && showingDemoRows) {
     return `${pos} · comps for Ja'Marr Chase · sample preview`;
   }
   if (isSnapshot) {
-    return `${pos} · from your panel`;
+    return `${pos}${weekSpike} · from your panel`;
   }
   if (showingDemoRows) {
     return `${pos} · sample preview`;
@@ -389,6 +394,7 @@ export async function GET(
   const query = url.searchParams.get("q") ?? "";
   const positionFilter = url.searchParams.get("position") ?? "";
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
+  const highlightWeek = Number(url.searchParams.get("highlight_week") ?? "");
   const playerId =
     url.searchParams.get("player_id") ??
     url.searchParams.get("id") ??
@@ -496,7 +502,7 @@ export async function GET(
           {panel.title}
         </div>
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 16, maxWidth: 1000 }}>
-          {`${panel.blurb}${panelBlurbSuffix(slug, positionFilter, isSnapshot, showingDemoRows, showingLiveData)}`}
+          {`${panel.blurb}${panelBlurbSuffix(slug, positionFilter, isSnapshot, showingDemoRows, showingLiveData, Number.isFinite(highlightWeek) && highlightWeek > 0 ? highlightWeek : undefined)}`}
         </div>
 
         {query && (

@@ -36,6 +36,7 @@ export function LabOgExportLink({
   playerId,
   position,
   snapshotRows,
+  highlightWeek,
 }: {
   slug: string;
   downloadName?: string;
@@ -46,11 +47,14 @@ export function LabOgExportLink({
   position?: string;
   /** Top rows from the in-product panel — OG card matches what the user sees. */
   snapshotRows?: OgSnapshotRow[];
+  /** Weekly heatmap: hottest week column visible in-panel (OG blurb matches tape). */
+  highlightWeek?: number;
 }) {
   const file = downloadName ?? `razzle-${slug}.png`;
   const params = new URLSearchParams({ download: "1" });
   if (playerId) params.set("player_id", playerId);
   if (position) params.set("position", position);
+  if (highlightWeek != null && highlightWeek > 0) params.set("highlight_week", String(highlightWeek));
   const snapshot = snapshotRows?.length ? encodeOgSnapshot(snapshotRows) : undefined;
   if (snapshot) params.set("snapshot", snapshot);
   return (

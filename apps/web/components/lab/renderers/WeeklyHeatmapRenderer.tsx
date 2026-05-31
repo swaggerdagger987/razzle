@@ -198,6 +198,7 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
             downloadName="razzle-weekly-heatmap.png"
             position={position}
             snapshotRows={ogSnapshotRows}
+            highlightWeek={hotPlayer.week}
           />
         </footer>
       )}
