@@ -25,10 +25,7 @@
     "snapshot row shape changes beyond optional pid wrapper"
   ],
   "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+  "content_commit": "1a12d9c0b",
+  "reality": "PASS",
+  "merge": "pending"
 }

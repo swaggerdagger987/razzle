@@ -2,7 +2,7 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Builder
 
-2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | SHIP | encodeOgSnapshot pid + decode snapshotPlayerId in OG route.
+2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | SHIP | encodeOgSnapshot pid + decode snapshotPlayerId in OG route.
 
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | SHIP | TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS for gamelog + dynasty-comps.
 2026-05-31 | league-trade-finder-og-snapshot | 19a1af0e9 | SHIP | bureau-trade-finder-og-snapshot encode on ShareBar.
