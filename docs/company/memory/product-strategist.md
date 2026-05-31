@@ -1,7 +1,12 @@
+2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Product Strategist
 
 2026-05-31 | lab-og-gamelog-from-panel-sticker | c89f9898a | SHIP | Pro gamelog snapshot exports show FROM PANEL trust on Reddit cards.
 2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | SHIP | Cycle 142; formula OG epic 1/3; deferred empty-OG atom 2.
+2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | Buy/sell OG matches formula-sorted panel lanes.
+
+2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | SHIP | Cycle 142; formula OG epic 1/3; deferred empty-OG atom 2.
+
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | Dynasty comps OG signals LIVE comp matches for Reddit trust.
 
 2026-05-31 | room-briefing-watermark | f6e0985f3 | SHIP | Briefing exports carry terracotta brand + deep Room link for Reddit.

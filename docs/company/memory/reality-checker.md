@@ -1,7 +1,12 @@
+2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Reality Checker
 
 2026-05-31 | lab-og-gamelog-from-panel-sticker | c89f9898a | PASS | curl gamelog snapshot 59323B; pytest 4; web build exit 0.
 2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | PASS | pytest 2; curl breakouts 66253B rankings 66806B.
+2026-05-31 | lab-og-buysell-formula-live | fb4483341 | PASS | pytest 3; curl buysell 55234B.
+
+2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | PASS | pytest 2; curl breakouts 66253B rankings 66806B.
+
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | PASS | curl dynasty-comps 54807B; pytest 2; web build exit 0.
 
 2026-05-31 | room-briefing-watermark | f6e0985f3 | PASS | pytest 3; curl briefing OG 89235B PNG.
