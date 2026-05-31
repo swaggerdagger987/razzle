@@ -1,8 +1,3 @@
 cycle: 94
-last_board_cycle: 54
-focus_pillar: Lab
-focus_layer: L5
-next_slice: lab-og-fidelity-epic-complete
-last_keep_cycle: 94
 last_commit: d9548870
 lab_l5_og_snapshot_fidelity_epic: complete
