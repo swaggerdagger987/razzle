@@ -26,4 +26,5 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | self-scout OG | POST /api/bureau/self-scout + grade helpers | e732f973 | keep | 2 files; POS_COLORS; Hawkeye badge
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
+2026-05-31 | breakouts position OG | 1 file | da33eafd | keep | Reuse OG route position filter; no route change
 2026-05-31 | Lab OG position filter rankings | 9e97afb7 | keep | LabOgExportLink.position → OG apiParams + demo filter; 3 files ≤80 lines

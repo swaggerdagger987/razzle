@@ -251,7 +251,11 @@ export function BreakoutsRenderer({ panel }: Props) {
           >
             Ask Hawkeye about {top.name} →
           </Link>
-          <LabOgExportLink slug="breakouts" downloadName="razzle-breakouts.png" />
+          <LabOgExportLink
+            slug="breakouts"
+            downloadName="razzle-breakouts.png"
+            position={position || undefined}
+          />
         </footer>
       )}
     </div>

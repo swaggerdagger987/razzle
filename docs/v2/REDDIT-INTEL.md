@@ -15,6 +15,12 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:**
 ```
 
+## 2026-05-31 — Workday cycle 1 atom 2 (breakouts position OG filter)
+
+1. **Breakout screenshots are position-scoped** — WR-only Hawkeye tables need WR-only export cards, not full-board noise.
+2. **Reuse URL param, not new OG routes** — `position` on existing `/og/breakouts` matches rankings pattern.
+3. Standing: filter parity across Lab list panels before prospects atom.
+
 ## 2026-05-31 — Workday cycle 1 atom 3 (player-scoped OG export)
 
 1. **Player context must ride on the export URL** — dynasty comps and gamelog screenshots are about *this* asset; `player_id` on the OG link matches in-panel selection.
