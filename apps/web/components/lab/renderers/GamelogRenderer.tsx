@@ -165,11 +165,12 @@ export function GamelogRenderer({ panel }: Props) {
     return best;
   }, [q.data?.weeks]);
 
-  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
-    const weekRows = q.data?.weeks ?? [];
-    const pos = q.data?.position ?? playerPos ?? "WR";
-    const team = q.data?.team ?? "";
-    return [...weekRows]
+  function gamelogWeeksToSnapshotRows(
+    weeks: WeekRow[],
+    pos: string,
+    team: string,
+  ): OgSnapshotRow[] {
+    return [...weeks]
       .sort((a, b) => b.fpts - a.fpts)
       .slice(0, 6)
       .map((w) => ({
@@ -179,7 +180,34 @@ export function GamelogRenderer({ panel }: Props) {
         stat: w.fpts,
         statLabel: "PPR",
       }));
+  }
+
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const weekRows = q.data?.weeks ?? [];
+    const pos = q.data?.position ?? playerPos ?? "WR";
+    const team = q.data?.team ?? "";
+    return gamelogWeeksToSnapshotRows(weekRows, pos, team);
   }, [q.data?.weeks, q.data?.position, q.data?.team, playerPos]);
+
+  const sampleGamelogQ = useQuery({
+    queryKey: ["panel", "gamelog", "sample-export", DEFAULT_LAB_OG_PLAYER_ID],
+    queryFn: async () => {
+      const res = await fetch(
+        `/api/panels/gamelog?player_id=${encodeURIComponent(DEFAULT_LAB_OG_PLAYER_ID)}`,
+      );
+      if (!res.ok) throw new Error(`API ${res.status}`);
+      return res.json() as GamelogData;
+    },
+    enabled: !playerId,
+    staleTime: 60_000,
+  });
+
+  const sampleOgSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const weekRows = sampleGamelogQ.data?.weeks ?? [];
+    const pos = sampleGamelogQ.data?.position ?? "WR";
+    const team = sampleGamelogQ.data?.team ?? "";
+    return gamelogWeeksToSnapshotRows(weekRows, pos, team);
+  }, [sampleGamelogQ.data?.weeks, sampleGamelogQ.data?.position, sampleGamelogQ.data?.team]);
 
   function selectPlayer(hit: SearchHit) {
     const q = new URLSearchParams(searchParams.toString());
@@ -260,7 +288,8 @@ export function GamelogRenderer({ panel }: Props) {
             slug="gamelog"
             downloadName="razzle-gamelog.png"
             playerId={DEFAULT_LAB_OG_PLAYER_ID}
-            label="export sample card"
+            snapshotRows={sampleOgSnapshotRows.length ? sampleOgSnapshotRows : undefined}
+            label={sampleOgSnapshotRows.length ? "export card" : "export sample card"}
           />
         </footer>
       </div>
