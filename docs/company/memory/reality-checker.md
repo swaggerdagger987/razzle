@@ -33,4 +33,6 @@ explicit checks in the verification routine.
 2026-05-31 | Lab launch10 OG label Gate C | 6e98f4a2 | PASS | curl rankings 59509B breakouts 60649B | keep | docs/v2/evidence/2026-05-31-lab-og-launch10-live-label.md
 2026-05-31 | Bureau H2H OG Gate C | 044ee1e8 | PASS | curl h2h 59305B PNG | keep | docs/v2/evidence/2026-05-31-bureau-h2h-share-bar.md
 2026-05-31 | Bureau MC share Gate C | 3392bc29 | PASS | curl monte-carlo 53767B PNG | keep | evidence/2026-05-31-bureau-monte-carlo-share-bar.md
-2026-05-31 | power-rankings OG Gate C | e62721a6 | PASS | curl 200 68555B | keep | docs/v2/evidence/2026-05-31-league-power-rankings-og.md
+2026-05-31 | Power Rankings OG Gate C | 90bf2dd5 | PASS | curl power-rankings 59807B PNG | keep | evidence/2026-05-31-league-power-rankings-og.md
+2026-05-31 | Roster Depth tab | 2d11a65f | PASS | build+pytest executed | keep | evidence/2026-05-31-league-roster-depth-tab.md
+2026-05-31 | Build Profiles tab | 309f8a8b | PASS | build+pytest executed post-merge | keep | evidence/2026-05-31-league-build-profiles-tab.md

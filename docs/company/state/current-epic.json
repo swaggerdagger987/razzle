@@ -24,20 +24,25 @@
       "merge_commit": "90bf2dd5"
     },
     {
-      "id": "bureau-trade-network-copy-link",
-      "title": "Trade Network copy link beside export card",
-      "status": "pending",
-      "merge_commit": null
-    },
-    {
       "id": "bureau-monte-carlo-copy-link",
       "title": "Monte Carlo copy link beside export card",
       "status": "done",
       "merge_commit": "30454811"
+    },
+    {
+      "id": "league-build-profiles-tab",
+      "title": "Unhide Build Profiles tab with Atlas renderer",
+      "status": "done",
+      "merge_commit": "309f8a8b"
+    },
+    {
+      "id": "bureau-trade-network-copy-link",
+      "title": "Trade Network copy link beside export card",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
   "next_atom_id": "bureau-trade-network-copy-link",
   "created_at": "2026-05-31T04:44:00Z",
-  "updated_at": "2026-05-31T13:20:00Z",
-  "last_cycle_commit": "90bf2dd5"
+  "updated_at": "2026-05-31T05:10:00Z"
 }

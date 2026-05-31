@@ -32,3 +32,6 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | panelBlurbSuffix launch-10 | 6e98f4a2 | keep | 1 file; LAUNCH_10_OG_SLUGS mirrors LabSidebar STAFF_PICKS
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
+2026-05-31 | power-rankings OG route | 46aeb445 | keep | mirrors pressure-map; diff bars + luck tags
+2026-05-31 | BureauRosterDepth | 2d11a65f | keep | Self-Scout depth grade pattern; 3-file contract
+2026-05-31 | BureauBuildProfiles | 19445fa1 | keep | build-profiles API rows; Atlas hallway; 3-file contract
