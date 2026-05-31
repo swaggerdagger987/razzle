@@ -20,12 +20,19 @@
     {
       "id": "lab-og-prospects-live-tiers",
       "title": "Prospects OG live fetch uses tier players with prospect rank labels",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "ab6ae8d7"
     }
   ],
-  "next_atom_id": "lab-og-prospects-live-tiers",
+  "next_atom_id": null,
   "created_at": "2026-05-31T08:00:00Z",
-  "updated_at": "2026-05-31T08:30:00Z",
-  "completed_epics": []
+  "updated_at": "2026-05-31T08:35:00Z",
+  "completed_epics": [
+    {
+      "id": "lab-l5-og-live-fetch",
+      "status": "complete",
+      "last_atom": "lab-og-prospects-live-tiers",
+      "merge_commit": "ab6ae8d7"
+    }
+  ]
 }
