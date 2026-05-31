@@ -8,8 +8,8 @@
     {
       "id": "lab-aging-og-live-extract",
       "title": "Aging OG extracts live players from positions map",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "bcfaa376"
     },
     {
       "id": "lab-rankings-og-live-blurb",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-aging-og-live-extract",
+  "next_atom_id": "lab-rankings-og-live-blurb",
   "created_at": "2026-05-31T14:00:00Z",
-  "updated_at": "2026-05-31T14:00:00Z"
+  "updated_at": "2026-05-31T14:30:00Z"
 }
