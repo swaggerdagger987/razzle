@@ -1,9 +1,9 @@
-cycle: 97
+cycle: 100
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-position-filters-followup
-last_keep_cycle: 97
-last_commit: 7f652a98
-bureau_depth_og_epic: complete
-league_strength_of_schedule_og_share: done
+next_slice: lab-og-efficiency-aging-live-sort
+last_keep_cycle: 100
+last_commit: da33eafd
+lab_l5_og_live_sort_epic: active
+lab_l5_og_rankings_tradevalues_live_sort: in_progress

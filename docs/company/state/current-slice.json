@@ -1,25 +1,32 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-strength-of-schedule-og-share",
-  "big_problem": "Four newly unhidden Bureau depth tabs have no group-chat export cards while rival tabs ship OG share rows.",
-  "epic": "League L5 — Bureau depth tab OG export cards",
-  "slice_title": "Schedule tab OG power verdict card + share bar",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with league+user params",
-  "trust_pillars": ["T2", "T5", "T6"],
-  "allowed_paths": [
-    "apps/web/components/league/BureauStrengthOfScheduleShareBar.tsx",
-    "apps/web/components/league/BureauStrengthOfSchedule.tsx",
-    "apps/web/app/og/strength-of-schedule/route.tsx"
-  ],
-  "max_files": 3,
-  "max_lines": 280,
+  "big_problem": "Lab OG share cards without panel stat keys sort by wrong fields when live API rows load — screenshots disagree with in-product Lab tables.",
+  "epic": "Lab L5 — OG live panel rows match in-product sort keys",
+  "slice_title": "Rankings + Trade Values OG rank by dynasty_value / trade_value on live fetch",
+  "atom_id": "lab-og-rankings-tradevalues-live-sort",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "ACCEPTANCE Gate 5 — Lab OG export",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
+  "max_files": 1,
+  "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test .venv-v2/bin/python -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-sos.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/strength-of-schedule?download=1&league=demo&user=demo'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-rankings.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/rankings?position=WR&download=1'",
+    "curl -s -o /tmp/og-tradevalues.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/tradevalues?position=WR&download=1'"
   ],
-  "out_of_scope": ["Lab position filters", "API changes", "new Bureau tabs"],
-  "builder_mode": "composer-surgical"
+  "out_of_scope": [
+    "Efficiency/aging/buysell stat keys (atom 2)",
+    "New LabOgExportLink wiring",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP"
+  }
 }

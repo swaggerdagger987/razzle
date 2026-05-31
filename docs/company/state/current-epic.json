@@ -1,37 +1,38 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Four newly unhidden Bureau depth tabs have no group-chat export cards while rival tabs ship OG share rows.",
-  "epic_title": "League L5 — Bureau depth tab OG export cards",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
+  "epic_status": "active",
+  "big_problem": "Lab OG share cards without panel stat keys sort by wrong fields when live API rows load — screenshots disagree with in-product Lab tables.",
+  "epic_title": "Lab L5 — OG live panel rows match in-product sort keys",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "league-roster-depth-og-share",
-      "title": "Roster Depth tab copy link + OG grade card",
-      "status": "done",
-      "merge_commit": "688cea64"
+      "id": "lab-og-rankings-tradevalues-live-sort",
+      "title": "Rankings + Trade Values OG rank by dynasty_value / trade_value on live fetch",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "league-build-profiles-og-share",
-      "title": "Build Profiles tab OG archetype card",
-      "status": "done",
-      "merge_commit": "77d4f765"
+      "id": "lab-og-efficiency-aging-live-sort",
+      "title": "Efficiency + Aging OG rank by efficiency_score / peak_age on live fetch",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "league-waiver-tendencies-og-share",
-      "title": "Waiver Tendencies tab OG FAAB card",
-      "status": "done",
-      "merge_commit": "6dcb0f72"
-    },
-    {
-      "id": "league-strength-of-schedule-og-share",
-      "title": "Schedule tab OG power verdict card",
-      "status": "done",
-      "merge_commit": "7f652a98"
+      "id": "lab-og-buysell-dashboard-live-sort",
+      "title": "Buy/Sell + Dashboard OG rank by value / rank_diff on live fetch",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T06:00:00Z",
-  "updated_at": "2026-05-31T06:45:00Z",
-  "last_cycle_commit": "7f652a98"
+  "next_atom_id": "lab-og-rankings-tradevalues-live-sort",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
+  "completed_epics": [
+    {
+      "id": "league-l5-bureau-depth-og",
+      "status": "complete",
+      "last_atom": "league-strength-of-schedule-og-share",
+      "merge_commit": "7f652a98"
+    }
+  ]
 }
