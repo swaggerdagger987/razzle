@@ -57,3 +57,41 @@ function marginNoteForCollegeRow(row: PlayerRow): MarginNote | null {
   }
   return null;
 }
+
+/** Minimal row shape for OG explore cards (edge-safe — no client imports). */
+export interface OgExploreMarginRow {
+  full_name: string;
+  position: string;
+  team?: string;
+  player_id?: string;
+  age?: number | null;
+  fantasy_points_ppr?: number;
+  targets?: number;
+  receiving_targets?: number;
+  total_yards?: number;
+  receptions?: number;
+  passing_yards?: number;
+  rushing_yards?: number;
+}
+
+export function marginNoteForOgExploreRow(
+  row: OgExploreMarginRow,
+  universe: string,
+): MarginNote | null {
+  const asRow = {
+    player_id: row.player_id ?? "",
+    full_name: row.full_name,
+    position: row.position,
+    team: row.team ?? "",
+    games: 0,
+    age: row.age,
+    fantasy_points_ppr: row.fantasy_points_ppr ?? 0,
+    targets: row.targets ?? 0,
+    receiving_targets: row.receiving_targets,
+    total_yards: row.total_yards,
+    receptions: row.receptions,
+    passing_yards: row.passing_yards,
+    rushing_yards: row.rushing_yards,
+  } as unknown as PlayerRow;
+  return marginNoteForRow(asRow, universe);
+}
