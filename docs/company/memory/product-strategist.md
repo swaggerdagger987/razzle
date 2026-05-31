@@ -1,10 +1,14 @@
 # Memory — Product Strategist
 
-2026-05-31 | H2H OG watermark | 44d05684 | League rivalry exports now match Lab/Explore screenshot brand — epic closed.
+2026-05-31 | lab-pro-gate-hallway-teasers | 73f6db41 | SHIP | L4 conversion: free screener exit + domain blur rows on pro panels.
 
-2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | SHIP | Lab L5 live-sort epic closed; ppo beats efficiency_score for in-panel parity.
+2026-05-31 | lab-og-weekly-prospects-breakouts-live-extract | 8d8b2635 | SHIP | Lab L5 OG extract epic atom 1/3; gamelog FPTS next
+
+2026-05-31 | lab-og-efficiency-aging-live-sort | da33eafd | SHIP | Lab L5 live-sort epic closed; ppo beats efficiency_score for in-panel parity.
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | SHIP | ppo/ppg align Octo efficiency + aging Lab tables for OG screenshots.
+
+2026-05-31 | lab-og-efficiency-aging-live-sort | 2bba7622 | SHIP | Live-sort epic atom 2/3; buysell+dashboard next
 
 2026-05-31 | bureau-h2h-sharebar-canonical-codec | da33eafd | SHIP | H2H codec epic atom 1/3; ShareBar must match OG y/m/pc decode
 

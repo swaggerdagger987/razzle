@@ -1,10 +1,8 @@
-cycle: 116
+cycle: 115
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L4
 next_slice: lab-pro-gate-launch10-teasers
-last_keep_cycle: 116
-last_commit: 675044ea
+last_keep_cycle: 115
+last_commit: 73f6db41
 lab_l4_pro_gate_epic: active
-lab_l5_og_watermark_epic: complete
-lab_l5_launch10_og_extract_epic: active
