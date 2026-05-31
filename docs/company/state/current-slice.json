@@ -6,7 +6,7 @@
   "slice_title": "Bureau Schedule OG share card with snapshot rows",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with demo or snapshot rows",
   "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
     "apps/web/lib/bureau-sos-og-snapshot.ts",
@@ -17,7 +17,8 @@
   "max_lines": 300,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-sos.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/strength-of-schedule?download=1'"
   ],
   "out_of_scope": ["API changes", "NORTH_STAR/DESIGN/DECISIONS"],
   "builder_mode": "composer-surgical",
