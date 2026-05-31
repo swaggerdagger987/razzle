@@ -1,29 +1,36 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG gamelog exports fail before a player is picked — empty state had no sample card for Reddit screenshots.",
-  "epic": "Lab L5 — OG live fetch + sticker parity",
-  "slice_title": "Gamelog OG — default player_id when export omits query",
-  "atom_id": "lab-og-gamelog-player-default",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
-  "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/web/components/lab/renderers/GamelogRenderer.tsx"],
-  "max_files": 1,
-  "max_lines": 40,
+  "big_problem": "Bureau H2H rivalry cards label live vs sample only in subtitle text — Reddit cannot tell a real league export from demo at a glance.",
+  "epic": "League L5 — Bureau H2H export trust stickers (atom 1/3)",
+  "slice_title": "H2H OG — LIVE, SAMPLE, and EXPORTED rotated trust stickers",
+  "atom_id": "bureau-h2h-og-live-sample-sticker",
+  "parity_ref": "PARITY League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — H2H OG PNG ≥40KB demo + snapshot paths",
+  "trust_pillars": ["T2", "T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/head-to-head/route.tsx",
+    "docs/v2/evidence/2026-05-31-bureau-h2h-og-live-sample-sticker.md"
+  ],
+  "max_files": 2,
+  "max_lines": 55,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-gamelog.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_bureau_h2h_og_snapshot_codec.py -q",
+    "curl -s -o /tmp/h2h-demo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/head-to-head?download=1'",
+    "curl -s -o /tmp/h2h-snap.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/head-to-head?download=1&snapshot=eyJ5Ijp7InQiOiJZb3VyIFNxdWFkIiwiciI6IjgtNSIsInAiOjExOC40fSwibSI6eyJ0IjoiUml2YWwgRkMiLCJyIjoiNy02IiwicCI6MTEyLjF9LCJwYyI6W3sicCI6IlJCIiwieSI6NCwidCI6Mn0seyJwIjoiV1IiLCJ5Ijo1LCJ0Ijo2fV19'",
+    "file /tmp/h2h-demo.png /tmp/h2h-snap.png"
   ],
-  "out_of_scope": ["og route changes", "NORTH_STAR/DESIGN/DECISIONS"],
+  "out_of_scope": [
+    "Other Bureau OG routes",
+    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "new npm deps"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  },
-  "content_commit": "e37cd230",
-  "reality": "PASS",
-  "merge": "pending"
+  }
 }

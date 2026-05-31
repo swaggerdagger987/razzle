@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 118 — Lab L4 pro gate perks catalog names)
+**Last updated:** 2026-05-31 (factory cycle 131 — League L5 Bureau H2H OG trust stickers)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 118 |
+| Cycle | 131 |
 | Last board | 54 |
-| Focus pillar | Lab |
-| Focus layer | L4 |
-| Next slice | explore-og-universe-query |
-| Last commit | `f56fdbd8` |
+| Focus pillar | League |
+| Focus layer | L5 |
+| Next slice | bureau-mc-og-live-sample-sticker |
+| Last commit | `da33eafd` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

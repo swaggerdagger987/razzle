@@ -1,5 +1,6 @@
 # Memory — Builder
 
+2026-05-31 | bureau-h2h-og-live-sample-sticker | da33eafd | LIVE/SAMPLE/EXPORTED stickers on head-to-head OG route.
 2026-05-31 | lab-sidebar-search-agent-labels | e75ec714 | keep | showOwnerInTitle prefixes search hits with agent name.
 
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | ExploreShareButton season/team → OG screener + band deep link.
