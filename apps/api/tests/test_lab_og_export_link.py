@@ -68,8 +68,7 @@ def test_rankings_empty_filter_exports_sample_card():
     assert "RANKINGS_SAMPLE_OG_ROWS" in renderer
     assert "isEmptyBoard" in renderer
     assert "snapshotRows={RANKINGS_SAMPLE_OG_ROWS}" in renderer
-    assert "LabPanelShareBar" in renderer
-    assert 'copyLabel="copy rankings link"' in renderer
+    assert 'label="export sample card"' in renderer
 
 
 def test_default_lab_og_player_matches_og_route():
@@ -80,3 +79,22 @@ def test_default_lab_og_player_matches_og_route():
     link = _export_link_source()
     assert 'DEFAULT_OG_PLAYER_ID = "00-0036900"' in route
     assert 'DEFAULT_LAB_OG_PLAYER_ID = "00-0036900"' in link
+
+
+def test_lab_og_export_link_preview_without_download_param():
+    source = _export_link_source()
+    assert "labOgExportSearchParams" in source
+    assert "preview card" in source
+    assert 'exportParams.set("download", "1")' in source
+    assert "previewPath" in source
+    assert "target=\"_blank\"" in source
+    idx = source.index("previewPath")
+    preview_block = source[idx : idx + 220]
+    assert "download" not in preview_block.split("exportParams")[0]
+
+
+def test_lab_og_export_search_params_encodes_snapshot_without_download():
+    source = _export_link_source()
+    assert "encodeOgSnapshot(snapshotRows" in source
+    assert "new URLSearchParams()" in source
+    assert "exportParams = new URLSearchParams(previewParams)" in source

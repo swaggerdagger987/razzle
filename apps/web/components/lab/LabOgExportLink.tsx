@@ -47,6 +47,29 @@ export function encodeOgSnapshot(
   return undefined;
 }
 
+/** Shared OG query params for preview (browser tab) and export (download). */
+export function labOgExportSearchParams(opts: {
+  slug: string;
+  playerId?: string;
+  playerName?: string;
+  position?: string;
+  snapshotRows?: OgSnapshotRow[];
+}): URLSearchParams {
+  const { slug, playerId, playerName, position, snapshotRows } = opts;
+  const params = new URLSearchParams();
+  const isPlayerScoped = (PLAYER_SCOPED_OG_SLUGS as readonly string[]).includes(slug);
+  const resolvedPlayerId =
+    playerId?.trim() || (isPlayerScoped ? DEFAULT_LAB_OG_PLAYER_ID : undefined);
+  if (resolvedPlayerId) params.set("player_id", resolvedPlayerId);
+  if (playerName?.trim()) params.set("name", playerName.trim());
+  if (position) params.set("position", position);
+  const snapshot = snapshotRows?.length
+    ? encodeOgSnapshot(snapshotRows, resolvedPlayerId)
+    : undefined;
+  if (snapshot) params.set("snapshot", snapshot);
+  return params;
+}
+
 export function LabOgExportLink({
   slug,
   downloadName,
@@ -69,22 +92,33 @@ export function LabOgExportLink({
   snapshotRows?: OgSnapshotRow[];
 }) {
   const file = downloadName ?? `razzle-${slug}.png`;
-  const params = new URLSearchParams({ download: "1" });
-  const isPlayerScoped = (PLAYER_SCOPED_OG_SLUGS as readonly string[]).includes(slug);
-  const resolvedPlayerId =
-    playerId?.trim() || (isPlayerScoped ? DEFAULT_LAB_OG_PLAYER_ID : undefined);
-  if (resolvedPlayerId) params.set("player_id", resolvedPlayerId);
-  if (playerName?.trim()) params.set("name", playerName.trim());
-  if (position) params.set("position", position);
-  const snapshot = snapshotRows?.length ? encodeOgSnapshot(snapshotRows, resolvedPlayerId) : undefined;
-  if (snapshot) params.set("snapshot", snapshot);
+  const previewParams = labOgExportSearchParams({
+    slug,
+    playerId,
+    playerName,
+    position,
+    snapshotRows,
+  });
+  const exportParams = new URLSearchParams(previewParams);
+  exportParams.set("download", "1");
+  const previewPath = `/og/${slug}?${previewParams.toString()}`;
   return (
-    <a
-      href={`/og/${slug}?${params.toString()}`}
-      className="text-sm text-ink-medium underline"
-      download={file}
-    >
-      {label}
-    </a>
+    <span className="inline-flex flex-wrap items-center gap-3">
+      <a
+        href={previewPath}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-sm text-ink-medium underline"
+      >
+        preview card
+      </a>
+      <a
+        href={`/og/${slug}?${exportParams.toString()}`}
+        className="text-sm text-ink-medium underline"
+        download={file}
+      >
+        {label}
+      </a>
+    </span>
   );
 }
