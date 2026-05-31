@@ -1,6 +1,26 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-breakouts-score-ranked",
-  "slice_title": "Breakouts OG export ranks top-6 by breakout score",
-  "builder_mode": "composer-surgical"
+  "atom_id": "league-strength-of-schedule-og-share",
+  "big_problem": "Bureau Schedule tab is live but group-chat exports lack an Octo verdict card.",
+  "epic": "League L5 — Bureau Schedule SOS OG export",
+  "slice_title": "Schedule tab OG power verdict card",
+  "parity_ref": "League L5 — Bureau export / OG share rows",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — Bureau export PNG ≥40KB",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/strength-of-schedule/route.tsx",
+    "apps/web/components/league/BureauStrengthOfScheduleShareBar.tsx",
+    "apps/web/components/league/BureauStrengthOfSchedule.tsx"
+  ],
+  "max_files": 3,
+  "max_lines": 300,
+  "acceptance_commands": [
+    "pytest apps/api/tests -q",
+    "npm run build --workspace=apps/web"
+  ],
+  "out_of_scope": [],
+  "builder_mode": "composer-surgical",
+  "content_commit": "8547d6e5",
+  "verdict": "SHIP"
 }

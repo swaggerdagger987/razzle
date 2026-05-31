@@ -1,6 +1,18 @@
 {
   "epic_status": "complete",
-  "epic_title": "Lab L5 — OG snapshot row fidelity",
+  "big_problem": "Bureau Schedule tab lacked group-chat export card.",
+  "epic_title": "League L5 — Bureau Schedule SOS OG export",
+  "parity_ref": "League L5 — Bureau export / OG share rows",
+  "depth_ref": "League L5",
+  "atoms": [
+    {
+      "id": "league-strength-of-schedule-og-share",
+      "title": "Schedule tab OG power verdict card",
+      "status": "done",
+      "merge_commit": null
+    }
+  ],
   "next_atom_id": null,
-  "last_cycle_commit": "d9548870"
+  "created_at": "2026-05-31T06:45:00Z",
+  "updated_at": "2026-05-31T06:45:00Z"
 }
