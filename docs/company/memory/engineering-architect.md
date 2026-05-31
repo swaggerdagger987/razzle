@@ -27,4 +27,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | fetchLiveOgRows + candidates | 2cb898b6 | keep | X-Razzle-Plan pro header; legacy API fallback chain
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
-2026-05-31 | rivalrySubtitle OG | da33eafd | keep | single string branch demo vs live; 1 file ≤12 lines
+2026-05-31 | rivalrySubtitle OG | 521e8482 | keep | single string branch demo vs live; 1 file ≤12 lines

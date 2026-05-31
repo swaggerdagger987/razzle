@@ -14,8 +14,8 @@
     {
       "id": "bureau-h2h-opponent-subtitle",
       "title": "OG card subtitle names selected opponent when live fetch works",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "521e8482"
     },
     {
       "id": "bureau-h2h-snapshot",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-h2h-opponent-subtitle",
+  "next_atom_id": "bureau-h2h-snapshot",
   "created_at": "2026-05-31T12:00:00Z",
   "updated_at": "2026-05-31T12:00:00Z"
 }
