@@ -31,3 +31,13 @@ def test_default_og_player_tolab_rules():
     assert '"dynasty-comps"' in source
     assert "includeDefaultPlayer" in source
     assert "opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer" in source
+
+
+def test_snapshot_payload_preserves_player_for_tolab():
+    route = ROUTE_TS.read_text(encoding="utf-8")
+    link_ts = (ROOT / "apps/web/components/lab/LabOgExportLink.tsx").read_text(encoding="utf-8")
+    assert "snapshotPlayerId" in route
+    assert "watermarkPlayerId" in route
+    assert "DecodedOgSnapshot" in route
+    assert '{ r: compact, p: pid }' in link_ts or "{ r: compact, p: pid }" in link_ts
+    assert "encodeOgSnapshot(snapshotRows, resolvedPlayerId)" in link_ts
