@@ -52,6 +52,7 @@ export function LabOgExportLink({
   downloadName,
   label = "export card",
   playerId,
+  playerName,
   position,
   snapshotRows,
 }: {
@@ -60,6 +61,8 @@ export function LabOgExportLink({
   label?: string;
   /** When set, OG route uses this player for player-scoped panels (e.g. gamelog, dynasty-comps). */
   playerId?: string;
+  /** Display name for hallway toLab watermark on exported cards. */
+  playerName?: string;
   /** When set, OG route applies the same position filter as the in-product panel (e.g. rankings WR). */
   position?: string;
   /** Top rows from the in-product panel — OG card matches what the user sees. */
@@ -71,6 +74,7 @@ export function LabOgExportLink({
   const resolvedPlayerId =
     playerId?.trim() || (isPlayerScoped ? DEFAULT_LAB_OG_PLAYER_ID : undefined);
   if (resolvedPlayerId) params.set("player_id", resolvedPlayerId);
+  if (playerName?.trim()) params.set("name", playerName.trim());
   if (position) params.set("position", position);
   const snapshot = snapshotRows?.length ? encodeOgSnapshot(snapshotRows, resolvedPlayerId) : undefined;
   if (snapshot) params.set("snapshot", snapshot);
