@@ -1,15 +1,21 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import {
+  encodeBureauMonteCarloOgSnapshot,
+  type BureauMonteCarloOgRow,
+} from "@/lib/bureau-monte-carlo-og-snapshot";
 
 interface Props {
   leagueId: string;
   userId: string;
   scenarioQuery?: string;
+  /** Top odds rows visible in Bureau — OG card matches this board without live API. */
+  oddsRows?: BureauMonteCarloOgRow[];
 }
 
 /** Copyable Monte Carlo URL + OG export — mirrors BureauH2HShareBar. */
-export function BureauMonteCarloShareBar({ leagueId, userId, scenarioQuery }: Props) {
+export function BureauMonteCarloShareBar({ leagueId, userId, scenarioQuery, oddsRows }: Props) {
   const [copied, setCopied] = useState(false);
 
   const simPath = `/league/${leagueId}/monte-carlo${scenarioQuery ? `?${scenarioQuery}` : ""}`;
@@ -19,6 +25,9 @@ export function BureauMonteCarloShareBar({ leagueId, userId, scenarioQuery }: Pr
     user: userId,
     download: "1",
   });
+  const snap =
+    oddsRows?.length ? encodeBureauMonteCarloOgSnapshot({ rows: oddsRows.slice(0, 3) }) : undefined;
+  if (snap) ogParams.set("snapshot", snap);
 
   const copyLink = useCallback(async () => {
     const url =
