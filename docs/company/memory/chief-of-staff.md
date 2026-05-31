@@ -1,5 +1,7 @@
 # Memory — Chief of Staff
 
+2026-05-31 | Factory cycle 110 efficiency/aging OG sort | da33eafd | Lab L5 live-sort epic complete; PR #643 merged; ppo/ppg keys aligned with renderers.
+
 2026-05-31 | Factory cycle 110 efficiency/aging OG sort | aefbf6ef | Lab live-sort epic atom 2/3; deduped rankings atom on base.
 
 2026-05-31 | Factory cycle 109 gamelog position OG | 228c4b59 | Lab L5 position epic gamelog atom; workday cycle 1.
