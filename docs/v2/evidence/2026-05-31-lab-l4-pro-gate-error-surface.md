@@ -1,25 +1,23 @@
-# Evidence — Lab L4 pro-gate error surface
+# Evidence — lab-l4-pro-gate-error-surface (2026-05-31)
 
-**Date:** 2026-05-31  
-**Atom:** `lab-l4-pro-gate-error-surface`  
-**Trust:** T2, T6
+## Slice
 
-## Change
+`ProGateFromPanelError` on breakouts renderer + pytest guard for shared 402 surface.
 
-- `ProGateFromPanelError.tsx` — single mapping from 402 upgrade payload / `UpgradeRequiredError` → `ProUpgradeGate`.
-- `BreakoutsRenderer.tsx` — uses shared helper (removes duplicated gate branches).
-- `test_panel_pro_gate_surface.py` — launch-10 + Bureau-7 perk slug guards; breakouts wiring check.
-
-## Commands
+## Commands (executed)
 
 ```bash
-npm run build --workspace=apps/web
-# exit 0
-
+npm run build --workspace=apps/web   # exit 0
 JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_pro_gate_surface.py apps/api/tests/test_panel_upgrade_teaser.py -q
 # 7 passed
 ```
 
-## Verdict
+## Files
 
-**PASS** — no OG route; build + pytest only.
+- `apps/web/components/lab/ProGateFromPanelError.tsx` — shared 402 → ProUpgradeGate mapper
+- `apps/web/components/lab/renderers/BreakoutsRenderer.tsx` — uses ProGateFromPanelError
+- `apps/api/tests/test_panel_pro_gate_surface.py` — wiring guard
+
+## Trust
+
+T2 (pro gate clarity), T6 (voice/consistency on upgrade path)
