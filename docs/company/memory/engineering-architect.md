@@ -1,5 +1,8 @@
 # Memory — Engineering Architect
 
+2026-05-31 | lab-efficiency-empty-export | d96f88dfb | 2 files; mirrors gamelog empty footer pattern.
+
+2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | 1 file GamelogRenderer; footer LabOgExportLink ≤15 lines.
 
 2026-05-31 | room-briefing-watermark | eca00c3f0 | 3 files; BriefingCard mirrors ExploreShareButton; OG band uses roomPath.
 

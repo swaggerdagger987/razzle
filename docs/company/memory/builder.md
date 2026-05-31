@@ -1,5 +1,8 @@
 # Memory — Builder
 
+2026-05-31 | EfficiencyRenderer empty export sample card | d96f88dfb | curl efficiency OG 64569B; pytest 4.
+
+2026-05-31 | GamelogRenderer LabOgExportLink on zero-week empty state | ac0280a20 | curl gamelog OG 59323B; empty weeks footer export.
 
 2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | preview+copy+export on BriefingCard; OG watermark band.
 

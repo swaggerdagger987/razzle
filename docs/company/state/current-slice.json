@@ -1,33 +1,34 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Situation Room briefings die in the chat — managers cannot share a formatted rivalry readout to league Slack or Reddit prep threads.",
-  "epic": "Room L5 — briefing GTM export",
-  "slice_title": "Briefing OG — terracotta watermark + Room hallway link",
-  "atom_id": "room-briefing-watermark",
-  "parity_ref": "Room L5 — GTM export slice",
-  "depth_ref": "Room L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB; hallway deep link in watermark band",
+  "atom_id": "lab-efficiency-empty-export",
+  "big_problem": "Lab export cards vanish when a panel has no rows yet — users can't screenshot an empty tape state for Reddit.",
+  "epic": "Lab L5 — OG export on empty panel states (atom 2/3)",
+  "slice_title": "Efficiency — export sample card on empty position board",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with demo rows",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/briefing/route.tsx",
-    "apps/web/components/room/BriefingCard.tsx",
-    "apps/api/tests/test_briefing_og_route.py"
+    "apps/web/components/lab/renderers/EfficiencyRenderer.tsx",
+    "apps/api/tests/test_lab_og_export_link.py"
   ],
-  "max_files": 3,
-  "max_lines": 120,
+  "max_files": 2,
+  "max_lines": 35,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_briefing_og_route.py -q",
-    "npm run build --workspace=apps/web"
+    "npm run build --workspace=apps/web 2>&1 | tail -8",
+    "PATH=\"$HOME/.local/bin:$PATH\" python3 -m pytest apps/api/tests/test_lab_og_export_link.py -q --noconftest",
+    "curl -s -o /tmp/efficiency-og.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/efficiency?download=1'"
   ],
-  "out_of_scope": ["NORTH_STAR/DESIGN/DECISIONS edits", "new npm deps"],
+  "out_of_scope": ["rankings empty export", "OG route changes"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   },
-  "content_commit": "eca00c3f0",
+  "status": "shipped",
+  "content_commit": "d96f88dfb",
   "reality": "PASS",
   "merge": "pending"
 }

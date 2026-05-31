@@ -1,5 +1,8 @@
 # Memory — Product Strategist
 
+2026-05-31 | lab-efficiency-empty-export | d96f88dfb | SHIP | Empty efficiency board still exports demo PPO card.
+
+2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | SHIP | Lab L5 empty OG epic atom 1/3; gamelog zero-week export for Reddit tape.
 
 2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | Room GTM epic closed; briefing screenshots deep-link to Situation Room.
 
