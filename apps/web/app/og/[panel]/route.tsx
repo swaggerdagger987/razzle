@@ -31,10 +31,12 @@ const STAT_CANDIDATE_KEYS = [
   "rbs_score",
   "breakout_score",
   "similarity",
+  "mismatch_score",
   "rank_diff",
   "composite_score",
   "efficiency_score",
   "ppo",
+  "rps",
   "total_yards",
   "pts",
   "rank",
@@ -68,7 +70,7 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
   tradevalues: "trade_value",
   efficiency: "ppo",
   aging: "ppg",
-  buysell: "dynasty_value",
+  buysell: "mismatch_score",
   dashboard: "rank_diff",
 };
 
@@ -331,9 +333,9 @@ function statLabelForKey(k: string): string {
   if (k === "ppg") statLabel = "PPG";
   if (k === "rps") statLabel = "RPS";
   if (k === "dynasty_value" || k === "trade_value" || k === "value") statLabel = "Value";
-  if (k === "ppo" || k === "efficiency_score") statLabel = "PPO";
-  if (k === "ppg") statLabel = "PPG";
+  if (k === "ppo" || k === "efficiency_score") statLabel = "Efficiency";
   if (k === "age" || k === "peak_age") statLabel = "Peak Age";
+  if (k === "mismatch_score") statLabel = "Value";
   if (k === "formula_score") statLabel = "Score";
   if (k === "rbs_score" || k === "breakout_score") statLabel = "RBS";
   if (k === "similarity") statLabel = "Match %";
