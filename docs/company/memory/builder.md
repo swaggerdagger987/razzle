@@ -1,5 +1,6 @@
 # Memory — Builder
 
+2026-05-31 | lab-l4-pro-gate-error-tradevalues | da33eafd | TradeValues + Efficiency use ProGateFromPanelError; pytest 8.
 2026-05-31 | lab-l4-pro-gate-error-surface | da33eafd | ProGateFromPanelError on BreakoutsRenderer; pytest surface guard.
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | ExploreShareButton season/team → OG screener + band deep link.
 2026-05-31 | lab-pro-gate-perks-copy | 73fdbf9c | keep | proUpgradePerkLines from getPanel + BUREAU_7 slugs.

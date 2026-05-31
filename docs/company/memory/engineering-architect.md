@@ -1,5 +1,6 @@
 # Memory — Engineering Architect
 
+2026-05-31 | lab-l4-pro-gate-error-tradevalues | da33eafd | 3 files; tradevalues+efficiency mirror breakouts gate pattern.
 2026-05-31 | lab-l4-pro-gate-error-surface | da33eafd | 3 files; ProGateFromPanelError single 402 mapping.
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.
 2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
