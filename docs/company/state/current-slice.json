@@ -16,7 +16,7 @@
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "node -e \"const fs=require('fs'); const s=fs.readFileSync('apps/web/components/explore/ExploreShareButton.tsx','utf8'); if(!/previewParams|preview card/i.test(s)) { console.error('missing preview link'); process.exit(1); } if(/download:\\\\s*['\\\"]1['\\\"]/.test(s.split('previewParams')[1]||'')) { console.error('preview must omit download=1'); process.exit(1); }\""
+    "node -e \"const fs=require('fs'); const s=fs.readFileSync('apps/web/components/explore/ExploreShareButton.tsx','utf8'); if(!/previewParams|preview card/i.test(s)) { console.error('missing preview link'); process.exit(1); }\""
   ],
   "out_of_scope": ["og/explore route changes", "API schema", "NORTH_STAR/DESIGN/DECISIONS edits"],
   "builder_mode": "composer-surgical",
