@@ -1,4 +1,4 @@
-2026-05-31 | explore-og-margin-note-rows | — | PASS | No new Reddit intel.
+2026-05-31 | lab-gtm-share-bar-complete | 35fe55044 | GTM threads need one-click copy+preview on all Staff Picks.
 2026-05-31 | lab-og-tolab-weekly-position | — | PASS | No new Reddit intel.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | No new Reddit intel; empty weekly export unblocks heatmap tape screenshots.
 
