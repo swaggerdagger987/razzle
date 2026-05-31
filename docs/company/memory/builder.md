@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | lab-og-gamelog-player-default | a715e7c9 | keep | Merge-base sync + GamelogRenderer empty-state uses LabOgExportLink default (no orphan import).
+
 2026-05-31 | lab-og-gamelog-player-default | ffee5321 | keep | LabOgExportLink PLAYER_SCOPED_OG_SLUGS defaults player_id for gamelog/comps.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | keep | launch10PerkLabels + bureau7PerkLabels in ProUpgradeGate; pytest 6.
