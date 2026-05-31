@@ -21,9 +21,18 @@ file /tmp/self-scout-demo.png
 # PNG 1200x630
 ```
 
+## Re-verify (cycle 124 close)
+
+```bash
+npm run build --workspace=apps/web  # exit 0
+curl -s -o /tmp/self-scout-demo.png -w '%{http_code} %{size_download}\n' \
+  'http://127.0.0.1:3000/og/self-scout?download=1'
+# 200 66997 — PNG 1200x630
+```
+
 ## Verdict
 
-PASS — export card passes compact snapshot; OG decodes panel depth grades without live API. Demo fallback unchanged when no snapshot.
+PASS — export card passes compact snapshot; OG decodes panel depth grades without live API. Demo fallback unchanged when no snapshot. PR #915 merged to `razzle-v2-redesign`.
 
 ## Trust
 

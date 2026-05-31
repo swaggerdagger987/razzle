@@ -1,6 +1,6 @@
 # Memory — Data Researcher
 
-2026-05-31 | bureau-self-scout-snapshot-export | da33eafd | PASS | no new REDDIT-INTEL; codec-only slice.
+2026-05-31 | bureau-self-scout-snapshot-export | c2de8dad | PASS | no new REDDIT-INTEL; codec-only slice.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | no new REDDIT-INTEL; copy-only slice.
 

@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | bureau-self-scout-snapshot-export | da33eafd | keep | encodeBureauSelfScoutOgSnapshot on export href; OG decode path.
+2026-05-31 | bureau-self-scout-snapshot-export | c2de8dad | keep | encodeBureauSelfScoutOgSnapshot on export href; OG decode path.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | keep | launch10PerkLabels + bureau7PerkLabels in ProUpgradeGate; pytest 6.
 

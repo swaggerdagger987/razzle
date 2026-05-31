@@ -1,6 +1,6 @@
 # Memory — Reality Checker
 
-2026-05-31 | bureau-self-scout-snapshot-export | da33eafd | PASS | curl self-scout 66997B + snapshot 43007B; web build ok.
+2026-05-31 | bureau-self-scout-snapshot-export | c2de8dad | PASS | curl self-scout 66997B PNG; web build ok; PR915 merged.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | pytest 6; web build ok; Gate C N/A.
 

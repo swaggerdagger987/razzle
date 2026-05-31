@@ -7,8 +7,8 @@
     {
       "id": "bureau-self-scout-snapshot-export",
       "title": "Self-Scout — snapshot param on export card matches OG",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "c2de8dad"
     },
     {
       "id": "bureau-self-scout-sharebar-extract",
@@ -23,10 +23,10 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-self-scout-snapshot-export",
+  "next_atom_id": "bureau-self-scout-sharebar-extract",
   "epic_status": "active",
   "created_at": "2026-05-31T12:15:00Z",
-  "updated_at": "2026-05-31T12:15:00Z",
+  "updated_at": "2026-05-31T18:00:00Z",
   "completed_epics": [
     {
       "id": "lab-l4-pro-gate-polish",

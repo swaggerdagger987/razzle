@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | self-scout snapshot | da33eafd | keep | 3-file contract; mirrors power-rankings codec pattern.
+2026-05-31 | self-scout snapshot | c2de8dad | keep | 3-file contract; mirrors power-rankings codec pattern.
 
 2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
 
