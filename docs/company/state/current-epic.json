@@ -1,30 +1,24 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Launch-10 Lab panels need in-product OG export links so every screenshot-worthy panel travels like Explore and Bureau cards (DEPTH Lab L5).",
-  "epic_title": "Lab L5 — launch-10 OG export link parity",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction / Lab L5 OG per panel",
+  "epic_status": "active",
+  "big_problem": "Five launch-10 Lab panels still use hand-rolled OG export anchors instead of LabOgExportLink — inconsistent download params and no path to player-scoped OG URLs (DEPTH Lab L5).",
+  "epic_title": "Lab L5 — launch-10 LabOgExportLink consolidation",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-export-gamelog-efficiency-aging",
-      "title": "OG export links on gamelog, efficiency, aging-curves renderers",
-      "status": "done",
-      "merge_commit": "45a5e79b"
+      "id": "lab-og-link-rankings-trade-breakouts",
+      "title": "LabOgExportLink on dynasty-rankings, trade-values, breakouts renderers",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-export-buysell-dashboard",
-      "title": "OG export links on buy-sell and dashboard renderers",
-      "status": "done",
-      "merge_commit": "497d1df5"
-    },
-    {
-      "id": "lab-og-export-player-scoped",
-      "title": "Player-scoped OG export links with default player_id on dynasty-comps and gamelog",
-      "status": "done",
-      "merge_commit": "ffccedf4"
+      "id": "lab-og-link-weekly-prospects",
+      "title": "LabOgExportLink on weekly heatmap and prospects renderers",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T02:13:03Z",
-  "updated_at": "2026-05-31T04:12:00Z"
+  "next_atom_id": "lab-og-link-rankings-trade-breakouts",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T12:00:00Z"
 }

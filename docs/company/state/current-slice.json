@@ -1,27 +1,29 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-export-player-scoped",
-  "big_problem": "Launch-10 Lab panels need in-product OG export links so every screenshot-worthy panel travels like Explore and Bureau cards (DEPTH Lab L5).",
-  "epic": "Lab L5 — launch-10 OG export link parity",
-  "slice_title": "Player-scoped OG export links on dynasty-comps and gamelog",
+  "atom_id": "lab-og-link-rankings-trade-breakouts",
+  "big_problem": "Five launch-10 Lab panels still use hand-rolled OG export anchors instead of LabOgExportLink — inconsistent download params and no path to player-scoped OG URLs (DEPTH Lab L5).",
+  "epic": "Lab L5 — launch-10 LabOgExportLink consolidation",
+  "slice_title": "LabOgExportLink on dynasty-rankings, trade-values, breakouts renderers",
   "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG URLs include player_id when panel has player context",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG export links use shared component",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/LabOgExportLink.tsx",
-    "apps/web/components/lab/renderers/GamelogRenderer.tsx",
-    "apps/web/components/lab/renderers/DashboardRenderer.tsx"
+    "apps/web/components/lab/renderers/DynastyRankingsRenderer.tsx",
+    "apps/web/components/lab/renderers/TradeValuesRenderer.tsx",
+    "apps/web/components/lab/renderers/BreakoutsRenderer.tsx"
   ],
   "max_files": 3,
-  "max_lines": 60,
+  "max_lines": 45,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-gamelog-scoped.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/gamelog?download=1&player_id=00-0036900'",
-    "curl -s -o /tmp/og-comps-scoped.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/dynasty-comps?download=1&player_id=00-0036900'"
+    "curl -s -o /tmp/og-rankings.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/rankings?download=1'",
+    "curl -s -o /tmp/og-tradevalues.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/tradevalues?download=1'",
+    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/breakouts?download=1'"
   ],
   "out_of_scope": [
+    "weekly/prospects renderers (atom 2)",
     "OG route handler changes",
     "NORTH_STAR / DESIGN edits"
   ],

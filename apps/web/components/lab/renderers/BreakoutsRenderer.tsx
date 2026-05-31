@@ -16,6 +16,7 @@ import {
 } from "@/lib/panel-formula-sort";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
+import { LabOgExportLink } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
@@ -250,9 +251,7 @@ export function BreakoutsRenderer({ panel }: Props) {
           >
             Ask Hawkeye about {top.name} →
           </Link>
-          <a href="/og/breakouts?download=1" className="text-sm text-ink-medium underline" download="razzle-breakouts.png">
-            export card
-          </a>
+          <LabOgExportLink slug="breakouts" downloadName="razzle-breakouts.png" />
         </footer>
       )}
     </div>

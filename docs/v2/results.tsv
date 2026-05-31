@@ -57,5 +57,6 @@ cycle	commit	score	status	pillar	slice	description
 64	2bd28752	depth+hallway+voice+simplicity	keep	League	L5 OG trade network	trust=T2,T5,T6; /og/trade-network partner lanes demo; curl 67677B PNG
 65	e732f973	depth+hallway+voice+simplicity	keep	League	L5 OG self scout	trust=T2,T5,T6; /og/self-scout depth grades demo; curl 66997B PNG; Bureau OG epic complete
 66	45a5e79b	depth+voice+simplicity	keep	Lab	L5 OG export links gamelog efficiency aging	trust=T5,T6; LabOgExportLink footers; curl gamelog 58408B efficiency 59068B aging 57934B
+67	da33eafd	depth+voice+simplicity	keep	Lab	L5 LabOgExportLink rankings trade breakouts	trust=T5,T6; LabOgExportLink on 3 renderers; curl rankings 59509B tradevalues 62488B breakouts 60649B
 67	497d1df5	depth+voice+simplicity	keep	Lab	L5 OG export links buy-sell dashboard	trust=T5,T6; LabOgExportLink footers; curl buysell 58072B dashboard 60034B
 68	ffccedf4	depth+voice+simplicity	keep	Lab	L5 OG export player-scoped links	trust=T5,T6; LabOgExportLink player_id param; curl gamelog+comps scoped 58-66KB

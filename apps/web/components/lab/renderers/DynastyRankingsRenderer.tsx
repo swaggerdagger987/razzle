@@ -16,6 +16,7 @@ import {
 import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
+import { LabOgExportLink } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
@@ -270,13 +271,7 @@ export function DynastyRankingsRenderer({ panel }: Props) {
           >
             Ask Octo about {topPlayer.full_name} →
           </Link>
-          <a
-            href={`/og/rankings?download=1`}
-            className="text-sm text-ink-medium underline"
-            download="razzle-dynasty-rankings.png"
-          >
-            export card
-          </a>
+          <LabOgExportLink slug="rankings" downloadName="razzle-dynasty-rankings.png" />
         </footer>
       )}
     </div>

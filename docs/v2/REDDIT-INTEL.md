@@ -279,6 +279,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 1. **Manager archetype labels are trade-DM shorthand** — PANIC SELLER / HOARDER badges travel faster than transaction counts in group chats.
 2. **Bureau OG series compounds** — Pressure Map + Manager Profiles give two screenshot hooks before trade-network atom.
 
+## 2026-05-31 — Cycle 67 (workday initiation cycle 1)
+
+1. **Ranking/trade/breakout OG cards are thread currency** — consolidating `LabOgExportLink` on the three highest-shared Lab panels keeps export URLs consistent before player-scoped params land on list views.
+2. **Mechanical parity beats one-off anchors** — hand-rolled `/og/*` links drift from download naming and future `player_id` query support.
+
 ## 2026-05-31 — Cycle 63 (factory reopen cycle 1)
 
 1. **Trade partnership lanes are collusion bait** — "these two trade every week" screenshots spark DM threads; OG card must show partner pairs + trade counts, not a graph stub.
