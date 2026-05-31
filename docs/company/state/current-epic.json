@@ -21,7 +21,7 @@
       "id": "lab-og-prospects-loading-snapshot",
       "title": "Prospects loading-state sample snapshot for export preview",
       "status": "done",
-      "merge_commit": "f6e0985f3"
+      "merge_commit": "75ff53361"
     }
   ],
   "next_atom_id": null,
@@ -44,7 +44,7 @@
       "id": "lab-l5-og-live-rows-epic",
       "status": "complete",
       "last_atom": "lab-og-prospects-loading-snapshot",
-      "merge_commit": "f6e0985f3"
+      "merge_commit": "75ff53361"
     }
   ]
 }
