@@ -1,9 +1,11 @@
-cycle: 94
+cycle: 98
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-snapshot-dashboard
-last_keep_cycle: 94
-last_commit: a755f51f
-lab_l5_og_fidelity_epic: active
-lab_l5_tradevalues_formula_statlabel: complete
+next_slice: lab-og-position-buysell
+last_keep_cycle: 98
+last_commit: da33eafd
+lab_l5_og_snapshot_row_fidelity_epic: complete
+lab_l5_og_position_filter_epic: active
+league_l5_unhide_bureau_tabs_epic: complete
+league_l5_strength_of_schedule_tab: complete

@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab OG position filters (cycle 98)
+- **Angle:** Dynasty trade-value exports scoped to WR/RB tabs match what Bones shows in-panel — no mixed-position OG cards in league DMs.
+- **Trust:** T5/T6 — filter param on export link, not a relabeled demo grid.
+
 ### 2026-05-31 — Lab launch-10 OG (cycle 77)
 - **Angle:** Screenshot cards without "sample preview" when API rows load — launch-10 exports read as live research, not demo shells.
 - **Trust:** T1 honest labeling; sample suffix only on demo fallback.

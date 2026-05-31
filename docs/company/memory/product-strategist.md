@@ -11,6 +11,8 @@ YYYY-MM-DD | hypothesis | slice | PARITY/DEPTH/ACCEPTANCE cited | outcome | keep
 Read this file before proposing a new slice. Do not repeat discarded ideas without
 new evidence.
 
+2026-05-31 | lab-og-position-tradevalues | Dynasty trade OG must match WR/RB tab | da33eafd | SHIP | T5/T6 screenshot trust | — | buy/sell | evidence file
+
 ---
 
 ## Entries

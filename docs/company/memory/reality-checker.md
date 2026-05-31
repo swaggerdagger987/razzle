@@ -12,6 +12,8 @@ YYYY-MM-DD | claim under review | evidence type (curl/screenshot/test) | layer/P
 Read this file before reviewing a claim. Recurring failure classes deserve
 explicit checks in the verification routine.
 
+2026-05-31 | lab-og-position-tradevalues | curl tradevalues 62120B prospects 49000B WR | da33eafd | PASS | Gate C both ≥40KB | — | — | evidence md
+
 ---
 
 ## Entries
