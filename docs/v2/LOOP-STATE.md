@@ -1,9 +1,9 @@
-cycle: 97
+cycle: 98
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: league-monte-carlo-og-snapshot
-last_keep_cycle: 97
-last_commit: 26a22f69
-league_l5_bureau_og_snapshot_epic: active
-league_l5_power_rankings_og_snapshot: shipped
+next_slice: lab-og-position-buysell
+last_keep_cycle: 98
+last_commit: d1e99f29
+lab_l5_og_position_epic: active
+lab_l5_og_position_atom: tradevalues-prospects
