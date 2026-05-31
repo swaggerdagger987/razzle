@@ -15,7 +15,7 @@
       "id": "league-waiver-tendencies-tab",
       "title": "Waiver Tendencies tab unhidden with transaction pattern renderer",
       "status": "done",
-      "merge_commit": "da33eafd"
+      "merge_commit": "1943a75f"
     },
     {
       "id": "league-strength-of-schedule-tab",
