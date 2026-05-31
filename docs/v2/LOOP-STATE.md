@@ -1,10 +1,11 @@
-cycle: 81
+cycle: 86
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: PARITY — league-roster-depth-tab
-last_keep_cycle: 81
-last_commit: e62721a6
+next_slice: lab-prospects-og-snapshot
+last_keep_cycle: 86
+last_commit: 3ee4a675
+lab_l5_og_in_panel_rows_epic: active
 explore_l5_watermarked_export: complete
 lab_l5_og_export_link_epic: complete
 league_l5_power_rankings_tab: complete
