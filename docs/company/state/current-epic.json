@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab gamelog OG share cards fall back to demo rows when export skips snapshot — Reddit screenshots miss the player's real hottest weeks by PPR.",
   "epic_title": "Lab L5 — gamelog OG live week rows",
   "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
@@ -20,14 +20,20 @@
     {
       "id": "lab-og-launch10-snapshot-default",
       "title": "Launch-10 panels — prefer live API before demo fallback",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "e2a3ce8a"
     }
   ],
-  "next_atom_id": "lab-og-launch10-snapshot-default",
+  "next_atom_id": null,
   "created_at": "2026-05-31T08:08:00Z",
-  "updated_at": "2026-05-31T08:30:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l5-og-gamelog-live-week-rows",
+      "status": "complete",
+      "last_atom": "lab-og-launch10-snapshot-default",
+      "merge_commit": "e2a3ce8a"
+    },
     {
       "id": "lab-l5-og-watermark-band",
       "status": "complete",
