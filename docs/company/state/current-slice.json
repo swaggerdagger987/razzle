@@ -1,0 +1,25 @@
+{
+  "date": "2026-05-31",
+  "big_problem": "Lab export cards must screenshot with real row layout even when the API has no live data (FACTORY-DOD Gate C).",
+  "epic": "Lab L5 — OG cards are always screenshot-ready",
+  "slice_title": "Lab L5 — OG panel static demo rows when live API empty",
+  "parity_ref": "Lab L4–L5 OG card per panel matches in-product export",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2/C3 — PNG shows player rows, not loading-copy-only",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
+  "max_files": 1,
+  "max_lines": 120,
+  "acceptance_commands": [
+    "npm run build --workspace=apps/web",
+    "pytest apps/api/tests -q",
+    "npx tsc --noEmit -p apps/web"
+  ],
+  "out_of_scope": [
+    "New panels",
+    "API schema changes",
+    "Per-player parameterized routes",
+    "NORTH_STAR or DESIGN edits"
+  ],
+  "builder_mode": "composer-surgical"
+}

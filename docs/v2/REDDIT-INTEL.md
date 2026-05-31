@@ -247,3 +247,12 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 55
 - **Screenshot potential:** RB-only FPTS card droppable in r/DynastyFF trade/value threads — data-first, not SaaS promo
 - **Bot-fact potential:** `!razzle confirm top RB PPR FPTS` — future intel layer
+
+## 2026-05-31 — Cycle 58
+
+### r/DynastyFF — panel OG cards need rows, not loading shells (pattern)
+- **Pattern:** Users share **data-dense** tool screenshots. A panel title + "pulling film..." reads as a broken export, not a teaser.
+- **Razzle gap:** Cycle 57 live fetch works with `terminal.db`; CI and cold OG previews still empty. H2H solved with labeled sample rivalry rows.
+- **Slice:** Lab L5 — `/og/[panel]` demo player rows + "sample preview" when API empty.
+- **Council cycle:** 58
+- **Screenshot potential:** Dynasty rankings / breakout cards droppable in threads even before API sync on preview hosts

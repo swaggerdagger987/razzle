@@ -35,6 +35,55 @@ const STAT_CANDIDATE_KEYS = [
   "rank",
 ] as const;
 
+/** Sample rows for OG preview when API/terminal.db unavailable (FACTORY-DOD Gate C). */
+const DEFAULT_DEMO_ROWS: OgRow[] = [
+  { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 312.4, statLabel: "Value" },
+  { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 298.1, statLabel: "Value" },
+  { name: "Brock Bowers", position: "TE", team: "LV", stat: 241.6, statLabel: "Value" },
+  { name: "Jayden Daniels", position: "QB", team: "WAS", stat: 228.9, statLabel: "Value" },
+  { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 215.2, statLabel: "Value" },
+  { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 201.8, statLabel: "Value" },
+];
+
+const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
+  rankings: [
+    { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 1, statLabel: "Rank" },
+    { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 2, statLabel: "Rank" },
+    { name: "Brock Bowers", position: "TE", team: "LV", stat: 3, statLabel: "Rank" },
+    { name: "Jayden Daniels", position: "QB", team: "WAS", stat: 4, statLabel: "Rank" },
+    { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 5, statLabel: "Rank" },
+    { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 6, statLabel: "Rank" },
+  ],
+  breakouts: [
+    { name: "Rome Odunze", position: "WR", team: "CHI", stat: 92, statLabel: "Score" },
+    { name: "Ladd McConkey", position: "WR", team: "LAC", stat: 88, statLabel: "Score" },
+    { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 85, statLabel: "Score" },
+    { name: "Malik Nabers", position: "WR", team: "NYG", stat: 81, statLabel: "Score" },
+    { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 78, statLabel: "Score" },
+    { name: "Xavier Worthy", position: "WR", team: "KC", stat: 74, statLabel: "Score" },
+  ],
+  efficiency: [
+    { name: "Christian McCaffrey", position: "RB", team: "SF", stat: 0.42, statLabel: "Efficiency" },
+    { name: "Tyreek Hill", position: "WR", team: "MIA", stat: 0.39, statLabel: "Efficiency" },
+    { name: "Amon-Ra St. Brown", position: "WR", team: "DET", stat: 0.37, statLabel: "Efficiency" },
+    { name: "Travis Kelce", position: "TE", team: "KC", stat: 0.35, statLabel: "Efficiency" },
+    { name: "Saquon Barkley", position: "RB", team: "PHI", stat: 0.34, statLabel: "Efficiency" },
+    { name: "CeeDee Lamb", position: "WR", team: "DAL", stat: 0.33, statLabel: "Efficiency" },
+  ],
+  buysell: [
+    { name: "Davante Adams", position: "WR", team: "NYJ", stat: 184.2, statLabel: "Value" },
+    { name: "Joe Mixon", position: "RB", team: "HOU", stat: 162.5, statLabel: "Value" },
+    { name: "Mark Andrews", position: "TE", team: "BAL", stat: 148.1, statLabel: "Value" },
+    { name: "Kirk Cousins", position: "QB", team: "ATL", stat: 121.4, statLabel: "Value" },
+    { name: "Stefon Diggs", position: "WR", team: "HOU", stat: 118.9, statLabel: "Value" },
+    { name: "Aaron Jones", position: "RB", team: "MIN", stat: 112.3, statLabel: "Value" },
+  ],
+};
+
+function demoRowsForPanel(slug: string): OgRow[] {
+  return DEMO_ROWS_BY_SLUG[slug] ?? DEFAULT_DEMO_ROWS;
+}
+
 function extractRows(data: unknown): OgRow[] {
   if (!data || typeof data !== "object") return [];
 
@@ -146,9 +195,12 @@ export async function GET(
   const agentName = agent?.name ?? "Razzle";
 
   const apiPath = panel.api.path.includes("{") ? "" : panel.api.path;
-  const rows = apiPath
+  const liveRows = apiPath
     ? await fetchPanelData(slug, apiPath, panel.api.method, panel.api.params as Record<string, unknown>)
     : [];
+  const liveHasRows = liveRows.length > 0 && liveRows.some((r) => r.name);
+  const isDemo = !liveHasRows;
+  const rows = isDemo ? demoRowsForPanel(slug) : liveRows;
 
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
@@ -206,7 +258,7 @@ export async function GET(
           {panel.title}
         </div>
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 16, maxWidth: 1000 }}>
-          {panel.blurb}
+          {`${panel.blurb}${isDemo ? " · sample preview" : ""}`}
         </div>
 
         {query && (
@@ -297,23 +349,7 @@ export async function GET(
               </div>
             ))}
           </div>
-        ) : (
-          <div
-            style={{
-              flex: 1,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
-              gap: 12,
-            }}
-          >
-            <div style={{ fontSize: 64, display: "flex" }}>{panel.icon}</div>
-            <div style={{ fontSize: 24, color: "#5c4a3d", display: "flex" }}>
-              {agent?.loadingCopy ?? "pulling film..."}
-            </div>
-          </div>
-        )}
+        ) : null}
 
         {/* Footer */}
         <div
