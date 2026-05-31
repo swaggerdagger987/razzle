@@ -1,3 +1,4 @@
+131	da33eafd	depth+voice+simplicity	keep	Lab	L5 Lab OG export player_id in share URL	trust=T5,T6; LabOgExportLink PLAYER_SCOPED; curl gamelog 60634B
 130	8ecd2c0b	depth+voice+simplicity	keep	Explore	L5 Explore OG universe season team export URL	trust=T5,T6; ShareButton+OG route; curl college 41427B; L5 epic complete; PR 939
 129	27ae252f	depth+voice+simplicity	keep	Explore	L5 Explore OG universe season team export URL	trust=T5,T6; ShareButton+OG route; curl college 41427B; L5 epic atom 1/3; PR 910
 107	4e8b0e8e	depth+voice+simplicity	keep	Lab	L2 Staff Picks sidebar by agent	trust=T2,T6; Hawkeye/Octo/Bones/Atlas/Razzle groups; web build PASS; sidebar epic atom 1/2
