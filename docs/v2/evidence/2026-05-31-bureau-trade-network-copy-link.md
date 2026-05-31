@@ -1,24 +1,27 @@
-# Evidence — League L5 Bureau Trade Network copy link
+# Evidence — Bureau Trade Network copy link export row
 
 **Date:** 2026-05-31  
-**Slice:** `bureau-trade-network-copy-link` — copy link beside export card on Trade Network tab  
-**Epic:** League L5 — Bureau behavioral share parity (atom 4/5)
+**Atom:** `bureau-trade-network-copy-link`  
+**Gate:** FACTORY-DOD C2/C3
 
-## Gate C — OG PNG
+## Change
 
-| Check | Command | Result | Verdict |
-|-------|---------|--------|---------|
-| Trade Network OG | `curl /og/trade-network?download=1&league=test` | **200 68090** bytes PNG | PASS |
+- `BureauTradeNetwork.tsx`: copy link button beside export card (mirrors Pressure Map / Manager Profiles).
 
-## Build / tests
+## Verification
 
-| Check | Result |
-|-------|--------|
-| `npm run build --workspace=apps/web` | PASS |
-| `JWT_SECRET=test pytest apps/api/tests -q` | 51 passed, 5 skipped |
+```bash
+curl -s -o /tmp/og-trade-network.png -w '%{http_code} %{size_download}\n' \
+  'http://localhost:3000/og/trade-network?league=test&download=1'
+# 200 67677
 
-## UI change
+file /tmp/og-trade-network.png
+# PNG image data, 1200 x 630
+```
 
-- `BureauTradeNetwork.tsx` footer: `copy link` button before `export card` — mirrors Pressure Map / Manager Profiles pattern.
+```bash
+npm run build --workspace=apps/web  # pass
+JWT_SECRET=test python3 -m pytest apps/api/tests -q  # 51 passed
+```
 
-**Reality:** PASS
+**Verdict:** PASS — OG PNG ≥40KB with partnership lane layout.

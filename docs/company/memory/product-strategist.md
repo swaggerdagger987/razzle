@@ -34,5 +34,6 @@ new evidence.
 2026-05-31 | Lab launch10 OG live label | 6e98f4a2 | SHIP | keep | T1/T5/T6; sample suffix only on demo fallback
 2026-05-31 | Bureau H2H export epic atom 1 | 044ee1e8 | SHIP | keep | PARITY Explore L5 H2H; Lab epic atoms deduped on base
 2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row
-2026-05-31 | Bureau share epic atom 4 | bureau-trade-network-copy-link | SHIP | keep | Trade Network last missing copy link; resume base epic after merge
-2026-05-31 | Bureau share finish epic atom 1 | bureau-trade-finder-copy-link | SHIP | keep | Trade Finder was last Bureau tab without copy link
+2026-05-31 | Trade Network share atom 2/4 | e701e3bb | SHIP | keep | partnership graphs travel in league group chats
+2026-05-31 | Bureau power rankings OG atom 2 | 9714bfa6 | SHIP | keep | Octo tab now has export card for trade DMs
+2026-05-31 | Lab L4 pro-gate voice | 8f0201f7 | SHIP | keep | F-09 invitation copy; next explore injury chip

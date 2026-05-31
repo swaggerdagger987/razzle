@@ -36,5 +36,6 @@ explicit checks in the verification routine.
 2026-05-31 | Bureau H2H OG Gate C | 044ee1e8 | PASS | curl h2h 59305B PNG | keep | docs/v2/evidence/2026-05-31-bureau-h2h-share-bar.md
 2026-05-31 | Bureau MC share Gate C | 3392bc29 | PASS | curl monte-carlo 53767B PNG | keep | evidence/2026-05-31-bureau-monte-carlo-share-bar.md
 2026-05-31 | power-rankings OG Gate C | e62721a6 | PASS | curl 200 68555B | keep | docs/v2/evidence/2026-05-31-league-power-rankings-og.md
-2026-05-31 | trade-network copy link Gate C | 3fd83bde | PASS | curl 200 68090B | keep | docs/v2/evidence/2026-05-31-bureau-trade-network-copy-link.md
-2026-05-31 | trade-finder copy link Gate C | da33eafd | PASS | curl 200 57773B | keep | docs/v2/evidence/2026-05-31-bureau-trade-finder-copy-link.md
+2026-05-31 | Trade Network share Gate C | 1616484c | PASS | curl trade-network 68090B PNG | keep | evidence/2026-05-31-bureau-trade-network-share-bar.md
+2026-05-31 | Cycle 86 Trade Network copy link | e701e3bb | PASS | curl 200 68090B | keep | Bureau behavioral share atom 3
+2026-05-31 | Lab pro-gate voice | 8f0201f7 | PASS | build + pytest + pricing 200 | keep | no OG gate for UI copy slice

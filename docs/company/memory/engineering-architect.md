@@ -34,5 +34,6 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | panelBlurbSuffix launch-10 | 6e98f4a2 | keep | 1 file; LAUNCH_10_OG_SLUGS mirrors LabSidebar STAFF_PICKS
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
-2026-05-31 | BureauTradeNetwork copy link | 3fd83bde | keep | inline clipboard pattern; no new ShareBar component needed
-2026-05-31 | BureauTradeFinder copy link | cce65064 | keep | hero flex row mirrors Trade Network footer pattern
+2026-05-31 | BureauTradeNetworkShareBar | 1616484c | keep | mirrors MC share bar; league OG param unchanged
+2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
+2026-05-31 | friendlyUpgradeNote | 8f0201f7 | keep | tier messages in panel-upgrade-teaser.ts

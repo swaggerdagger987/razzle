@@ -1,9 +1,9 @@
-cycle: 86
+cycle: 88
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L4
 next_slice: explore-l5-injury-row-chip
-last_keep_cycle: 86
+last_keep_cycle: 88
 last_commit: 8f0201f7
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
@@ -38,6 +38,5 @@ lab_l5_hawkeye_og_snapshot_epic: complete
 lab_l5_og_weekly_prospects_snapshot: complete
 lab_l5_og_breakouts_snapshot: complete
 lab_l5_og_tradevalues_snapshot: complete
-league_l5_bureau_share_parity_epic: complete
-league_l5_bureau_share_parity_finish_epic: active
-league_l5_bureau_trade_finder_copy_link: complete
+lab_l4_pro_gate_voice: complete
+league_l5_bureau_behavioral_share_epic: complete

@@ -95,12 +95,16 @@ export function BreakoutsRenderer({ panel }: Props) {
   const top = candidates[0] ?? null;
 
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const statLabel = formula?.name ?? "RBS";
     return candidates.slice(0, 6).map((p) => ({
       name: p.name,
       position: p.position,
       team: p.team,
-      stat: formula ? (p.formula_score ?? 0) : (p.rbs_score ?? 0),
-      statLabel: formula ? formula.name : "RBS",
+      stat:
+        formula && p.formula_score != null
+          ? p.formula_score
+          : (p.rbs_score ?? 0),
+      statLabel,
     }));
   }, [candidates, formula]);
 

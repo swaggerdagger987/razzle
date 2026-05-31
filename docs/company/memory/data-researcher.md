@@ -35,6 +35,7 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Lab OG launch10 label | 6e98f4a2 | keep | live cards without sample tag when API rows present
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
-2026-05-31 | bureau-h2h-og-snapshot-decode | bbbd1b3c | keep | no new intel
-2026-05-31 | bureau-trade-network-copy-link | 3fd83bde | keep | collusion-thread screenshots need copy+export pair
-2026-05-31 | bureau-trade-finder-copy-link | cce65064 | keep | deal-room screenshots need pasteable league link before export
+2026-05-31 | Pressure Map share | 864e1d14 | keep | deadline desperation URLs for trade-DM hooks
+2026-05-31 | Trade Network share | e701e3bb | keep | collusion/partnership cards sized for Reddit screenshot gravity
+2026-05-31 | Bureau power OG | 9714bfa6 | keep | diff+luck bars match in-app power board story for screenshots
+2026-05-31 | F-09 ProUpgradeGate | 8f0201f7 | keep | free screener + paid depth expects upgrade invite not error chrome
