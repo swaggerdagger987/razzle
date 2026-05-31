@@ -1,8 +1,8 @@
-cycle: 143
+cycle: 144
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: League
 focus_layer: L5
-next_slice: lab-og-buysell-formula-live
-last_keep_cycle: 143
-last_commit: da33eafd
-lab_l5_formula_og_live_parity_epic: active
+next_slice: league-trade-finder-og-snapshot (epic atom 2/3)
+last_keep_cycle: 144
+last_commit: db6537faf
+league_l5_trade_finder_gtm_epic: active
