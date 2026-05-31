@@ -17,6 +17,7 @@ new evidence.
 
 2026-05-31 | Bureau behavioral share atom 2 | pressure-map copy link | SHIP | keep | Explore-parity travel on deadline pressure tab
 2026-05-30 | Lab L5 OG export cards with live data compound the Explore L5 watermarked export pattern | Lab L5 OG — DEPTH.md L5 "OG card per panel matches in-product export" | SHIP | keep | T5+T6 — screenshot gravity via real data rows not branding cards; agent badges differentiate from generic SaaS
+2026-05-31 | Trade Finder OG dynasty labels on demo rows | bureau-trade-finder-og-demo-label | SHIP | keep | T1 trust on Bones screenshots; position-only rows looked fake
 2026-05-31 | Lab OG demo rows close cycle 57 CI/preview gap without inventing new scope | lab-og-demo-rows atom | SHIP | keep | Lab L5 epic atom 1/3; labeled sample preview protects trust vs fake-live claims
 2026-05-31 | launch-10 OG demo stat labels | atom 2/3 SHIP | keep | curl weekly 63819B tradevalues 62488B gamelog 58408B
 2026-05-31 | lab-og-param-defaults closes Lab L5 OG epic | SHIP | keep | shareable /og/dynasty-comps without manual player_id
@@ -34,4 +35,5 @@ new evidence.
 2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row
 2026-05-31 | Trade Network share atom 2/4 | da33eafd | SHIP | keep | partnership graphs travel in league group chats
 2026-05-31 | Bureau power rankings OG atom 2 | 9714bfa6 | SHIP | keep | Octo tab now has export card for trade DMs
-2026-05-31 | Build Profiles unhide atom 1/3 | da33eafd | SHIP | keep | Zero RB / Win Now labels for dynasty trade threads
+2026-05-31 | Trade Finder OG demo labels | fe9bbce0 | SHIP | keep | T1 honest dynasty values on Bones trade screenshots
+2026-05-31 | Build Profiles unhide atom 1/3 | 2ee04975 | SHIP | keep | Zero RB / Win Now labels for dynasty trade threads

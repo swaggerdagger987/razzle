@@ -82,6 +82,10 @@ function playerLabel(name: string): string {
   return name.length > 16 ? `${name.slice(0, 14)}…` : name;
 }
 
+function valueLabel(p: PlayerRef): string {
+  return `${p.position} · ${p.dynasty_value.toLocaleString()}`;
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
@@ -140,9 +144,10 @@ export async function GET(req: Request) {
           Trade Finder
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 16 }}>
-          {`value-matched league trades${isDemo ? " · sample preview" : ""}`}
+          {`value-matched league trades`}
           {needs.length ? ` · need ${needs.join(", ")}` : ""}
           {surplus.length ? ` · surplus ${surplus.join(", ")}` : ""}
+          {isDemo ? " · sample preview" : ""}
         </div>
 
         {hero ? (
@@ -199,14 +204,17 @@ export async function GET(req: Request) {
               }}
             >
               <div style={{ display: "flex", flexDirection: "column", width: 140 }}>
-                <div style={{ display: "flex", fontSize: 13, color: "#8a7565" }}>{m.partner_team}</div>
+                <div style={{ display: "flex", fontSize: 13, color: "#8a7565" }}>
+                  {m.partner_team}
+                  {isDemo ? " · sample" : ""}
+                </div>
                 <div style={{ display: "flex", fontSize: 18, fontWeight: 700 }}>{playerLabel(m.give.name)}</div>
               </div>
               <div style={{ display: "flex", fontSize: 22, color: "#d97757" }}>→</div>
               <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
                 <div style={{ display: "flex", fontSize: 18, fontWeight: 700 }}>{playerLabel(m.get.name)}</div>
                 <div style={{ display: "flex", fontSize: 14, color: "#5c4a3d" }}>
-                  {m.give.position} for {m.get.position}
+                  {valueLabel(m.give)} → {valueLabel(m.get)}
                 </div>
               </div>
               <div style={{ display: "flex", fontSize: 16, color: "#5c4a3d" }}>{m.gap_pct}%</div>

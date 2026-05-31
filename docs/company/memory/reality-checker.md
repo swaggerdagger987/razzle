@@ -33,7 +33,8 @@ explicit checks in the verification routine.
 2026-05-31 | Lab launch10 OG label Gate C | 6e98f4a2 | PASS | curl rankings 59509B breakouts 60649B | keep | docs/v2/evidence/2026-05-31-lab-og-launch10-live-label.md
 2026-05-31 | Bureau H2H OG Gate C | 044ee1e8 | PASS | curl h2h 59305B PNG | keep | docs/v2/evidence/2026-05-31-bureau-h2h-share-bar.md
 2026-05-31 | Bureau MC share Gate C | 3392bc29 | PASS | curl monte-carlo 53767B PNG | keep | evidence/2026-05-31-bureau-monte-carlo-share-bar.md
+2026-05-31 | Trade Finder OG demo labels Gate C | fe9bbce0 | PASS | curl trade-finder 60325B | keep | evidence/2026-05-31-bureau-trade-finder-og-demo-label.md
 2026-05-31 | power-rankings OG Gate C | e62721a6 | PASS | curl 200 68555B | keep | docs/v2/evidence/2026-05-31-league-power-rankings-og.md
 2026-05-31 | Trade Network share Gate C | 1616484c | PASS | curl trade-network 68090B PNG | keep | evidence/2026-05-31-bureau-trade-network-share-bar.md
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
-2026-05-31 | Build Profiles tab | da33eafd | PASS | build exit 0; pytest 51; slug unhidden | keep | docs/v2/evidence/2026-05-31-league-build-profiles-tab.md
+2026-05-31 | Build Profiles tab | 2ee04975 | PASS | build exit 0; pytest 51; slug unhidden | keep | docs/v2/evidence/2026-05-31-league-build-profiles-tab.md
