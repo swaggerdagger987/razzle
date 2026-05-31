@@ -39,3 +39,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauBuildProfiles | da33eafd | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
 2026-05-31 | BureauWaiverTendencies | da33eafd | keep | 3 files ≤175 lines; mirrors BuildProfiles; no API change
 2026-05-31 | TradeValues+Prospects snapshot | 70af534a | keep | 2 files ≤40 lines; Breakouts ogSnapshotRows pattern
+2026-05-31 | Breakouts OG rank | 795bf08b | keep | 2 app files ≤45 lines; sort live rows by rbs_score on download path
