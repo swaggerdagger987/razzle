@@ -1,15 +1,15 @@
 {
   "epic_status": "active",
-  "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
-  "epic_title": "Explore L5 — OG screener agent margin notes",
-  "parity_ref": "Explore L5 — agent margin notes on rows",
-  "depth_ref": "Explore L5",
+  "big_problem": "Bureau H2H rivalry exports don't signal in-panel snapshot trust \u2014 group chats can't tell exported rivalry rows from live Sleeper pulls.",
+  "epic_title": "League L5 \u2014 Bureau H2H GTM export",
+  "parity_ref": "Explore L5 \u2014 Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "explore-og-margin-note-lead",
-      "title": "Lead-row Hawkeye/Dolphin margin note on Explore OG card",
+      "id": "bureau-h2h-og-exported-sticker",
+      "title": "H2H OG EXPORTED sticker when snapshot param present",
       "status": "done",
-      "merge_commit": "0fc4932b7"
+      "merge_commit": "5b60ea23d"
     },
     {
       "id": "explore-og-margin-note-rows",
@@ -18,14 +18,8 @@
       "merge_commit": "89d026dda"
     },
     {
-      "id": "explore-og-margin-note-sticker",
-      "title": "LIVE staff sticker when OG rows carry margin notes",
-      "status": "pending",
-      "merge_commit": null
-    },
-    {
-      "id": "explore-og-margin-note-college",
-      "title": "College universe margin notes on OG export",
+      "id": "bureau-h2h-og-gate-c-snapshot",
+      "title": "Gate C curl evidence for H2H snapshot OG PNG",
       "status": "pending",
       "merge_commit": null
     }
@@ -35,32 +29,10 @@
   "updated_at": "2026-05-31T11:30:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-launch10-og-demo-trust-labels",
-      "status": "complete",
-      "last_atom": "lab-og-launch10-demo-blurbs",
-      "merge_commit": "3705fdce8"
-    },
-    {
-      "id": "lab-l5-empty-board-og-sample-cards",
-      "status": "complete",
-      "last_atom": "lab-weekly-empty-export",
-      "merge_commit": "088cebc07"
-    },
-    {
-      "id": "lab-l5-formula-og-live-parity",
-      "status": "complete",
-      "last_atom": "lab-og-from-panel-gate-c-rest",
-      "merge_commit": "0b6730166"
-    },
-    {
       "id": "league-l5-trade-finder-gtm",
       "status": "complete",
-      "last_atom": "bureau-trade-finder-copy-link",
-      "merge_commit": "a6930ca13"
-    },
-    {
-      "epic_title": "Lab L5 — OG hallway deep links",
-      "completed_at": "2026-05-31T16:30:00Z"
+      "last_atom": "league-trade-finder-og-room-hallway",
+      "merge_commit": "c8091030c"
     }
   ]
 }
