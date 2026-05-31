@@ -73,3 +73,4 @@ cycle	commit	score	status	pillar	slice	description
 81	6c8da85f	depth+voice+simplicity	keep	League	L5 Bureau H2H OG snapshot export	trust=T1,T5,T6; encode you/them/position bars in snapshot param; curl h2h OG 59305B; epic atom 2/3
 82	04c19959	depth+voice+simplicity	keep	League	L5 Bureau Manager Profiles copy link export row	trust=T5,T6; copy link + export; curl manager-profiles OG 77194B; behavioral share epic atom 1
 83	db109bfa	depth+voice+simplicity	keep	League	L5 Bureau H2H OG snapshot decode	trust=T1,T5,T6; decode snapshot before API; curl demo 59305B snap 57091B; epic atom 3/3 complete
+84	90bf2dd5	depth+hallway+voice+simplicity	keep	League	L5 Power Rankings OG + share row	trust=T2,T5,T6; /og/power-rankings curl 59807B; BureauPowerRankingsShareBar

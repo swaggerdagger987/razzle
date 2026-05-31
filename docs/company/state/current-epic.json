@@ -18,6 +18,12 @@
       "merge_commit": "c4ce09b7"
     },
     {
+      "id": "league-power-rankings-og",
+      "title": "Power Rankings OG + copy board link",
+      "status": "done",
+      "merge_commit": "90bf2dd5"
+    },
+    {
       "id": "bureau-trade-network-copy-link",
       "title": "Trade Network copy link beside export card",
       "status": "pending",
@@ -32,6 +38,6 @@
   ],
   "next_atom_id": "bureau-trade-network-copy-link",
   "created_at": "2026-05-31T04:44:00Z",
-  "updated_at": "2026-05-31T04:55:00Z",
-  "last_cycle_commit": "04c19959"
+  "updated_at": "2026-05-31T13:20:00Z",
+  "last_cycle_commit": "90bf2dd5"
 }
