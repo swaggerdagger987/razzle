@@ -20,8 +20,8 @@
     {
       "id": "lab-og-buysell-dashboard-live-sort",
       "title": "Buy/Sell + Dashboard OG rank by value / rank_diff on live fetch",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "cb59494b"
     }
   ],
   "next_atom_id": "lab-og-efficiency-aging-live-sort",
@@ -37,8 +37,8 @@
     {
       "id": "lab-l5-og-position-filter",
       "status": "complete",
-      "last_atom": "lab-og-position-gamelog",
-      "merge_commit": "228c4b59"
+      "last_atom": "lab-og-position-efficiency",
+      "merge_commit": "7fb236c5"
     }
   ]
 }

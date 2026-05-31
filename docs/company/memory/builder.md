@@ -1,4 +1,6 @@
 # Memory — Builder
+2026-05-31 | lab-og-buysell-dashboard-live-sort | cb59494b | keep | dynasty_value/rank_diff; buy_low/sell_high extract; curl ≥44KB.
+
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | OG route ppo/ppg + aging positions unwrap | aefbf6ef | SHIP | keep | 1 file | curl 45KB×2
 

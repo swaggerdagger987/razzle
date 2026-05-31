@@ -68,6 +68,8 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
   tradevalues: "trade_value",
   efficiency: "ppo",
   aging: "ppg",
+  buysell: "dynasty_value",
+  dashboard: "rank_diff",
 };
 
 const LAUNCH_10_OG_SLUGS = new Set([
@@ -252,23 +254,25 @@ function statLabelForKey(k: string): string {
   if (k === "ppg") statLabel = "PPG";
   if (k === "rps") statLabel = "RPS";
   if (k === "dynasty_value" || k === "trade_value" || k === "value") statLabel = "Value";
-  if (k === "ppo") statLabel = "PPO";
+  if (k === "ppo" || k === "efficiency_score") statLabel = "PPO";
+  if (k === "ppg") statLabel = "PPG";
+  if (k === "age" || k === "peak_age") statLabel = "Peak Age";
   if (k === "formula_score") statLabel = "Score";
   if (k === "rbs_score" || k === "breakout_score") statLabel = "Score";
   if (k === "similarity") statLabel = "Match %";
   if (k === "rank_diff") statLabel = "Chg";
-  if (k === "efficiency_score") statLabel = "Efficiency";
-  if (k === "peak_age") statLabel = "Peak Age";
   return statLabel;
 }
 
-function extractRows(data: unknown, slug?: string, positionFilter?: string): OgRow[] {
+function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[] {
   if (!data || typeof data !== "object") return [];
 
   const obj = data as Record<string, unknown>;
   let candidates: Record<string, unknown>[] = [];
 
-  if (slug === "aging" && obj.positions && typeof obj.positions === "object") {
+  if (Array.isArray(obj.most_efficient)) {
+    candidates = obj.most_efficient as Record<string, unknown>[];
+  } else if (slug === "aging" && obj.positions && typeof obj.positions === "object") {
     const positions = obj.positions as Record<
       string,
       { players?: Record<string, unknown>[] }
@@ -279,6 +283,15 @@ function extractRows(data: unknown, slug?: string, positionFilter?: string): OgR
         : Object.keys(positions)[0];
     if (pos && Array.isArray(positions[pos]?.players)) {
       candidates = positions[pos]!.players!;
+    }
+  } else if (obj.positions && typeof obj.positions === "object") {
+    const positions = obj.positions as Record<string, { players?: Record<string, unknown>[] }>;
+    const keys = positionFilter && positions[positionFilter] ? [positionFilter] : Object.keys(positions);
+    for (const k of keys) {
+      const block = positions[k];
+      if (Array.isArray(block?.players)) {
+        candidates.push(...(block.players as Record<string, unknown>[]));
+      }
     }
   } else if (Array.isArray(obj.items)) {
     candidates = obj.items as Record<string, unknown>[];
@@ -292,6 +305,10 @@ function extractRows(data: unknown, slug?: string, positionFilter?: string): OgR
     candidates = obj.players as Record<string, unknown>[];
   } else if (Array.isArray(obj.candidates)) {
     candidates = obj.candidates as Record<string, unknown>[];
+  } else if (Array.isArray(obj.buy_low) || Array.isArray(obj.sell_high)) {
+    const buyLow = Array.isArray(obj.buy_low) ? (obj.buy_low as Record<string, unknown>[]) : [];
+    const sellHigh = Array.isArray(obj.sell_high) ? (obj.sell_high as Record<string, unknown>[]) : [];
+    candidates = [...buyLow, ...sellHigh];
   } else if (Array.isArray(obj.buy) || Array.isArray(obj.sell)) {
     const buy = Array.isArray(obj.buy) ? (obj.buy as Record<string, unknown>[]) : [];
     const sell = Array.isArray(obj.sell) ? (obj.sell as Record<string, unknown>[]) : [];
@@ -302,10 +319,12 @@ function extractRows(data: unknown, slug?: string, positionFilter?: string): OgR
     candidates = obj.rankings as Record<string, unknown>[];
   } else if (Array.isArray(obj.comps)) {
     candidates = obj.comps as Record<string, unknown>[];
-  } else if (Array.isArray(obj.top5) || Array.isArray(obj.risers)) {
+  } else if (Array.isArray(obj.top5) || Array.isArray(obj.risers) || Array.isArray(obj.fallers)) {
     const top5 = Array.isArray(obj.top5) ? (obj.top5 as Record<string, unknown>[]) : [];
     const risers = Array.isArray(obj.risers) ? (obj.risers as Record<string, unknown>[]) : [];
-    candidates = [...top5, ...risers];
+    const fallers = Array.isArray(obj.fallers) ? (obj.fallers as Record<string, unknown>[]) : [];
+    const valuePicks = Array.isArray(obj.value_picks) ? (obj.value_picks as Record<string, unknown>[]) : [];
+    candidates = [...top5, ...risers, ...fallers, ...valuePicks];
   } else if (Array.isArray(data)) {
     candidates = data as Record<string, unknown>[];
   }
@@ -387,9 +406,8 @@ async function fetchLiveOgRows(
       headers: { [OG_PRO_PREVIEW_HEADER]: "pro" },
     });
     if (!res.ok) return [];
-    const position =
-      params?.position != null ? String(params.position) : undefined;
-    return extractRows(await res.json(), slug, position);
+    const pos = params?.position != null ? String(params.position) : "";
+    return extractRows(await res.json(), slug, pos);
   } catch {
     return [];
   }
@@ -424,9 +442,8 @@ async function fetchPanelData(
     }
     if (!res.ok) return [];
     const data = await res.json();
-    const position =
-      params?.position != null ? String(params.position) : undefined;
-    return extractRows(data, slug, position);
+    const pos = params?.position != null ? String(params.position) : "";
+    return extractRows(data, slug, pos);
   } catch {
     return [];
   }
