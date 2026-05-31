@@ -21,7 +21,7 @@
       "id": "lab-l4-catalog-teaser-batch-1",
       "title": "Expand GENERIC_PRO_GATE_SLUGS teaser rows + pitch copy",
       "status": "done",
-      "merge_commit": "5946f096c"
+      "merge_commit": "3374c1ec0"
     }
   ],
   "next_atom_id": null,
@@ -32,7 +32,7 @@
       "id": "lab-l4-generic-pro-gate-polish",
       "status": "complete",
       "last_atom": "lab-l4-catalog-teaser-batch-1",
-      "merge_commit": "5946f096c"
+      "merge_commit": "3374c1ec0"
     },
     {
       "id": "lab-l5-og-watermark-display-names",
