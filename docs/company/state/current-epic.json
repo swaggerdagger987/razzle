@@ -12,6 +12,12 @@
       "merge_commit": "ceadf0402"
     },
     {
+      "id": "lab-og-weekly-prospects-live-sticker-guard",
+      "title": "Weekly + prospects LIVE sticker pytest guard",
+      "status": "done",
+      "merge_commit": null
+    },
+    {
       "id": "lab-og-buysell-formula-live",
       "title": "Buy/sell OG live extract prefers formula_score + mismatch lanes",
       "status": "pending",
