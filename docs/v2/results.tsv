@@ -60,3 +60,4 @@ cycle	commit	score	status	pillar	slice	description
 67	497d1df5	depth+voice+simplicity	keep	Lab	L5 OG export links buy-sell dashboard	trust=T5,T6; LabOgExportLink footers; curl buysell 58072B dashboard 60034B
 68	ffccedf4	depth+voice+simplicity	keep	Lab	L5 OG export player-scoped links	trust=T5,T6; LabOgExportLink player_id param; curl gamelog+comps scoped 58-66KB
 69	997c5e5f	depth+voice+simplicity	keep	Lab	L5 OG panels API live rows	trust=T5,T6; /api/panels slug fetch live tape label; curl rankings 59509B dashboard 60034B; epic atom 1/3
+70	da33eafd	depth+voice+simplicity	keep	Lab	L5 OG export links rankings breakouts	trust=T5,T6; LabOgExportLink footers; curl rankings 59509B breakouts 60649B; epic atom 2/3

@@ -11,6 +11,8 @@ YYYY-MM-DD | hypothesis | slice | PARITY/DEPTH/ACCEPTANCE cited | outcome | keep
 Read this file before proposing a new slice. Do not repeat discarded ideas without
 new evidence.
 
+2026-05-31 | Lab OG export links atom 2/3 | rankings+breakouts footers before prospects sweep | da33eafd | SHIP | keep | — | atom 3 | T5 T6 screenshot path
+
 ---
 
 ## Entries

@@ -11,6 +11,8 @@ YYYY-MM-DD | slice | approach | commit hash | outcome | keep | discard | revisit
 Read this file before implementing. Reuse working patterns; avoid repeating known
 failure modes. Karpathy: simplicity first, surgical changes.
 
+2026-05-31 | LabOgExportLink rankings+breakouts | swap raw anchors for shared component | da33eafd | SHIP | keep | — | atom 3 prospects/weekly/tradevalues | curl rankings 59509B breakouts 60649B
+
 ---
 
 ## Entries
