@@ -8,8 +8,8 @@
     {
       "id": "lab-og-position-tradevalues",
       "title": "Trade values export passes position filter to OG",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "099bf89a"
     },
     {
       "id": "lab-og-position-buysell",
