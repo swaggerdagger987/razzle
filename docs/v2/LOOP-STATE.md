@@ -1,10 +1,10 @@
-cycle: 138
+cycle: 140
 last_board_cycle: 54
-focus_pillar: Explore
+focus_pillar: Lab
 focus_layer: L5
-next_slice: room-briefing-watermark
-last_keep_cycle: 138
-last_commit: c7b50c707
-lab_l4_pro_gate_error_epic: complete
+next_slice: lab-og-tradevalues-live-rank-labels
+last_keep_cycle: 140
+last_commit: da33eafd
+lab_l5_og_live_rank_readout_epic: active
 explore_l5_universe_export_epic: complete
-room_l5_briefing_gtm_epic: active
+room_l5_briefing_gtm_epic: complete
