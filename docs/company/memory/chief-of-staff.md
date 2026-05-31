@@ -1,6 +1,14 @@
 # Memory — Chief of Staff
 
+2026-05-31 | Factory cycle 129 Self-Scout roundtrip | pending | workday cycle 1 reopen; League L5 epic atom 3/3.
+
+2026-05-31 | Factory cycle 128 Self-Scout ShareBar | 0bbfc1bb | keep | League L5 epic atom 2/3.
+
+2026-05-31 | Factory cycle 124 Self-Scout snapshot | c2de8dad | keep | workday open; League L5 epic atom 1/3 merged PR915.
+
 2026-05-31 | Factory cycle 125 OG LIVE labels | ad24a219 | Workday open; panel-native LIVE epic 1/3; lock #842.
+
+2026-05-31 | Factory cycle 118 perks copy | f56fdbd8 | keep | workday open cycle 1; L4 epic complete atom 3/3.
 
 2026-05-31 | Factory cycle 121 pro gate panel pitches | ad24a219 | L4 epic atom 2/3; factory open.
 
@@ -80,3 +88,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory open cycle 1 Build Profiles tab | ad24a219 | keep | new unhide epic; roster-depth dedup on base; atom 1/3 SHIP
 2026-05-31 | Factory open cycle 1 Schedule tab | ad24a219 | keep | dedup waiver a2536dcc; HIDDEN empty; epic complete
 2026-05-31 | Factory cycle 1 Lab OG live sort | 7f78b631 | keep | workday open; Lab L5 epic atom 1/3
+2026-05-31 | Factory cycle 1 Self-Scout ShareBar | 0bbfc1bb | keep | workday open; League L5 epic atom 2/3
