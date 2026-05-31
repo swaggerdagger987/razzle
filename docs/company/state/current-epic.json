@@ -7,25 +7,25 @@
     {
       "id": "lab-og-prospects-tradevalues-snapshot",
       "title": "Prospects + tradevalues export snapshot rows",
-      "status": "done",
-      "merge_commit": "73d74dca"
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
       "id": "lab-og-dashboard-comps-snapshot",
       "title": "Dashboard dynasty-comps snapshot rows",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "0c5112c5"
     },
     {
       "id": "lab-og-live-blurb-consistency",
       "title": "OG blurb suffix when snapshot present (launch-10)",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "83d4c770"
     }
   ],
-  "next_atom_id": "lab-og-dashboard-comps-snapshot",
+  "next_atom_id": "lab-og-prospects-tradevalues-snapshot",
   "epic_status": "active",
   "created_at": "2026-05-31T14:00:00Z",
-  "updated_at": "2026-05-31T14:00:00Z",
-  "last_cycle_commit": "73d74dca"
+  "updated_at": "2026-05-31T16:00:00Z",
+  "last_cycle_commit": null
 }

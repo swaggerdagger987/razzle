@@ -1,5 +1,6 @@
 {
   "date": "2026-05-31",
+  "atom_id": "lab-og-prospects-tradevalues-snapshot",
   "big_problem": "Lab export cards still ship demo rows on panels where the table already has live data — screenshots don't match what the user sees.",
   "epic": "Lab L5 — OG export cards mirror in-panel rows",
   "slice_title": "Prospects + tradevalues export snapshot rows",
