@@ -20,5 +20,8 @@
     "curl -s -o /tmp/og-tn.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/trade-network?download=1&league=test'"
   ],
   "out_of_scope": ["API schema changes", "NORTH_STAR / DESIGN edits"],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "content_commit": "6fede02d",
+  "verdict": "SHIP"
 }
+
