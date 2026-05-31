@@ -8,8 +8,8 @@
     {
       "id": "lab-dashboard-og-slug-snapshot",
       "title": "DashboardRenderer export uses /og/dashboard with riser/faller snapshot rows",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "92fb53d0"
     },
     {
       "id": "lab-dashboard-og-top5-fallback",
@@ -18,7 +18,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-dashboard-og-slug-snapshot",
+  "next_atom_id": "lab-dashboard-og-top5-fallback",
   "created_at": "2026-05-31T14:30:00Z",
-  "updated_at": "2026-05-31T14:30:00Z"
+  "updated_at": "2026-05-31T14:45:00Z"
 }
