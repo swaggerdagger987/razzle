@@ -1,9 +1,10 @@
-cycle: 106
+cycle: 117
 last_board_cycle: 54
 focus_pillar: Lab
-focus_layer: L5
-next_slice: lab-og-dynasty-comps-pro-teaser
-last_keep_cycle: 106
-last_commit: 40c80f0e
-lab_l5_og_live_extract_epic: active
-lab_og_gamelog_weeks_fpts_sort: done
+focus_layer: L4
+next_slice: lab-pro-gate-launch10-teasers
+last_keep_cycle: 117
+last_commit: 675044ea
+lab_l4_pro_gate_epic: active
+lab_l5_og_watermark_epic: complete
+lab_l5_og_live_sort_epic: complete
