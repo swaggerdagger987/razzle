@@ -17,6 +17,7 @@ YYYY-MM-DD | hypothesis | slice | PARITY/DEPTH/ACCEPTANCE cited | outcome | keep
 Read this file before proposing a new slice. Do not repeat discarded ideas without
 new evidence.
 
+2026-05-31 | lab-og-position-tradevalues | Dynasty trade OG must match WR/RB tab | c4cfe914 | SHIP | T5/T6 screenshot trust | — | buy/sell | evidence file
 2026-05-31 | weekly hot-week OG | lab-weekly-hot-week-snapshot | PARITY Explore L5, DEPTH Lab L5 | SHIP | KEEP spike-week stat over PPG | — | buysell atom next | standup cycle 93
 
 2026-05-31 | Lab OG mirror rows epic | lab-dashboard-top5-og-snapshot | PARITY Explore L5, DEPTH Lab L5, NEXT.md | SHIP | KEEP top5-before-movers snapshot order | — | weekly hot-week atom | standup cycle 92
