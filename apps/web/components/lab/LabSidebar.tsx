@@ -151,7 +151,7 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
                   key={panel.slug}
                   panel={panel}
                   activeSlug={activeSlug}
-                  showAgentName={Boolean(query.trim())}
+                  showOwnerInTitle={Boolean(query)}
                   onNavigate={onCloseMobile}
                 />
               ))}
@@ -172,18 +172,20 @@ function SidebarItem({
   panel,
   activeSlug,
   badge,
-  showAgentName,
+  showOwnerInTitle = false,
   onNavigate,
 }: {
   panel: PanelDefinition;
   activeSlug?: string;
   badge?: string;
-  /** When filtering panels, surface agent voice so search matches Staff Picks grouping. */
-  showAgentName?: boolean;
+  /** When searching, prefix visible title with agent owner (hallway H-04). */
+  showOwnerInTitle?: boolean;
   onNavigate?: () => void;
 }) {
   const active = activeSlug === panel.slug;
   const owner = agentForPanel(panel.slug);
+  const label =
+    showOwnerInTitle && owner ? `${owner.name} · ${panel.title}` : panel.title;
   return (
     <Link
       href={`/lab/${panel.slug}`}
@@ -201,12 +203,7 @@ function SidebarItem({
           height={18}
         />
       )}
-      <span className="lab-sidebar-item-label">
-        {panel.title}
-        {showAgentName && owner && (
-          <span className="lab-sidebar-agent-name text-ink-light"> · {owner.name}</span>
-        )}
-      </span>
+      {label}
       {panel.tier === "pro" && <span className="lab-pro-lock"> 🔒</span>}
       {badge && <span className="lab-staff-pick"> {badge}</span>}
     </Link>
@@ -221,16 +218,30 @@ export function LabPanelGrid() {
         <section key={cat} className="lab-grid-section">
           <h2 className="lab-grid-heading">{CATEGORY_LABELS[cat]}</h2>
           <div className="lab-grid-cards">
-            {panelsByCategory(cat).map((panel) => (
-              <Link key={panel.slug} href={`/lab/${panel.slug}`} className="lab-grid-card chunky bg-bg-card">
-                <span className="lab-grid-icon" aria-hidden>
-                  {panel.icon}
-                </span>
-                <h3 style={{ fontFamily: "var(--font-display)" }}>{panel.title}</h3>
-                <p className="text-ink-medium text-xs">{panel.blurb}</p>
-                {panel.tier === "pro" && <span className="lab-pro-badge">PRO</span>}
-              </Link>
-            ))}
+            {panelsByCategory(cat).map((panel) => {
+              const owner = STAFF_PICKS.has(panel.slug) ? agentForPanel(panel.slug) : undefined;
+              return (
+                <Link
+                  key={panel.slug}
+                  href={`/lab/${panel.slug}`}
+                  className="lab-grid-card chunky bg-bg-card"
+                  title={owner ? `${owner.name} · ${panel.blurb}` : panel.blurb}
+                >
+                  {owner && (
+                    <span className="lab-grid-agent-chip">
+                      <img src={`/agents/${owner.avatar}.svg`} alt="" width={16} height={16} />
+                      <span>{owner.name}</span>
+                    </span>
+                  )}
+                  <span className="lab-grid-icon" aria-hidden>
+                    {panel.icon}
+                  </span>
+                  <h3 style={{ fontFamily: "var(--font-display)" }}>{panel.title}</h3>
+                  <p className="text-ink-medium text-xs">{panel.blurb}</p>
+                  {panel.tier === "pro" && <span className="lab-pro-badge">PRO</span>}
+                </Link>
+              );
+            })}
           </div>
         </section>
       ))}

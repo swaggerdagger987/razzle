@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | Lab grid agent chip | lab-grid-agent-chip on STAFF_PICKS cards | SHIP | keep | build + pytest 59
+
 2026-05-31 | LabSidebar search agent hint | showAgentName when query set | SHIP | keep | build + pytest 59
 
 2026-05-31 | LabOgExportLink player-scoped default | PLAYER_SCOPED_LAB_OG_SLUGS; gamelog export always has player_id | SHIP | keep | curl 60634B

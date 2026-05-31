@@ -2,18 +2,18 @@
 
 **Date:** 2026-05-31  
 **Atom:** `explore-og-universe-query`  
-**Cycle:** 121  
 **Verdict:** PASS
 
 ## Commands
 
 ```bash
 npm run build --workspace=apps/web   # exit 0
-JWT_SECRET=test-secret python3 -m pytest apps/api/tests -q   # 58 passed, 5 skipped
-curl -s -o /tmp/og-nfl.png -w '%{http_code} %{size_download}\n' \
-  'http://127.0.0.1:3000/og/explore?universe=nfl&sort=fantasy_points_ppr&dir=desc&download=1'
+JWT_SECRET=test .venv-v2/bin/pytest apps/api/tests -q   # 58 passed, 5 skipped
 curl -s -o /tmp/og-college.png -w '%{http_code} %{size_download}\n' \
-  'http://127.0.0.1:3000/og/explore?universe=college&sort=total_yards&dir=desc&download=1'
+  'http://127.0.0.1:3000/og/explore?universe=college&sort=total_yards&dir=desc&season=2024'
+curl -s -o /tmp/og-nfl.png -w '%{http_code} %{size_download}\n' \
+  'http://127.0.0.1:3000/og/explore?universe=nfl&sort=fantasy_points_ppr&dir=desc'
+file /tmp/og-college.png /tmp/og-nfl.png
 ```
 
 ## Results
@@ -21,12 +21,10 @@ curl -s -o /tmp/og-college.png -w '%{http_code} %{size_download}\n' \
 | Check | Result |
 |-------|--------|
 | Web build | exit 0 |
-| NFL OG export | `200 34561` PNG 1200×630 |
-| College OG export | `200 37393` |
-| Copy link | Explicit `/explore?universe=…&sort=…` URL (not bare window.location) |
-| OG fetch | `resolveApiOrigin(req)` same-origin screener query |
-| Export sort | `apiSortKey` passed from ExplorePageClient (college total_yards) |
+| College OG + season | `200 41427` PNG 1200×630 |
+| NFL OG | `200 38060` PNG 1200×630 |
+| Band link | includes `universe`, `sort`, `dir`, optional `season`/`team` |
 
 ## Change
 
-Explore share/export always encodes universe + API-aligned sort in OG and copy URLs; OG route fetches screener via same-origin `/api/screener/query`.
+`ExploreShareButton` forwards `season` and `team` into preview/export URLs; `/og/explore` reads them for screener query parity and watermark band deep link.
