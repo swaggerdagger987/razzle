@@ -93,8 +93,13 @@ function launch10LiveBlurbSuffix(slug: string): string {
   if (slug === "prospects") return " · live RPS board";
   if (slug === "weekly") return " · live PPG heatmap";
   if (slug === "rankings") return " · live dynasty ranks";
+<<<<<<< HEAD
   if (slug === "tradevalues") return " · live trade values";
   if (slug === "breakouts") return " · live breakout board";
+=======
+  if (slug === "breakouts") return " · live RBS board";
+  if (slug === "tradevalues") return " · live value curve";
+>>>>>>> origin/razzle-v2-redesign
   return " · live nflverse rows";
 }
 
@@ -102,8 +107,13 @@ function launch10LiveStickerLabel(slug: string): string {
   if (slug === "prospects") return "LIVE · RPS board";
   if (slug === "weekly") return "LIVE · PPG heatmap";
   if (slug === "rankings") return "LIVE · dynasty ranks";
+<<<<<<< HEAD
   if (slug === "tradevalues") return "LIVE · trade values";
   if (slug === "breakouts") return "LIVE · breakout board";
+=======
+  if (slug === "breakouts") return "LIVE · RBS board";
+  if (slug === "tradevalues") return "LIVE · value curve";
+>>>>>>> origin/razzle-v2-redesign
   return "LIVE · nflverse rows";
 }
 
