@@ -69,4 +69,4 @@ cycle	commit	score	status	pillar	slice	description
 78	3c1237df	depth+voice+simplicity	keep	Lab	L5 OG export links prospects weekly tradevalues	trust=T5,T6; LabOgExportLink footers; curl prospects 58084B weekly 63819B tradevalues 62488B; export-link epic complete
 80	28f39b4a	depth+hallway+voice+simplicity	keep	League	L5 Power Rankings OG + share row	trust=T2,T5,T6; /og/power-rankings curl 59807B; BureauPowerRankingsShareBar
 81	9afe6a01	depth+hallway+voice+simplicity	keep	League	L5 Bureau Roster Depth tab unhidden	trust=T2,T5,T6; Dolphin renderer; roster-depth out of HIDDEN; build+pytest PASS
-82	da33eafd	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5,T6; Atlas renderer; build-profiles out of HIDDEN; build+pytest PASS
+82	2a6d6512	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5,T6; Atlas renderer; build-profiles out of HIDDEN; build+pytest PASS

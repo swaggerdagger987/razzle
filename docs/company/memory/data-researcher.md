@@ -30,4 +30,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
 2026-05-31 | Roster depth tab | 9afe6a01 | keep | no new intel; Dolphin injury angle already in REDDIT-INTEL
-2026-05-31 | Build profiles tab | da33eafd | keep | no new intel; construction archetype threads stable in REDDIT-INTEL
+2026-05-31 | Build profiles tab | 2a6d6512 | keep | no new intel; construction archetype threads stable in REDDIT-INTEL
