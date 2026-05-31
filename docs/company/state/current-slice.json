@@ -1,27 +1,37 @@
 {
   "date": "2026-05-31",
-  "atom_id": "bureau-trade-network-share-bar",
-  "big_problem": "Bureau-7 surfaces need copyable league URLs plus OG export on every tab.",
-  "epic": "League L5 — Bureau behavioral share parity",
-  "slice_title": "Trade Network ShareBar copy link + export",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
+  "big_problem": "Lab OG export cards still fall back to generic demo rows on launch-10 panels without snapshot wiring — screenshots do not match in-product leaders.",
+  "epic": "Lab L5 — OG export matches in-product panel rows",
+  "atom_id": "lab-og-prospects-snapshot",
+  "slice_title": "Prospects export passes top-6 RPS snapshot rows",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2/C3 — snapshot OG ≥40KB with from-your-panel suffix",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauTradeNetworkShareBar.tsx",
-    "apps/web/components/league/BureauTradeNetwork.tsx"
+    "apps/web/components/lab/renderers/ProspectsRenderer.tsx"
   ],
-  "max_files": 2,
-  "max_lines": 80,
+  "max_files": 1,
+  "max_lines": 30,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "npm run typecheck --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-trade-network.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/trade-network?league=test&download=1'"
+    "curl -s -o /tmp/og-prospects-snap.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/prospects?download=1&snapshot=eyJuIjoiQ2VjZSBPZGF1bmV6IiwicCI6IldSIiwidCI6Ik9IQSIsInMiOjk1LjIsInNsIjoiUlBTIn0seyJuIjoiTWFydmluIEhhcmlzb24gSnIuIiwicCI6IldSIiwidCI6Ik9IQSIsInMiOjk0LjEsInNsIjoiUlBTIn0seyJuIjoiTWFsdWsgTmFiZXJzIiwicCI6IldSIiwidCI6Ik5ZRyIsInMiOjkyLjAsInNsIjoiUlBTIn1d'",
+    "curl -s -o /tmp/og-prospects-demo.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/prospects?download=1'"
   ],
-  "out_of_scope": ["OG route changes", "new Bureau tabs", "NORTH_STAR/DESIGN/DECISIONS edits"],
+  "out_of_scope": [
+    "OG route changes",
+    "Other launch-10 panels",
+    "API schema changes",
+    "Auth/billing"
+  ],
   "builder_mode": "composer-surgical",
-  "verdict": "SHIP",
-  "content_commit": "1616484c"
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  },
+  "content_commit": null,
+  "verdict": "SHIP"
 }

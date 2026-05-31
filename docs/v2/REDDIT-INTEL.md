@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Prospects OG snapshot (cycle 90)
+- **Angle:** Devy/cff big-board screenshots show the same RPS leaders as the Hawkeye panel — not a generic demo QB list.
+- **Trust:** T6 screenshot gravity; college screener hallway link still on footer.
+
 ### 2026-05-31 — Lab launch-10 OG (cycle 77)
 - **Angle:** Screenshot cards without "sample preview" when API rows load — launch-10 exports read as live research, not demo shells.
 - **Trust:** T1 honest labeling; sample suffix only on demo fallback.

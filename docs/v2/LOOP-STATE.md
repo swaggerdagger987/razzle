@@ -1,10 +1,11 @@
-cycle: 85
+cycle: 90
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: bureau-trade-finder-share-bar
-last_keep_cycle: 85
-last_commit: 1616484c
+next_slice: lab-og-trade-values-snapshot
+last_keep_cycle: 90
+last_commit: da33eafd
+lab_l5_og_prospects_snapshot: complete
 lab_l5_og_snapshot_weekly_breakouts: complete
 explore_l5_watermarked_export: complete
 lab_l5_og_export_link_epic: complete
