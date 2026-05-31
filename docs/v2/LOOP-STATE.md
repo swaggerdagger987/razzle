@@ -1,8 +1,9 @@
-cycle: 96
+cycle: 98
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: league-strength-of-schedule-og-share
-last_keep_cycle: 96
-last_commit: 3f584f61
-league_l5_bureau_depth_og_epic: active
+next_slice: league-l5-bureau-h2h-export
+last_keep_cycle: 98
+last_commit: 69334f8b
+lab_l5_live_og_epic: complete
+lab_l5_efficiency_og_live_extract: complete
