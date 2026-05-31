@@ -55,3 +55,5 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 94	d9548870	depth+voice+simplicity	keep	Lab	L5 Breakouts OG score-ranked snapshot	trust=T5,T6; sort top-6 RBS; fidelity epic atom 3/3 complete
 96	7ec8f82a	depth+voice+simplicity	keep	League	L5 H2H ShareBar canonical snapshot codec	trust=T5,T6; encodeBureauH2HOgSnapshot; curl h2h demo 71895B snap 70829B; pytest 51; web build; epic atom 1/3
 97	9344de22	depth+voice+simplicity	keep	League	L5 Bureau Schedule SOS OG verdict card	trust=T5,T6; /og/strength-of-schedule 65992B; share bar; pytest 51; depth OG export
+97	26a22f69	depth+voice+simplicity	keep	League	L5 Power Rankings OG snapshot rows	trust=T5,T6; encode top-5 board; curl snap 50084B; Bureau OG epic atom 1/3
+98	9344de22	depth+voice+simplicity	keep	League	L5 Bureau Schedule SOS OG verdict card	trust=T5,T6; /og/strength-of-schedule 65992B; share bar; pytest 51
