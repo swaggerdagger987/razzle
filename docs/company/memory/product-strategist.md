@@ -1,5 +1,6 @@
-2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | SHIP | Lab L5 position-default epic 3/3; breakouts WR hallway.
-2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | SHIP | League L5 H2H GTM epic closed — Gate C evidence on snapshot path.
+2026-05-31 | bureau-waiver-og-gate-c-pytest | 845d9d1a1 | SHIP | Gate C pytest closes Bureau OG watermark epic; next Lab live rows.
+2026-05-31 | bureau-waiver-og-watermark-band | 7f7a22676 | SHIP | Waiver OG band completes Bureau advanced export parity (T6).
+2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | Explore margin epic 2/4; OG top-3 matches screener staff column.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Weekly OG toLab matches WR heatmap default (T6).
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | SHIP | Snapshot pid wrapper; hallway epic complete (T6).
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Lab L5 empty OG epic 3/3; weekly heatmap sample export on empty board.

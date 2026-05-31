@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Bureau waiver OG watermark (cycle 157)
+- **Angle:** FAAB archetype card with terracotta band — league managers screenshot waiver psychology threads.
+- **Trust:** T5/T6 — demo rows show hoarder/streamer lanes; hallway path on band.
+
 ### 2026-05-31 — Lab trade values export (cycle 95)
 - **Angle:** Formula-ranked trade value card — rank + composite name on each row matches what Bones users sort before screenshotting.
 - **Trust:** T5/T6 — top 6 from visible sort; dynasty rank when no formula.
