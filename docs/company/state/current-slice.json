@@ -1,0 +1,29 @@
+{
+  "date": "2026-05-31",
+  "big_problem": "Lab share cards must show real data, not loading shells — screenshot-worthy Bureau/Lab OG.",
+  "epic": "Lab L5 depth — live OG and export cards",
+  "slice_title": "Dynasty Rankings OG route with demo fallback rows",
+  "parity_ref": "F-Lab-OG",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "ACCEPTANCE Gate 2 — Lab panels real data on export",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/rankings/route.tsx",
+    "docs/company/state/current-epic.json",
+    "docs/company/state/workday.json"
+  ],
+  "max_files": 3,
+  "max_lines": 300,
+  "acceptance_commands": [
+    "pytest apps/api/tests -q",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-rankings.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/rankings?download=1'"
+  ],
+  "out_of_scope": [
+    "Redesign all OG cards",
+    "New panels",
+    "pricing/auth/billing",
+    "NORTH_STAR edits"
+  ],
+  "builder_mode": "composer-surgical"
+}

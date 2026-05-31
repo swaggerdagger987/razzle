@@ -12,10 +12,10 @@
     },
     {
       "id": "atom-2",
-      "title": "Next Lab OG route — rankings or explore export live rows",
+      "title": "Dynasty Rankings OG route with demo fallback rows",
       "parity_ref": "F-Lab-OG",
       "depth_ref": "Lab L5",
-      "status": "next",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
@@ -30,6 +30,6 @@
   "completed_atom_ids": ["atom-1"],
   "next_atom_id": "atom-2",
   "epic_status": "active",
-  "last_updated": "2026-05-30T22:30:00Z",
+  "last_updated": "2026-05-31T06:00:00Z",
   "last_merge_commit": "2e11270"
 }
