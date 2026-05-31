@@ -17,13 +17,9 @@ interface Props {
   snapshot?: BureauH2HOgSnapshot;
 }
 
-/** Copyable rivalry URL + OG export — mirrors ExploreShareButton for Bureau H2H. */
+/** Copyable OG preview URL + PNG export — mirrors BriefingShareBar for Bureau H2H. */
 export function BureauH2HShareBar({ leagueId, userId, opponentId, snapshot }: Props) {
   const [copied, setCopied] = useState(false);
-
-  const rivalryQuery = new URLSearchParams({ user: userId });
-  if (opponentId) rivalryQuery.set("opponent", opponentId);
-  const rivalryPath = `/league/${leagueId}/head-to-head?${rivalryQuery.toString()}`;
 
   const previewParams = new URLSearchParams({
     league: leagueId,
@@ -33,6 +29,8 @@ export function BureauH2HShareBar({ leagueId, userId, opponentId, snapshot }: Pr
   // Export card encodes in-panel rivalry; direct OG URLs with league/user try live API first.
   const snap = snapshot ? encodeBureauH2HOgSnapshot(snapshot) : undefined;
   if (snap) previewParams.set("snapshot", snap);
+
+  const previewPath = `/og/head-to-head?${previewParams.toString()}`;
 
   const exportParams = new URLSearchParams(previewParams);
   exportParams.set("download", "1");
@@ -51,8 +49,8 @@ export function BureauH2HShareBar({ leagueId, userId, opponentId, snapshot }: Pr
   const copyLink = useCallback(async () => {
     const url =
       typeof window !== "undefined"
-        ? `${window.location.origin}${rivalryPath}`
-        : rivalryPath;
+        ? `${window.location.origin}${previewPath}`
+        : previewPath;
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
@@ -60,15 +58,15 @@ export function BureauH2HShareBar({ leagueId, userId, opponentId, snapshot }: Pr
     } catch {
       setCopied(false);
     }
-  }, [rivalryPath]);
+  }, [previewPath]);
 
   return (
     <div className="mt-3 flex flex-wrap items-center gap-2">
       <button type="button" className="btn-chunky text-xs" onClick={() => void copyLink()}>
-        {copied ? "copied!" : "copy rivalry link"}
+        {copied ? "copied!" : "copy card link"}
       </button>
       <a
-        href={`/og/head-to-head?${previewParams.toString()}`}
+        href={previewPath}
         target="_blank"
         rel="noopener noreferrer"
         className="btn-chunky text-xs"

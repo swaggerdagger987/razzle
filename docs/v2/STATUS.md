@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 154 — Bureau H2H preview card)
+**Last updated:** 2026-05-31 (factory cycle 155 — Bureau H2H copy OG preview link)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 154 |
+| Cycle | 155 |
 | Last board | 54 |
 | Focus pillar | League |
 | Focus layer | L5 |
-| Next slice | bureau-h2h-copy-og-preview-link (H2H GTM epic 2/3) |
-| Last commit | `452e67951` |
+| Next slice | bureau-mc-preview-card (H2H GTM epic 3/3) |
+| Last commit | `f6e0985f3` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
@@ -32,4 +32,4 @@ Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export f
 |------|-------|-------|
 | Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export + margin note on OG lead row |
 | Lab (panels) | Shipping | Launch 10 at L1+; depth work continues per PARITY |
-| Bureau (league) | Shipping | Self-Scout default; 8 features wired; H2H preview card before export |
+| Bureau (league) | Shipping | Self-Scout default; 8 features wired; H2H copy link shares OG preview URL |

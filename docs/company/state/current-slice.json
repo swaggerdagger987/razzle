@@ -1,27 +1,27 @@
 {
   "date": "2026-05-31",
   "big_problem": "Bureau rivalry cards lack preview-before-export — managers can't eyeball the OG card before downloading like Explore and Room Briefing.",
-  "epic": "League L5 — Bureau H2H GTM preview export (atom 1/3)",
-  "slice_title": "H2H share bar preview card link before export",
+  "epic": "League L5 — Bureau H2H GTM preview export (atom 2/3)",
+  "slice_title": "H2H copy link targets OG preview URL for GTM embeds",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG preview without download param",
+  "acceptance_ref": "FACTORY-DOD Gate C — copyable OG preview URL mirrors BriefingShareBar",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
     "apps/web/components/league/BureauH2HShareBar.tsx",
     "apps/api/tests/test_bureau_h2h_share_bar.py"
   ],
   "max_files": 2,
-  "max_lines": 80,
+  "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests/test_bureau_h2h_share_bar.py -q",
-    "curl -s -o /tmp/h2h-preview.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/head-to-head?league=demo&user=u1&opponent=u2'"
+    "curl -s -o /tmp/h2h-copy-og.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/head-to-head?league=demo&user=u1&opponent=u2'"
   ],
   "out_of_scope": [
     "Monte Carlo preview",
-    "copy-link URL change",
     "OG route changes",
+    "league page URL removal from UI",
     "NORTH_STAR edits"
   ],
   "builder_mode": "composer-surgical"
