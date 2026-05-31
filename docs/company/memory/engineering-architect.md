@@ -1,6 +1,7 @@
 2026-05-31 | lab-og-tolab-snapshot-rankings-top-row | 892d34580 | 2 files ≤12 lines; topPlayer playerId on rankings export.
 2026-05-31 | lab-og-tolab-snapshot-weekly-player | e516797e6 | 2 files ≤5 lines; hot-row playerId on export link.
-2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | route map loop + pytest rows; ≤80 lines.
+2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | 2 files; breakouts WR + rankings no-default pytest.
+2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | 2 files; gate-c pytest imports codec DEMO_SNAPSHOT_PARAM.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | TOLAB_DEFAULT_POSITION + watermarkPosition.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | 3 files; decodeOgSnapshot pid + labOgWatermarkLink snapshotPlayerId.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.
