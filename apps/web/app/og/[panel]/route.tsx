@@ -271,6 +271,10 @@ function extractRows(data: unknown): OgRow[] {
 
   if (candidates.length === 0) return [];
 
+  if (candidates[0] && "ppg" in candidates[0] && candidates[0].ppg != null) {
+    candidates.sort((a, b) => Number(b.ppg ?? 0) - Number(a.ppg ?? 0));
+  }
+
   let statKey = "";
   let statLabel = "";
   for (const k of STAT_CANDIDATE_KEYS) {
@@ -430,13 +434,17 @@ export async function GET(
   const liveHasRows = namedLiveRows.length > 0;
   const isSnapshot = snapshotHasRows;
   let rows = isSnapshot
-    ? snapshotRows.slice(0, 6)
+    ? snapshotRows
     : liveHasRows
-      ? namedLiveRows.slice(0, 6)
+      ? namedLiveRows
       : demoRowsForPanel(slug);
   if (!isSnapshot && positionFilter) {
     rows = rows.filter((r) => r.position === positionFilter);
   }
+  if (!isSnapshot && liveHasRows && slug === "weekly") {
+    rows = [...rows].sort((a, b) => b.stat - a.stat);
+  }
+  rows = rows.slice(0, 6);
 
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
   const showingLiveData = !isSnapshot && liveHasRows && hasRows;
