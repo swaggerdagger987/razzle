@@ -1,8 +1,26 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-watermark-display-name",
-  "slice_title": "Gamelog export passes player name into OG watermark toLab",
-  "content_commit": "338709883",
-  "reality": "PASS",
-  "merge": "pending"
+  "big_problem": "Bureau waiver and schedule exports lack the terracotta watermark band — league screenshots don't match H2H/Lab brand gravity.",
+  "epic": "League L5 — Bureau advanced tabs OG watermark parity",
+  "slice_title": "Strength of schedule OG terracotta watermark band",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — Bureau OG PNG ≥40KB",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/strength-of-schedule/route.tsx",
+    "apps/api/tests/test_bureau_sos_og_watermark.py"
+  ],
+  "max_files": 2,
+  "max_lines": 80,
+  "acceptance_commands": [
+    "JWT_SECRET=test PATH=$HOME/.local/bin:$PATH python3 -m pytest apps/api/tests/test_bureau_sos_og_watermark.py -q --noconftest",
+    "npm run build --workspace=apps/web"
+  ],
+  "out_of_scope": [
+    "waiver OG changes",
+    "new npm deps",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
+  "builder_mode": "composer-surgical"
 }
