@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab OG share cards must fetch live panel rows on Edge via same-origin /api — not a hardcoded API host (DEPTH Lab L5).",
   "epic_title": "Lab L5 — OG Edge-safe live fetch",
   "parity_ref": "Lab L5 — OG card per panel matches in-product export",
@@ -8,11 +8,11 @@
     {
       "id": "lab-og-api-origin-rewrite",
       "title": "OG panel fetch uses request origin + Next /api rewrite",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "7a078f3a"
     }
   ],
-  "next_atom_id": "lab-og-api-origin-rewrite",
+  "next_atom_id": null,
   "created_at": "2026-05-31T04:40:00Z",
   "updated_at": "2026-05-31T04:40:00Z"
 }
