@@ -4,7 +4,7 @@ focus_pillar: League
 focus_layer: L5
 next_slice: league-sos-tab
 last_keep_cycle: 90
-last_commit: da33eafd
+last_commit: 1d33cf0b
 league_l5_bureau_build_profiles_tab: complete
 league_l5_bureau_waiver_tendencies_tab: in_progress
 league_l5_bureau_hidden_tabs_epic: in_progress

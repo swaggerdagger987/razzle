@@ -30,4 +30,4 @@ explicit checks in the verification routine.
 2026-05-31 | Bureau H2H snapshot Gate C | 3d498394 | PASS | curl demo 59305B snap 54444B | keep | docs/v2/evidence/2026-05-31-bureau-h2h-snapshot-export.md
 2026-05-31 | Bureau H2H OG Gate C | 044ee1e8 | PASS | curl h2h 59305B PNG | keep | docs/v2/evidence/2026-05-31-bureau-h2h-share-bar.md
 2026-05-31 | Bureau MC share Gate C | 3392bc29 | PASS | curl monte-carlo 53767B PNG | keep | evidence/2026-05-31-bureau-monte-carlo-share-bar.md
-2026-05-31 | cycle 90 waiver tendencies | da33eafd | keep | BureauWaiverTendencies Hawkeye cards; hidden-tabs epic 2/3
+2026-05-31 | cycle 90 waiver tendencies | 1d33cf0b | keep | BureauWaiverTendencies Hawkeye cards; hidden-tabs epic 2/3

@@ -30,4 +30,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | league H2H export fidelity | 3d498394 | keep | rivalry cards must match Bureau panel for chat shares
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
-2026-05-31 | cycle 90 waiver tendencies | da33eafd | keep | BureauWaiverTendencies Hawkeye cards; hidden-tabs epic 2/3
+2026-05-31 | cycle 90 waiver tendencies | 1d33cf0b | keep | BureauWaiverTendencies Hawkeye cards; hidden-tabs epic 2/3
