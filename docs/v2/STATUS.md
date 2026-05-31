@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | bureau-pressure-og-live-sample-sticker |
-| Last commit | `da33eafd` |
+| Last commit | `fc0bee2` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
