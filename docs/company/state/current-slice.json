@@ -23,5 +23,8 @@
     "NORTH_STAR/DESIGN/DECISIONS edits",
     "snapshot codec changes"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "content_commit": "3bb457789",
+  "reality": "PASS",
+  "merge": "pending"
 }

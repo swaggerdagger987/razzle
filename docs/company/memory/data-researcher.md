@@ -1,11 +1,14 @@
 2026-05-31 | bureau-waiver-og-watermark-band | 3bb457789 | PASS | Waiver FAAB screenshots travel in league group chats.
 
+2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | PASS | No new Reddit intel.
+2026-05-31 | lab-og-tolab-weekly-position | — | PASS | No new Reddit intel.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | No new Reddit intel; empty weekly export unblocks heatmap tape screenshots.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | No new intel.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Data Researcher
 
+2026-05-31 | explore-og-margin-note-lead | — | PASS | No new Reddit intel; Explore OG margin slice only.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | PASS | No new Reddit intel; hallway snapshot pid slice.
 2026-05-31 | league-trade-finder-og-room-hallway | — | PASS | No new Reddit intel; Bureau export hallway only.
 2026-05-31 | lab-og-from-panel-gate-c-rest | 3bb457789 | PASS | No new intel; pytest contract only.

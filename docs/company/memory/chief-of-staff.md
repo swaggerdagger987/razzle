@@ -1,4 +1,7 @@
-2026-05-31 | bureau-waiver-og-watermark-band | 3bb457789 | SHIP | Factory open cycle 1; dedup PR1343 snapshot slice on base; NO_LOCK_GUARDRAIL.
+2026-05-31 | bureau-waiver-og-watermark-band | 3bb457789 | SHIP | Factory open cycle 155; dedup snapshot hallway on base; NO_LOCK_GUARDRAIL.
+2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | Factory cycle 154; efficiency RB in OG watermark.
+2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Factory cycle 153; weekly WR in OG watermark.
+2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | Factory open cycle 1; Explore L5 margin epic 1/4; NO_LOCK_GUARDRAIL.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Factory open cycle 1; empty OG epic 3/3 complete; NO_LOCK_GUARDRAIL.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | Workday cycle 1; demo trust epic complete.
