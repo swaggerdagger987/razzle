@@ -402,6 +402,24 @@ export async function GET(req: Request) {
                         marginTop: 2,
                       }}
                     >
+                      <span
+                        style={{
+                          display: "flex",
+                          transform: "rotate(-4deg)",
+                          background: "#d97757",
+                          color: "#f7efe5",
+                          fontSize: 11,
+                          fontWeight: 700,
+                          padding: "1px 6px",
+                          border: "2px solid #2d1f14",
+                          borderRadius: 4,
+                          boxShadow: "2px 2px 0 #2d1f14",
+                          fontFamily: "Space Mono, monospace",
+                          letterSpacing: "0.04em",
+                        }}
+                      >
+                        STAFF
+                      </span>
                       <span style={{ display: "flex" }}>{rowAgent.emoji}</span>
                       <span style={{ display: "flex" }}>{rowMarginNote.text}</span>
                     </div>

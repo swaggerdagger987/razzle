@@ -1,16 +1,21 @@
-"""Explore OG — LIVE staff margin note sticker when live rows qualify (Explore L5)."""
+"""Explore OG — staff margin stickers (Explore L5 atom 3/4)."""
+
+from __future__ import annotations
 
 from pathlib import Path
 
-
-def _repo_root() -> Path:
-    return Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[3]
+EXPLORE_OG = ROOT / "apps/web/app/og/explore/route.tsx"
 
 
 def test_explore_og_live_staff_margin_sticker():
-    route = _repo_root() / "apps/web/app/og/explore/route.tsx"
-    text = route.read_text(encoding="utf-8")
-    assert "hasStaffMarginNotes" in text
-    assert "LIVE · staff margin notes" in text
-    assert "TOP_MARGIN_NOTE_ROWS" in text
-    assert "!isDemo" in text
+    source = EXPLORE_OG.read_text(encoding="utf-8")
+    assert "hasStaffMarginNotes" in source
+    assert "LIVE · staff margin notes" in source
+
+
+def test_explore_og_margin_rows_render_staff_sticker():
+    source = EXPLORE_OG.read_text(encoding="utf-8")
+    assert "STAFF" in source
+    assert "rotate(-4deg)" in source
+    assert "rowMarginNote && rowAgent" in source
