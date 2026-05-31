@@ -22,6 +22,7 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | launch-10 OG demo stat labels | atom 2/3 SHIP | keep | curl weekly 63819B tradevalues 62488B gamelog 58408B
 2026-05-31 | Lab L5 OG epic complete atom 3/3 | ef908a99 | keep | PR #29 + cycle 60; dynasty-comps OG defaults
 2026-05-31 | Factory cycle 1 League OG epic open | 0d39635e | keep | workday reopen; Bureau OG atom 1 pressure-map SHIP
+2026-05-31 | Workday open cycle 1 atom 2/4 | da33eafd | keep | League power-rankings OG after tab unhide; issue #206 lock
 2026-05-31 | Factory cycle 2 manager-profiles OG | ffccedf4 | keep | workday open; Bureau OG atom 2/4 SHIP; curl 76684B
 2026-05-31 | Factory reopen cycle 1 trade-network OG | 2bd28752 | keep | workday reopen; Bureau OG atom 3/4 SHIP; curl 67677B
 2026-05-31 | Factory open cycle 1 self-scout OG epic complete | e732f973 | keep | workday open; Bureau OG atom 4/4 SHIP; curl 66997B; epic complete
@@ -30,3 +31,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory open cycle 1 Lab live OG rows | 2cb898b6 | keep | workday open; epic atom 1/3 SHIP; PR standup 2026-05-31
 2026-05-31 | Factory cycle 1 Bureau H2H export | 044ee1e8 | keep | workday open; League L5 epic atom 1/3; copy link + export bar
 2026-05-31 | Factory cycle 1 Bureau MC share | 3392bc29 | keep | deduped lab-og-live-label; Bureau share epic 3/3
+2026-05-31 | Workday open cycle 1 power-rankings OG | da33eafd | keep | synced base 212d06de; curl 66050B; next roster-depth tab

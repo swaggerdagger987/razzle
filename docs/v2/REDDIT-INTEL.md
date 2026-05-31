@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Power Rankings OG (cycle 80)
+- **Angle:** Pythagorean luck + differential boards travel better than W-L tables in dynasty league chats.
+- **Screenshot hook:** Octo power board with demo teams + luck tags on `/og/power-rankings`.
+
 ### 2026-05-31 — Bureau H2H (cycle 73)
 - **Angle:** League rivalry cards with copyable URLs — managers share H2H dossiers in league group chats.
 - **Screenshot hook:** Atlas rivalry card with you/them records + position depth bars.
