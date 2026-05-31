@@ -439,6 +439,38 @@ function extractProspectsRows(
   return [...rows].sort((a, b) => b.stat - a.stat).slice(0, 6);
 }
 
+/** Dynasty rankings — dynasty_value sort with #rank column (matches DynastyRankingsRenderer). */
+function extractRankingsRows(
+  players: Record<string, unknown>[],
+  positionFilter: string,
+): OgRow[] {
+  let rows = players
+    .map((row, idx) => {
+      const rankRaw = row.rank ?? row.dynasty_rank ?? row.overall_rank;
+      const rank =
+        rankRaw != null && Number(rankRaw) > 0 ? Number(rankRaw) : idx + 1;
+      const value = Number(row.dynasty_value ?? row.value ?? 0);
+      return {
+        name: String(row.full_name ?? row.name ?? row.player_name ?? ""),
+        position: String(row.position ?? row.pos ?? ""),
+        team: String(row.team ?? row.team_abbr ?? ""),
+        stat: value > 0 ? value : rank,
+        statLabel: `#${rank}`,
+      };
+    })
+    .filter((r) => r.name.trim().length > 0);
+  if (positionFilter) {
+    rows = rows.filter((r) => r.position === positionFilter);
+  }
+  return [...rows]
+    .sort((a, b) => b.stat - a.stat)
+    .slice(0, 6)
+    .map((row, i) => ({
+      ...row,
+      statLabel: `#${i + 1}`,
+    }));
+}
+
 /** Strengths OG — top percentile metrics (matches legacy player-strengths payload). */
 function extractStrengthsRows(
   strengths: Record<string, unknown>[],
@@ -677,6 +709,11 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
   }
 
   if (candidates.length === 0) return [];
+
+  if (slug === "rankings") {
+    const rankingRows = extractRankingsRows(candidates, positionFilter);
+    if (rankingRows.length > 0) return rankingRows;
+  }
 
   const preferredKey = slug ? PANEL_OG_STAT_KEY[slug] : undefined;
   const tradeValueStatKeys: string[] = [
