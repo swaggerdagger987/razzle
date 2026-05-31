@@ -4,6 +4,6 @@ focus_pillar: League
 focus_layer: L5
 next_slice: league-strength-of-schedule-tab
 last_keep_cycle: 91
-last_commit: pending
-league_l5_unhide_bureau_tabs_epic: active
+last_commit: 9f7eee47
+league_l5_unhide_bureau_tabs_epic: complete
 league_l5_waiver_tendencies_tab: complete
