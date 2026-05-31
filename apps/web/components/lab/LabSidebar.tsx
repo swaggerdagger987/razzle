@@ -1,6 +1,6 @@
 "use client";
 
-import { agentForPanel } from "@razzle/agents";
+import { AGENT_BY_ID, agentForPanel, type AgentDefinition, type AgentId } from "@razzle/agents";
 import {
   PANELS,
   panelsByCategory,
@@ -39,6 +39,9 @@ const STAFF_PICKS = new Set([
   "dashboard",
 ]);
 
+/** Display order for Staff Picks agent groups (Hawkeye → Octo → Bones → Atlas → Razzle). */
+const STAFF_AGENT_ORDER: AgentId[] = ["hawkeye", "octo", "bones", "atlas", "razzle"];
+
 interface Props {
   activeSlug?: string;
   collapsed?: boolean;
@@ -62,6 +65,22 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
     }
     return map;
   }, [panels]);
+
+  const staffByAgent = useMemo(() => {
+    const map = new Map<AgentId, PanelDefinition[]>();
+    for (const panel of PANELS) {
+      if (!STAFF_PICKS.has(panel.slug)) continue;
+      const owner = agentForPanel(panel.slug);
+      const id = owner?.id ?? "razzle";
+      const arr = map.get(id) ?? [];
+      arr.push(panel);
+      map.set(id, arr);
+    }
+    return STAFF_AGENT_ORDER.filter((id) => map.has(id)).map((id) => ({
+      agent: AGENT_BY_ID[id] as AgentDefinition,
+      panels: map.get(id) ?? [],
+    }));
+  }, []);
 
   function toggleCategory(cat: string) {
     setCollapsedCats((prev) => {
@@ -88,20 +107,32 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
       </div>
 
       <div className="lab-sidebar-inner">
-        {!query && (
-          <div className="lab-sidebar-category">
-            <span className="cat-text">Staff Picks</span>
-          </div>
-        )}
         {!query &&
-          PANELS.filter((p) => STAFF_PICKS.has(p.slug)).map((panel) => (
-            <SidebarItem
-              key={`staff-${panel.slug}`}
-              panel={panel}
-              activeSlug={activeSlug}
-              badge="★"
-              onNavigate={onCloseMobile}
-            />
+          staffByAgent.map(({ agent, panels: staffPanels }) => (
+            <div key={`staff-${agent.id}`}>
+              <div
+                className="lab-sidebar-category"
+                style={{ display: "flex", alignItems: "center", gap: 8, cursor: "default" }}
+              >
+                <img
+                  src={`/agents/${agent.avatar}.svg`}
+                  alt=""
+                  className="lab-sidebar-agent"
+                  width={20}
+                  height={20}
+                />
+                <span className="cat-text">{agent.name}</span>
+              </div>
+              {staffPanels.map((panel) => (
+                <SidebarItem
+                  key={`staff-${panel.slug}`}
+                  panel={panel}
+                  activeSlug={activeSlug}
+                  badge="★"
+                  onNavigate={onCloseMobile}
+                />
+              ))}
+            </div>
           ))}
 
         {Array.from(grouped.entries()).map(([category, items]) => (

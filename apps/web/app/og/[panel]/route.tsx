@@ -88,6 +88,19 @@ const LAUNCH_10_OG_SLUGS = new Set([
   "buysell",
 ]);
 
+/** Panel-specific LIVE copy when `/api/panels/{slug}` returns real rows (Launch-10). */
+function launch10LiveBlurbSuffix(slug: string): string {
+  if (slug === "prospects") return " · live RPS board";
+  if (slug === "weekly") return " · live PPG heatmap";
+  return " · live nflverse rows";
+}
+
+function launch10LiveStickerLabel(slug: string): string {
+  if (slug === "prospects") return "LIVE · RPS board";
+  if (slug === "weekly") return "LIVE · PPG heatmap";
+  return "LIVE · nflverse rows";
+}
+
 function panelBlurbSuffix(
   slug: string,
   positionFilter: string,
@@ -109,7 +122,7 @@ function panelBlurbSuffix(
     return `${pos} · sample preview`;
   }
   if (showingLiveData && LAUNCH_10_OG_SLUGS.has(slug)) {
-    return `${pos} · live nflverse rows`;
+    return `${pos}${launch10LiveBlurbSuffix(slug)}`;
   }
   if (showingLiveData) {
     return `${pos} · live data`;
@@ -744,7 +757,7 @@ export async function GET(
               fontWeight: 700,
             }}
           >
-            LIVE · nflverse rows
+            {launch10LiveStickerLabel(slug)}
           </div>
         ) : null}
 

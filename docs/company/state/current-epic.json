@@ -1,50 +1,32 @@
 {
-  "big_problem": "Lab OG exports still look like generic sample cards on Reddit — live nflverse rows aren't obvious when API returns real data.",
-  "epic_title": "Lab L5 — OG live panel rows visible on Launch-10 cards",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Lab sidebar still lists Staff Picks as a flat catalog — agents own panels in headers but not in navigation, so the hallway band is invisible until you open a panel.",
+  "epic_title": "Lab L2 — sidebar groups launch-10 by agent owner",
+  "parity_ref": "docs/v2/AGENTS.md — LabSidebar group by agent",
+  "depth_ref": "Lab L2",
   "atoms": [
     {
-      "id": "lab-og-live-sticker-launch10",
-      "title": "Launch-10 OG — LIVE sticker + blurb when nflverse rows render",
-      "status": "done",
-      "merge_commit": "4e905360"
+      "id": "lab-sidebar-staff-picks-by-agent",
+      "title": "Staff Picks grouped under agent owner headers in LabSidebar",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-live-sticker-prospects-weekly",
-      "title": "Prospects + Weekly OG — verify live sticker with panel API",
-      "status": "done",
-      "merge_commit": "5bb77346"
-    },
-    {
-      "id": "lab-og-live-demo-fallback-copy",
-      "title": "Sample preview copy — sharper contrast vs live sticker",
-      "status": "done",
-      "merge_commit": "9cd6a5cf"
+      "id": "lab-sidebar-search-agent-labels",
+      "title": "Search results show agent owner in sidebar item title",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T08:05:00Z",
-  "updated_at": "2026-05-31T12:20:00Z",
+  "next_atom_id": "lab-sidebar-staff-picks-by-agent",
+  "created_at": "2026-05-31T08:30:00Z",
+  "updated_at": "2026-05-31T08:30:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-og-live-rows-launch10",
+      "id": "lab-l5-launch10-og-live-extract",
       "status": "complete",
-      "last_atom": "lab-og-live-demo-fallback-copy",
-      "merge_commit": "9cd6a5cf"
-    },
-    {
-      "id": "lab-l5-og-watermark-band",
-      "status": "complete",
-      "last_atom": "lab-og-watermark-band-head-to-head",
-      "merge_commit": "44d05684"
-    },
-    {
-      "id": "lab-l5-og-live-sort-keys",
-      "status": "complete",
-      "last_atom": "lab-og-buysell-dashboard-live-sort",
-      "merge_commit": "7afc0b03"
+      "last_atom": "lab-og-dynasty-comps-pro-teaser",
+      "merge_commit": "26a590c9"
     }
   ]
 }
