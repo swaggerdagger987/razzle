@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-dashboard-live-gate-c | f6e0985f3 | SHIP | Factory open cycle 1; live-rows epic 3/3; lock #1431.
 2026-05-31 | lab-og-from-panel-launch10-registry | a3d651b25 | SHIP | Factory open cycle 1; live-rows epic 2/3; NO_LOCK_GUARDRAIL.
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | Factory open cycle 1; Explore L5 margin epic 1/4; NO_LOCK_GUARDRAIL.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Factory open cycle 1; empty OG epic 3/3 complete; NO_LOCK_GUARDRAIL.

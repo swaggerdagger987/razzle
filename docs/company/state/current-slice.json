@@ -1,25 +1,25 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG exports still dead-end when live panel scope (position filters) is not reflected in the terracotta toLab watermark.",
-  "epic": "Lab L5 — OG live panel data rows (atom 2/3)",
-  "slice_title": "FROM PANEL pytest registry covers all Launch-10 slugs",
-  "atom_id": "lab-og-from-panel-launch10-registry",
+  "big_problem": "Lab OG exports still dead-end when trust stickers drift from Launch-10 panel set — FROM PANEL registry only guarded four snapshot slugs.",
+  "epic": "Lab L5 — OG live panel data rows (atom 3/3)",
+  "slice_title": "Dashboard OG Gate C curl proves live dynasty-dashboard rows",
+  "atom_id": "lab-og-dashboard-live-gate-c",
   "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C trust stickers",
+  "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/api/tests/test_og_from_panel_sticker.py",
-    "docs/v2/evidence/2026-05-31-lab-og-from-panel-launch10-registry.md"
+    "apps/api/tests/test_og_dashboard_gate_c.py",
+    "docs/v2/evidence/2026-05-31-lab-og-dashboard-live-gate-c.md"
   ],
   "max_files": 2,
   "max_lines": 80,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_from_panel_sticker.py -q --noconftest"
+    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_dashboard_gate_c.py -q --noconftest",
+    "curl -s -o /tmp/og-dashboard.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/dashboard?download=1'"
   ],
   "out_of_scope": [
-    "route.tsx edits",
-    "Dashboard Gate C",
+    "route.tsx edits unless contract test fails",
     "NORTH_STAR/DESIGN/DECISIONS"
   ],
   "builder_mode": "composer-surgical",
@@ -29,6 +29,6 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   },
-  "status": "shipped",
-  "content_commit": "a3d651b25"
+  "status": "in_progress",
+  "content_commit": null
 }

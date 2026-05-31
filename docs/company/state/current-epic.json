@@ -20,7 +20,7 @@
     {
       "id": "lab-og-dashboard-live-gate-c",
       "title": "Dashboard OG Gate C curl proves live dynasty-dashboard rows",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],
