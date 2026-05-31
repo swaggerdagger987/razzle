@@ -101,6 +101,12 @@ function launch10LiveStickerLabel(slug: string): string {
   return "LIVE · nflverse rows";
 }
 
+function demoStickerLabel(slug: string): string {
+  if (slug === "prospects") return "SAMPLE · demo board";
+  if (slug === "weekly") return "SAMPLE · demo heatmap";
+  return "SAMPLE · demo rows";
+}
+
 function panelBlurbSuffix(
   slug: string,
   positionFilter: string,
@@ -117,7 +123,7 @@ function panelBlurbSuffix(
   }
   if (showingDemoRows) {
     if (LAUNCH_10_OG_SLUGS.has(slug)) {
-      return `${pos} · SAMPLE rows — not live nflverse`;
+      return pos;
     }
     return `${pos} · sample preview`;
   }
@@ -770,7 +776,7 @@ export async function GET(
               fontWeight: 700,
             }}
           >
-            SAMPLE · not live data
+            {demoStickerLabel(slug)}
           </div>
         ) : null}
 
