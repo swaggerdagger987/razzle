@@ -50,6 +50,13 @@ const OG_PRO_PREVIEW_HEADER = "X-Razzle-Plan";
 const DEFAULT_OG_PLAYER_ID = "00-0036900";
 const DEFAULT_OG_PLAYER_NAME = "Ja'Marr Chase";
 
+/** Career Compare OG default overlay when p1/p2/p3 omitted (Chase, Lamb, Jefferson). */
+const DEFAULT_CAREER_COMPARE_PLAYER_IDS = [
+  "00-0036900",
+  "00-0036358",
+  "00-0036963",
+];
+
 /** Lab panels that require player_id on the API (path or query). */
 const PLAYER_SCOPED_SLUGS = new Set([
   "dynasty-comps",
@@ -77,10 +84,15 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
   dashboard: "rank_diff",
   "dynasty-comps": "similarity",
   strengths: "percentile",
+  "career-compare": "ppg",
 };
 
 /** Pro player-scoped Lab panels (not Launch-10) — LIVE trust sticker when API returns rows. */
-const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set(["dynasty-comps", "strengths"]);
+const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set([
+  "dynasty-comps",
+  "strengths",
+  "career-compare",
+]);
 
 /** Panels where DEFAULT_OG_PLAYER_ID is the real export context — keep player in toLab (T6). */
 const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set(["gamelog", "dynasty-comps"]);
@@ -135,6 +147,7 @@ function launch10LiveBlurbSuffix(slug: string): string {
 function playerScopedLiveStickerLabel(slug: string): string {
   if (slug === "dynasty-comps") return "LIVE · comp matches";
   if (slug === "strengths") return "LIVE · top strengths";
+  if (slug === "career-compare") return "LIVE · overlay arcs";
   if (slug === "gamelog") return "LIVE · Wk tape";
   return "LIVE · panel rows";
 }
@@ -208,6 +221,9 @@ function panelBlurbSuffix(
   if (slug === "strengths" && showingDemoRows) {
     return `${pos} · sample strength grades`;
   }
+  if (slug === "career-compare" && showingDemoRows) {
+    return `${pos} · sample overlay arcs`;
+  }
   if (isSnapshot) {
     return `${pos} · from your panel`;
   }
@@ -225,6 +241,9 @@ function panelBlurbSuffix(
   }
   if (showingLiveData && slug === "strengths") {
     return `${pos} · live positional strengths`;
+  }
+  if (showingLiveData && slug === "career-compare") {
+    return `${pos} · live overlay arcs`;
   }
   if (showingLiveData) {
     return `${pos} · live data`;
@@ -334,6 +353,11 @@ const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
     { name: "Red Zone Targets", position: "WR", team: "CIN", stat: 85, statLabel: "B+" },
     { name: "Catch Rate", position: "WR", team: "CIN", stat: 82, statLabel: "B" },
     { name: "First Downs", position: "WR", team: "CIN", stat: 79, statLabel: "B" },
+  ],
+  "career-compare": [
+    { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 24.6, statLabel: "Peak PPG" },
+    { name: "CeeDee Lamb", position: "WR", team: "DAL", stat: 23.8, statLabel: "Peak PPG" },
+    { name: "Justin Jefferson", position: "WR", team: "MIN", stat: 25.1, statLabel: "Peak PPG" },
   ],
   "dynasty-comps": [
     { name: "Amon-Ra St. Brown", position: "WR", team: "DET", stat: 96, statLabel: "Match %" },
@@ -490,6 +514,33 @@ function extractStrengthsRows(
     .filter((r) => r.name.trim().length > 0 && r.stat > 0)
     .sort((a, b) => b.stat - a.stat)
     .slice(0, 6);
+}
+
+/** Career Compare OG — one row per player (peak season PPG from /api/career-stats). */
+function extractCareerCompareRow(payload: Record<string, unknown>): OgRow | null {
+  const player =
+    payload.player && typeof payload.player === "object"
+      ? (payload.player as Record<string, unknown>)
+      : undefined;
+  const seasons = Array.isArray(payload.seasons)
+    ? (payload.seasons as Record<string, unknown>[])
+    : [];
+  if (!player || seasons.length === 0) return null;
+  let best: Record<string, unknown> = seasons[0]!;
+  for (const s of seasons) {
+    if (Number(s.ppg ?? 0) > Number(best.ppg ?? 0)) best = s;
+  }
+  const peakPpg = Number(best.ppg ?? 0);
+  if (peakPpg <= 0) return null;
+  const seasonLabel =
+    best.season != null ? `Peak '${String(best.season).slice(-2)}` : "Peak PPG";
+  return {
+    name: String(player.full_name ?? player.name ?? ""),
+    position: String(player.position ?? ""),
+    team: String(player.team ?? ""),
+    stat: peakPpg,
+    statLabel: seasonLabel,
+  };
 }
 
 /** Dynasty comps OG — match % sort (matches DynastyCompsRenderer ogSnapshotRows). */
@@ -815,6 +866,29 @@ const OG_FETCH_HEADERS: Record<string, string> = {
   [OG_PRO_PREVIEW_HEADER]: "pro",
 };
 
+/** Career Compare — fetch up to three /api/career-stats payloads for overlay OG rows. */
+async function fetchCareerCompareOgRows(
+  req: Request,
+  playerIds: string[],
+): Promise<OgRow[]> {
+  const apiOrigin = resolveApiOrigin(req);
+  const rows: OgRow[] = [];
+  for (const pid of playerIds.slice(0, 3)) {
+    if (!pid.trim()) continue;
+    try {
+      const url = new URL(`${apiOrigin}/api/career-stats`);
+      url.searchParams.set("player_id", pid.trim());
+      const res = await fetch(url.toString(), { headers: OG_FETCH_HEADERS });
+      if (!res.ok) continue;
+      const row = extractCareerCompareRow((await res.json()) as Record<string, unknown>);
+      if (row && row.name.trim().length > 0) rows.push(row);
+    } catch {
+      /* try next slot */
+    }
+  }
+  return rows;
+}
+
 async function fetchPanelData(
   req: Request,
   slug: string,
@@ -977,13 +1051,22 @@ export async function GET(
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
   let liveRows: OgRow[] = [];
   if (apiPath && !snapshotHasRows && !forceDemo) {
-    liveRows = await fetchOgLiveRows(
-      req,
-      slug,
-      apiPath,
-      panel.api.method,
-      apiParams,
-    );
+    if (slug === "career-compare") {
+      const fromUrl = ["p1", "p2", "p3"]
+        .map((k) => url.searchParams.get(k)?.trim() ?? "")
+        .filter((id) => id.length > 0);
+      const compareIds =
+        fromUrl.length >= 2 ? fromUrl.slice(0, 3) : DEFAULT_CAREER_COMPARE_PLAYER_IDS;
+      liveRows = await fetchCareerCompareOgRows(req, compareIds);
+    } else {
+      liveRows = await fetchOgLiveRows(
+        req,
+        slug,
+        apiPath,
+        panel.api.method,
+        apiParams,
+      );
+    }
   }
   const namedLiveRows = liveRows.filter((r) => r.name.trim().length > 0);
   const liveHasRows = namedLiveRows.length > 0;

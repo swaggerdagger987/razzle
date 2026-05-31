@@ -1,29 +1,34 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermarks omit default position filters — efficiency exports click back to an unscoped PPO board.",
-  "epic": "Lab L5 — OG hallway position defaults (atom 2/3)",
-  "slice_title": "Efficiency OG watermark includes default RB position in toLab",
-  "atom_id": "lab-og-tolab-efficiency-position",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
+  "atom_id": "lab-og-career-compare-live",
+  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when career APIs return real season data.",
+  "epic": "Lab L5 — pro profile OG live parity (atom 1/4)",
+  "slice_title": "Career compare OG multi-player overlay rows",
+  "parity_ref": "Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
+  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
     "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/api/tests/test_lab_og_career_compare_live.py"
   ],
   "max_files": 2,
-  "max_lines": 25,
+  "max_lines": 180,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "python3 -m pytest apps/api/tests/test_lab_og_career_compare_live.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["other renderers", "billing", "NORTH_STAR edits"],
+  "out_of_scope": [
+    "percentiles/career single-panel atoms",
+    "NORTH_STAR/DESIGN/DECISIONS",
+    "new npm deps"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP 3/3"
-  }
+  },
+  "status": "done"
 }
