@@ -20,8 +20,8 @@
     {
       "id": "bureau-trade-network-copy-link",
       "title": "Trade Network copy link beside export card",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "fb7337c3"
     },
     {
       "id": "bureau-monte-carlo-copy-link",
