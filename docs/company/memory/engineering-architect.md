@@ -1,5 +1,6 @@
 # Memory — Engineering Architect
 
+2026-05-31 | Cycle 117 | da33eafd | extractGamelogWeekRows in og/[panel]/route.tsx only.
 2026-05-31 | Cycle 116 | 5e75875e | pytest mirrors bureau-h2h-og-snapshot.ts.
 
 
