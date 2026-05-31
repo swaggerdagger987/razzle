@@ -13,14 +13,12 @@ interface Props {
 export function ExploreShareButton({ universe, sort, dir, q, pos }: Props) {
   const [copied, setCopied] = useState(false);
 
-  const ogParams = new URLSearchParams({
-    universe,
-    sort,
-    dir,
-    download: "1",
-  });
-  if (q) ogParams.set("q", q);
-  if (pos.length) ogParams.set("pos", pos.join(","));
+  const previewParams = new URLSearchParams({ universe, sort, dir });
+  if (q) previewParams.set("q", q);
+  if (pos.length) previewParams.set("pos", pos.join(","));
+
+  const ogParams = new URLSearchParams(previewParams);
+  ogParams.set("download", "1");
 
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 
@@ -39,6 +37,14 @@ export function ExploreShareButton({ universe, sort, dir, q, pos }: Props) {
       <button type="button" className="btn-chunky text-xs" onClick={() => void copyLink()}>
         {copied ? "copied!" : "copy link"}
       </button>
+      <a
+        href={`/og/explore?${previewParams.toString()}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="btn-chunky text-xs"
+      >
+        preview card
+      </a>
       <a
         href={`/og/explore?${ogParams.toString()}`}
         download="razzle-explore.png"
