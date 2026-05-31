@@ -1,9 +1,9 @@
 cycle: 154
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Explore
 focus_layer: L5
-next_slice: bureau-h2h-og-exported-pytest
+next_slice: explore-og-margin-note-sticker
 last_keep_cycle: 154
-last_commit: 5b60ea23d
-league_l5_h2h_gtm_epic: active
-league_l5_trade_finder_gtm_epic: complete
+last_commit: c1a0bcaad
+explore_l5_og_margin_epic: active
+lab_l5_og_watermark_display_name_epic: complete
