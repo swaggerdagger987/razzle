@@ -26,19 +26,19 @@
   ],
   "next_atom_id": "lab-pro-gate-perks-copy",
   "created_at": "2026-05-31T09:15:00Z",
-  "updated_at": "2026-05-31T09:35:00Z",
+  "updated_at": "2026-05-31T09:40:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l5-launch10-og-live-extract",
+      "status": "complete",
+      "last_atom": "lab-og-dynasty-comps-pro-teaser",
+      "merge_commit": "26a590c9"
+    },
     {
       "id": "lab-l5-og-watermark-band",
       "status": "complete",
       "last_atom": "lab-og-watermark-band-head-to-head",
       "merge_commit": "44d05684"
-    },
-    {
-      "id": "lab-l5-launch10-og-live-extract",
-      "status": "complete",
-      "last_atom": "lab-og-weekly-prospects-breakouts-live-extract",
-      "merge_commit": "8d8b2635"
     }
   ]
 }

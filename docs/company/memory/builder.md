@@ -1,6 +1,8 @@
 # Memory — Builder
 
-2026-05-31 | launch10 pro gate | dashboard teasers + perks | ae44616e | SHIP | KEEP | — | atom 3 | evidence/2026-05-31-lab-pro-gate-launch10-teasers.md
+2026-05-31 | launch10 pro gate | dashboard teasers + perks | ae44616e | SHIP | evidence/2026-05-31-lab-pro-gate-launch10-teasers.md
+
+2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | teal LIVE sticker on Launch-10 when showingLiveData.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 44d05684 | H2H OG terracotta band; curl 67846B.
 
