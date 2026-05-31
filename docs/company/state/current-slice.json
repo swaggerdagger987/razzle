@@ -23,5 +23,7 @@
     "HIDDEN_BUREAU_SLUGS edits",
     "NORTH_STAR / DESIGN edits"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "verdict": "SHIP",
+  "content_commit": "f433e3ca"
 }
