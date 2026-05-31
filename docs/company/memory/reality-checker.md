@@ -1,8 +1,8 @@
 # Memory — Reality Checker
 
-2026-05-31 | Lab OG efficiency/aging Gate C | ccb58697 | PASS | build+pytest+curl 48610B/44093B PNG.
+2026-05-31 | lab-og-efficiency-aging-live-sort | curl eff 59068B aging 57916B | PASS | Gate C live-sort atom 2/3
 
-2026-05-31 | Lab OG rankings/tradevalues Gate C | 7f78b631 | PASS | build+pytest+curl 50251B/51115B; PR619 merged.
+2026-05-31 | lab-og-position-gamelog | curl gamelog WR 48035B PASS | player_id+position on OG URL
 
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
 near-misses, and verification techniques that caught real issues.

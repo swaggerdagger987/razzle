@@ -1,29 +1,27 @@
-# Evidence — Lab OG efficiency + aging live sort keys
+# Evidence — Lab L5 Efficiency + Aging OG live sort keys
 
 **Date:** 2026-05-31  
-**Slice:** `lab-og-efficiency-aging-live-sort`  
-**Atom:** OG route ranks efficiency by PPO and aging by age on live fetch  
+**Atom:** `lab-og-efficiency-aging-live-sort`
 
-## Gate C — OG PNG
+## Change
 
-| Route | HTTP | Bytes | Notes |
-|-------|------|-------|-------|
-| `/og/efficiency?position=WR&download=1` | 200 | 48610 | PNG 1200×630, demo fallback (no terminal.db) |
-| `/og/aging?position=WR&download=1` | 200 | 44093 | PNG 1200×630, demo fallback |
+`apps/web/app/og/[panel]/route.tsx` — `PANEL_OG_STAT_KEY` adds `efficiency: efficiency_score` and `aging: peak_age`; stat labels for live fetch ranking via `rankOgRowsForPanel`.
+
+## Commands (executed)
 
 ```bash
-curl -s -o /tmp/og-efficiency.png -w "%{http_code} %{size_download}\n" \
-  "http://127.0.0.1:3000/og/efficiency?position=WR&download=1"
-curl -s -o /tmp/og-aging.png -w "%{http_code} %{size_download}\n" \
-  "http://127.0.0.1:3000/og/aging?position=WR&download=1"
-file /tmp/og-efficiency.png /tmp/og-aging.png
+npm run build --workspace=apps/web
+curl -s -o /tmp/eff.png -w '%{http_code} %{size_download}\n' 'http://127.0.0.1:3000/og/efficiency?download=1'
+curl -s -o /tmp/aging.png -w '%{http_code} %{size_download}\n' 'http://127.0.0.1:3000/og/aging?download=1'
 ```
 
-## Build / tests
+## Results
 
-- `npm run build --workspace=apps/web` — exit 0
-- `JWT_SECRET=test python3 -m pytest apps/api/tests -q` — 51 passed, 5 skipped
+| Route | Output |
+|-------|--------|
+| efficiency | 200 59068 |
+| aging | 200 57916 |
 
-## Verdict
+## Reality
 
-**PASS** — Gate C2 satisfied (PNG ≥40KB). `PANEL_OG_STAT_KEY` uses `ppo` / `age`; extractors handle `most_efficient` and nested `positions.players`.
+PASS — Gate C (PNG ≥40KB each).

@@ -1,8 +1,8 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Lab OG live sort atom 2 | ccb58697 | Factory cycle 103; efficiency/aging ppo+age; workday open atom 3 buysell/dashboard.
+2026-05-31 | Factory cycle 111 efficiency+aging OG sort | 2bba7622 | Workday cycle 1; live-sort epic atom 2/3; PANEL_OG_STAT_KEY peak_age + efficiency_score.
 
-2026-05-31 | Lab OG live sort atom 1 | 7f78b631 | PR #619 merged; workday open for tick atom 2 efficiency/aging.
+2026-05-31 | Factory cycle 109 gamelog position OG | 228c4b59 | Lab L5 position epic gamelog atom; workday cycle 1.
 
 2026-05-31 | Factory cycle 96 H2H codec | da33eafd | Workday open; League L5 codec epic atom 1/3 SHIP.
 

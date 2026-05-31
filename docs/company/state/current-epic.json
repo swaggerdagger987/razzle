@@ -15,7 +15,7 @@
       "id": "lab-og-efficiency-aging-live-sort",
       "title": "Efficiency + Aging OG rank by efficiency_score / peak_age on live fetch",
       "status": "done",
-      "merge_commit": "ccb58697"
+      "merge_commit": "2bba7622"
     },
     {
       "id": "lab-og-buysell-dashboard-live-sort",
