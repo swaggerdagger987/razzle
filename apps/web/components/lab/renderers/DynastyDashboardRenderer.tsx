@@ -115,25 +115,39 @@ export function DynastyDashboardRenderer({ panel }: Props) {
 
   const topRiser = q.data?.risers?.[0];
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const top5 = q.data?.top5 ?? [];
     const movers = [...(q.data?.risers ?? []), ...(q.data?.fallers ?? [])];
-    if (movers.length > 0) {
-      return movers.slice(0, 6).map((p) => ({
+    const valuePicks = q.data?.value_picks ?? [];
+    const seen = new Set<string>();
+    const rows: OgSnapshotRow[] = [];
+
+    const push = (p: DashboardPlayer, stat: number, statLabel: string) => {
+      if (!p.full_name || seen.has(p.player_id)) return;
+      seen.add(p.player_id);
+      rows.push({
         name: p.full_name,
         position: p.position,
         team: p.team,
-        stat: p.rank_diff ?? 0,
-        statLabel: "Chg",
-      }));
+        stat,
+        statLabel,
+      });
+    };
+
+    for (const p of top5) {
+      push(p, p.trade_value ?? 0, "Value");
+      if (rows.length >= 6) break;
     }
-    return (q.data?.top5 ?? []).slice(0, 6).map((p) => ({
-      name: p.full_name,
-      position: p.position,
-      team: p.team,
-      stat: p.ppg ?? 0,
-      statLabel: "PPG",
-    }));
-  }, [q.data?.risers, q.data?.fallers, q.data?.top5]);
-  const hasOgExportRows = ogSnapshotRows.length > 0;
+    for (const p of movers) {
+      push(p, p.rank_diff ?? 0, "Chg");
+      if (rows.length >= 6) break;
+    }
+    for (const p of valuePicks) {
+      push(p, p.trade_value ?? 0, "Value");
+      if (rows.length >= 6) break;
+    }
+
+    return rows.slice(0, 6);
+  }, [q.data?.top5, q.data?.risers, q.data?.fallers, q.data?.value_picks]);
   const maxDropoff = useMemo(() => {
     const rows = q.data?.position_scarcity ?? {};
     return Math.max(0, ...Object.values(rows).map((s) => s.dropoff ?? 0));
@@ -327,22 +341,20 @@ export function DynastyDashboardRenderer({ panel }: Props) {
         </section>
       )}
 
-      {hasOgExportRows && (
+      {topRiser && (
         <footer className="mt-6 flex flex-wrap items-center gap-4 border-t border-ink pt-4">
-          {topRiser && (
-            <Link
-              href={
-                toRoom({
-                  agentId: "razzle",
-                  panelSlug: "dashboard",
-                  question: `${topRiser.full_name} is a rising stock (+${topRiser.rank_diff} rank diff) at ${topRiser.trade_value} dynasty value — buy window or noise?`,
-                }) as Route
-              }
-              className="text-sm text-orange underline"
-            >
-              Ask Razzle about {topRiser.full_name} (rising stock) →
-            </Link>
-          )}
+          <Link
+            href={
+              toRoom({
+                agentId: "razzle",
+                panelSlug: "dashboard",
+                question: `${topRiser.full_name} is a rising stock (+${topRiser.rank_diff} rank diff) at ${topRiser.trade_value} dynasty value — buy window or noise?`,
+              }) as Route
+            }
+            className="text-sm text-orange underline"
+          >
+            Ask Razzle about {topRiser.full_name} (rising stock) →
+          </Link>
           <LabOgExportLink
             slug="dashboard"
             downloadName="razzle-dashboard.png"
