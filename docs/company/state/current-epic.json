@@ -14,8 +14,8 @@
     {
       "id": "lab-og-live-sticker-gamelog-efficiency",
       "title": "gamelog/efficiency OG LIVE sticker + blurb parity",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "72af0cb6"
     },
     {
       "id": "lab-og-live-sticker-aging-buysell",
@@ -24,9 +24,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-live-sticker-gamelog-efficiency",
+  "next_atom_id": "lab-og-live-sticker-aging-buysell",
   "created_at": "2026-05-31T08:34:07Z",
-  "updated_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T12:05:00Z",
   "completed_epics": [
     {
       "id": "lab-l2-sidebar-groups-by-agent",
