@@ -1,32 +1,28 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab formula panels re-sort in-product but OG share cards still rank by raw PPO/PPG — Reddit screenshots disagree with the composite the user picked.",
-  "epic_title": "Lab L5 — formula-sorted OG live parity",
+  "epic_status": "active",
+  "big_problem": "Launch-10 Lab panels with FormulaPanelBar still export OG cards sorted by native stats (PPG, RPS, week tape) — screenshots miss the composite users picked.",
+  "epic_title": "Lab L5 — remaining launch-10 formula OG parity",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-breakouts-rankings-formula-live",
-      "title": "Breakouts + Rankings OG — formula_score before native stat",
-      "status": "done",
-      "merge_commit": "ceadf0402"
+      "id": "lab-og-weekly-prospects-formula-live",
+      "title": "Weekly + Prospects OG — formula_score before PPG/RPS",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-buysell-formula-live",
-      "title": "Buy/Sell OG — formula_score + Buy/Sell lanes",
-      "status": "done",
-      "merge_commit": "fb4483341"
-    },
-    {
-      "id": "lab-og-efficiency-aging-formula-live",
-      "title": "Efficiency + Aging OG — formula_score before PPO/PPG",
-      "status": "done",
-      "merge_commit": "8db7cdf24"
+      "id": "lab-og-gamelog-formula-live",
+      "title": "Gamelog OG — formula_score before week-tape default stat",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T11:15:00Z",
-  "updated_at": "2026-05-31T11:15:00Z",
-  "completed_epics": ["league-trade-finder-gtm-export-2026-05-31"]
+  "next_atom_id": "lab-og-weekly-prospects-formula-live",
+  "created_at": "2026-05-31T11:22:00Z",
+  "updated_at": "2026-05-31T11:22:00Z",
+  "completed_epics": [
+    "league-trade-finder-gtm-export-2026-05-31",
+    "lab-l5-formula-sorted-og-live-parity-2026-05-31"
+  ]
 }
