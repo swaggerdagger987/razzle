@@ -1,19 +1,16 @@
 # Memory — Builder
 
+2026-05-31 | lab-og-live-sticker-breakouts-dashboard | 96d43d1b | keep | pytest EXPECTED breakouts/dashboard; curl 67621B/67113B.
+
 2026-05-31 | lab-l4-pro-gate-error-surface | 5721ee33 | ProGateFromPanelError on BreakoutsRenderer; pytest 7.
+
 2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | launch10LiveStickerLabel 3 slugs.
 
-2026-05-31 | lab-pro-gate-perks-copy | 73fdbf9c | keep | proUpgradePerkLines from getPanel + BUREAU_7 slugs.
+2026-05-31 | lab-og-live-sticker-tradevalues-aging | a74c2afe | keep | pytest EXPECTED tradevalues/aging; curl 68974B/65088B.
 
-2026-05-31 | lab-pro-gate-loading-copy | 7236be3e | PanelAgentLoading wired into ProUpgradeGate.
+2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | keep | launch10PerkLabels + bureau7PerkLabels in ProUpgradeGate; pytest 6.
 
-2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | keep | weekly/prospects/dashboard teasers; test_panel_upgrade_teaser.
-
-2026-05-31 | lab-sidebar-staff-picks-by-agent | 4e8b0e8e | keep | staffByAgent agent headers.
-
-2026-05-31 | lab-og-live-demo-fallback-copy | 9cd6a5cf | terracotta SAMPLE sticker + blurb on Launch-10 demo path.
-
-2026-05-31 | lab-og-live-sticker-prospects-weekly | 5bb77346 | weekly OG defaults position=WR for panel API live rows.
+2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | partial panel-native labels on base before full switch epic.
 
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | teal LIVE sticker on Launch-10 when showingLiveData.
 
