@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L4 |
 | Next slice | lab-l4-pro-gate-error-remaining |
-| Last commit | `da33eafd` |
+| Last commit | `b105671d` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
