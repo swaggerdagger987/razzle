@@ -2,6 +2,7 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+<<<<<<< HEAD
 ### 2026-05-31 — Lab trade values export (cycle 95)
 - **Angle:** Formula-ranked trade value card — rank + composite name on each row matches what Bones users sort before screenshotting.
 - **Trust:** T5/T6 — top 6 from visible sort; dynasty rank when no formula.
@@ -15,6 +16,11 @@
 - **Trust:** T5/T6 — snapshot encodes what was on screen; demo fallback unchanged when API empty.
 
 ### 2026-05-31 — Lab launch-10 OG (cycle 77)
+=======
+### 2026-05-31 — Bureau share-export (cycle 92)
+- Build archetype cards travel well on r/DynastyFF trade threads — construction intel is screenshot bait.
+
+>>>>>>> 246052ec (standup: 2026-05-31 — SHIP Build Profiles share OG)
 - **Angle:** Screenshot cards without "sample preview" when API rows load — launch-10 exports read as live research, not demo shells.
 - **Trust:** T1 honest labeling; sample suffix only on demo fallback.
 

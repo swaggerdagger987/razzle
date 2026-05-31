@@ -50,6 +50,13 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory cycle 79 Power Rankings OG | 90bf2dd5 | keep | unhide epic atom 2/4; curl 68555B
 2026-05-31 | Factory cycle 1 Trade Network share | 1616484c | keep | workday open; behavioral share epic complete; PR #278
 2026-05-31 | Factory cycle 79 Power Rankings OG | 90bf2dd5 | keep | unhide epic atom 2/4; curl 59807B
+<<<<<<< HEAD
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | Factory open cycle 1 Build Profiles tab | da33eafd | keep | new unhide epic; roster-depth dedup on base; atom 1/3 SHIP
 2026-05-31 | Factory open cycle 1 Schedule tab | da33eafd | keep | dedup waiver a2536dcc; HIDDEN empty; epic complete
+=======
+2026-05-31 | Factory open cycle 1 Build Profiles tab | 2ee04975 | keep | League unhide epic atom 1/3 on base
+2026-05-31 | Factory cycle 1 prospects OG RPS+position | 17a40c65 | keep | filtered-panel epic atom 1/3; PR #408
+2026-05-31 | Factory cycle 1 efficiency OG filter | b2d304e7 | keep | filtered-panel epic atom 2/3; PR #408 merged
+2026-05-31 | Factory open cycle 1 Build Profiles share OG | da33eafd | keep | League share-export epic atom 1/3; factory reopen
+>>>>>>> 246052ec (standup: 2026-05-31 — SHIP Build Profiles share OG)
