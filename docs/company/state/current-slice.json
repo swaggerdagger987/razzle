@@ -1,26 +1,34 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-h2h-og-live-sample-stickers",
-  "big_problem": "Bureau H2H rivalry OG cards don't scream LIVE vs SAMPLE on Reddit.",
-  "epic": "League L5 — Bureau H2H OG screenshot parity",
-  "slice_title": "H2H OG — teal LIVE + terracotta SAMPLE stickers",
-  "parity_ref": "PARITY Explore L5 — Bureau H2H export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
-  "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/web/app/og/head-to-head/route.tsx"],
-  "max_files": 1,
-  "max_lines": 85,
-  "acceptance_commands": [
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-h2h-demo.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/head-to-head?download=1'"
+  "big_problem": "Lab Pro gates still feel like paywall errors — generic blur rows and no path back to the free screener break the conversion funnel.",
+  "epic": "Lab L4 — Pro gates feel like upgrade, not error",
+  "slice_title": "Pro gate perks list matches PARITY launch-10 + Bureau-7 names",
+  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
+  "depth_ref": "Lab L4",
+  "acceptance_ref": "ACCEPTANCE Gate 2 — Pro gate shows upgrade message, not blank",
+  "trust_pillars": ["T2", "T6"],
+  "allowed_paths": [
+    "apps/web/lib/bureau-features.ts",
+    "apps/web/lib/panel-upgrade-teaser.ts",
+    "apps/web/components/lab/ProUpgradeGate.tsx",
+    "apps/api/tests/test_panel_upgrade_teaser.py"
   ],
-  "out_of_scope": [],
+  "max_files": 4,
+  "max_lines": 150,
+  "acceptance_commands": [
+    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q",
+    "npm run build --workspace=apps/web"
+  ],
+  "out_of_scope": [
+    "OG routes",
+    "pricing page",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
+    "verdict": "SHIP"
   }
 }
