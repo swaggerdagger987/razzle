@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Bureau Build Profiles tab (cycle 80)
+- **Angle:** League-mates debate roster construction (Zero RB vs Hero RB) before trade offers.
+- **Screenshot hook:** Atlas grid with rotated archetype stickers + league-wide archetype counts.
+
 ### 2026-05-31 — Bureau H2H (cycle 73)
 - **Angle:** League rivalry cards with copyable URLs — managers share H2H dossiers in league group chats.
 - **Screenshot hook:** Atlas rivalry card with you/them records + position depth bars.
