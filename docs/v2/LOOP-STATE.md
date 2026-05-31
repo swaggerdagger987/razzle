@@ -1,8 +1,8 @@
-cycle: 154
+cycle: 155
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: bureau-h2h-og-exported-pytest
+next_slice: bureau-h2h-og-gate-c-snapshot
 last_keep_cycle: 154
 last_commit: 5b60ea23d
 league_l5_h2h_gtm_epic: active

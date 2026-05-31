@@ -1,3 +1,4 @@
+2026-05-31 | bureau-h2h-og-gate-c-snapshot | f6e0985f3 | SHIP | League L5 H2H GTM epic closed — Gate C evidence on snapshot path.
 2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | H2H snapshot EXPORTED trust — mirrors Trade Finder.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | Position hallway epic atom 2/3.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Weekly OG toLab matches WR heatmap default (T6).
