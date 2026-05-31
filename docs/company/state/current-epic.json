@@ -1,39 +1,45 @@
 {
-  "epic_status": "active",
-  "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
-  "epic_title": "Explore L5 — OG screener agent margin notes",
-  "parity_ref": "Explore L5 — agent margin notes on rows",
-  "depth_ref": "Explore L5",
+  "epic_status": "complete",
+  "big_problem": "Lab OG cards mislabel stats when users sort by custom formulas — export shows rank_diff while the panel shows formula_score.",
+  "epic_title": "Lab L5 — Launch-10 OG formula_score stat parity",
+  "parity_ref": "Launch 10 — Lab panel OG live data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "explore-og-margin-note-lead",
-      "title": "Lead-row Hawkeye/Dolphin margin note on Explore OG card",
+      "id": "lab-efficiency-formula-og-live",
+      "title": "Efficiency OG prefers formula_score over PPO when present",
       "status": "done",
-      "merge_commit": "0fc4932b7"
+      "merge_commit": "ad5dfe579"
     },
     {
-      "id": "explore-og-margin-note-rows",
-      "title": "Margin notes on top-3 OG screener rows",
-      "status": "in_progress",
-      "merge_commit": null
+      "id": "lab-aging-formula-og-live",
+      "title": "Aging curves OG prefers formula_score over PPG when present",
+      "status": "done",
+      "merge_commit": "ad5dfe579"
     },
     {
-      "id": "explore-og-margin-note-sticker",
-      "title": "LIVE staff sticker when OG rows carry margin notes",
-      "status": "pending",
-      "merge_commit": null
+      "id": "lab-tradevalues-formula-og-snapshot",
+      "title": "Trade values panel snapshot encodes formula rank on OG export",
+      "status": "done",
+      "merge_commit": "ad5dfe579"
     },
     {
-      "id": "explore-og-margin-note-college",
-      "title": "College universe margin notes on OG export",
-      "status": "pending",
-      "merge_commit": null
+      "id": "lab-dashboard-formula-og-live",
+      "title": "Dashboard OG live extract prefers formula_score on risers/top5",
+      "status": "done",
+      "merge_commit": "7aff18134"
     }
   ],
-  "next_atom_id": "explore-og-margin-note-rows",
-  "created_at": "2026-05-31T11:22:30Z",
-  "updated_at": "2026-05-31T18:00:00Z",
+  "next_atom_id": null,
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T12:10:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l5-formula-og-stat-parity",
+      "status": "complete",
+      "last_atom": "lab-dashboard-formula-og-live",
+      "merge_commit": "7aff18134"
+    },
     {
       "id": "lab-l5-og-watermark-display-names",
       "status": "complete",
