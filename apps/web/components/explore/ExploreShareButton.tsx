@@ -4,8 +4,10 @@ import { useCallback, useState } from "react";
 
 interface Props {
   universe: string;
-  /** API sort key — matches screener fetch (formula_* maps to universe default). */
+  /** URL sort key — preserves formula_* in share/OG links. */
   sort: string;
+  /** Screener fetch key when it differs from URL sort (formula sorts). */
+  apiSort: string;
   dir: string;
   q: string;
   pos: string[];
@@ -13,7 +15,16 @@ interface Props {
   team?: string[];
 }
 
-export function ExploreShareButton({ universe, sort, dir, q, pos, season = 0, team = [] }: Props) {
+export function ExploreShareButton({
+  universe,
+  sort,
+  apiSort,
+  dir,
+  q,
+  pos,
+  season = 0,
+  team = [],
+}: Props) {
   const [copied, setCopied] = useState(false);
 
   const previewParams = new URLSearchParams({ universe, sort, dir });
@@ -21,6 +32,7 @@ export function ExploreShareButton({ universe, sort, dir, q, pos, season = 0, te
   if (pos.length) previewParams.set("pos", pos.join(","));
   if (season > 0) previewParams.set("season", String(season));
   if (team.length) previewParams.set("team", team.join(","));
+  if (apiSort && apiSort !== sort) previewParams.set("api_sort", apiSort);
 
   const ogParams = new URLSearchParams(previewParams);
   ogParams.set("download", "1");

@@ -127,9 +127,13 @@ async function fetchTopPlayers(params: {
   }
 }
 
+function formulaSortLabel(sort: string): string {
+  return sort.replace("formula_", "").replace(/_/g, " ");
+}
+
 function statLabel(universe: string, sort: string): string {
   if (sort.startsWith("formula_")) {
-    return sort.replace("formula_", "").replace(/_/g, " ");
+    return formulaSortLabel(sort);
   }
   if (universe === "college") return sort === "total_yards" ? "Yards" : sort.replace(/_/g, " ");
   if (sort === "fantasy_points_ppr") return "FPTS";
@@ -143,13 +147,36 @@ function effectiveSortKey(universe: string, sort: string): string {
   return sort;
 }
 
-function buildSubtitle(universe: string, sort: string, pos: string, q: string): string {
-  const sortKey = effectiveSortKey(universe, sort);
+function resolveApiSort(universe: string, sort: string, apiSortParam: string): string {
+  const raw = apiSortParam || sort;
+  if (raw.startsWith("formula_")) {
+    return effectiveSortKey(universe, raw);
+  }
+  return raw;
+}
+
+function buildSubtitle(
+  universe: string,
+  sort: string,
+  apiSort: string,
+  pos: string,
+  q: string,
+): string {
+  const formulaSort = sort.startsWith("formula_");
+  const apiDiffers = formulaSort && apiSort !== sort;
+  const displaySortKey = apiDiffers ? apiSort : sort;
+  const sortKey = effectiveSortKey(universe, displaySortKey);
   const parts: string[] = [];
+  if (formulaSort) {
+    parts.push(`sorted by ${formulaSortLabel(sort)}`);
+    if (apiDiffers) {
+      parts.push(`rows ranked by ${statLabel(universe, sortKey)}`);
+    }
+  }
   if (pos) parts.push(`${pos} only`);
   const isDefaultSort =
     universe === "college" ? sortKey === "total_yards" : sortKey === "fantasy_points_ppr";
-  if (!isDefaultSort || pos || q) {
+  if (!formulaSort && (!isDefaultSort || pos || q)) {
     parts.push(statLabel(universe, sortKey));
   }
   if (q) parts.push(`"${q}"`);
@@ -165,6 +192,11 @@ export async function GET(req: Request) {
   const forceDemo = url.searchParams.get("force_demo") === "1";
   const universe = url.searchParams.get("universe") ?? "nfl";
   const sort = url.searchParams.get("sort") ?? "fantasy_points_ppr";
+  const apiSort = resolveApiSort(
+    universe,
+    sort,
+    url.searchParams.get("api_sort") ?? "",
+  );
   const dir = url.searchParams.get("dir") ?? "desc";
   const q = url.searchParams.get("q") ?? "";
   const pos = url.searchParams.get("pos") ?? "";
@@ -173,13 +205,16 @@ export async function GET(req: Request) {
   const teams = parseTeams(team);
 
   const title = universe === "college" ? "College Screener" : "Dynasty Screener";
-  const subtitle = buildSubtitle(universe, sort, pos, q);
-  const colHeader = statLabel(universe, effectiveSortKey(universe, sort));
+  const formulaSort = sort.startsWith("formula_");
+  const subtitle = buildSubtitle(universe, sort, apiSort, pos, q);
+  const colHeader = formulaSort
+    ? formulaSortLabel(sort)
+    : statLabel(universe, effectiveSortKey(universe, sort));
   const exploreLink = buildExplorePageLink({ universe, sort, dir, q, pos, season, team });
 
   const livePlayers = forceDemo
     ? []
-    : await fetchTopPlayers({ universe, sort, dir, q, pos, season, teams });
+    : await fetchTopPlayers({ universe, sort: apiSort, dir, q, pos, season, teams });
   const isDemo = forceDemo || livePlayers.length === 0;
   const players = isDemo ? demoRowsForExplore(universe) : livePlayers;
 
@@ -207,6 +242,23 @@ export async function GET(req: Request) {
 
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
           <div style={{ fontFamily: "Luckiest Guy", fontSize: 56, display: "flex" }}>{title}</div>
+          {formulaSort ? (
+            <div
+              style={{
+                display: "flex",
+                fontSize: 16,
+                fontWeight: 700,
+                background: "#5b7fff",
+                color: "#f7efe5",
+                padding: "4px 12px",
+                border: "3px solid #2d1f14",
+                borderRadius: 6,
+                boxShadow: "3px 3px 0 #2d1f14",
+              }}
+            >
+              FORMULA SORT
+            </div>
+          ) : null}
           {isDemo ? (
             <div
               style={{

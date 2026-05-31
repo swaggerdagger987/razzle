@@ -2,22 +2,25 @@
   "date": "2026-05-31",
   "big_problem": "Explore share cards don't mirror the screener URL — college toggles and filters get lost on export, so Reddit screenshots lie about the view.",
   "epic": "Explore L5 — OG card matches screener query state",
-  "slice_title": "Explore OG — static demo rows when API empty (not pulling film)",
+  "slice_title": "Explore OG — formula sort label on card when apiSort differs",
   "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
   "depth_ref": "Explore L5",
   "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with visible rows",
-  "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/web/app/og/explore/route.tsx"],
-  "max_files": 1,
-  "max_lines": 90,
+  "trust_pillars": ["T1", "T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/explore/route.tsx",
+    "apps/web/components/explore/ExploreShareButton.tsx",
+    "apps/web/components/explore/ExplorePageClient.tsx"
+  ],
+  "max_files": 3,
+  "max_lines": 80,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/explore-og-demo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?download=1&force_demo=1&universe=nfl&sort=fantasy_points_ppr&dir=desc&pos=QB'",
-    "file /tmp/explore-og-demo.png"
+    "curl -s -o /tmp/explore-og-formula.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?download=1&force_demo=1&universe=nfl&sort=formula_dynasty_pulse&api_sort=fantasy_points_ppr&dir=desc&pos=QB'",
+    "file /tmp/explore-og-formula.png"
   ],
   "out_of_scope": [
-    "ExploreShareButton changes",
-    "formula sort label atom",
+    "Formula computation on OG edge route",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",
