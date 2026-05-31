@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | lab-og-live-sticker-prospects-weekly | da33eafd | launch10LiveStickerLabel + blurb suffix by slug.
+
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | 1-file panel route; LIVE sticker gated on showingLiveData.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 44d05684 | 1-file H2H OG; band copied from panel route; atlas link above band.
