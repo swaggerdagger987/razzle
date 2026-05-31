@@ -6,6 +6,7 @@ import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
 import type { Route } from "next";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { BureauRosterDepthShareBar } from "./BureauRosterDepthShareBar";
 
 interface Props {
   data: Record<string, unknown>;
@@ -42,6 +43,7 @@ export function BureauRosterDepth({ data, leagueId }: Props) {
   const depth = (data.depth as Record<string, PosBlock>) ?? {};
   const totalPlayers = Number(data.total_players ?? 0);
   const starters = (data.starters as string[]) ?? [];
+  const userId = String(data.user_id ?? "");
 
   const weakest = POS_ORDER.reduce(
     (min, pos) => ((depth[pos]?.count ?? 0) < (depth[min]?.count ?? 0) ? pos : min),
@@ -173,6 +175,7 @@ export function BureauRosterDepth({ data, leagueId }: Props) {
         >
           open Self-Scout →
         </Link>
+        {userId ? <BureauRosterDepthShareBar leagueId={leagueId} userId={userId} /> : null}
       </section>
     </div>
   );
