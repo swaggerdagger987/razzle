@@ -2,6 +2,9 @@
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
 
+
+2026-05-31 | league-monte-carlo-og-watermark-live | f6e0985f3 | PASS | pytest 1; curl 58174B; web build exit 0.
+
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | PASS | pytest 4; curl 58533B.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Reality Checker

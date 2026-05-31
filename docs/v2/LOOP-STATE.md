@@ -1,9 +1,8 @@
 cycle: 154
 last_board_cycle: 54
-focus_pillar: Explore
+focus_pillar: League
 focus_layer: L5
-next_slice: explore-og-margin-note-sticker
+next_slice: league-monte-carlo-og-snapshot
 last_keep_cycle: 154
-last_commit: c1a0bcaad
-explore_l5_og_margin_epic: active
-lab_l5_og_watermark_display_name_epic: complete
+last_commit: a6b49816d
+league_l5_monte_carlo_gtm_epic: active
