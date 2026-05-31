@@ -1,7 +1,7 @@
 # Memory — Builder
 
 
-2026-05-31 | lab-og-weekly-gate-c-evidence | da33eafd | SHIP | test_lab_og_weekly_gate_c.py; pytest 6; curl 63603B.
+2026-05-31 | lab-og-weekly-gate-c-evidence | e4bc2cc0c | SHIP | test_lab_og_weekly_gate_c.py; pytest 6; curl 63603B.
 
 2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | preview+copy+export on BriefingCard; OG watermark band.
 

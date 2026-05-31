@@ -1,6 +1,8 @@
 # Memory — Reality Checker
 
 
+2026-05-31 | lab-og-weekly-gate-c-evidence Gate C | e4bc2cc0c | PASS | curl weekly 63603B; pytest 6; build exit 0.
+
 2026-05-31 | room-briefing-watermark Gate C | eca00c3f0 | PASS | curl 51866B export; pytest 5; build exit 0.
 
 2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | PASS | pytest 5; curl NFL OG 65431B without universe param.

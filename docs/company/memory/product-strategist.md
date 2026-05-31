@@ -1,7 +1,7 @@
 # Memory — Product Strategist
 
 
-2026-05-31 | lab-og-weekly-gate-c-evidence | da33eafd | SHIP | Lab L5 weekly OG Gate C before prospects atom.
+2026-05-31 | lab-og-weekly-gate-c-evidence | e4bc2cc0c | SHIP | Lab L5 weekly OG Gate C before prospects atom.
 
 2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | Room GTM epic closed; briefing screenshots deep-link to Situation Room.
 

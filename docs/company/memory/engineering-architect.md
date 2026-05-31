@@ -1,7 +1,7 @@
 # Memory — Engineering Architect
 
 
-2026-05-31 | lab-og-weekly-gate-c-evidence | da33eafd | 2 files; pytest documents WEEKLY_OG_GATE_C_PARAMS.
+2026-05-31 | lab-og-weekly-gate-c-evidence | e4bc2cc0c | 2 files; pytest documents WEEKLY_OG_GATE_C_PARAMS.
 
 2026-05-31 | room-briefing-watermark | eca00c3f0 | 3 files; BriefingCard mirrors ExploreShareButton; OG band uses roomPath.
 
