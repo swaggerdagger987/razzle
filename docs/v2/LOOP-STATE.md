@@ -1,10 +1,10 @@
-cycle: 74
+cycle: 75
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: PARITY — league-power-rankings-og or roster-depth tab
-last_keep_cycle: 74
-last_commit: 20c7940a
+next_slice: PARITY — league-roster-depth-tab or build-profiles tab
+last_keep_cycle: 75
+last_commit: da33eafd
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
