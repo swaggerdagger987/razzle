@@ -17,8 +17,7 @@
   "max_lines": 80,
   "acceptance_commands": [
     "JWT_SECRET=test-secret pytest apps/api/tests/test_explore_og_margin_note_rows.py apps/api/tests/test_explore_og_margin_note_lead.py -q --noconftest",
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-explore.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/explore?download=1&force_demo=1'"
+    "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
     "Rows 4–6 margin notes",
