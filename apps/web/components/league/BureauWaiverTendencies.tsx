@@ -3,6 +3,7 @@
 import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
+import { BureauWaiverTendenciesShareBar } from "./BureauWaiverTendenciesShareBar";
 import type { Route } from "next";
 
 interface Props {
@@ -93,6 +94,8 @@ export function BureauWaiverTendencies({ data, leagueId }: Props) {
           </div>
         ))}
       </section>
+
+      <BureauWaiverTendenciesShareBar leagueId={leagueId} />
 
       <footer className="flex flex-wrap gap-4 text-sm">
         <Link href={`/league/${leagueId}/trade-finder` as Route} className="text-orange underline">
