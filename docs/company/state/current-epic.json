@@ -1,44 +1,68 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Bureau H2H rivalry exports don't signal in-panel snapshot trust \u2014 group chats can't tell exported rivalry rows from live Sleeper pulls.",
-  "epic_title": "League L5 \u2014 Bureau H2H GTM export",
-  "parity_ref": "Explore L5 \u2014 Bureau H2H export or Lab panel OG data rows",
-  "depth_ref": "League L5",
+  "epic_status": "active",
+  "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
+  "epic_title": "Explore L5 — OG screener agent margin notes",
+  "parity_ref": "Explore L5 — agent margin notes on rows",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "bureau-h2h-og-exported-sticker",
-      "title": "H2H OG EXPORTED sticker when snapshot param present",
+      "id": "explore-og-margin-note-lead",
+      "title": "Lead-row Hawkeye/Dolphin margin note on Explore OG card",
       "status": "done",
-      "merge_commit": "5b60ea23d"
+      "merge_commit": "0fc4932b7"
     },
     {
-      "id": "bureau-h2h-og-exported-pytest",
-      "title": "pytest guard for H2H snapshot EXPORTED sticker + ShareBar encode",
+      "id": "explore-og-margin-note-rows",
+      "title": "Margin notes on top-3 OG screener rows",
       "status": "done",
-      "merge_commit": "5e75875e4"
+      "merge_commit": "c1a0bcaad"
     },
     {
-      "id": "bureau-h2h-og-gate-c-snapshot",
-      "title": "Gate C curl evidence for H2H snapshot OG PNG",
-      "status": "done",
-      "merge_commit": "4907c8327"
+      "id": "explore-og-margin-note-sticker",
+      "title": "LIVE staff sticker when OG rows carry margin notes",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "explore-og-margin-note-college",
+      "title": "College universe margin notes on OG export",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T20:00:00Z",
-  "updated_at": "2026-05-31T20:30:00Z",
+  "next_atom_id": "explore-og-margin-note-sticker",
+  "created_at": "2026-05-31T11:22:30Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
     {
-      "id": "league-l5-trade-finder-gtm",
+      "id": "lab-l5-og-watermark-display-names",
       "status": "complete",
-      "last_atom": "league-trade-finder-og-room-hallway",
-      "merge_commit": "c8091030c"
+      "last_atom": "lab-og-watermark-display-name",
+      "merge_commit": "338709883"
+    },
+    {
+      "id": "lab-l5-launch10-og-demo-trust-labels",
+      "status": "complete",
+      "last_atom": "lab-og-launch10-demo-blurbs",
+      "merge_commit": "3705fdce8"
+    },
+    {
+      "id": "lab-l5-og-hallway-deep-links",
+      "status": "complete",
+      "last_atom": "lab-og-tolab-snapshot-player",
+      "merge_commit": "1a12d9c0b"
     },
     {
       "id": "league-l5-bureau-h2h-gtm",
       "status": "complete",
       "last_atom": "bureau-h2h-og-gate-c-snapshot",
       "merge_commit": "4907c8327"
+    },
+    {
+      "id": "league-l5-trade-finder-gtm",
+      "status": "complete",
+      "last_atom": "league-trade-finder-og-room-hallway",
+      "merge_commit": "c8091030c"
     }
   ]
 }

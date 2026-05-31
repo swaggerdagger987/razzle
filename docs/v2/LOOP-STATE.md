@@ -1,9 +1,10 @@
 cycle: 155
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Explore
 focus_layer: L5
-next_slice: bureau-h2h-og-gate-c-snapshot
-last_keep_cycle: 154
-last_commit: 5b60ea23d
+next_slice: explore-og-margin-note-sticker
+last_keep_cycle: 155
+last_commit: 4907c8327
+explore_l5_og_margin_epic: active
 league_l5_h2h_gtm_epic: complete
-league_l5_trade_finder_gtm_epic: complete
+lab_l5_og_watermark_display_name_epic: complete
