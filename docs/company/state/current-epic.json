@@ -14,7 +14,7 @@
     {
       "id": "league-strength-of-schedule-tab",
       "title": "Unhide Schedule tab with bespoke renderer",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],

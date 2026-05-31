@@ -1,10 +1,10 @@
-cycle: 89
+cycle: 92
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: league-strength-of-schedule-tab
-last_keep_cycle: 91
-last_commit: 920304a2
+next_slice: lab-og-live-data-rows
+last_keep_cycle: 92
+last_commit: da33eafd
 lab_l5_og_snapshot_weekly_breakouts: complete
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
@@ -33,7 +33,8 @@ league_l5_power_rankings_tab: complete
 league_l5_unhide_bureau_epic: complete
 league_l5_roster_depth_tab: complete
 league_l5_waiver_tendencies_tab: complete
-league_l5_waiver_schedule_epic: in_progress
+league_l5_strength_of_schedule_tab: complete
+league_l5_waiver_schedule_epic: complete
 league_l5_bureau_monte_carlo_share_bar: complete
 league_l5_bureau_share_row_epic: complete
 league_l5_bureau_manager_profiles_copy_link: complete
