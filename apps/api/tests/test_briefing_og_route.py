@@ -14,6 +14,9 @@ def test_briefing_og_route_exists():
     assert "export async function GET" in text
     assert "DEMO" in text
     assert "ImageResponse" in text
+    assert "LIVE · your briefing" in text
+    assert "SAMPLE · trade readout" in text
+    assert "razzle.lol${roomPath}" in text
 
 
 def test_briefing_card_export_link():

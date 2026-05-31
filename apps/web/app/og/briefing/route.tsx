@@ -100,8 +100,24 @@ export async function GET(req: Request) {
         <div style={{ fontFamily: "Luckiest Guy", fontSize: 52, lineHeight: 1.1, marginBottom: 4 }}>
           Situation Room
         </div>
-        <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 16 }}>
-          {isLive ? "briefing export · live card" : "briefing export · sample preview"}
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+          <span
+            style={{
+              display: "flex",
+              fontSize: 16,
+              fontWeight: 700,
+              color: "#f7efe5",
+              background: isLive ? "#2ec4b6" : "#d97757",
+              padding: "4px 12px",
+              border: "2px solid #2d1f14",
+              borderRadius: 6,
+            }}
+          >
+            {isLive ? "LIVE · your briefing" : "SAMPLE · trade readout"}
+          </span>
+          <span style={{ display: "flex", fontSize: 20, color: "#5c4a3d" }}>
+            {isLive ? "briefing export · live card" : "briefing export · sample preview"}
+          </span>
         </div>
 
         <div
@@ -173,7 +189,7 @@ export async function GET(req: Request) {
             fontSize: 20,
           }}
         >
-          <div style={{ display: "flex", fontWeight: 700 }}>razzle.lol/room</div>
+          <div style={{ display: "flex", fontWeight: 700 }}>{`razzle.lol${roomPath}`}</div>
           <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
             {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
           </div>
