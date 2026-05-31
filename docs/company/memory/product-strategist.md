@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | Bureau OG atom 2 | league-monte-carlo-og-snapshot | League L5 | SHIP | keep | — | — | cycle 95
+
 Append-only log of product hypotheses, slice picks, KILL verdicts, and outcomes.
 
 Format per entry:

@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { decodeBureauMonteCarloOgSnapshot } from "@/lib/bureau-monte-carlo-og-snapshot";
 
 export const runtime = "edge";
 
@@ -44,11 +45,15 @@ export async function GET(req: Request) {
   const isDownload = url.searchParams.get("download") === "1";
   const league = url.searchParams.get("league") ?? "";
   const user = url.searchParams.get("user") ?? "";
+  const snapshotParam = url.searchParams.get("snapshot") ?? "";
+  const snapshot = snapshotParam ? decodeBureauMonteCarloOgSnapshot(snapshotParam) : null;
 
   const octo = AGENT_BY_ID.octo;
-  const live = await fetchMonteCarlo(league, user);
-  const isDemo = !live?.length;
-  const odds = isDemo ? DEMO_ODDS : live;
+  const fromSnapshot = snapshot?.rows?.length ? snapshot.rows : null;
+  const live = fromSnapshot?.length ? null : await fetchMonteCarlo(league, user);
+  const isDemo = !fromSnapshot?.length && !live?.length;
+  const odds = (fromSnapshot ?? (isDemo ? DEMO_ODDS : live!)).slice(0, 3);
+  const fromPanel = Boolean(fromSnapshot?.length);
 
   return new ImageResponse(
     (
@@ -94,7 +99,9 @@ export async function GET(req: Request) {
           Monte Carlo
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 20 }}>
-          {`playoff + title odds from roster sims${isDemo ? " · sample preview" : ""}`}
+          {`playoff + title odds from roster sims${
+            fromPanel ? " · from your sim board" : isDemo ? " · sample preview" : ""
+          }`}
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12, flex: 1 }}>

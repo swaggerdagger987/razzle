@@ -1,9 +1,9 @@
-cycle: 94
+cycle: 95
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: league-monte-carlo-og-snapshot
-last_keep_cycle: 94
-last_commit: 26a22f69
+next_slice: league-trade-network-og-snapshot
+last_keep_cycle: 95
+last_commit: da33eafd
 league_l5_bureau_og_snapshot_epic: active
-league_l5_power_rankings_og_snapshot: shipped
+league_l5_monte_carlo_og_snapshot: shipped
