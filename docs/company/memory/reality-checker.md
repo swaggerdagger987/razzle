@@ -38,4 +38,4 @@ explicit checks in the verification routine.
 2026-05-31 | Trade Network share Gate C | 1616484c | PASS | curl trade-network 68090B PNG | keep | evidence/2026-05-31-bureau-trade-network-share-bar.md
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles tab | da33eafd | PASS | build exit 0; pytest 51; slug unhidden | keep | docs/v2/evidence/2026-05-31-league-build-profiles-tab.md
-2026-05-31 | breakouts OG RBS-ranked | da33eafd | PASS | curl breakouts 61718B snapshot | keep | evidence/2026-05-31-lab-og-breakouts-score-ranked.md
+2026-05-31 | breakouts OG RBS-ranked | 596643fb | PASS | curl breakouts 61718B snapshot | keep | evidence/2026-05-31-lab-og-breakouts-score-ranked.md
