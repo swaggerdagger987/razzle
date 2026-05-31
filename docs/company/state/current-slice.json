@@ -1,29 +1,36 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG gamelog exports fail before a player is picked — empty state had no sample card for Reddit screenshots.",
-  "epic": "Lab L5 — OG live fetch + sticker parity",
-  "slice_title": "Gamelog OG — default player_id when export omits query",
-  "atom_id": "lab-og-gamelog-player-default",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "big_problem": "Launch-10 OG Reddit screenshots still read generic — panel-native LIVE labels missing on half the Staff Picks export set.",
+  "epic": "Lab L5 — Launch-10 OG panel-native LIVE labels",
+  "slice_title": "gamelog/efficiency OG LIVE sticker + blurb parity; blank player_id trim",
+  "atom_id": "lab-og-live-sticker-gamelog-efficiency",
+  "parity_ref": "PARITY Lab L5 — OG card per panel",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
-  "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/web/components/lab/renderers/GamelogRenderer.tsx"],
-  "max_files": 1,
-  "max_lines": 40,
+  "acceptance_ref": "FACTORY-DOD Gate C — gamelog + efficiency OG PNG ≥40KB",
+  "trust_pillars": ["T1", "T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/api/tests/test_lab_og_live_sticker_gamelog_efficiency.py"
+  ],
+  "max_files": 2,
+  "max_lines": 30,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-gamelog.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1'"
+    "python3 -m pytest apps/api/tests/test_lab_og_live_sticker_gamelog_efficiency.py -q --noconftest",
+    "curl -s -o /tmp/og-gamelog.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1&player_id='",
+    "curl -s -o /tmp/og-efficiency.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/efficiency?download=1&force_demo=1'",
+    "file /tmp/og-gamelog.png /tmp/og-efficiency.png"
   ],
-  "out_of_scope": ["og route changes", "NORTH_STAR/DESIGN/DECISIONS"],
+  "out_of_scope": [
+    "aging/buysell panels",
+    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "new npm deps"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  },
-  "content_commit": "e37cd230",
-  "reality": "PASS",
-  "merge": "pending"
+  }
 }
