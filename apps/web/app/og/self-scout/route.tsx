@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { toLeague } from "@razzle/hallway";
 import { decodeBureauSelfScoutOgSnapshot } from "@/lib/bureau-self-scout-og-snapshot";
 
 export const runtime = "edge";
@@ -63,9 +64,18 @@ function depthScore(block: PosBlock): number {
   return Math.min(100, Math.round(elite * 25 + count * 12 + avg / 10));
 }
 
-async function fetchSelfScout(leagueId: string, userId: string): Promise<SelfScoutData | null> {
-  const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
+/** Edge OG must hit same-origin `/api/*` so Next rewrites reach FastAPI (dev/preview/CI). */
+function resolveApiOrigin(req: Request): string {
+  return new URL(req.url).origin;
+}
+
+async function fetchSelfScout(
+  req: Request,
+  leagueId: string,
+  userId: string,
+): Promise<SelfScoutData | null> {
   if (!leagueId || !userId) return null;
+  const apiOrigin = resolveApiOrigin(req);
 
   try {
     const res = await fetch(`${apiOrigin}/api/bureau/self-scout`, {
@@ -91,9 +101,12 @@ export async function GET(req: Request) {
   const snapshot = snapshotParam ? decodeBureauSelfScoutOgSnapshot(snapshotParam) : null;
 
   const hawkeye = AGENT_BY_ID.hawkeye;
-  const live = snapshot?.rows?.length ? null : await fetchSelfScout(league, user);
+  const isSnapshot = Boolean(snapshot?.rows?.length);
+  const live = isSnapshot ? null : await fetchSelfScout(req, league, user);
   const fromSnapshot = snapshot?.rows?.length ? snapshot : null;
-  const isDemo = !fromSnapshot?.rows?.length && (!live?.depth || Object.keys(live.depth).length === 0);
+  const isLive = !isSnapshot && Boolean(live?.depth && Object.keys(live.depth).length > 0);
+  const isDemo = !isSnapshot && !isLive;
+  const leagueDeepLink = league ? toLeague(league, "self-scout") : "/league/self-scout";
   const depth = isDemo ? DEMO_DEPTH : fromSnapshot ? null : live!.depth!;
   const teamName = fromSnapshot?.team ?? (isDemo ? DEMO_META.team : live!.team?.name ?? "Your Team");
   const record = fromSnapshot?.record ?? (isDemo ? DEMO_META.record : live!.team?.record ?? "");
@@ -103,8 +116,6 @@ export async function GET(req: Request) {
     fromSnapshot?.archetype ?? (isDemo ? DEMO_META.archetype : live!.build_profile?.archetype ?? "");
   const rank = fromSnapshot?.rank ?? (isDemo ? DEMO_META.rank : live!.power_rank?.rank ?? 0);
   const total = fromSnapshot?.total ?? (isDemo ? DEMO_META.total : live!.power_rank?.total ?? 0);
-  const fromPanel = Boolean(fromSnapshot?.rows?.length);
-
   const rows = fromSnapshot?.rows?.length
     ? fromSnapshot.rows.map((row) => ({
         pos: row.pos,
@@ -179,8 +190,74 @@ export async function GET(req: Request) {
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 8 }}>
           {`${teamName} · ${record} · #${rank} of ${total}`}
-          {fromPanel ? " · from your scout" : isDemo ? " · sample preview" : ""}
+          {isSnapshot ? " · exported from panel" : isDemo ? " · sample preview" : ""}
         </div>
+
+        {isSnapshot ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#8b5cf6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-1.5deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            EXPORTED · panel scout rows
+          </div>
+        ) : null}
+
+        {isLive ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            LIVE · Sleeper depth grades
+          </div>
+        ) : null}
+
+        {isDemo ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(1.5deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            SAMPLE · demo depth preview
+          </div>
+        ) : null}
 
         {archetype ? (
           <div
@@ -259,24 +336,26 @@ export async function GET(req: Request) {
           ))}
         </div>
 
+        {/* Always-on watermark band — matches Monte Carlo + Trade Finder OG (T6 screenshot gravity) */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-end",
-            fontSize: 18,
-            color: "#5c4a3d",
-            marginTop: 10,
+            alignItems: "center",
+            marginTop: 16,
+            padding: "10px 18px",
+            background: "#d97757",
+            color: "#f7efe5",
+            border: "3px solid #2d1f14",
+            borderRadius: 8,
+            boxShadow: "4px 4px 0 #2d1f14",
+            fontSize: 20,
           }}
         >
-          <div style={{ display: "flex" }}>
-            {`razzle.lol/league${league ? `/${league}` : ""}${leagueName ? ` · ${leagueName}` : ""}${season ? ` ${season}` : ""}`}
+          <div style={{ display: "flex", fontWeight: 700 }}>{`razzle.lol${leagueDeepLink}`}</div>
+          <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
+            {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
           </div>
-          {isDownload ? (
-            <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
-              made with 🐯 razzle.lol
-            </div>
-          ) : null}
         </div>
       </div>
     ),
