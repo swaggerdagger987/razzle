@@ -1,3 +1,4 @@
+2026-05-31 | bureau-waiver-og-gate-c-pytest | f6e0985f3 | SHIP | WAIVER_OG_GATE_C_PARAMS + demo/share/gate pytest guards.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WEEKLY_SAMPLE_OG_ROWS + test_lab_og_export_link guard.
 2026-05-31 | bureau-sos-og-watermark-band | ee6b78ea6 | SHIP | SOS route band + test_bureau_sos_og_watermark.
 

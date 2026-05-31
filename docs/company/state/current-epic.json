@@ -20,14 +20,21 @@
     {
       "id": "bureau-waiver-og-gate-c-pytest",
       "title": "Waiver OG Gate C pytest + curl guard",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "f6e0985f3"
     }
   ],
-  "next_atom_id": "bureau-waiver-og-gate-c-pytest",
+  "next_atom_id": null,
+  "epic_status": "complete",
   "created_at": "2026-05-31T12:00:00Z",
   "updated_at": "2026-05-31T12:15:00Z",
   "completed_epics": [
+    {
+      "id": "league-l5-bureau-og-watermark-parity",
+      "status": "complete",
+      "last_atom": "bureau-waiver-og-gate-c-pytest",
+      "merge_commit": "f6e0985f3"
+    },
     {
       "id": "lab-l5-og-watermark-display-names",
       "status": "complete",
