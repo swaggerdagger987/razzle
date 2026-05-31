@@ -1,8 +1,8 @@
-cycle: 156
+cycle: 154
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: PARITY next RED/YELLOW row
-last_keep_cycle: 156
-last_commit: 338709883
-lab_l5_og_watermark_display_name_epic: complete
+next_slice: lab-og-tolab-rankings-position or Bureau per PARITY
+last_keep_cycle: 154
+last_commit: 8327741
+lab_l5_og_hallway_position_defaults_epic: active
