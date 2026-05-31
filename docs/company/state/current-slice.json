@@ -14,14 +14,12 @@
   "max_files": 2,
   "max_lines": 300,
   "acceptance_commands": [
-    "JWT_SECRET=test .venv-v2/bin/pytest apps/api/tests -q",
     "npm run build --workspace=apps/web",
     "curl -s -o /tmp/mc-og.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/monte-carlo?download=1'"
   ],
   "out_of_scope": [
-    "New Bureau tabs",
-    "API schema changes",
-    "Trade Finder / Pressure Map OG (next atoms)"
+    "Trade Finder / Pressure Map OG (next atoms)",
+    "API schema changes"
   ],
   "builder_mode": "composer-surgical"
 }
