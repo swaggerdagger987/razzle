@@ -8,29 +8,29 @@
     {
       "id": "lab-dashboard-top5-og-snapshot",
       "title": "Dashboard export snapshot uses top5 dynasty assets plus movers",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "5615a8df"
     },
     {
       "id": "lab-weekly-hot-week-snapshot",
       "title": "Weekly heatmap export snapshot includes hottest week rows",
       "status": "pending",
-      "merge_commit": null
+      "merge_commit": "5615a8df"
     },
     {
       "id": "lab-buysell-combined-snapshot",
       "title": "Buy/sell export snapshot merges buy and sell lanes",
       "status": "pending",
-      "merge_commit": null
+      "merge_commit": "5615a8df"
     },
     {
       "id": "lab-tradevalues-formula-snapshot",
       "title": "Trade values export snapshot uses formula-ranked visible rows",
       "status": "pending",
-      "merge_commit": null
+      "merge_commit": "5615a8df"
     }
   ],
-  "next_atom_id": "lab-dashboard-top5-og-snapshot",
+  "next_atom_id": "lab-weekly-hot-week-snapshot",
   "created_at": "2026-05-31T05:48:00Z",
   "updated_at": "2026-05-31T05:48:00Z"
 }
