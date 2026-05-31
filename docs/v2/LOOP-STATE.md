@@ -1,8 +1,8 @@
-cycle: 157
+cycle: 158
 last_board_cycle: 54
-focus_pillar: Lab
-focus_layer: L2
-next_slice: lab-sidebar-staff-registry
-last_keep_cycle: 157
-last_commit: 026e7de6b
-lab_l2_sidebar_staff_epic: active
+focus_pillar: League
+focus_layer: L5
+next_slice: league-og-sos-watermark (Bureau OG watermark epic atom 2/3)
+last_keep_cycle: 158
+last_commit: PLACEHOLDER_HASH
+league_l5_bureau_og_watermark_epic: active (1/3)

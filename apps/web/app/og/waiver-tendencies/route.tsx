@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { toLeague } from "@razzle/hallway";
 
 export const runtime = "edge";
 
@@ -72,9 +73,14 @@ const DEMO_META = {
   league_pulse: "Streamer ×2 · Hoarder ×1",
 };
 
-async function fetchWaiverTendencies(leagueId: string): Promise<WaiverData | null> {
-  const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
+/** Edge OG must hit same-origin `/api/*` so Next rewrites reach FastAPI (dev/preview/CI). */
+function resolveApiOrigin(req: Request): string {
+  return new URL(req.url).origin;
+}
+
+async function fetchWaiverTendencies(req: Request, leagueId: string): Promise<WaiverData | null> {
   if (!leagueId) return null;
+  const apiOrigin = resolveApiOrigin(req);
 
   try {
     const res = await fetch(`${apiOrigin}/api/bureau/waiver-tendencies`, {
@@ -121,9 +127,12 @@ export async function GET(req: Request) {
   const league = url.searchParams.get("league") ?? "";
 
   const hawkeye = AGENT_BY_ID.hawkeye;
-  const live = await fetchWaiverTendencies(league);
-  const isDemo = !live?.rows?.length;
+  const hasLeagueParam = Boolean(league);
+  const live = hasLeagueParam ? await fetchWaiverTendencies(req, league) : null;
+  const isLive = Boolean(live?.rows?.length);
+  const isDemo = !isLive;
   const rows = (isDemo ? DEMO_ROWS : live!.rows!).slice(0, 4);
+  const leagueDeepLink = league ? toLeague(league, "waiver-tendencies") : "/league/waiver-tendencies";
   const hero = pickHero(rows);
   const pulse = isDemo ? DEMO_META.league_pulse : leaguePulse(live!.rows!);
   const heroTeam = isDemo ? DEMO_META.hero_team : hero.team;
@@ -174,8 +183,52 @@ export async function GET(req: Request) {
           Waiver Tendencies
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 10 }}>
-          {`${rows.length} managers · ${totalAdds} adds · ${pulse}${isDemo ? " · sample preview" : ""}`}
+          {`${rows.length} managers · ${totalAdds} adds · ${pulse}${isDemo ? " · sample preview" : " · live league data"}`}
         </div>
+
+        {isLive ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            LIVE · Sleeper wire archetypes
+          </div>
+        ) : null}
+
+        {isDemo ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(1.5deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            SAMPLE · demo waiver rows
+          </div>
+        ) : null}
 
         {heroTeam && heroArchetype ? (
           <div
@@ -257,22 +310,26 @@ export async function GET(req: Request) {
           })}
         </div>
 
+        {/* Always-on watermark band — matches H2H + Trade Finder OG (T6 screenshot gravity) */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-end",
+            alignItems: "center",
+            marginTop: 16,
+            padding: "10px 18px",
+            background: "#d97757",
+            color: "#f7efe5",
+            border: "3px solid #2d1f14",
+            borderRadius: 8,
+            boxShadow: "4px 4px 0 #2d1f14",
             fontSize: 20,
-            color: "#5c4a3d",
-            marginTop: 12,
           }}
         >
-          <div style={{ display: "flex" }}>{`razzle.lol/league${league ? `/${league}` : ""}/waiver-tendencies`}</div>
-          {isDownload ? (
-            <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
-              made with 🐯 razzle.lol
-            </div>
-          ) : null}
+          <div style={{ display: "flex", fontWeight: 700 }}>{`razzle.lol${leagueDeepLink}`}</div>
+          <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
+            {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
+          </div>
         </div>
       </div>
     ),
