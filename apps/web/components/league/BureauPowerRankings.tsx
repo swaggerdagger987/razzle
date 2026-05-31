@@ -122,6 +122,14 @@ export function BureauPowerRankings({ data, leagueId }: Props) {
       </section>
 
       <footer className="flex flex-wrap items-center gap-4 text-sm">
+        <a
+          href={`/og/power-rankings?league=${encodeURIComponent(leagueId)}&download=1`}
+          className="text-orange underline"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          export OG card →
+        </a>
         <Link href={`/league/${leagueId}/monte-carlo` as Route} className="text-orange underline">
           monte carlo →
         </Link>
