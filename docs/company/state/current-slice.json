@@ -1,7 +1,20 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-power-rankings-tab",
-  "slice_title": "Unhide Power Rankings Bureau tab with Octo quant renderer",
-  "verdict": "SHIP",
-  "content_commit": "20c7940a"
+  "big_problem": "Bureau behavioral tabs need copy-link + export rows so deadline pressure screenshots travel in group chats.",
+  "epic": "League L5 — Unhide Bureau tabs with screenshot-ready renderers",
+  "slice_title": "Pressure Map copy link beside export card",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — /og/pressure-map PNG ≥40KB",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": ["apps/web/components/league/BureauPressureMap.tsx"],
+  "max_files": 1,
+  "max_lines": 35,
+  "acceptance_commands": [
+    "npm run build --workspace=apps/web",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-pressure-map.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/pressure-map?league=test&download=1'"
+  ],
+  "out_of_scope": ["OG route edits", "new Bureau tabs", "auth/billing", "shared share-bar refactor"],
+  "builder_mode": "composer-surgical"
 }
