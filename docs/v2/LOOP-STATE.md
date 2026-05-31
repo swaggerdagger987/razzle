@@ -1,8 +1,10 @@
-cycle: 152
+cycle: 153
 last_board_cycle: 54
 focus_pillar: Explore
 focus_layer: L5
 next_slice: explore-og-margin-note-rows
-last_keep_cycle: 152
+last_keep_cycle: 153
 last_commit: 0fc4932b7
 explore_l5_og_margin_epic: active
+lab_l5_og_demo_trust_epic: complete
+lab_l5_og_hallway_epic: complete

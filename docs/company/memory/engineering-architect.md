@@ -1,9 +1,12 @@
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.
+
+2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | 2 files; demo blurb parity.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Engineering Architect
 
+2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | 3 files; marginNoteForOgExploreRow on edge OG route.
 2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | 2 files pytest-only; SNAPSHOT_FROM_PANEL_SLUGS extended.
-
+2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | 3 files; mirrors H2H atlasRoomPath pattern for Bones.
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | 2 files; includeDefaultPlayer guard in labOgWatermarkLink.
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | 2 files; extractBuySellRows + buysellStatKeys.
 
