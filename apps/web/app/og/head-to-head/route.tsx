@@ -78,12 +78,14 @@ export async function GET(req: Request) {
   const user = url.searchParams.get("user") ?? "";
   const opponent = url.searchParams.get("opponent") ?? "";
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
+  /** QA/dev only — skip live fetch so Gate C can curl SAMPLE sticker path. */
+  const forceDemo = url.searchParams.get("force_demo") === "1";
 
   const atlas = AGENT_BY_ID.atlas;
   const snapshot = snapshotParam ? decodeBureauH2HOgSnapshot(snapshotParam) : null;
   const isSnapshot = Boolean(snapshot);
   const hasLeagueParams = Boolean(league && user);
-  const live = isSnapshot ? null : await fetchH2H(req, { league, user, opponent });
+  const live = isSnapshot || forceDemo ? null : await fetchH2H(req, { league, user, opponent });
   const isLive = !isSnapshot && Boolean(live?.you && live?.them);
   const isDemo = !isSnapshot && !isLive;
   const data: H2HData =
