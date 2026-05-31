@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getPanel } from "@razzle/panels";
 import { agentForPanel } from "@razzle/agents";
+import { teaserOgRowsForPanel } from "@/lib/panel-upgrade-teaser";
 
 export const runtime = "edge";
 
@@ -72,6 +73,7 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
   aging: "ppg",
   buysell: "mismatch_score",
   dashboard: "rank_diff",
+  "dynasty-comps": "similarity",
 };
 
 const LAUNCH_10_OG_SLUGS = new Set([
@@ -219,6 +221,10 @@ const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
 };
 
 function demoRowsForPanel(slug: string): OgRow[] {
+  if (slug === "dynasty-comps") {
+    const teaserRows = teaserOgRowsForPanel(slug);
+    if (teaserRows.length > 0) return teaserRows;
+  }
   return DEMO_ROWS_BY_SLUG[slug] ?? DEFAULT_DEMO_ROWS;
 }
 
@@ -284,6 +290,25 @@ function extractWeeklyHeatmapRows(
     rows = rows.filter((r) => r.position === positionFilter);
   }
   return [...rows].sort((a, b) => b.stat - a.stat).slice(0, 6);
+}
+
+/** Dynasty comps OG — similarity sort (matches DynastyCompsRenderer ogSnapshotRows). */
+function extractDynastyCompsRows(comps: Record<string, unknown>[]): OgRow[] {
+  return [...comps]
+    .filter((c) => String(c.full_name ?? c.name ?? "").trim().length > 0)
+    .sort((a, b) => Number(b.similarity ?? 0) - Number(a.similarity ?? 0))
+    .slice(0, 6)
+    .map((c) => {
+      const raw = Number(c.similarity ?? 0);
+      const stat = raw <= 1 ? Math.round(raw * 100) : Math.round(raw);
+      return {
+        name: String(c.full_name ?? c.name ?? ""),
+        position: String(c.position ?? c.pos ?? ""),
+        team: String(c.team ?? c.team_abbr ?? ""),
+        stat,
+        statLabel: "Match %",
+      };
+    });
 }
 
 /** Gamelog OG — peak weeks by FPTS (matches GamelogRenderer ogSnapshotRows). */
@@ -365,6 +390,11 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
   if (slug === "gamelog" && Array.isArray(obj.weeks)) {
     const gamelogRows = extractGamelogWeekRows(obj);
     if (gamelogRows.length > 0) return gamelogRows;
+  }
+
+  if (slug === "dynasty-comps" && Array.isArray(obj.comps)) {
+    const compRows = extractDynastyCompsRows(obj.comps as Record<string, unknown>[]);
+    if (compRows.length > 0) return compRows;
   }
 
   let candidates: Record<string, unknown>[] = [];

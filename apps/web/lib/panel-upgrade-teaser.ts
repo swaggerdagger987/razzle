@@ -92,6 +92,28 @@ export function teaserRowsForPanel(slug: string): TeaserRow[] {
   return ROWS_BY_SLUG[slug] ?? DEFAULT_ROWS;
 }
 
+/** OG share-card rows mirroring ProUpgradeGate teaser preview (single source of truth). */
+export interface TeaserOgRow {
+  name: string;
+  position: string;
+  team: string;
+  stat: number;
+  statLabel: string;
+}
+
+export function teaserOgRowsForPanel(slug: string): TeaserOgRow[] {
+  return teaserRowsForPanel(slug).map((row) => {
+    const pctMatch = row.detail.match(/(\d+(?:\.\d+)?)\s*%/);
+    return {
+      name: row.name,
+      position: row.position,
+      team: "",
+      stat: pctMatch ? Number(pctMatch[1]) : 0,
+      statLabel: "Match %",
+    };
+  });
+}
+
 export function upgradePitchForPanel(slug: string, agentName: string): string {
   const pitch = PITCH_BY_SLUG[slug];
   if (pitch) return `${agentName}: unlock ${pitch}.`;
