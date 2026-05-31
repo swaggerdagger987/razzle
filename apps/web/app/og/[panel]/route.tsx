@@ -27,11 +27,10 @@ const STAT_CANDIDATE_KEYS = [
   "ppg",
   "fpts",
   "score",
-  "breakout_score",
   "similarity",
-  "rank_diff",
   "composite_score",
   "efficiency_score",
+  "breakout_score",
   "total_yards",
   "pts",
   "rank",
@@ -52,6 +51,10 @@ const PLAYER_SCOPED_SLUGS = new Set([
   "fptsbreakdown",
   "archetypes",
 ]);
+
+function resolvePanelApiPath(path: string, playerId: string): string {
+  return path.replace(/\{player_id\}/g, encodeURIComponent(playerId));
+}
 
 /** Sample rows for OG preview when API/terminal.db unavailable (FACTORY-DOD Gate C). */
 const DEFAULT_DEMO_ROWS: OgRow[] = [
@@ -158,6 +161,35 @@ function demoRowsForPanel(slug: string): OgRow[] {
   return DEMO_ROWS_BY_SLUG[slug] ?? DEFAULT_DEMO_ROWS;
 }
 
+type CompactOgRow = { n: string; p: string; t: string; s: number; sl: string };
+
+function decodeOgSnapshot(param: string): OgRow[] {
+  try {
+    const b64 = param.replace(/-/g, "+").replace(/_/g, "/");
+    const json = atob(b64);
+    const arr = JSON.parse(json) as CompactOgRow[];
+    if (!Array.isArray(arr)) return [];
+    return arr
+      .filter((r) => r?.n)
+      .slice(0, 6)
+      .map((r) => ({
+        name: r.n,
+        position: r.p ?? "",
+        team: r.t ?? "",
+        stat: Number(r.s ?? 0),
+        statLabel: r.sl ?? "",
+      }));
+  } catch {
+    return [];
+  }
+}
+
+function resolveApiOrigin(req: Request): string {
+  const env = process.env.NEXT_PUBLIC_API_ORIGIN?.replace(/\/$/, "");
+  if (env) return env;
+  return new URL(req.url).origin;
+}
+
 function extractRows(data: unknown): OgRow[] {
   if (!data || typeof data !== "object") return [];
 
@@ -184,12 +216,6 @@ function extractRows(data: unknown): OgRow[] {
     candidates = obj.rankings as Record<string, unknown>[];
   } else if (Array.isArray(obj.comps)) {
     candidates = obj.comps as Record<string, unknown>[];
-  } else if (Array.isArray(obj.candidates)) {
-    candidates = obj.candidates as Record<string, unknown>[];
-  } else if (Array.isArray(obj.top5) || Array.isArray(obj.risers)) {
-    const top5 = Array.isArray(obj.top5) ? (obj.top5 as Record<string, unknown>[]) : [];
-    const risers = Array.isArray(obj.risers) ? (obj.risers as Record<string, unknown>[]) : [];
-    candidates = [...top5, ...risers];
   } else if (Array.isArray(data)) {
     candidates = data as Record<string, unknown>[];
   }
@@ -206,8 +232,6 @@ function extractRows(data: unknown): OgRow[] {
       if (k === "ppg") statLabel = "PPG";
       if (k === "dynasty_value" || k === "trade_value" || k === "value") statLabel = "Value";
       if (k === "similarity") statLabel = "Match %";
-      if (k === "rank_diff") statLabel = "Chg";
-      if (k === "breakout_score") statLabel = "Score";
       break;
     }
   }
@@ -226,41 +250,32 @@ function extractRows(data: unknown): OgRow[] {
   }));
 }
 
-function ogFetchHeaders(): HeadersInit {
-  const headers: Record<string, string> = { Accept: "application/json" };
-  const plan = process.env.RAZZLE_OG_CARD_PLAN?.toLowerCase();
-  if (plan === "free" || plan === "pro" || plan === "elite") {
-    headers["X-Razzle-Plan"] = plan;
-  }
-  return headers;
-}
-
-/** Same panels API the Lab uses — keeps OG rows aligned with in-product tape. */
 async function fetchPanelData(
+  req: Request,
   slug: string,
+  apiPath: string,
   method: string,
   params?: Record<string, unknown>,
 ): Promise<OgRow[]> {
-  const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
-  const headers = ogFetchHeaders();
+  const apiOrigin = resolveApiOrigin(req);
 
   try {
     let res: Response;
     if (method === "POST") {
-      res = await fetch(`${apiOrigin}/api/panels/${encodeURIComponent(slug)}`, {
+      res = await fetch(`${apiOrigin}${apiPath}`, {
         method: "POST",
-        headers: { ...headers, "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ limit: 6, ...(params ?? {}) }),
       });
     } else {
-      const url = new URL(`${apiOrigin}/api/panels/${encodeURIComponent(slug)}`);
+      const url = new URL(`${apiOrigin}${apiPath}`);
       if (params) {
         for (const [k, v] of Object.entries(params)) {
           if (v != null) url.searchParams.set(k, String(v));
         }
       }
       url.searchParams.set("limit", "6");
-      res = await fetch(url.toString(), { headers });
+      res = await fetch(url.toString());
     }
     if (!res.ok) return [];
     const data = await res.json();
@@ -289,6 +304,7 @@ export async function GET(
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
   const query = url.searchParams.get("q") ?? "";
+  const snapshotParam = url.searchParams.get("snapshot") ?? "";
   const playerId =
     url.searchParams.get("player_id") ??
     url.searchParams.get("id") ??
@@ -303,16 +319,26 @@ export async function GET(
   const agentEmoji = agent?.emoji ?? "🐯";
   const agentName = agent?.name ?? "Razzle";
 
+  const rawPath = panel.api.path;
+  const apiPath = rawPath.includes("{player_id}")
+    ? resolvePanelApiPath(rawPath, playerId)
+    : rawPath;
   const apiParams: Record<string, unknown> = {
     ...(panel.api.params as Record<string, unknown> | undefined),
   };
-  if (PLAYER_SCOPED_SLUGS.has(slug) || panel.api.path.includes("{player_id}")) {
+  if (PLAYER_SCOPED_SLUGS.has(slug)) {
     apiParams.player_id = playerId;
   }
-  const liveRows = await fetchPanelData(slug, panel.api.method, apiParams);
+  const snapshotRows = snapshotParam ? decodeOgSnapshot(snapshotParam) : [];
+  const snapshotHasRows =
+    snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
+  const liveRows = apiPath
+    ? await fetchPanelData(req, slug, apiPath, panel.api.method, apiParams)
+    : [];
   const liveHasRows = liveRows.length > 0 && liveRows.some((r) => r.name);
-  const isDemo = !liveHasRows;
-  const rows = isDemo ? demoRowsForPanel(slug) : liveRows;
+  const isSnapshot = snapshotHasRows;
+  const isDemo = !isSnapshot && !liveHasRows;
+  const rows = isSnapshot ? snapshotRows : liveHasRows ? liveRows : demoRowsForPanel(slug);
 
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
@@ -373,9 +399,11 @@ export async function GET(
           {`${panel.blurb}${
             slug === "dynasty-comps" && isDemo
               ? " · comps for Ja'Marr Chase · sample preview"
-              : isDemo
-                ? " · sample preview"
-                : " · live tape"
+              : isSnapshot
+                ? " · from your panel"
+                : isDemo
+                  ? " · sample preview"
+                  : ""
           }`}
         </div>
 
