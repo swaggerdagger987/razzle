@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Bureau Trade Finder (cycle 81)
+- **Angle:** Fair-trade ideas travel — copy finder link + Bones OG card with give/get rows for league chat.
+- **Screenshot hook:** Top match callout + three value-matched deal rows on export card.
+
 ### 2026-05-31 — Bureau Power Rankings (cycle 80)
 - **Angle:** Beyond W-L boards travel — managers share differential + luck bars in league chats.
 - **Screenshot hook:** Octo power board OG with green/orange diff bars and #1 callout.

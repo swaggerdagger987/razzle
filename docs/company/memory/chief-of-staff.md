@@ -28,4 +28,5 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory cycle 1 Bureau H2H export | 044ee1e8 | keep | workday open; League L5 epic atom 1/3; copy link + export bar
 2026-05-31 | Factory cycle 1 Bureau MC share | 3392bc29 | keep | deduped lab-og-live-label; Bureau share epic 3/3
 2026-05-31 | Factory open cycle 1 Pressure Map copy | 2c3cd3a2 | keep | workday open; Bureau share-row epic complete 4/4
-2026-05-31 | Factory open cycle 1 Power Rankings OG | da33eafd | keep | workday open; Bureau power OG epic atom 1/3
+2026-05-31 | Factory open cycle 1 Power Rankings OG | 131ee281 | keep | workday open; Bureau power OG epic atom 1/3
+2026-05-31 | Factory open cycle 1 Trade Finder share | da33eafd | keep | workday open; Bureau OG epic atom 2/3; curl 57813B

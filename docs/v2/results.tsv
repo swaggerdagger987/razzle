@@ -68,3 +68,4 @@ cycle	commit	score	status	pillar	slice	description
 78	30454811	depth+hallway+voice+simplicity	keep	League	L5 Bureau Monte Carlo share bar	trust=T2,T5,T6; BureauMonteCarloShareBar copy sim + export; curl monte-carlo OG 53767B
 79	2c3cd3a2	depth+hallway+voice+simplicity	keep	League	L5 Bureau Pressure Map copy link	trust=T5,T6; copy chart link + export card; curl pressure-map OG 60104B
 80	131ee281	depth+hallway+voice+simplicity	keep	League	L5 Bureau Power Rankings OG + share	trust=T5,T6; og/power-rankings route + copy board; curl 63022B PNG
+81	da33eafd	depth+hallway+voice+simplicity	keep	League	L5 Bureau Trade Finder share row	trust=T5,T6; copy finder link + export card header; curl trade-finder OG 57813B

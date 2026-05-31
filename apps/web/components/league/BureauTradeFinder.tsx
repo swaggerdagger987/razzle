@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import { useCallback, useState } from "react";
 import { getSleeperUser } from "@/lib/sleeper";
 
 interface Props {
@@ -33,6 +34,23 @@ export function BureauTradeFinder({ data, leagueId }: Props) {
   const hero = (data.hero_match as Match | null) ?? matches[0] ?? null;
   const needs = (data.needs as string[]) ?? [];
   const surplus = (data.surplus as string[]) ?? [];
+  const [copied, setCopied] = useState(false);
+  const finderPath = `/league/${leagueId}/trade-finder`;
+  const sleeperUser = getSleeperUser();
+  const ogParams = new URLSearchParams({ league: leagueId, download: "1" });
+  if (sleeperUser?.user_id) ogParams.set("user", sleeperUser.user_id);
+
+  const copyFinderLink = useCallback(async () => {
+    const url =
+      typeof window !== "undefined" ? `${window.location.origin}${finderPath}` : finderPath;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }, [finderPath]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -56,6 +74,19 @@ export function BureauTradeFinder({ data, leagueId }: Props) {
           {needs.length > 0 ? ` · need ${needs.join(", ")}` : ""}
           {surplus.length > 0 ? ` · surplus ${surplus.join(", ")}` : ""}
         </p>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <button type="button" className="btn-chunky text-xs" onClick={() => void copyFinderLink()}>
+            {copied ? "copied!" : "copy finder link"}
+          </button>
+          <a
+            href={`/og/trade-finder?${ogParams.toString()}`}
+            download="razzle-trade-finder.png"
+            className="btn-chunky active text-xs"
+            style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+          >
+            export card
+          </a>
+        </div>
       </header>
 
       {hero && (
@@ -94,22 +125,6 @@ export function BureauTradeFinder({ data, leagueId }: Props) {
           >
             re-sim odds →
           </Link>
-          {(() => {
-            const user = getSleeperUser();
-            if (!user?.user_id) return null;
-            return (
-              <a
-                href={`/og/trade-finder?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(
-                  user.user_id,
-                )}&download=1`}
-                download="razzle-trade-finder.png"
-                className="btn-chunky active mt-3 inline-block text-xs"
-                style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
-              >
-                export card
-              </a>
-            );
-          })()}
         </section>
       )}
 
