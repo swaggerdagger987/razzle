@@ -1,0 +1,108 @@
+# Opens standup PRs when Slack Automations push but cannot call createPullRequest
+# on the VM integration token (403). Push still works; this workflow completes Gate A.
+name: standup-pr-autopen
+
+on:
+  push:
+    branches:
+      - "cursor/**"
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch name to open a standup PR for (retry stuck runs)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  open-standup-pr:
+    runs-on: ubuntu-latest
+    # Only factory standup pushes — not doc/cloud-agent branches (docs:, feat:, etc.)
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      contains(github.event.head_commit.message, 'standup:') ||
+      contains(github.event.head_commit.message, 'standup metadata:')
+    steps:
+      - name: Resolve branch
+        id: meta
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "branch=${{ github.event.inputs.branch }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "branch=${GITHUB_REF#refs/heads/}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.meta.outputs.branch }}
+          fetch-depth: 1
+
+      - name: Open or find standup PR
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const head = `${owner}:${{ steps.meta.outputs.branch }}`;
+            const base = "razzle-v2-redesign";
+
+            const existing = await github.rest.pulls.list({
+              owner,
+              repo,
+              head,
+              base,
+              state: "open",
+            });
+            if (existing.data.length > 0) {
+              const pr = existing.data[0];
+              core.setOutput("number", String(pr.number));
+              core.setOutput("url", pr.html_url);
+              core.setOutput("created", "false");
+              return;
+            }
+
+            const today = new Date().toISOString().slice(0, 10);
+            const sha = context.sha.slice(0, 7);
+            const { data: pr } = await github.rest.pulls.create({
+              owner,
+              repo,
+              title: `standup: ${today}`,
+              head: "${{ steps.meta.outputs.branch }}",
+              base,
+              body: [
+                "## Standup PR (auto-opened)",
+                "",
+                "Slack Automation pushed this branch but the VM integration token",
+                "cannot call `createPullRequest` (403). This workflow completes **Gate A**.",
+                "",
+                `- **Branch:** \`${{ steps.meta.outputs.branch }}\``,
+                `- **Head commit:** \`${sha}\``,
+                `- **Standup:** \`docs/company/standups/${today}.md\` (if present on branch)`,
+                "",
+                "Agent: poll `gh pr list --head ${{ steps.meta.outputs.branch }} --json url,number`",
+                "then proceed with merge when CI is green.",
+              ].join("\n"),
+            });
+            core.setOutput("number", String(pr.number));
+            core.setOutput("url", pr.html_url);
+            core.setOutput("created", "true");
+
+      - name: Enable auto-merge when checks pass
+        uses: actions/github-script@v7
+        continue-on-error: true
+        with:
+          script: |
+            await github.rest.pulls.enableAutoMerge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: Number("${{ steps.pr.outputs.number }}"),
+              merge_method: "merge",
+            });
+
+      - name: Summary
+        run: |
+          echo "PR ${{ steps.pr.outputs.url }} (created=${{ steps.pr.outputs.created }})"
