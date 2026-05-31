@@ -1,6 +1,6 @@
 # Memory — Data Researcher
 
-2026-05-31 | Explore injury chip | da33eafd | PASS | keep | games_missed + injury_status passthrough on PlayerRow sufficient for chip
+2026-05-31 | Explore injury chip | 9ad5757b | PASS | keep | games_missed + injury_status passthrough on PlayerRow sufficient for chip
 2026-05-31 | F-09 ProUpgradeGate | 8f0201f7 | PASS | keep | Reddit intel: free screener + paid depth funnel expects upgrade invite not error chrome
 
 Append-only log of recurring user pain patterns, language signals, and feature-gap
