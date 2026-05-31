@@ -1,5 +1,30 @@
 /** Static blur-preview rows + staff voice for Pro upgrade gates (Lab L4). */
 
+/** Launch-10 Staff Picks — mirrors `LabSidebar` STAFF_PICKS + PARITY Launch 10 table. */
+export const LAUNCH_10_STAFF_PICK_SLUGS = [
+  "weekly",
+  "prospects",
+  "rankings",
+  "tradevalues",
+  "breakouts",
+  "gamelog",
+  "efficiency",
+  "aging",
+  "buysell",
+  "dashboard",
+] as const;
+
+/** Pro-tier launch panels (generic `ProUpgradeGate` + dedicated renderers). */
+export const LAUNCH_10_PRO_GATE_SLUGS = [
+  "rankings",
+  "tradevalues",
+  "breakouts",
+  "gamelog",
+  "efficiency",
+  "aging",
+  "buysell",
+] as const;
+
 export type TeaserPosition = "QB" | "RB" | "WR" | "TE";
 
 export interface TeaserRow {
@@ -71,6 +96,21 @@ const ROWS_BY_SLUG: Record<string, TeaserRow[]> = {
     { name: "Bijan Robinson", position: "RB", detail: "Comp: Jonathan Taylor · 91%" },
     { name: "Marvin Harrison Jr.", position: "WR", detail: "Comp: Mike Evans · 88%" },
   ],
+  weekly: [
+    { name: "Tyreek Hill", position: "WR", detail: "Wk 12 · 31.4 pts · hot cell" },
+    { name: "Amon-Ra St. Brown", position: "WR", detail: "Wk 11 · 28.2 pts" },
+    { name: "Garrett Wilson", position: "WR", detail: "Wk 10 · 9.1 pts · cold streak" },
+  ],
+  prospects: [
+    { name: "Travis Hunter", position: "WR", detail: "RPS 94 · combine 4.4" },
+    { name: "Cam Ward", position: "QB", detail: "RPS 91 · draft capital 1.01" },
+    { name: "Omarion Hampton", position: "RB", detail: "RPS 88 · workload path" },
+  ],
+  dashboard: [
+    { name: "Bijan Robinson", position: "RB", detail: "Riser · +8 rank · 24.1 PPG" },
+    { name: "Davante Adams", position: "WR", detail: "Faller · sell window" },
+    { name: "Garrett Wilson", position: "WR", detail: "Value pick · market lag" },
+  ],
 };
 
 const PITCH_BY_SLUG: Record<string, string> = {
@@ -86,7 +126,14 @@ const PITCH_BY_SLUG: Record<string, string> = {
   stocks: "rising and falling dynasty assets before your league reacts",
   waivers: "waiver-wire risers ranked by recent production and role",
   "dynasty-comps": "statistical comps for any dynasty asset you're pricing",
+  weekly: "weekly heatmap streaks before your league mates spot the run",
+  prospects: "rookie big board with combine and college context",
+  dashboard: "dynasty pulse — risers, fallers, and value picks in one view",
 };
+
+export function hasCustomTeaser(slug: string): boolean {
+  return slug in ROWS_BY_SLUG && slug in PITCH_BY_SLUG;
+}
 
 export function teaserRowsForPanel(slug: string): TeaserRow[] {
   return ROWS_BY_SLUG[slug] ?? DEFAULT_ROWS;

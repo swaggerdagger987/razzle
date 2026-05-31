@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getPanel } from "@razzle/panels";
 import { agentForPanel } from "@razzle/agents";
+import { teaserRowsForPanel } from "@/lib/panel-upgrade-teaser";
 
 export const runtime = "edge";
 
@@ -87,6 +88,19 @@ const LAUNCH_10_OG_SLUGS = new Set([
   "buysell",
 ]);
 
+/** Panel-specific LIVE copy when `/api/panels/{slug}` returns real rows (Launch-10). */
+function launch10LiveBlurbSuffix(slug: string): string {
+  if (slug === "prospects") return " · live RPS board";
+  if (slug === "weekly") return " · live PPG heatmap";
+  return " · live nflverse rows";
+}
+
+function launch10LiveStickerLabel(slug: string): string {
+  if (slug === "prospects") return "LIVE · RPS board";
+  if (slug === "weekly") return "LIVE · PPG heatmap";
+  return "LIVE · nflverse rows";
+}
+
 function panelBlurbSuffix(
   slug: string,
   positionFilter: string,
@@ -96,7 +110,7 @@ function panelBlurbSuffix(
 ): string {
   const pos = positionFilter ? ` · ${positionFilter} only` : "";
   if (slug === "dynasty-comps" && showingDemoRows) {
-    return `${pos} · comps for Ja'Marr Chase · sample preview`;
+    return `${pos} · Pro comp preview · sample`;
   }
   if (isSnapshot) {
     return `${pos} · from your panel`;
@@ -105,7 +119,7 @@ function panelBlurbSuffix(
     return `${pos} · sample preview`;
   }
   if (showingLiveData && LAUNCH_10_OG_SLUGS.has(slug)) {
-    return `${pos} · live nflverse rows`;
+    return `${pos}${launch10LiveBlurbSuffix(slug)}`;
   }
   if (showingLiveData) {
     return `${pos} · live data`;
@@ -218,7 +232,21 @@ const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
   ],
 };
 
+/** Pro-gate teaser rows for OG when live comps unavailable (matches ProUpgradeGate preview). */
+function dynastyCompsTeaserOgRows(): OgRow[] {
+  const stats = [94, 91, 88];
+  const teams = ["CIN", "IND", "TB"];
+  return teaserRowsForPanel("dynasty-comps").map((row, i) => ({
+    name: row.name,
+    position: row.position,
+    team: teams[i] ?? "—",
+    stat: stats[i] ?? 85,
+    statLabel: "Match %",
+  }));
+}
+
 function demoRowsForPanel(slug: string): OgRow[] {
+  if (slug === "dynasty-comps") return dynastyCompsTeaserOgRows();
   return DEMO_ROWS_BY_SLUG[slug] ?? DEFAULT_DEMO_ROWS;
 }
 
@@ -631,6 +659,9 @@ export async function GET(
   }
   if (positionFilter) {
     apiParams.position = positionFilter;
+  } else if (slug === "weekly" && apiParams.position == null) {
+    // Match WeeklyHeatmapRenderer default so /api/panels/weekly returns live rows for OG.
+    apiParams.position = "WR";
   }
   const snapshotRows = snapshotParam ? decodeOgSnapshot(snapshotParam) : [];
   const snapshotHasRows =
@@ -735,7 +766,7 @@ export async function GET(
               fontWeight: 700,
             }}
           >
-            LIVE · nflverse rows
+            {launch10LiveStickerLabel(slug)}
           </div>
         ) : null}
 
