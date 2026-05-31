@@ -1,6 +1,7 @@
 # Memory — Engineering Architect
 
-2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.
+2026-05-31 | explore OG SAMPLE sticker | edb27535 | isDemo conditional; 1 file explore/route.tsx.
+2026-05-31 | explore OG demo fallback | 478eee02 | explore/route.tsx only; force_demo + DEMO arrays.
 2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | route.tsx merge; sticker + fetchOgLiveRows + extractors.
