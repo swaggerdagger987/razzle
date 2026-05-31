@@ -334,6 +334,7 @@ export function BuySellRenderer({ panel }: Props) {
           <LabOgExportLink
             slug="buysell"
             downloadName="razzle-buy-sell.png"
+            position={position || undefined}
             snapshotRows={ogSnapshotRows}
           />
         </footer>

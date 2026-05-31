@@ -14,18 +14,18 @@
     {
       "id": "lab-og-position-tradevalues-prospects",
       "title": "Trade values + prospects export passes position filter",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "516bcca1"
     },
     {
       "id": "lab-og-position-buysell",
       "title": "Buy/sell export passes position filter to OG",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-position-tradevalues-prospects",
+  "next_atom_id": "lab-og-position-buysell",
   "created_at": "2026-05-31T06:10:00Z",
-  "updated_at": "2026-05-31T06:15:00Z",
-  "last_cycle_commit": "f358349d"
+  "updated_at": "2026-05-31T21:30:00Z",
+  "last_cycle_commit": "516bcca1"
 }
