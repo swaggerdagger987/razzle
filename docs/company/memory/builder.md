@@ -1,9 +1,15 @@
-2026-05-31 | lab-og-career-compare-live | 9a32bf547 | SHIP | fetchCareerCompareOgRows + peak PPG demo trio on /og/career-compare.
-2026-05-31 | lab-og-percentiles-live-extract | 454db1c1d | SHIP | extractPercentilesRows + LIVE sticker on /og/percentiles.
-2026-05-31 | lab-og-tolab-snapshot-player | aa5cc4b0d | SHIP | encodeOgSnapshot pid wrapper; watermarkPlayerId on OG route.
+2026-05-31 | lab-og-career-compare-live | PLACEHOLDER | SHIP | fetchCareerCompareOgRows + LIVE overlay sticker.
+2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | weekly WR watermarkPosition on OG route.
+2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WEEKLY_SAMPLE_OG_ROWS + test_lab_og_export_link guard.
+
+2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | launch10Demo* helpers + pytest guard.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Builder
 
+2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | SHIP | encodeOgSnapshot pid + decode snapshotPlayerId in OG route.
+2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | SHIP | toRoom bones on Trade Finder OG + ShareBar.
+2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | launch10Demo* helpers + pytest guard.
+2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | SHIP | prospects+tradevalues SNAPSHOT_FROM_PANEL_SLUGS; 5 pytest guards.
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | SHIP | TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS for gamelog + dynasty-comps.
 2026-05-31 | league-trade-finder-og-snapshot | 19a1af0e9 | SHIP | bureau-trade-finder-og-snapshot encode on ShareBar.
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | extractBuySellRows + formula_score priority on OG route.
@@ -11,7 +17,7 @@
 
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | extractDynastyCompsRows + pytest contract.
 
-2026-05-31 | room-briefing-watermark | 9a32bf547 | SHIP | Briefing OG watermark uses razzle.lol${roomPath}; pytest 4.
+2026-05-31 | room-briefing-watermark | 088cebc07 | SHIP | Briefing OG watermark uses razzle.lol${roomPath}; pytest 4.
 2026-05-31 | GamelogRenderer LabOgExportLink on zero-week empty state | ac0280a20 | curl gamelog OG 59323B; empty weeks footer export.
 2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | preview+copy+export on BriefingCard; OG watermark band.
 2026-05-31 | lab-og-tolab-watermark | b80512bb4 | SHIP | toLab on panel OG band; position query when filtered.

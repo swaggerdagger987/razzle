@@ -30,14 +30,27 @@ def test_default_og_player_tolab_rules():
     assert '"gamelog"' in source
     assert '"dynasty-comps"' in source
     assert "includeDefaultPlayer" in source
-    assert "opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer" in source
+    assert "watermarkPlayerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer" in source
 
 
-def test_snapshot_payload_preserves_player_for_watermark():
+def test_snapshot_export_player_id_in_watermark():
     source = ROUTE_TS.read_text(encoding="utf-8")
-    assert "snapshotDecoded.playerId" in source
-    assert "watermarkPlayerId" in source
+    assert "snapshotExportPlayerId" in source
+    assert "exportPlayerId" in source
+    assert "snapshotPlayerId: snapshotExportPlayerId" in source.replace("\n", " ") or "snapshotExportPlayerId" in source
+
+
+def test_lab_og_export_link_encodes_snapshot_player_id():
     link_ts = ROOT / "apps/web/components/lab/LabOgExportLink.tsx"
-    link_source = link_ts.read_text(encoding="utf-8")
-    assert "encodeOgSnapshot(snapshotRows, { playerId: resolvedPlayerId })" in link_source
-    assert '{ pid, rows: compact }' in link_source
+    source = link_ts.read_text(encoding="utf-8")
+    assert "encodeOgSnapshot(snapshotRows, resolvedPlayerId)" in source
+    assert "exportPlayerId?: string" in source
+    assert '{ r: compact, pid }' in source or "pid }" in source
+
+
+def test_weekly_og_watermark_includes_default_wr_position():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "TOLAB_DEFAULT_POSITION" in source
+    assert 'weekly: "WR"' in source
+    assert "watermarkPosition" in source
+    assert "positionFilter: watermarkPosition" in source

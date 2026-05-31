@@ -35,6 +35,7 @@
   "updated_at": "2026-05-31T12:05:00Z",
   "completed_epics": [
     "lab-l5-og-export-live-panel-rows",
-    "lab-l5-og-hallway-deep-links"
+    "lab-l5-og-hallway-deep-links",
+    "lab-l5-og-hallway-position-defaults"
   ]
 }
