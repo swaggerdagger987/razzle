@@ -59,4 +59,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 90	c9151786	depth+voice+simplicity	keep	Lab	L5 Dashboard comps OG snapshot rows	trust=T5,T6; DashboardRenderer snapshotRows; curl dynasty-comps 65961B; dedup prospects+tradevalues on base
 91	a2536dcc	depth+voice+simplicity	keep	League	L5 Bureau Waiver Tendencies tab unhidden	trust=T2,T5; Hawkeye renderer; waiver-tendencies nav visible; web build PASS; epic atom 2/3
 92	c0358ff3	depth+voice+simplicity	keep	Lab	L5 Prospects OG RPS-ranked snapshot	trust=T5,T6; sort top-6 RPS + position filter; curl 40842B; fidelity epic atom 1/3
-93	PLACEHOLDER	voice+simplicity	keep	Lab	L4 ProUpgradeGate upgrade voice	trust=T3,T7; PRO UNLOCK badge; unlock Pro intel CTA; epic atom 1/3
+93	fdae6659	voice+simplicity	keep	Lab	L4 ProUpgradeGate upgrade voice	trust=T3,T7; PRO UNLOCK badge; unlock Pro intel CTA; epic atom 1/3
