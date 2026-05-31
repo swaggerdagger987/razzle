@@ -2,7 +2,12 @@ cycle: 96
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: league-strength-of-schedule-og-share
+next_slice: league-roster-depth-share-og
 last_keep_cycle: 96
-last_commit: 3f584f61
-league_l5_bureau_depth_og_epic: active
+last_commit: 634cb201
+league_l5_bureau_share_export_epic: active
+league_l5_build_profiles_share_og: complete
+league_l5_roster_depth_share_og: in_progress
+league_l5_bureau_unhide_epic: complete
+lab_l5_og_filtered_panel_epic: complete
+lab_l5_og_fidelity_epic: active

@@ -3,41 +3,66 @@ import { AGENT_BY_ID } from "@razzle/agents";
 
 export const runtime = "edge";
 
-const POS_COLOR: Record<string, string> = {
+type DepthPlayer = {
+  player_id: string;
+  name: string;
+  position: string;
+  dynasty_value?: number | null;
+};
+
+type PosBlock = {
+  count?: number;
+  elite?: number;
+  depth?: DepthPlayer[];
+};
+
+type RosterDepthData = {
+  league_id?: string;
+  user_id?: string;
+  depth?: Record<string, PosBlock>;
+  total_players?: number;
+  error?: string;
+};
+
+const POS_ORDER = ["QB", "RB", "WR", "TE"] as const;
+
+const POS_COLORS: Record<string, string> = {
   QB: "#5b7fff",
   RB: "#2ec4b6",
   WR: "#d97757",
   TE: "#8b5cf6",
 };
 
-type PosRow = {
-  position: string;
-  count: number;
-  elite: number;
-  grade: string;
+const DEMO_DEPTH: Record<string, PosBlock> = {
+  QB: {
+    count: 2,
+    elite: 1,
+    depth: [{ player_id: "1", name: "Patrick Mahomes", position: "QB", dynasty_value: 92 }],
+  },
+  RB: {
+    count: 4,
+    elite: 2,
+    depth: [
+      { player_id: "2", name: "Breece Hall", position: "RB", dynasty_value: 88 },
+      { player_id: "3", name: "Kenneth Walker", position: "RB", dynasty_value: 72 },
+    ],
+  },
+  WR: {
+    count: 5,
+    elite: 1,
+    depth: [
+      { player_id: "4", name: "Ja'Marr Chase", position: "WR", dynasty_value: 95 },
+      { player_id: "5", name: "Amon-Ra St. Brown", position: "WR", dynasty_value: 84 },
+    ],
+  },
+  TE: {
+    count: 1,
+    elite: 0,
+    depth: [{ player_id: "6", name: "Sam LaPorta", position: "TE", dynasty_value: 68 }],
+  },
 };
 
-type DepthBlock = {
-  count?: number;
-  elite?: number;
-};
-
-type DepthData = {
-  depth?: Record<string, DepthBlock>;
-  total_players?: number;
-  error?: string;
-};
-
-const DEMO_ROWS: PosRow[] = [
-  { position: "QB", count: 2, elite: 1, grade: "B" },
-  { position: "RB", count: 5, elite: 2, grade: "A" },
-  { position: "WR", count: 7, elite: 2, grade: "A" },
-  { position: "TE", count: 1, elite: 0, grade: "D" },
-];
-
-const POS_ORDER = ["QB", "RB", "WR", "TE"] as const;
-
-function depthGrade(block: DepthBlock): string {
+function depthGrade(block: PosBlock): string {
   const count = block.count ?? 0;
   const elite = block.elite ?? 0;
   if (count === 0) return "F";
@@ -47,19 +72,7 @@ function depthGrade(block: DepthBlock): string {
   return "D";
 }
 
-function rowsFromDepth(depth: Record<string, DepthBlock>): PosRow[] {
-  return POS_ORDER.map((position) => {
-    const block = depth[position] ?? {};
-    return {
-      position,
-      count: block.count ?? 0,
-      elite: block.elite ?? 0,
-      grade: depthGrade(block),
-    };
-  });
-}
-
-async function fetchRosterDepth(leagueId: string, userId: string): Promise<DepthData | null> {
+async function fetchRosterDepth(leagueId: string, userId: string): Promise<RosterDepthData | null> {
   const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
   if (!leagueId || !userId) return null;
 
@@ -70,12 +83,22 @@ async function fetchRosterDepth(leagueId: string, userId: string): Promise<Depth
       body: JSON.stringify({ league_id: leagueId, user_id: userId }),
     });
     if (!res.ok) return null;
-    const data = (await res.json()) as DepthData;
+    const data = (await res.json()) as RosterDepthData;
     if (data.error || !data.depth) return null;
     return data;
   } catch {
     return null;
   }
+}
+
+function topPlayer(block: PosBlock): string {
+  const players = [...(block.depth ?? [])].sort(
+    (a, b) => (b.dynasty_value ?? 0) - (a.dynasty_value ?? 0),
+  );
+  const top = players[0];
+  if (!top) return "—";
+  const name = top.name;
+  return name.length > 18 ? `${name.slice(0, 16)}…` : name;
 }
 
 export async function GET(req: Request) {
@@ -87,12 +110,13 @@ export async function GET(req: Request) {
   const hawkeye = AGENT_BY_ID.hawkeye;
   const live = await fetchRosterDepth(league, user);
   const isDemo = !live?.depth;
-  const rows = isDemo ? DEMO_ROWS : rowsFromDepth(live!.depth!);
-  const totalPlayers = isDemo ? 15 : Number(live?.total_players ?? 0);
-  let weakest: PosRow = rows[0] ?? DEMO_ROWS[0]!;
-  for (const row of rows) {
-    if (row.count < weakest.count) weakest = row;
-  }
+  const depth = isDemo ? DEMO_DEPTH : live!.depth!;
+  const totalPlayers = isDemo ? 12 : (live?.total_players ?? 0);
+
+  const weakest = POS_ORDER.reduce(
+    (min, pos) => ((depth[pos]?.count ?? 0) < (depth[min]?.count ?? 0) ? pos : min),
+    "QB" as (typeof POS_ORDER)[number],
+  );
 
   return new ImageResponse(
     (
@@ -138,22 +162,8 @@ export async function GET(req: Request) {
           Roster Depth
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 14 }}>
-          {`position grades · ${totalPlayers} rostered${isDemo ? " · sample preview" : ""}`}
+          {`${totalPlayers} players · thinnest at ${weakest}${isDemo ? " · sample preview" : ""}`}
         </div>
-
-        {weakest ? (
-          <div
-            style={{
-              display: "flex",
-              fontFamily: "Caveat",
-              fontSize: 30,
-              color: "#d97757",
-              marginBottom: 12,
-            }}
-          >
-            {`thinnest: ${weakest.position} (${weakest.count} deep) — grade ${weakest.grade}`}
-          </div>
-        ) : null}
 
         <div
           style={{
@@ -164,61 +174,41 @@ export async function GET(req: Request) {
             background: "#f7efe5",
             border: "3px solid #2d1f14",
             borderRadius: 8,
-            padding: "16px 20px",
+            padding: "14px 18px",
             boxShadow: "4px 4px 0 #2d1f14",
           }}
         >
-          {rows.map((row) => {
-            const color = POS_COLOR[row.position] ?? "#d97757";
-            const barWidth = Math.min(100, Math.max(14, row.count * 14));
+          {POS_ORDER.map((pos) => {
+            const block = depth[pos] ?? {};
+            const grade = depthGrade(block);
+            const color = POS_COLORS[pos] ?? "#5c4a3d";
             return (
-              <div key={row.position} style={{ display: "flex", alignItems: "center", gap: 14 }}>
+              <div key={pos} style={{ display: "flex", alignItems: "center", gap: 14 }}>
                 <div
                   style={{
                     display: "flex",
-                    width: 44,
-                    height: 44,
+                    width: 52,
+                    height: 52,
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: 18,
+                    fontSize: 28,
                     fontWeight: 700,
-                    color: "#f7efe5",
-                    background: color,
-                    border: "3px solid #2d1f14",
-                    borderRadius: 8,
-                  }}
-                >
-                  {row.position}
-                </div>
-                <div style={{ display: "flex", flex: 1, flexDirection: "column", gap: 4 }}>
-                  <div style={{ display: "flex", fontSize: 18, fontWeight: 700 }}>
-                    {`${row.count} rostered · ${row.elite} elite`}
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      height: 16,
-                      background: "#e5d6c4",
-                      borderRadius: 4,
-                      overflow: "hidden",
-                      border: "2px solid #2d1f14",
-                    }}
-                  >
-                    <div style={{ display: "flex", width: `${barWidth}%`, background: color }} />
-                  </div>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    fontFamily: "Luckiest Guy",
-                    fontSize: 36,
-                    width: 52,
-                    justifyContent: "center",
                     color,
-                    transform: "rotate(-4deg)",
+                    border: `3px solid ${color}`,
+                    borderRadius: 8,
+                    fontFamily: "Luckiest Guy",
                   }}
                 >
-                  {row.grade}
+                  {grade}
+                </div>
+                <div style={{ display: "flex", width: 48, fontSize: 16, fontWeight: 700, color }}>
+                  {pos}
+                </div>
+                <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
+                  <div style={{ display: "flex", fontSize: 18, fontWeight: 700 }}>{topPlayer(block)}</div>
+                  <div style={{ display: "flex", fontSize: 14, color: "#8a7565" }}>
+                    {`${block.count ?? 0} rostered · ${block.elite ?? 0} elite`}
+                  </div>
                 </div>
               </div>
             );

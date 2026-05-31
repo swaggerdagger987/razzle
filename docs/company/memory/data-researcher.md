@@ -18,7 +18,8 @@ anecdotes (>=3 independent threads = signal).
 
 ## Entries
 
-2026-05-31 | Dashboard comps OG snapshot | c9151786 | keep | roster builder comps export matches in-panel match %
+2026-05-31 | build profiles share | Win Now vs Zero RB archetype cards for dynasty trade threads | Atlas bureau OG | keep | cycle 95 REDDIT-INTEL
+2026-05-31 | waiver tendencies | FAAB hoarder archetype cards travel on waiver threads | Hawkeye bureau tab | keep | cycle 94 REDDIT-INTEL
 2026-05-30 | no web scraping | screenshot culture on r/DynastyFF remains the primary distribution engine | existing REDDIT-INTEL.md signals (cycles 31, 55) directly support Lab L5 OG — agent voice on screenshots and filtered data cards | keep | Lab OG live data card addresses standing gap "screenshot-worthy share cards"
 2026-05-31 | light scan | loading-only OG reads as broken tool in screenshot culture | demo rows + sample preview label | keep | cycle 58 REDDIT-INTEL entry
 2026-05-31 | launch-10 OG demo stat labels | atom 2/3 SHIP | keep | curl weekly 63819B tradevalues 62488B gamelog 58408B
@@ -31,12 +32,15 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | breakout OG candidates | 2cb898b6 | keep | Hawkeye names on share card when API live
 2026-05-31 | Bureau share rows | 433d8002 | keep | Monte Carlo export row now matches Explore copy+export pattern
-2026-05-31 | Monte Carlo share row | da33eafd | keep | Bureau group-chat export parity; H2H already on base
+2026-05-31 | Monte Carlo share row | 246052ec | keep | Bureau group-chat export parity; H2H already on base
 2026-05-31 | Lab OG launch10 label | 6e98f4a2 | keep | live cards without sample tag when API rows present
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
 2026-05-31 | Pressure Map share | 864e1d14 | keep | deadline desperation URLs for trade-DM hooks
-2026-05-31 | Trade Network share | da33eafd | keep | collusion/partnership cards sized for Reddit screenshot gravity
+2026-05-31 | Trade Network share | 246052ec | keep | collusion/partnership cards sized for Reddit screenshot gravity
 2026-05-31 | Bureau power OG | 9714bfa6 | keep | diff+luck bars match in-app power board story for screenshots
-2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
+2026-05-31 | Cycle 86 Trade Network copy link | 246052ec | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles archetypes | 2ee04975 | keep | league construction tape for trade-DM screenshots
+2026-05-31 | Efficiency OG position | b2d304e7 | keep | dynasty Twitter shares PPO leaderboards by position slot
+2026-05-31 | Build Profiles share OG | 246052ec | keep | construction archetype cards for trade-DM screenshots
+2026-05-31 | Roster Depth share OG | 1b769554 | keep | position grades + top names for thin-spot trade threads

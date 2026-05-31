@@ -70,6 +70,7 @@ export function BureauRosterDepth({ data, leagueId }: Props) {
         <p className="text-ink-medium text-sm" style={{ fontFamily: "var(--font-mono)" }}>
           {totalPlayers} players · {starters.length} starters flagged
         </p>
+        {userId ? <BureauRosterDepthShareBar leagueId={leagueId} userId={userId} /> : null}
       </header>
 
       <section className="chunky bg-bg-card p-6">

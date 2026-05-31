@@ -1,13 +1,5 @@
 # Memory — Builder
 
-2026-05-31 | league-power-rankings-og-snapshot | 26a22f69 | keep | compact encode/decode lib + ShareBar rows prop
-
-2026-05-31 | H2H canonical codec | da33eafd | BureauH2HShareBar uses encodeBureauH2HOgSnapshot; OG route decodeBureauH2HOgSnapshot.
-
-2026-05-31 | Trade values OG rank labels | 5ed39e14 | TradeValuesRenderer ogSnapshotRows uses `rank · Value` or `rank · formula.name` on top 6 sorted rows.
-
-2026-05-31 | Buy/Sell OG lane labels | 98ae0ef2 | BuySellRenderer splits buyRows/sellRows with Buy/Sell statLabel before encodeOgSnapshot.
-
 Append-only log of implementation patterns, surgical wins, things to avoid.
 
 Format per entry:
@@ -21,15 +13,17 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
-2026-05-31 | weekly-hot-week-og | ogSnapshotRows max week pts + Wk label | da33eafd | SHIP | KEEP hottest-week not PPG | — | — | evidence/2026-05-31-lab-weekly-hot-week-snapshot.md
+2026-05-31 | league-build-profiles-share-og | merge base conflicts + PR 577 | da33eafd | SHIP | KEEP demo fallback ≥40KB | — | — | curl 72409B; pytest 51
+2026-05-31 | league-build-profiles-share-og | merge base + verify ShareBar/OG route | 8a08b2f4 | SHIP | KEEP demo fallback ≥40KB | — | — | curl 72409B
+2026-05-31 | league-waiver-tendencies-unhide | cherry-pick BureauWaiverTendencies from base + unhide slug | 42069a46 | SHIP | KEEP 3-file contract | — | — | evidence/2026-05-31-league-waiver-tendencies-unhide.md
 
-2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | da33eafd | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
-2026-05-31 | DashboardRenderer snapshotRows | c9151786 | keep | comps match % on dynasty-comps OG; curl 65961B
-2026-05-31 | league-waiver-tendencies-og-share | Hawkeye OG + share bar; pickHero hoarder-first | 6dcb0f72 | SHIP | KEEP FAAB bar from faab_spent | — | — | evidence 2026-05-31-league-waiver-tendencies-og-share.md
+2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | 246052ec | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
 
 ---
 
 ## Entries
+
+2026-05-31 | weekly PPG demo + export footer | route demo PPG + footer when players | f60168e1 | SHIP | KEEP statLabel parity on DEMO_ROWS | — | — | cycle 91 evidence
 
 2026-05-31 | Lab OG weekly+breakouts snapshotRows | 98e51602 | keep | PPG weekly + RBS breakouts; curl weekly snap 64762B
 2026-05-31 | Bureau Pressure Map copy link | c4ce09b7 | keep | copyPressureLink row; curl pressure-map 60661B
@@ -47,15 +41,15 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | Lab OG live panel rows | 2cb898b6 | keep | fetchLiveOgRows panels slug + candidates extract; curl rankings 59509B breakouts 60649B
 2026-05-31 | Bureau Monte Carlo copy link | 433d8002 | keep | copyMonteCarloLink mirrors Self-Scout; curl monte-carlo OG 53350B
-2026-05-31 | Bureau Monte Carlo copy link morning | da33eafd | keep | copyMonteCarloLink row; H2H dedup ShareBar on base; curl monte-carlo 53350B
+2026-05-31 | Bureau Monte Carlo copy link morning | 246052ec | keep | copyMonteCarloLink row; H2H dedup ShareBar on base; curl monte-carlo 53350B
 2026-05-31 | Lab OG launch10 live label | 6e98f4a2 | keep | panelBlurbSuffix + LAUNCH_10_OG_SLUGS; namedLiveRows; curl rankings 59509B
 2026-05-31 | Bureau H2H share bar | 044ee1e8 | keep | BureauH2HShareBar copy link + export; OG blurb Satori fix; curl 59305B
 2026-05-31 | Bureau Monte Carlo share bar | 3392bc29 | keep | BureauMonteCarloShareBar; curl monte-carlo OG 53767B
 2026-05-31 | Bureau power-rankings OG | e62721a6 | keep | /og/power-rankings route + export link; curl 68555B
 2026-05-31 | Bureau Trade Network share bar | 1616484c | keep | BureauTradeNetworkShareBar; curl trade-network OG 68090B
-2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
-2026-05-31 | league-build-profiles-tab | da33eafd | keep | BureauBuildProfiles Atlas archetype grid; unhide slug; build PASS pytest 51
-2026-05-31 | league-roster-depth-og-share | 688cea64 | keep | /og/roster-depth Hawkeye grades; curl 57282B; BureauRosterDepthShareBar
-2026-05-31 | league-build-profiles-og-share | 77d4f765 | keep | /og/build-profiles Atlas archetypes; curl 73228B; BureauBuildProfilesShareBar
-2026-05-31 | league-waiver-tendencies-og-share | 6dcb0f72 | SHIP | /og/waiver-tendencies 73121B; BureauWaiverTendenciesShareBar
-2026-05-31 | league-strength-of-schedule-tab | eb542d51 | keep | BureauStrengthOfSchedule; HIDDEN_BUREAU_SLUGS empty; epic 3/3
+2026-05-31 | Cycle 86 Trade Network copy link | 246052ec | keep | Bureau behavioral share atom 3
+2026-05-31 | league-build-profiles-tab | 2ee04975 | keep | BureauBuildProfiles Atlas archetype grid; unhide slug; build PASS pytest 51
+2026-05-31 | Prospects RPS+position export | 17a40c65 | keep | statLabel RPS; position on LabOgExportLink
+2026-05-31 | Efficiency position prop | b2d304e7 | keep | position on LabOgExportLink; 1 file
+2026-05-31 | league-build-profiles-share-og | 246052ec | keep | ShareBar + OG route; curl 72409B; pytest 51
+2026-05-31 | league-roster-depth-share-og | 1b769554 | keep | ShareBar + OG route; curl 54072B; pytest 51

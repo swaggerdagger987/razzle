@@ -61,6 +61,7 @@ export function BureauBuildProfiles({ data, leagueId }: Props) {
         <p className="text-ink-medium mt-1 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
           {rows.length} teams · league {leagueLabel}
         </p>
+        <BureauBuildProfilesShareBar leagueId={leagueId} />
       </header>
 
       {Object.keys(archetypeCounts).length > 0 && (

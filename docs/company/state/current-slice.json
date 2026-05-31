@@ -1,27 +1,31 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-waiver-tendencies-og-share",
-  "big_problem": "Four newly unhidden Bureau depth tabs have no group-chat export cards while rival tabs ship OG share rows.",
-  "epic": "League L5 — Bureau depth tab OG export cards (atom 3/4)",
-  "slice_title": "Waiver Tendencies tab OG FAAB card",
+  "atom_id": "league-roster-depth-share-og",
+  "big_problem": "Bureau Build/Roster share cards exist locally but never merged — dynasty league intel still can't screenshot to Reddit (DEPTH League L5).",
+  "epic": "League L5 — Bureau share-export ship to base",
+  "slice_title": "Roster Depth copy link + OG export card on base",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — Bureau export PNG ≥40KB",
-  "trust_pillars": ["T5", "T6"],
+  "acceptance_ref": "FACTORY-DOD Gate C2 — OG PNG ≥40KB with demo rows",
+  "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/waiver-tendencies/route.tsx",
-    "apps/web/components/league/BureauWaiverTendenciesShareBar.tsx",
-    "apps/web/components/league/BureauWaiverTendencies.tsx"
+    "apps/web/components/league/BureauRosterDepthShareBar.tsx",
+    "apps/web/app/og/roster-depth/route.tsx",
+    "apps/web/components/league/BureauRosterDepth.tsx"
   ],
   "max_files": 3,
   "max_lines": 300,
   "acceptance_commands": [
-    "pytest apps/api/tests -q",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-waiver-tendencies.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/waiver-tendencies?league=demo&download=1'"
+    "JWT_SECRET=test .venv-v2/bin/python -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/roster-depth-og.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/roster-depth?league=demo&user=demo&download=1'"
   ],
-  "out_of_scope": [],
-  "builder_mode": "composer-surgical",
-  "content_commit": "6dcb0f72",
-  "verdict": "SHIP"
+  "out_of_scope": ["new Bureau tabs", "API schema changes"],
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  },
+  "builder_mode": "composer-surgical"
 }

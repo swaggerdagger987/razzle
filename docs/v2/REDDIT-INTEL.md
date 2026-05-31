@@ -2,24 +2,19 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
-### 2026-05-31 — Lab trade values export (cycle 95)
-- **Angle:** Formula-ranked trade value card — rank + composite name on each row matches what Bones users sort before screenshotting.
-- **Trust:** T5/T6 — top 6 from visible sort; dynasty rank when no formula.
+### 2026-05-31 — Bureau Build Profiles share OG (cycle 95)
+- Atlas archetype grid on export cards — Win Now vs Zero RB splits are construction-intel screenshots for r/DynastyFF trade threads.
+- Copy link + OG closes the gap between in-product Bureau and Reddit travel.
 
-### 2026-05-31 — Lab buy/sell export (cycle 94)
-- **Angle:** Buy-low vs sell-high on one share card — Bones lane labels match the two-column panel Reddit traders screenshot.
-- **Trust:** T5/T6 — top 3 per lane in snapshot; formula name on label when composite sort active.
+### 2026-05-31 — Bureau waiver tendencies (cycle 94)
+- FAAB hoarder / streamer archetype cards are waiver-wire screenshot bait on r/fantasyfootball.
+- Hawkeye-owned tab closes the Bureau unhide epic — league managers can scout opponent pickup habits.
 
-### 2026-05-31 — Lab dashboard export (cycle 92)
-- **Angle:** Dynasty pulse export shows top5 trade values on the card — matches the hero grid users screenshot, not only rank movers.
-- **Trust:** T5/T6 — snapshot encodes what was on screen; demo fallback unchanged when API empty.
+### 2026-05-31 — Bureau share-export (cycle 92)
+- Build archetype cards travel well on r/DynastyFF trade threads — construction intel is screenshot bait.
 
-### 2026-05-31 — Lab launch-10 OG (cycle 77)
 - **Angle:** Screenshot cards without "sample preview" when API rows load — launch-10 exports read as live research, not demo shells.
 - **Trust:** T1 honest labeling; sample suffix only on demo fallback.
-
-### 2026-05-31 — Bureau H2H codec (cycle 96)
-- **Angle:** League group chats break when export PNG shows demo rows after a real rivalry snapshot — canonical y/m/pc codec keeps ShareBar honest.
 
 ### 2026-05-31 — Bureau H2H (cycle 73)
 - **Angle:** League rivalry cards with copyable URLs — managers share H2H dossiers in league group chats.

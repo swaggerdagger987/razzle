@@ -7,7 +7,7 @@ interface Props {
   userId: string;
 }
 
-/** Copyable roster depth URL + OG export — mirrors BureauPowerRankingsShareBar. */
+/** Copyable roster depth URL + OG export — mirrors BureauBuildProfilesShareBar. */
 export function BureauRosterDepthShareBar({ leagueId, userId }: Props) {
   const [copied, setCopied] = useState(false);
 
