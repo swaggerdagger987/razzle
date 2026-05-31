@@ -1,3 +1,5 @@
+2026-05-31 | lab-og-gamelog-player-default | da33eafd | PASS | curl 60634B; pytest 61; build ok.
+
 # Memory — Reality Checker
 
 2026-05-31 | explore-og-universe-query Gate C | 7dbd4b11 | PASS college OG 41427B; build + pytest 58.

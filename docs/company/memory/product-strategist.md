@@ -1,3 +1,5 @@
+2026-05-31 | lab-og-gamelog-player-default | da33eafd | SHIP | T5/T6 export URLs screenshot-ready.
+
 # Memory — Product Strategist
 
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | SHIP | Explore L5 export URL carries college season filter.
