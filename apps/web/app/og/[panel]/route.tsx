@@ -359,6 +359,14 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
     if (weeklyRows.length > 0) return weeklyRows;
   }
 
+  if (slug === "prospects" && Array.isArray(obj.items)) {
+    const prospectRows = extractProspectsRows(
+      obj.items as Record<string, unknown>[],
+      positionFilter,
+    );
+    if (prospectRows.length > 0) return prospectRows;
+  }
+
   if (slug === "prospects" && Array.isArray(obj.prospects)) {
     const prospectRows = extractProspectsRows(
       obj.prospects as Record<string, unknown>[],
