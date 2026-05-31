@@ -1,31 +1,30 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG export cards must mirror in-panel position filters — snapshot-less exports still fetch unscoped live rows.",
-  "epic_title": "Lab L5 — OG export matches in-panel position filters",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Explore screener exports travel without a visible razzle.lol watermark — Reddit screenshots need branded cards, not anonymous tables.",
+  "epic_title": "Explore L5 — Watermarked screener OG export cards",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "lab-og-position-efficiency-aging",
-      "title": "Efficiency + aging export passes position filter to OG",
+      "id": "explore-og-watermark-band",
+      "title": "Diagonal razzle.lol watermark on Explore OG download cards",
       "status": "done",
-      "merge_commit": "f358349d"
+      "merge_commit": "b395bbba"
     },
     {
-      "id": "lab-og-position-tradevalues-prospects",
-      "title": "Trade values + prospects export passes position filter",
+      "id": "explore-og-live-rows-fallback",
+      "title": "Demo row fallback when screener API empty on OG export",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "lab-og-position-buysell",
-      "title": "Buy/sell export passes position filter to OG",
+      "id": "explore-share-snapshot-param",
+      "title": "Pass top-6 screener rows via snapshot param from ExploreShareButton",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-position-tradevalues-prospects",
+  "next_atom_id": "explore-og-live-rows-fallback",
   "created_at": "2026-05-31T06:10:00Z",
-  "updated_at": "2026-05-31T06:15:00Z",
-  "last_cycle_commit": "f358349d"
+  "updated_at": "2026-05-31T06:10:00Z"
 }

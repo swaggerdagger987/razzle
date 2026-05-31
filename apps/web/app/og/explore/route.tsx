@@ -101,6 +101,7 @@ export async function GET(req: Request) {
     (
       <div
         style={{
+          position: "relative",
           width: "100%",
           height: "100%",
           background: "#ede0cf",
@@ -110,8 +111,29 @@ export async function GET(req: Request) {
           padding: 48,
           fontFamily: "Space Mono",
           border: "10px solid #2d1f14",
+          overflow: "hidden",
         }}
       >
+        {isDownload ? (
+          <div
+            style={{
+              position: "absolute",
+              top: "38%",
+              left: "-6%",
+              width: "112%",
+              display: "flex",
+              justifyContent: "center",
+              transform: "rotate(-16deg)",
+              fontFamily: "Luckiest Guy",
+              fontSize: 88,
+              color: "rgba(217, 119, 87, 0.14)",
+              letterSpacing: 10,
+              pointerEvents: "none",
+            }}
+          >
+            razzle.lol
+          </div>
+        ) : null}
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
           <div style={{ fontSize: 52, display: "flex" }}>🐯</div>
           <div style={{ display: "flex", fontSize: 38, fontWeight: 700 }}>
