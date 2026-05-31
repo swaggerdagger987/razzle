@@ -1,26 +1,36 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Room briefing OG ships without regression guards — watermark band and Room hallway link need Gate C pytest like Explore/Lab exports.",
-  "epic": "Room L5 — briefing GTM export (close-out)",
-  "slice_title": "Briefing OG watermark + hallway Gate C pytest",
-  "atom_id": "room-briefing-watermark",
-  "parity_ref": "Room L5 — GTM export slice",
-  "depth_ref": "Room L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — briefing OG PNG ≥40KB",
+  "big_problem": "Lab export cards vanish when a panel has no rows yet — users can't screenshot an empty tape state for Reddit.",
+  "epic": "Lab L5 — OG export on empty panel states",
+  "slice_title": "Gamelog — export card when player loaded but weeks empty",
+  "atom_id": "lab-gamelog-empty-weeks-export",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with visible rows",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/api/tests/test_briefing_og_route.py",
-    "docs/v2/evidence/2026-05-31-room-briefing-watermark-gate-c.md"
+    "apps/web/components/lab/renderers/GamelogRenderer.tsx"
   ],
-  "max_files": 2,
+  "max_files": 1,
   "max_lines": 40,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_briefing_og_route.py -q",
-    "curl -s -o /tmp/og-briefing.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/briefing?download=1'"
+    "npm run build --workspace=apps/web",
+    "JWT_SECRET=test pytest apps/api/tests -q",
+    "curl -s -o /tmp/gamelog-og-empty.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1&player_id=00-0036900'",
+    "file /tmp/gamelog-og-empty.png"
   ],
-  "out_of_scope": ["route.tsx changes", "NORTH_STAR/DESIGN/DECISIONS edits"],
+  "out_of_scope": [
+    "Other Lab panels this cycle",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
   "builder_mode": "composer-surgical",
-  "content_commit": "5a32e03de",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP"
+  },
+  "content_commit": "ac0280a20",
   "reality": "PASS",
-  "merge": "pending"
+  "merge": "merged"
 }
