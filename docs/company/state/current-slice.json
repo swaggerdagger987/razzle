@@ -1,7 +1,38 @@
 {
   "date": "2026-05-31",
+<<<<<<< HEAD
+  "big_problem": "Lab OG cards without a snapshot can rank by the wrong stat — formula-sorted panels export nflverse defaults instead of what the user sees.",
+  "epic": "Lab L5 — formula-sorted OG live parity",
+  "slice_title": "Buy/sell OG live extract prefers formula_score + mismatch lanes",
+  "atom_id": "lab-og-buysell-formula-live",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/api/tests/test_og_launch10_formula_live.py"
+  ],
+  "max_files": 2,
+  "max_lines": 40,
+  "acceptance_commands": [
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_launch10_formula_live.py -q",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-buysell.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/buysell?download=1'"
+  ],
+  "out_of_scope": ["NORTH_STAR/DESIGN/DECISIONS"],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP"
+  },
+  "status": "in_progress"
+=======
   "atom_id": "league-trade-finder-og-watermark-live",
   "slice_title": "Trade Finder OG — LIVE/SAMPLE stickers + terracotta watermark band",
   "status": "shipped",
   "content_commit": "db6537faf"
+>>>>>>> origin/razzle-v2-redesign
 }

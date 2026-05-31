@@ -1,8 +1,9 @@
-cycle: 144
+cycle: 145
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: league-trade-finder-og-snapshot (epic atom 2/3)
-last_keep_cycle: 144
-last_commit: db6537faf
+next_slice: league-trade-finder-og-snapshot
+last_keep_cycle: 145
+last_commit: e4204015f
+lab_l5_formula_og_epic: complete
 league_l5_trade_finder_gtm_epic: active
