@@ -306,6 +306,26 @@ function extractProspectsRows(
   return [...rows].sort((a, b) => b.stat - a.stat).slice(0, 6);
 }
 
+/** Gamelog week rows — PPR sort (matches GamelogRenderer ogSnapshotRows). */
+function extractGamelogWeekRows(
+  weeks: Record<string, unknown>[],
+  playerName: string,
+  position: string,
+  team: string,
+): OgRow[] {
+  return [...weeks]
+    .map((w) => ({
+      name: `Wk ${Number(w.week ?? 0)}`,
+      position,
+      team,
+      stat: Number(w.fpts ?? 0),
+      statLabel: "PPR",
+    }))
+    .filter((r) => r.stat > 0)
+    .sort((a, b) => b.stat - a.stat)
+    .slice(0, 6);
+}
+
 function statLabelForKey(k: string): string {
   let statLabel = k.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
   if (k === "fantasy_points_ppr") statLabel = "FPTS";
@@ -341,6 +361,16 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
       positionFilter,
     );
     if (prospectRows.length > 0) return prospectRows;
+  }
+
+  if (slug === "gamelog" && Array.isArray(obj.weeks)) {
+    const gamelogRows = extractGamelogWeekRows(
+      obj.weeks as Record<string, unknown>[],
+      String(obj.name ?? ""),
+      String(obj.position ?? positionFilter),
+      String(obj.team ?? ""),
+    );
+    if (gamelogRows.length > 0) return gamelogRows;
   }
 
   let candidates: Record<string, unknown>[] = [];
