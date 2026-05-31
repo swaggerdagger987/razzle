@@ -1,3 +1,4 @@
+2026-05-31 | league-og-pressure-map-watermark | ce3f60ee6 | SHIP | Factory open cycle 1; Bureau OG watermark 3/4.
 2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | SHIP | Factory open cycle 1; position-default epic 3/3; NO_LOCK_GUARDRAIL.
 2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | SHIP | Factory cycle 1; H2H GTM epic complete; dedup pytest on base.
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | Factory open cycle 1; Explore L5 margin epic 1/4; NO_LOCK_GUARDRAIL.
