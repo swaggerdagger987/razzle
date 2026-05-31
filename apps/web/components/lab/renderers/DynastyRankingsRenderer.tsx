@@ -22,6 +22,16 @@ import { LabPanelShareBar } from "../LabPanelShareBar";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
+/** Sample dynasty ranks when filter returns zero rows — OG export still screenshots. */
+const RANKINGS_SAMPLE_OG_ROWS: OgSnapshotRow[] = [
+  { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 1, statLabel: "Rank" },
+  { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 2, statLabel: "Rank" },
+  { name: "Brock Bowers", position: "TE", team: "LV", stat: 3, statLabel: "Rank" },
+  { name: "Jayden Daniels", position: "QB", team: "WAS", stat: 4, statLabel: "Rank" },
+  { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 5, statLabel: "Rank" },
+  { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 6, statLabel: "Rank" },
+];
+
 interface PlayerRow extends WithFormulaScore {
   player_id: string;
   full_name: string;
@@ -122,6 +132,7 @@ export function DynastyRankingsRenderer({ panel }: Props) {
 
   const data = q.data!;
   const tiers = data.tiers ?? [];
+  const isEmptyBoard = formula ? !sortedPlayers.length : !tiers.length;
 
   const renderPlayerRow = (p: PlayerRow, rank?: number) => {
     const age = p.age != null ? Number(p.age) : null;
@@ -218,21 +229,28 @@ export function DynastyRankingsRenderer({ panel }: Props) {
         </p>
       )}
 
-      {formula ? (
-        !sortedPlayers.length ? (
-          <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
-        ) : (
-          <section className="tier-block chunky bg-bg-card p-4">
-            <h3 className="tier-label" style={{ fontFamily: "var(--font-display)" }}>
-              Sorted by {formula.name}
-            </h3>
-            <ul className="tier-players">
-              {sortedPlayers.slice(0, 60).map((p, i) => renderPlayerRow(p, i + 1))}
-            </ul>
-          </section>
-        )
-      ) : !tiers.length ? (
-        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+      {isEmptyBoard ? (
+        <div className="p-6">
+          <p className="text-ink-medium">{agent.emptyCopy}</p>
+          <footer className="mt-4 flex flex-wrap items-center gap-4">
+            <LabPanelShareBar
+              slug="rankings"
+              downloadName="razzle-dynasty-rankings.png"
+              position={position || undefined}
+              snapshotRows={RANKINGS_SAMPLE_OG_ROWS}
+              copyLabel="copy sample card"
+            />
+          </footer>
+        </div>
+      ) : formula ? (
+        <section className="tier-block chunky bg-bg-card p-4">
+          <h3 className="tier-label" style={{ fontFamily: "var(--font-display)" }}>
+            Sorted by {formula.name}
+          </h3>
+          <ul className="tier-players">
+            {sortedPlayers.slice(0, 60).map((p, i) => renderPlayerRow(p, i + 1))}
+          </ul>
+        </section>
       ) : (
         <div className="tier-stack">
           {tiers.map((tier) => (

@@ -1,4 +1,4 @@
-/** Compact Trade Finder payload for OG export — mirrors Bureau Trade Finder panel. */
+/** Compact Trade Finder payload for OG export — mirrors in-product Bureau panel. */
 
 export type BureauTradeFinderOgPlayer = {
   player_id: string;
@@ -23,86 +23,87 @@ export type BureauTradeFinderOgSnapshot = {
   surplus?: string[];
 };
 
-type CompactPlayer = { id: string; n: string; p: string; v: number };
+export type TradeFinderOgData = {
+  matches?: BureauTradeFinderOgMatch[];
+  hero_match?: BureauTradeFinderOgMatch | null;
+  needs?: string[];
+  surplus?: string[];
+};
 
+type CompactPlayer = { id: string; nm: string; pos: string; dv: number };
 type CompactMatch = {
-  id: number;
-  t: string;
-  g: CompactPlayer;
-  r: CompactPlayer;
+  pr: number;
+  pt: string;
+  gv: CompactPlayer;
+  gt: CompactPlayer;
   gp: number;
 };
-
 type CompactTradeFinder = {
   m: CompactMatch[];
-  nd?: string[];
-  su?: string[];
+  h?: CompactMatch;
+  n?: string[];
+  s?: string[];
 };
+
+function compactPlayer(p: BureauTradeFinderOgPlayer): CompactPlayer {
+  return { id: p.player_id, nm: p.name, pos: p.position, dv: p.dynasty_value };
+}
+
+function expandPlayer(p: CompactPlayer): BureauTradeFinderOgPlayer {
+  return { player_id: p.id, name: p.nm, position: p.pos, dynasty_value: p.dv };
+}
+
+function compactMatch(m: BureauTradeFinderOgMatch): CompactMatch {
+  return {
+    pr: m.partner_roster_id,
+    pt: m.partner_team,
+    gv: compactPlayer(m.give),
+    gt: compactPlayer(m.get),
+    gp: m.gap_pct,
+  };
+}
+
+function expandMatch(m: CompactMatch): BureauTradeFinderOgMatch {
+  const valueGap = Math.abs(m.gv.dv - m.gt.dv);
+  return {
+    partner_roster_id: m.pr,
+    partner_team: m.pt,
+    give: expandPlayer(m.gv),
+    get: expandPlayer(m.gt),
+    value_gap: valueGap,
+    gap_pct: m.gp,
+  };
+}
 
 function hasSnapshotData(snap: BureauTradeFinderOgSnapshot): boolean {
   return snap.matches?.length > 0 && Boolean(snap.matches[0]?.partner_team);
 }
 
 function fromCompact(c: CompactTradeFinder): BureauTradeFinderOgSnapshot | null {
-  const matches = (c.m ?? [])
-    .map((row) => ({
-      partner_roster_id: row.id,
-      partner_team: row.t,
-      give: {
-        player_id: row.g.id,
-        name: row.g.n,
-        position: row.g.p,
-        dynasty_value: row.g.v,
-      },
-      get: {
-        player_id: row.r.id,
-        name: row.r.n,
-        position: row.r.p,
-        dynasty_value: row.r.v,
-      },
-      value_gap: Math.abs(row.g.v - row.r.v),
-      gap_pct: row.gp,
-    }))
-    .filter((m) => m.partner_team && m.give.name);
+  const matches = (c.m ?? []).map(expandMatch).filter((m) => m.partner_team);
   if (!matches.length) return null;
+  const hero = c.h ? expandMatch(c.h) : matches[0];
   return {
     matches,
-    hero_match: matches[0],
-    needs: c.nd,
-    surplus: c.su,
+    hero_match: hero,
+    needs: c.n ?? [],
+    surplus: c.s ?? [],
   };
 }
 
-function toCompact(snap: BureauTradeFinderOgSnapshot): CompactTradeFinder {
-  const top = snap.matches.slice(0, 3);
-  return {
-    m: top.map((m) => ({
-      id: m.partner_roster_id,
-      t: m.partner_team,
-      g: {
-        id: m.give.player_id,
-        n: m.give.name,
-        p: m.give.position,
-        v: m.give.dynasty_value,
-      },
-      r: {
-        id: m.get.player_id,
-        n: m.get.name,
-        p: m.get.position,
-        v: m.get.dynasty_value,
-      },
-      gp: m.gap_pct,
-    })),
-    nd: snap.needs?.length ? snap.needs : undefined,
-    su: snap.surplus?.length ? snap.surplus : undefined,
-  };
-}
-
+/** Base64url JSON for `snapshot` query param on `/og/trade-finder`. */
 export function encodeBureauTradeFinderOgSnapshot(
   snap: BureauTradeFinderOgSnapshot,
 ): string | undefined {
   if (!hasSnapshotData(snap)) return undefined;
-  const json = JSON.stringify(toCompact(snap));
+  const hero = snap.hero_match ?? snap.matches[0];
+  const compact: CompactTradeFinder = {
+    m: snap.matches.slice(0, 5).map(compactMatch),
+    h: hero ? compactMatch(hero) : undefined,
+    n: snap.needs?.length ? snap.needs : undefined,
+    s: snap.surplus?.length ? snap.surplus : undefined,
+  };
+  const json = JSON.stringify(compact);
   if (typeof btoa === "function") {
     return btoa(json).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
   }
@@ -121,18 +122,13 @@ export function decodeBureauTradeFinderOgSnapshot(
   }
 }
 
-export function tradeFinderDataToOgSnapshot(data: {
-  matches?: BureauTradeFinderOgMatch[];
-  hero_match?: BureauTradeFinderOgMatch | null;
-  needs?: string[];
-  surplus?: string[];
-}): BureauTradeFinderOgSnapshot | null {
-  const matches = data.matches ?? [];
-  if (!matches.length) return null;
+export function bureauTradeFinderOgSnapshotToData(
+  snap: BureauTradeFinderOgSnapshot,
+): TradeFinderOgData {
   return {
-    matches,
-    hero_match: data.hero_match ?? matches[0],
-    needs: data.needs,
-    surplus: data.surplus,
+    matches: snap.matches,
+    hero_match: snap.hero_match ?? snap.matches[0],
+    needs: snap.needs ?? [],
+    surplus: snap.surplus ?? [],
   };
 }

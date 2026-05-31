@@ -12,7 +12,7 @@ import {
 interface Props {
   leagueId: string;
   userId: string;
-  /** In-panel matches — OG card mirrors Bureau view without live API. */
+  /** Encodes in-panel trade rows so OG card matches Bureau view. */
   snapshot?: BureauTradeFinderOgSnapshot;
 }
 

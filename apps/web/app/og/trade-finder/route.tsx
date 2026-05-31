@@ -1,35 +1,18 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
 import { toLeague, toRoom } from "@razzle/hallway";
-import { decodeBureauTradeFinderOgSnapshot } from "@/lib/bureau-trade-finder-og-snapshot";
+import {
+  bureauTradeFinderOgSnapshotToData,
+  decodeBureauTradeFinderOgSnapshot,
+  type BureauTradeFinderOgMatch,
+  type TradeFinderOgData,
+} from "@/lib/bureau-trade-finder-og-snapshot";
 
 export const runtime = "edge";
 
-type PlayerRef = {
-  player_id: string;
-  name: string;
-  position: string;
-  dynasty_value: number;
-};
+type TradeFinderData = TradeFinderOgData & { error?: string };
 
-type Match = {
-  partner_roster_id: number;
-  partner_team: string;
-  give: PlayerRef;
-  get: PlayerRef;
-  value_gap: number;
-  gap_pct: number;
-};
-
-type TradeFinderData = {
-  matches?: Match[];
-  hero_match?: Match | null;
-  needs?: string[];
-  surplus?: string[];
-  error?: string;
-};
-
-const DEMO_MATCHES: Match[] = [
+const DEMO_MATCHES: BureauTradeFinderOgMatch[] = [
   {
     partner_roster_id: 2,
     partner_team: "Rebuild FC",
@@ -93,22 +76,8 @@ function playerLabel(name: string): string {
   return name.length > 16 ? `${name.slice(0, 14)}…` : name;
 }
 
-function bonesTradeFinderRoomQuestion(m: Match): string {
-  return `Should I offer ${m.give.name} for ${m.get.name} from ${m.partner_team}? Value gap is ${m.gap_pct}%.`;
-}
-
-function bonesTradeFinderRoomPath(m: Match): string {
-  return toRoom({
-    agentId: "bones",
-    question: bonesTradeFinderRoomQuestion(m),
-    panelSlug: "trade-finder",
-    player: {
-      playerId: m.give.player_id,
-      name: m.give.name,
-      slug: m.give.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-      position: m.give.position,
-    },
-  });
+function bonesTradeFinderRoomQuestion(hero: BureauTradeFinderOgMatch): string {
+  return `Should I offer ${hero.give.name} for ${hero.get.name} from ${hero.partner_team}? Value gap is ${hero.gap_pct}%.`;
 }
 
 export async function GET(req: Request) {
@@ -117,32 +86,37 @@ export async function GET(req: Request) {
   const league = url.searchParams.get("league") ?? "";
   const user = url.searchParams.get("user") ?? "";
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
-  const snapshot = snapshotParam ? decodeBureauTradeFinderOgSnapshot(snapshotParam) : null;
 
   const bones = AGENT_BY_ID.bones;
-  const fromSnapshot = snapshot?.matches?.length ? snapshot : null;
-  const live = fromSnapshot ? null : await fetchTradeFinder(req, league, user);
-  const isLive = Boolean(live?.matches?.length);
-  const fromPanel = Boolean(fromSnapshot?.matches?.length);
-  const isDemo = !fromPanel && !isLive;
-  const matches = fromPanel
-    ? fromSnapshot!.matches.slice(0, 3)
-    : isDemo
-      ? DEMO_MATCHES
-      : live!.matches!.slice(0, 3);
-  const hero = fromPanel
-    ? (fromSnapshot!.hero_match ?? matches[0])
-    : isDemo
-      ? DEMO_MATCHES[0]
-      : (live!.hero_match ?? matches[0]);
-  const needs = fromPanel ? (fromSnapshot!.needs ?? []) : isDemo ? DEMO_META.needs : (live!.needs ?? []);
-  const surplus = fromPanel
-    ? (fromSnapshot!.surplus ?? [])
-    : isDemo
-      ? DEMO_META.surplus
-      : (live!.surplus ?? []);
+  const snapshot = snapshotParam ? decodeBureauTradeFinderOgSnapshot(snapshotParam) : null;
+  const isSnapshot = Boolean(snapshot);
+  const live = isSnapshot ? null : await fetchTradeFinder(req, league, user);
+  const isLive = !isSnapshot && Boolean(live?.matches?.length);
+  const isDemo = !isSnapshot && !isLive;
+  const panelData: TradeFinderOgData =
+    isSnapshot && snapshot
+      ? bureauTradeFinderOgSnapshotToData(snapshot)
+      : isLive
+        ? live!
+        : { matches: DEMO_MATCHES, hero_match: DEMO_MATCHES[0], needs: DEMO_META.needs, surplus: DEMO_META.surplus };
+  const matches = (panelData.matches ?? DEMO_MATCHES).slice(0, 3);
+  const hero = panelData.hero_match ?? matches[0];
+  const needs = panelData.needs ?? [];
+  const surplus = panelData.surplus ?? [];
   const leagueDeepLink = league ? toLeague(league, "trade-finder") : "/league/trade-finder";
-  const bonesRoomPath = hero ? bonesTradeFinderRoomPath(hero) : "/room?agent=bones&from=trade-finder";
+  const bonesRoomPath = hero
+    ? toRoom({
+        agentId: "bones",
+        question: bonesTradeFinderRoomQuestion(hero),
+        panelSlug: "trade-finder",
+        player: {
+          playerId: hero.give.player_id,
+          name: hero.give.name,
+          slug: hero.give.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+          position: hero.give.position,
+        },
+      })
+    : "/room?agent=bones&from=trade-finder";
 
   return new ImageResponse(
     (
@@ -188,18 +162,20 @@ export async function GET(req: Request) {
           Trade Finder
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 16 }}>
-          {`value-matched league trades${fromPanel ? " · from your board" : isDemo ? " · sample preview" : ""}`}
+          {`value-matched league trades${
+            isSnapshot ? " · exported from panel" : isDemo ? " · sample preview" : ""
+          }`}
           {needs.length ? ` · need ${needs.join(", ")}` : ""}
           {surplus.length ? ` · surplus ${surplus.join(", ")}` : ""}
         </div>
 
-        {fromPanel ? (
+        {isSnapshot ? (
           <div
             style={{
               fontFamily: "Caveat",
               fontSize: 32,
               color: "#f7efe5",
-              background: "#5b7fff",
+              background: "#8b5cf6",
               padding: "6px 18px",
               alignSelf: "flex-start",
               border: "3px solid #2d1f14",
@@ -211,7 +187,7 @@ export async function GET(req: Request) {
               display: "flex",
             }}
           >
-            FROM PANEL · your deals
+            EXPORTED · panel trade rows
           </div>
         ) : null}
 
@@ -330,7 +306,7 @@ export async function GET(req: Request) {
 
         {hero ? (
           <div style={{ display: "flex", fontSize: 18, color: "#d97757", marginTop: 10 }}>
-            {`razzle.lol${bonesRoomPath} · ask ${bones.name} about ${playerLabel(hero.give.name)} → ${playerLabel(hero.get.name)}`}
+            {`razzle.lol${bonesRoomPath} · ask ${bones.name} about ${playerLabel(hero.partner_team)}`}
           </div>
         ) : null}
 
