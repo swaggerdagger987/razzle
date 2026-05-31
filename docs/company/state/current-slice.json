@@ -23,8 +23,5 @@
     "Explore or Bureau OG routes",
     "Snapshot query round-trip"
   ],
-  "builder_mode": "composer-surgical",
-  "content_commit": "b80512bb4",
-  "reality": "PASS",
-  "merge": "merged"
+  "builder_mode": "composer-surgical"
 }
