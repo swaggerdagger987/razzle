@@ -1,31 +1,27 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 branches across launch-10 renderers drift from teaser/perks polish.",
-  "epic": "Lab L4 — shared pro-gate error surface",
-  "slice_title": "ProGateFromPanelError on breakouts + pytest guard",
-  "atom_id": "lab-l4-pro-gate-error-surface",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
-  "acceptance_ref": "ACCEPTANCE Gate 2 — pro panel shows upgrade message (402)",
-  "trust_pillars": ["T2", "T6"],
+  "big_problem": "Launch-10 OG cards still read generic on Hawkeye panels — Reddit cannot tell breakouts from dynasty ranks at a glance.",
+  "epic": "Lab L5 — Launch-10 OG panel-specific LIVE labels (atom 1/3)",
+  "slice_title": "Breakouts OG LIVE sticker + blurb (RBS breakout board)",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with real row layout",
+  "trust_pillars": ["T1", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/ProGateFromPanelError.tsx",
-    "apps/web/components/lab/renderers/BreakoutsRenderer.tsx",
-    "apps/api/tests/test_panel_pro_gate_surface.py"
+    "apps/web/app/og/[panel]/route.tsx",
+    "docs/v2/evidence/2026-05-31-lab-og-breakouts-live-sticker.md"
   ],
-  "max_files": 3,
-  "max_lines": 140,
+  "max_files": 2,
+  "max_lines": 24,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_pro_gate_surface.py apps/api/tests/test_panel_upgrade_teaser.py -q"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/breakouts?download=1'"
   ],
-  "out_of_scope": ["Tradevalues/efficiency this cycle"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP"
-  },
-  "status": "shipped"
+  "out_of_scope": [
+    "Other Launch-10 slugs",
+    "Pro gate / pricing",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
+  "builder_mode": "composer-surgical"
 }

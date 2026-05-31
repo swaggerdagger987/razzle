@@ -1,16 +1,13 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 125 OG LIVE labels | ad24a219 | Workday open; panel-native LIVE epic 1/3; lock #842.
-
-2026-05-31 | Factory cycle 121 pro gate panel pitches | ad24a219 | L4 epic atom 2/3; factory open.
-
-2026-05-31 | Factory cycle 120 pro-gate loading copy | ad24a219 | Deduped OG on base #753; L4 epic atom 1/3.
-
-2026-05-31 | Factory cycle 107 Lab sidebar agent groups | 4e8b0e8e | Workday open; L2 sidebar epic atom 1/2.
-
+2026-05-31 | Factory cycle 122 breakouts OG sticker | c2c5f6a9 | workday cycle 1; PR #918; Hawkeye RBS breakout board copy.
+2026-05-31 | Factory cycle 125 OG LIVE labels | ad24a219 | rankings/breakouts/tv on base; cycle 122 refines breakouts label.
+2026-05-31 | Factory cycle 127 sidebar search labels | e75ec714 | L2 sidebar epic complete on base.
+2026-05-31 | Factory cycle 121 explore OG query | 7dbd4b11 | workday cycle 1; live-fetch epic atom 2/3.
+2026-05-31 | Factory cycle 120 live fetch merge | 3f0411ec | NO_LOCK_GUARDRAIL; live-fetch epic atom 1/3.
+2026-05-31 | Factory cycle 107 Lab sidebar agent groups | 4e8b0e8e | L2 sidebar epic atom 1/2.
 2026-05-31 | Factory cycle 119 SAMPLE vs LIVE OG | 9cd6a5cf | Live-rows epic 3/3 complete; force_demo for Gate C.
-
-2026-05-31 | Factory cycle 118 prospects-weekly OG | 5bb77346 | Deduped PR720 gamelog on base; live-rows epic 2/3.
+2026-05-31 | Factory cycle 107 Lab sidebar agent groups | 4e8b0e8e | Workday open; L2 sidebar epic atom 1/2.
 
 2026-05-31 | Factory cycle 116 LIVE OG sticker | 4e905360 | Dedup H2H on base #666; live-rows epic 1/3.
 
