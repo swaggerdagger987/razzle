@@ -11,6 +11,7 @@
 2026-05-31 | lab-og-live-demo-fallback-copy | 45d4a448 | curl force_demo 66345B weekly 63522B PASS | Gate C.
 
 2026-05-31 | lab-og-live-sticker-prospects-weekly | 15109115 | curl weekly 55816B prospects 60688B PASS | Gate C.
+2026-05-31 | explore-og-universe-query Gate C | 7dbd4b11 | PASS college OG 41427B; build + pytest 58.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | pytest 6; web build ok; Gate C N/A.
 
 2026-05-31 | launch10 live-fetch merge Gate C | 3f0411ec | PASS curl rankings 62355B weekly 66512B; build + pytest 58.

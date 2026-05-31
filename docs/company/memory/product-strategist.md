@@ -11,6 +11,7 @@
 2026-05-31 | lab-og-live-demo-fallback-copy | 45d4a448 | SHIP | T1 sample vs live at a glance closes live-rows epic.
 
 2026-05-31 | lab-og-live-sticker-prospects-weekly | 15109115 | SHIP | Weekly WR default unlocks panel API rows for LIVE badge.
+2026-05-31 | explore-og-universe-query | 7dbd4b11 | SHIP | Explore L5 export URL carries college season filter.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
 
 2026-05-31 | lab-og-launch10-live-fetch-merge | 3f0411ec | SHIP | live-fetch epic atom 1/3; sticker+fetch on base merge.
