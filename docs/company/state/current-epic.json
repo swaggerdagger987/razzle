@@ -1,8 +1,8 @@
 {
   "epic_status": "active",
-  "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
-  "epic_title": "Explore L5 — OG screener agent margin notes",
-  "parity_ref": "Explore L5 — agent margin notes on rows",
+  "big_problem": "Explore screener screenshots look like spreadsheets \u2014 OG exports miss the staff margin notes that make the in-product table feel alive.",
+  "epic_title": "Explore L5 \u2014 OG screener agent margin notes",
+  "parity_ref": "Explore L5 \u2014 agent margin notes on rows",
   "depth_ref": "Explore L5",
   "atoms": [
     {
@@ -21,7 +21,7 @@
       "id": "explore-og-margin-note-sticker",
       "title": "LIVE staff sticker when OG rows carry margin notes",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "843797ca1"
     },
     {
       "id": "explore-og-margin-note-college",
