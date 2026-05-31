@@ -71,5 +71,5 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 94	98ae0ef2	depth+voice+simplicity	keep	Lab	L5 Buy/sell combined OG snapshot lanes	trust=T5,T6; Buy/Sell labels 3+3; curl buysell snap 57884B demo 58072B; pytest 51; web build; epic atom 3/4
 95	5ed39e14	depth+voice+simplicity	keep	Lab	L5 Trade values formula-ranked OG rows	trust=T5,T6; rank·Value or rank·formula on snapshot; curl tradevalues snap 62441B demo 62488B; pytest 51; web build; epic atom 4/4 complete
 96	7ec8f82a	depth+voice+simplicity	keep	League	L5 H2H ShareBar canonical snapshot codec	trust=T5,T6; encodeBureauH2HOgSnapshot; curl h2h demo 71895B snap 70829B; pytest 51; web build; epic atom 1/3
->>>>>>> origin/razzle-v2-redesign
 97	26a22f69	depth+voice+simplicity	keep	League	L5 Power Rankings OG snapshot rows	trust=T5,T6; encode top-5 board; curl snap 50084B; Bureau OG epic atom 1/3
+98	3ca40686	depth+voice+simplicity	keep	League	L5 H2H snapshot roundtrip pytest	trust=T5,T6; pytest codec roundtrip; curl snap 72304B demo 71895B; H2H codec epic atom 3/3 complete
