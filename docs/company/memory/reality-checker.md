@@ -38,3 +38,4 @@ explicit checks in the verification routine.
 2026-05-31 | Waiver Tendencies tab | 920304a2 | PASS | build exit 0; pytest 51 passed | keep | evidence/2026-05-31-league-waiver-tendencies-tab.md
 2026-05-31 | Schedule tab | 12b51b1e | PASS | build exit 0; pytest 51 passed | keep | evidence/2026-05-31-league-strength-of-schedule-tab.md
 2026-05-31 | Lab sidebar agent sections | 51b37d6f | PASS | build exit 0; pytest 51 passed | keep | evidence/2026-05-31-lab-sidebar-agent-sections.md
+2026-05-31 | Lab grid agent badges | da33eafd | PASS | build exit 0; pytest 51 passed | keep | evidence/2026-05-31-lab-grid-agent-badges.md

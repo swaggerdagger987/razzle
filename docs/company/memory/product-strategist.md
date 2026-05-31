@@ -37,3 +37,4 @@ new evidence.
 2026-05-31 | league-waiver-tendencies-tab atom 1/2 | SHIP | keep | Hawkeye archetype board; Sunday waiver screenshot fuel; schedule tab next
 2026-05-31 | league-strength-of-schedule-tab atom 2/2 | SHIP | keep | Octo slate verdict; Bureau nav fully honest; epic complete
 2026-05-31 | lab-sidebar-agent-sections atom 1/3 | SHIP | keep | Hallway H-04 visible; agent headers on launch-10; grid badges next
+2026-05-31 | lab-grid-agent-badges atom 2/3 | SHIP | keep | /lab browse shows owner avatars; T4 discovery; filter chips next

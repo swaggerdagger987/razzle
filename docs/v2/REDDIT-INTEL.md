@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab grid agent badges (cycle 94)
+- **Angle:** `/lab` index cards show owner avatar beside panel icon — discovery without opening sidebar.
+- **Trust:** T4 ownership visible on browse surface, not only Staff Picks nav.
+
 ### 2026-05-31 — Lab agent sidebar (cycle 93)
 - **Angle:** Launch-10 grouped under Hawkeye/Octo/Bones headers — screenshot the sidebar to show "six staff, not 100 panels."
 - **Trust:** T4 hallway ownership visible before users open a panel.

@@ -13,6 +13,8 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
+2026-05-31 | lab-grid-agent-badges | LabPanelGrid owner img + globals .lab-grid-agent | da33eafd | SHIP | keep avatar+icon head row | — | — | evidence/2026-05-31-lab-grid-agent-badges.md
+
 ## Entries
 
 2026-05-31 | bureau-h2h-room-hallway | toRoom atlas on OG footer + ShareBar | 389cab8e | SHIP | keep | duplicate question strings later | H2H epic done | evidence/2026-05-31-bureau-h2h-room-hallway.md

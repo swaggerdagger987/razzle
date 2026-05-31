@@ -39,3 +39,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Waiver archetype board | cycle 89 | keep | pre-waiver FAAB-block language matches standing intel
 2026-05-31 | Schedule slate verdict | cycle 92 | keep | Sunday AM schedule-prep; labeled power-ranking approximation
 2026-05-31 | Agent-owned Lab nav | cycle 93 | keep | sidebar screenshot shows six-staff model before panel open
+2026-05-31 | Lab grid agent badges | cycle 94 | keep | /lab browse avatars for discovery screenshots without opening sidebar

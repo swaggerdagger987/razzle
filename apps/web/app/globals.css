@@ -443,10 +443,22 @@ body {
   position: relative;
 }
 
+.lab-grid-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.lab-grid-agent {
+  flex-shrink: 0;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+}
+
 .lab-grid-icon {
   font-size: 1.5rem;
   display: block;
-  margin-bottom: 0.5rem;
 }
 
 .lab-pro-badge {
