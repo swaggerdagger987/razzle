@@ -1,9 +1,10 @@
-cycle: 130
+cycle: 128
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: Explore
 focus_layer: L5
-next_slice: lab-l4-pro-gate-error-tradevalues
-last_keep_cycle: 130
-last_commit: 4bc3913e
+next_slice: explore-og-college-gate-c
+last_keep_cycle: 128
+last_commit: 02b730ec
+explore_l5_universe_export_epic: active
 lab_l5_og_live_fetch_epic: complete
 lab_l4_pro_gate_error_epic: active
