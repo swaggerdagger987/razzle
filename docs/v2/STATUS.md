@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | PARITY next RED/YELLOW row after OG fidelity epic |
-| Last commit | `da33eafd` |
+| Last commit | `b9e2d2bf` |
 
 Recent completions (cycle 94): Lab OG snapshot row fidelity epic complete — breakouts RBS-ranked OG + weekly dedup on base.
 

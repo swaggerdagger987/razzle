@@ -31,5 +31,6 @@
     "builder": "SHIP",
     "verdict": "SHIP 3/3"
   },
-  "verdict": "SHIP"
+  "verdict": "SHIP",
+  "content_commit": "b9e2d2bf"
 }
