@@ -1,4 +1,4 @@
-2026-05-31 | lab-panel-share-bar-weekly-gamelog | f6e0985f3 | 3 files; weekly position + gamelog playerId on share bar.
+2026-05-31 | lab-panel-share-bar-weekly-gamelog | 9f463c823 | 3 files; weekly position + gamelog playerId on share bar.
 2026-05-31 | lab-panel-share-bar-breakouts-buysell | d4cf33c26 | 3 renderers + pytest; swap footer LabOgExportLink → LabPanelShareBar.
 2026-05-31 | lab-panel-share-bar-rankings | 6c62faf8c | 3 files ≤120 lines; share bar reuses LabOgExportLink encode.
 2026-05-31 | lab-og-efficiency-aging-formula-live | 8db7cdf24 | 2 files ≤50 lines; stat key branches only.
