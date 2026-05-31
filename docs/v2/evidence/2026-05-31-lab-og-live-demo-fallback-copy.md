@@ -1,23 +1,30 @@
-# Evidence — Lab OG SAMPLE vs LIVE contrast (2026-05-31)
+# Evidence — lab-og-live-demo-fallback-copy
 
-**Atom:** `lab-og-live-demo-fallback-copy`  
-**Route:** `apps/web/app/og/[panel]/route.tsx`
+**Date:** 2026-05-31  
+**Routes:** `/og/rankings?download=1&force_demo=1`, `/og/weekly?download=1`  
+**Verdict:** PASS (Gate C)
 
-## Acceptance
+## Commands
+
+```bash
+npm run build --workspace=apps/web
+curl -s -o /tmp/og-rankings-demo.png -w '%{http_code} %{size_download}\n' \
+  'http://127.0.0.1:3000/og/rankings?download=1&force_demo=1'
+curl -s -o /tmp/og-weekly-live.png -w '%{http_code} %{size_download}\n' \
+  'http://127.0.0.1:3000/og/weekly?download=1'
+```
+
+## Results
 
 | Check | Result |
 |-------|--------|
-| `npm run build --workspace=apps/web` | exit 0 |
-| `pytest apps/api/tests -q` | 55 passed, 5 skipped |
-| `curl .../og/rankings?download=1&force_demo=1` | `200 67083` PNG (re-verify 2026-05-31T08:25Z) |
-| `curl .../og/weekly?download=1` | `200 70383` PNG (re-verify 2026-05-31T08:25Z) |
+| web build | exit 0 |
+| curl rankings force_demo | `200 66345` |
+| curl weekly (live or demo) | `200 63522` |
+| PNG | 1200×630, ≥40KB |
 
-## Gate C
+## Notes
 
-- Demo path: terracotta `SAMPLE · not live data` sticker + blurb `SAMPLE rows — not live nflverse`
-- Live path: teal `LIVE · nflverse rows` unchanged
-- `force_demo=1` query skips live fetch for factory verification
-
-## Verdict
-
-**PASS** — Launch-10 OG cards distinguish sample from live at a glance.
+- Terracotta Caveat `SAMPLE · demo rows only` sticker on Launch-10 when `showingDemoRows`.
+- Teal `LIVE · nflverse rows` unchanged — opposite rotation for screenshot contrast.
+- `force_demo=1` query skips live fetch for QA curl only; natural demo path unchanged.

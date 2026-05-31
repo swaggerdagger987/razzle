@@ -74,6 +74,8 @@ function atlasH2hRoomQuestion(
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
+  /** QA/dev only — skip live fetch so Gate C can curl SAMPLE sticker with league params. */
+  const forceDemo = url.searchParams.get("force_demo") === "1";
   const league = url.searchParams.get("league") ?? "";
   const user = url.searchParams.get("user") ?? "";
   const opponent = url.searchParams.get("opponent") ?? "";
@@ -83,9 +85,10 @@ export async function GET(req: Request) {
   const snapshot = snapshotParam ? decodeBureauH2HOgSnapshot(snapshotParam) : null;
   const isSnapshot = Boolean(snapshot);
   const hasLeagueParams = Boolean(league && user);
-  const live = isSnapshot ? null : await fetchH2H(req, { league, user, opponent });
-  const isLive = !isSnapshot && Boolean(live?.you && live?.them);
-  const isDemo = !isSnapshot && !isLive;
+  const live =
+    isSnapshot || forceDemo ? null : await fetchH2H(req, { league, user, opponent });
+  const isLive = !isSnapshot && !forceDemo && Boolean(live?.you && live?.them);
+  const isDemo = !isSnapshot && (forceDemo || !isLive);
   const data: H2HData =
     isSnapshot && snapshot
       ? bureauH2HOgSnapshotToData(snapshot)
@@ -196,13 +199,13 @@ export async function GET(req: Request) {
               border: "3px solid #2d1f14",
               borderRadius: 10,
               boxShadow: "4px 4px 0 #2d1f14",
-              transform: "rotate(1.5deg)",
+              transform: "rotate(2deg)",
               marginBottom: 12,
               fontWeight: 700,
               display: "flex",
             }}
           >
-            SAMPLE · demo rivalry rows
+            SAMPLE · demo rivalry preview
           </div>
         ) : null}
 

@@ -535,6 +535,18 @@ function siteOrigin(req: Request): string {
   return new URL(req.url).origin;
 }
 
+const PANEL_API_OG_LIMIT: Record<string, string> = {
+  weekly: "25",
+  prospects: "25",
+};
+
+/** Weekly heatmap Lab defaults to WR — OG must match or panel API returns sparse rows. */
+function ogPositionFilter(slug: string, positionFromQuery: string): string {
+  if (positionFromQuery) return positionFromQuery;
+  if (slug === "weekly") return "WR";
+  return "";
+}
+
 /** Same panels slug path Lab uses — pro preview header for OG share cards. */
 async function fetchLiveOgRows(
   req: Request,
@@ -547,7 +559,7 @@ async function fetchLiveOgRows(
       if (v != null) url.searchParams.set(k, String(v));
     }
   }
-  url.searchParams.set("limit", "6");
+  url.searchParams.set("limit", PANEL_API_OG_LIMIT[slug] ?? "6");
   try {
     const res = await fetch(url.toString(), { headers: OG_FETCH_HEADERS });
     if (!res.ok) return [];
@@ -570,14 +582,18 @@ async function fetchPanelData(
   params?: Record<string, unknown>,
 ): Promise<OgRow[]> {
   const apiOrigin = resolveApiOrigin(req);
+  const panelApiHeaders: Record<string, string> = LAUNCH_10_OG_SLUGS.has(slug)
+    ? { [OG_PRO_PREVIEW_HEADER]: "pro" }
+    : {};
 
   try {
     let res: Response;
+    const rowLimit = Number(PANEL_API_OG_LIMIT[slug] ?? "6");
     if (method === "POST") {
       res = await fetch(`${apiOrigin}${apiPath}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", ...OG_FETCH_HEADERS },
-        body: JSON.stringify({ limit: 6, ...(params ?? {}) }),
+        headers: { "Content-Type": "application/json", ...panelApiHeaders },
+        body: JSON.stringify({ limit: rowLimit, ...(params ?? {}) }),
       });
     } else {
       const url = new URL(`${apiOrigin}${apiPath}`);
@@ -586,8 +602,8 @@ async function fetchPanelData(
           if (v != null) url.searchParams.set(k, String(v));
         }
       }
-      url.searchParams.set("limit", "6");
-      res = await fetch(url.toString(), { headers: OG_FETCH_HEADERS });
+      url.searchParams.set("limit", String(rowLimit));
+      res = await fetch(url.toString(), { headers: panelApiHeaders });
     }
     if (!res.ok) return [];
     const data = await res.json();
@@ -639,9 +655,13 @@ export async function GET(
   const { panel: slug } = await params;
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
+  /** QA/dev only — skip live fetch so Gate C can curl SAMPLE sticker path. */
   const forceDemo = url.searchParams.get("force_demo") === "1";
   const query = url.searchParams.get("q") ?? "";
-  const positionFilter = url.searchParams.get("position") ?? "";
+  const positionFilter = ogPositionFilter(
+    slug,
+    url.searchParams.get("position") ?? "",
+  );
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
   const playerId =
     url.searchParams.get("player_id") ??
@@ -798,6 +818,27 @@ export async function GET(
             }}
           >
             {launch10LiveStickerLabel(slug)}
+          </div>
+        ) : null}
+
+        {showingDemoRows && LAUNCH_10_OG_SLUGS.has(slug) ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+            }}
+          >
+            SAMPLE · demo rows only
           </div>
         ) : null}
 

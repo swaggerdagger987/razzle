@@ -1,31 +1,27 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 branches across launch-10 renderers drift from teaser/perks polish.",
-  "epic": "Lab L4 — shared pro-gate error surface",
-  "slice_title": "ProGateFromPanelError on breakouts + pytest guard",
-  "atom_id": "lab-l4-pro-gate-error-surface",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
-  "acceptance_ref": "ACCEPTANCE Gate 2 — pro panel shows upgrade message (402)",
-  "trust_pillars": ["T2", "T6"],
-  "allowed_paths": [
-    "apps/web/components/lab/ProGateFromPanelError.tsx",
-    "apps/web/components/lab/renderers/BreakoutsRenderer.tsx",
-    "apps/api/tests/test_panel_pro_gate_surface.py"
-  ],
-  "max_files": 3,
-  "max_lines": 140,
+  "atom_id": "bureau-h2h-og-force-demo-qa",
+  "big_problem": "Bureau H2H OG cards don't signal live Sleeper rivalry vs sample preview — Reddit can't tell real league exports from demo.",
+  "epic": "League L5 — Bureau H2H OG live vs sample stickers",
+  "slice_title": "H2H OG — force_demo QA param for Gate C SAMPLE curl",
+  "parity_ref": "Explore L5 — Bureau H2H export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": ["apps/web/app/og/head-to-head/route.tsx"],
+  "max_files": 1,
+  "max_lines": 20,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_pro_gate_surface.py apps/api/tests/test_panel_upgrade_teaser.py -q"
+    "npm run build --workspace=apps/web 2>&1 | tail -3",
+    "curl -s -o /tmp/og-h2h-force-demo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/head-to-head?download=1&force_demo=1&league=999&user=1&opponent=2'",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_smoke.py -q 2>&1 | tail -2"
   ],
-  "out_of_scope": ["Tradevalues/efficiency this cycle"],
+  "out_of_scope": ["Lab panel route", "snapshot encode changes", "API schema changes"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
-  },
-  "status": "shipped"
+    "verdict": "SHIP 3/3"
+  }
 }

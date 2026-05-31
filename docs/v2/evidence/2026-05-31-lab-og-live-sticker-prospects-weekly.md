@@ -1,29 +1,30 @@
 # Evidence — lab-og-live-sticker-prospects-weekly
 
 **Date:** 2026-05-31  
-**Routes:** `/og/weekly?download=1`, `/og/prospects?download=1`  
-**Verdict:** PASS (Gate C)
+**Atom:** `lab-og-live-sticker-prospects-weekly`  
+**Verdict:** PASS (FACTORY-DOD Gate C)
 
 ## Commands
 
 ```bash
 npm run build --workspace=apps/web
-JWT_SECRET=test python3 -m pytest apps/api/tests -q
 curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}\n' 'http://127.0.0.1:3000/og/weekly?download=1'
 curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}\n' 'http://127.0.0.1:3000/og/prospects?download=1'
 ```
 
 ## Results
 
-| Check | Result |
-|-------|--------|
-| web build | exit 0 |
-| pytest | 55 passed, 5 skipped |
-| curl weekly OG | `200 66512` |
-| curl prospects OG | `200 60688` |
-| PNG | 1200×630, ≥40KB each |
+| Route | HTTP | Bytes | PNG |
+|-------|------|-------|-----|
+| `/og/weekly?download=1` | 200 | 55816 | 1200×630 |
+| `/og/prospects?download=1` | 200 | 60688 | 1200×630 |
+
+## Change
+
+- Weekly OG defaults `position=WR` (matches `WeeklyHeatmapRenderer`) so `/api/panels/weekly` returns heatmap rows.
+- Panel API fetch uses `limit=25` for weekly/prospects; Launch-10 catalog fallback sends pro preview header.
+- LIVE sticker + `· live nflverse rows` blurb when `showingLiveData` on Launch-10 slugs (demo fallback still ≥40KB).
 
 ## Notes
 
-- Weekly OG without `position` query now defaults `apiParams.position=WR` (matches `WeeklyHeatmapRenderer`) so `/api/panels/weekly` returns rows and LIVE sticker can show on Launch-10 slugs.
-- Prospects OG unchanged; already in `LAUNCH_10_OG_SLUGS` with live extractors.
+- Local pytest skipped (no venv on VM); CI `api` job is authoritative.

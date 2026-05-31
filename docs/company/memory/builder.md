@@ -1,25 +1,16 @@
 # Memory — Builder
 
-2026-05-31 | lab-l4-pro-gate-error-surface | 5721ee33 | ProGateFromPanelError on BreakoutsRenderer; pytest 7.
-2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | launch10LiveStickerLabel 3 slugs.
+2026-05-31 | bureau-h2h-og-force-demo-qa | b4d91213 | force_demo skips H2H fetch; curl 77736B with league params.
 
-2026-05-31 | lab-pro-gate-perks-copy | 73fdbf9c | keep | proUpgradePerkLines from getPanel + BUREAU_7 slugs.
+2026-05-31 | bureau-h2h-og-sample-sticker | 7b9639d9 | terracotta SAMPLE on H2H demo path; curl 75595B.
 
-2026-05-31 | lab-pro-gate-loading-copy | 7236be3e | PanelAgentLoading wired into ProUpgradeGate.
+2026-05-31 | bureau-h2h-og-live-sticker | 08e1824c | curl head-to-head 67846B; build+pytest green.
 
-2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | keep | weekly/prospects/dashboard teasers; test_panel_upgrade_teaser.
+2026-05-31 | lab-og-live-demo-fallback-copy | 45d4a448 | terracotta SAMPLE sticker + force_demo QA; curl ≥63KB.
 
-2026-05-31 | lab-sidebar-staff-picks-by-agent | 4e8b0e8e | keep | staffByAgent agent headers.
-
-2026-05-31 | lab-og-live-demo-fallback-copy | 9cd6a5cf | terracotta SAMPLE sticker + blurb on Launch-10 demo path.
-
-2026-05-31 | lab-og-live-sticker-prospects-weekly | 5bb77346 | weekly OG defaults position=WR for panel API live rows.
+2026-05-31 | lab-og-live-sticker-prospects-weekly | 15109115 | ogPositionFilter weekly WR; panel limit 25; curl weekly+prospects ≥55KB.
 
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | teal LIVE sticker on Launch-10 when showingLiveData.
-
-2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | keep | weekly/prospects/dashboard teasers; test_panel_upgrade_teaser.
-
-2026-05-31 | lab-og-gamelog-weeks-fpts-sort | 40c80f0e | keep | extractGamelogWeekRows; Wk N + fpts sort; curl 56390B.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 44d05684 | H2H OG terracotta band; curl 67846B.
 
