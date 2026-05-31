@@ -89,10 +89,10 @@ export async function GET(req: Request) {
   const isDemo = !live?.depth;
   const rows = isDemo ? DEMO_ROWS : rowsFromDepth(live!.depth!);
   const totalPlayers = isDemo ? 15 : Number(live?.total_players ?? 0);
-  const weakest = rows.reduce<PosRow>(
-    (min, row) => (row.count < min.count ? row : min),
-    rows[0] ?? DEMO_ROWS[0],
-  );
+  let weakest: PosRow = rows[0] ?? DEMO_ROWS[0]!;
+  for (const row of rows) {
+    if (row.count < weakest.count) weakest = row;
+  }
 
   return new ImageResponse(
     (
