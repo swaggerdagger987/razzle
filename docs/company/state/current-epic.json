@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Bureau H2H OG cards don't signal live Sleeper rivalry vs sample preview — Reddit can't tell real league exports from demo.",
   "epic_title": "League L5 — Bureau H2H OG live vs sample stickers",
   "parity_ref": "Explore L5 — Bureau H2H export",
@@ -20,12 +20,19 @@
     {
       "id": "bureau-h2h-og-force-demo-qa",
       "title": "H2H OG — force_demo QA param for Gate C SAMPLE curl",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "8f238b66"
     }
   ],
-  "next_atom_id": "bureau-h2h-og-force-demo-qa",
+  "next_atom_id": null,
   "created_at": "2026-05-31T08:45:00Z",
-  "updated_at": "2026-05-31T09:25:00Z",
-  "completed_epics": []
+  "updated_at": "2026-05-31T09:28:00Z",
+  "completed_epics": [
+    {
+      "id": "league-l5-h2h-og-stickers",
+      "status": "complete",
+      "last_atom": "bureau-h2h-og-force-demo-qa",
+      "merge_commit": "8f238b66"
+    }
+  ]
 }
