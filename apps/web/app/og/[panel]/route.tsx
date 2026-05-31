@@ -89,6 +89,7 @@ const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set(["gamelog", "dynasty-comps"])
 const TOLAB_DEFAULT_POSITION: Record<string, string> = {
   weekly: "WR",
   efficiency: "RB",
+  breakouts: "WR",
 };
 
 const LAUNCH_10_OG_SLUGS = new Set([

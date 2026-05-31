@@ -35,6 +35,12 @@
   "updated_at": "2026-05-31T18:00:00Z",
   "completed_epics": [
     {
+      "id": "lab-l5-og-hallway-position-defaults",
+      "status": "complete",
+      "last_atom": "lab-og-tolab-breakouts-position",
+      "merge_commit": "c401934bc"
+    },
+    {
       "id": "lab-l5-og-watermark-display-names",
       "status": "complete",
       "last_atom": "lab-og-watermark-display-name",

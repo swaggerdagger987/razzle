@@ -23,13 +23,11 @@
     "College-only atom",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
-  "content_commit": "c1a0bcaad",
-  "reality": "PASS",
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   }
 }
