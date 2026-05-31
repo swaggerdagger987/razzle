@@ -8,7 +8,7 @@ import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
-import { LabOgExportLink } from "../LabOgExportLink";
+import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 
 interface DashboardPlayer {
@@ -114,6 +114,16 @@ export function DynastyDashboardRenderer({ panel }: Props) {
   });
 
   const topRiser = q.data?.risers?.[0];
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const movers = [...(q.data?.risers ?? []), ...(q.data?.fallers ?? [])];
+    return movers.slice(0, 6).map((p) => ({
+      name: p.full_name,
+      position: p.position,
+      team: p.team,
+      stat: p.rank_diff ?? 0,
+      statLabel: "Chg",
+    }));
+  }, [q.data?.risers, q.data?.fallers]);
   const maxDropoff = useMemo(() => {
     const rows = q.data?.position_scarcity ?? {};
     return Math.max(0, ...Object.values(rows).map((s) => s.dropoff ?? 0));
@@ -321,7 +331,11 @@ export function DynastyDashboardRenderer({ panel }: Props) {
           >
             Ask Razzle about {topRiser.full_name} (rising stock) →
           </Link>
-          <LabOgExportLink slug="dashboard" downloadName="razzle-dashboard.png" />
+          <LabOgExportLink
+            slug="dashboard"
+            downloadName="razzle-dashboard.png"
+            snapshotRows={ogSnapshotRows}
+          />
         </footer>
       )}
     </div>
