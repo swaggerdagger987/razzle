@@ -1,15 +1,16 @@
-# Evidence — Lab Gamelog OG default player export (2026-05-31)
+# Evidence — Gamelog OG trim blank player_id (cycle 130)
 
 **Atom:** `lab-og-gamelog-player-default`  
-**Cycle:** 124
+**Commit:** (metadata commit)
 
-## Acceptance
+## Gate C
 
-```text
-npm run build --workspace=apps/web → exit 0
-curl 'http://127.0.0.1:3000/og/gamelog?download=1' → 200 60634 bytes PNG 1200×630
-```
+| Route | HTTP | Bytes |
+|-------|------|-------|
+| `/og/gamelog?download=1` | 200 | 60634 |
+| `/og/gamelog?download=1&player_id=` | 200 | 60634 |
 
-## Verdict
+## Tests
 
-PASS — Gate C ≥40KB PNG with default player before search.
+- `pytest apps/api/tests/test_lab_og_gamelog_player_default.py -q --noconftest` — 3 passed
+- `npm run build --workspace=apps/web` — exit 0
