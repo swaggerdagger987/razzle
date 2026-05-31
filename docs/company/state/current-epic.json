@@ -1,58 +1,50 @@
 {
   "epic_status": "complete",
-  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
-  "epic_title": "Lab L5 — pro profile OG live parity",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Catalog pro panels still show raw errors instead of the shared L4 upgrade card.",
+  "epic_title": "Lab L4 — generic pro-gate polish",
+  "parity_ref": "Lab L4 pro-gate polish or formula extraction",
+  "depth_ref": "Lab L4",
   "atoms": [
     {
-      "id": "lab-og-percentiles-live-extract",
-      "title": "Percentiles OG live percentile extract + LIVE sticker",
+      "id": "lab-l4-pro-gate-generic-renderer",
+      "title": "GenericPanelRenderer uses ProGateFromPanelError",
       "status": "done",
-      "merge_commit": "454db1c1d"
+      "merge_commit": "4c4f7d8f2"
     },
     {
-      "id": "lab-og-career-live-extract",
-      "title": "Career OG live season arc rows",
+      "id": "lab-l4-pro-gate-surface-pytest-catalog",
+      "title": "Pytest guard catalog slugs use GenericPanelRenderer path",
       "status": "done",
-      "merge_commit": "4bbdfe1e1"
+      "merge_commit": "4c4f7d8f2"
     },
     {
-      "id": "lab-og-career-compare-live",
-      "title": "Career compare OG multi-player overlay rows",
+      "id": "lab-l4-catalog-teaser-batch-1",
+      "title": "Expand GENERIC_PRO_GATE_SLUGS teaser rows + pitch copy",
       "status": "done",
-      "merge_commit": "9d19930cf"
-    },
-    {
-      "id": "lab-og-percentiles-tolab",
-      "title": "Percentiles OG toLab default player hallway",
-      "status": "done",
-      "merge_commit": "62e147bb8"
+      "merge_commit": "5946f096c"
     }
   ],
   "next_atom_id": null,
-  "created_at": "2026-05-31T11:20:00Z",
-  "updated_at": "2026-05-31T12:15:00Z",
+  "created_at": "2026-05-31T13:00:00Z",
+  "updated_at": "2026-05-31T12:20:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-og-hallway-position-defaults",
+      "id": "lab-l4-generic-pro-gate-polish",
       "status": "complete",
-      "last_atom": "lab-og-tolab-breakouts-position",
-      "merge_commit": "1ebb9dc73"
+      "last_atom": "lab-l4-catalog-teaser-batch-1",
+      "merge_commit": "5946f096c"
     },
     {
-      "id": "explore-l5-og-margin-notes",
-      "status": "partial",
-      "last_atom": "explore-og-margin-note-rows",
-      "merge_commit": "c1a0bcaad"
+      "id": "lab-l5-og-watermark-display-names",
+      "status": "complete",
+      "last_atom": "lab-og-watermark-display-name",
+      "merge_commit": "338709883"
     },
     {
-      "id": "league-l5-bureau-h2h-gtm",
+      "id": "lab-l5-og-hallway-deep-links",
       "status": "complete",
-      "last_atom": "bureau-h2h-og-gate-c-snapshot",
-      "merge_commit": "4907c8327"
-    },
-    "league-h2h-gtm-export-2026-05-31",
-    "lab-l5-pro-profile-og-live-parity"
+      "last_atom": "lab-og-tolab-snapshot-player",
+      "merge_commit": "1a12d9c0b"
+    }
   ]
 }
