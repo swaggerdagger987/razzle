@@ -1,10 +1,11 @@
-cycle: 138
+cycle: 140
 last_board_cycle: 54
-focus_pillar: Explore
+focus_pillar: Lab
 focus_layer: L5
-next_slice: room-briefing-watermark
-last_keep_cycle: 138
-last_commit: c7b50c707
+next_slice: lab-og-tolab-gamelog-default
+last_keep_cycle: 140
+last_commit: da33eafd
 lab_l4_pro_gate_error_epic: complete
 explore_l5_universe_export_epic: complete
-room_l5_briefing_gtm_epic: active
+room_l5_briefing_gtm_epic: complete
+lab_l5_og_hallway_epic: active

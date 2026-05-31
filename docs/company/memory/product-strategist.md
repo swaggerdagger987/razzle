@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | lab-og-tolab-watermark | da33eafd | SHIP | Lab OG exports click back via toLab; T6 hallway on Launch-10.
+
 2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | SHIP | Dynasty share links cleaner; college stays explicit.
 
 2026-05-31 | lab-og-sample-labels-rankings-tv-breakouts | 54443bc8 | SHIP | SAMPLE stickers mirror LIVE dynasty/RBS/value curve; T1/T5/T6.
