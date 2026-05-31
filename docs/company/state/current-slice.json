@@ -1,27 +1,31 @@
 {
   "date": "2026-05-31",
-  "atom_id": "bureau-trade-network-share-bar",
-  "big_problem": "Bureau-7 surfaces need copyable league URLs plus OG export on every tab.",
-  "epic": "League L5 — Bureau behavioral share parity",
-  "slice_title": "Trade Network ShareBar copy link + export",
+  "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 roster archetypes are invisible in-product.",
+  "epic": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
+  "slice_title": "Build Profiles tab unhidden with Atlas roster archetype renderer",
+  "atom_id": "league-build-profiles-tab",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
-  "trust_pillars": ["T5", "T6"],
+  "acceptance_ref": "ACCEPTANCE Gate 3 — Bureau behavioral tabs return data",
+  "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauTradeNetworkShareBar.tsx",
-    "apps/web/components/league/BureauTradeNetwork.tsx"
+    "apps/web/components/league/BureauBuildProfiles.tsx",
+    "apps/web/components/league/BureauFeatureBody.tsx",
+    "apps/web/lib/bureau-features.ts"
   ],
-  "max_files": 2,
-  "max_lines": 80,
+  "max_files": 3,
+  "max_lines": 200,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "npm run typecheck --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-trade-network.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/trade-network?league=test&download=1'"
+    "node -e \"const fs=require('fs'); const s=fs.readFileSync('apps/web/lib/bureau-features.ts','utf8'); if(!/HIDDEN_BUREAU_SLUGS[^]*build-profiles/.test(s)) process.exit(0); else { console.error('build-profiles still hidden'); process.exit(1); }\""
   ],
-  "out_of_scope": ["OG route changes", "new Bureau tabs", "NORTH_STAR/DESIGN/DECISIONS edits"],
+  "out_of_scope": ["OG route", "API changes", "unhide waiver/SOS tabs", "NORTH_STAR/DESIGN/DECISIONS edits"],
   "builder_mode": "composer-surgical",
-  "verdict": "SHIP",
-  "content_commit": "1616484c"
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP"
+  }
 }
