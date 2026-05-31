@@ -1,28 +1,28 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-position-breakouts",
+  "atom_id": "lab-og-position-prospects",
   "big_problem": "Lab OG export cards ignore in-product filters, so downloaded screenshots do not match the filtered table the user is researching (DEPTH Lab L5 live data parity).",
   "epic": "Lab L5 — OG export matches in-product filters",
-  "slice_title": "Breakouts position filter on LabOgExportLink + OG route",
+  "slice_title": "Prospects position filter on LabOgExportLink + OG route",
   "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG breakouts matches filtered panel when position set",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG prospects matches filtered panel when position set",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/BreakoutsRenderer.tsx"
+    "apps/web/components/lab/renderers/ProspectsRenderer.tsx"
   ],
   "max_files": 1,
   "max_lines": 5,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-breakouts-wr.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/breakouts?download=1&position=WR'",
-    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/breakouts?download=1'"
+    "curl -s -o /tmp/og-prospects-wr.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/prospects?download=1&position=WR'",
+    "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/prospects?download=1'"
   ],
   "out_of_scope": [
-    "Prospects class/year filter (atom 3)",
+    "draft_year query param (panel has no year picker)",
     "NORTH_STAR / DESIGN edits",
-    "OG route changes (position already wired)"
+    "OG route changes (position filter already wired)"
   ],
   "builder_mode": "composer-surgical"
 }

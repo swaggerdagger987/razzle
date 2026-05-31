@@ -17,6 +17,7 @@ new evidence.
 
 2026-05-31 | Lab launch-10 LabOgExportLink epic complete | weekly+prospects atom 2/2 | e84acacf | keep | T5/T6 export consistency on Hawkeye panels
 2026-05-30 | Lab L5 OG export cards with live data compound the Explore L5 watermarked export pattern | Lab L5 OG — DEPTH.md L5 "OG card per panel matches in-product export" | SHIP | keep | T5+T6 — screenshot gravity via real data rows not branding cards; agent badges differentiate from generic SaaS
+2026-05-31 | Prospects OG position filter closes filter-parity epic 3/3 | lab-og-position-prospects | SHIP | keep | Devy WR/QB boards need matching export cards
 2026-05-31 | Breakouts OG position filter atom 2/3 | lab-og-position-breakouts | SHIP | keep | Hawkeye filtered exports for breakout screenshot threads
 2026-05-31 | Filtered rankings OG must match position pill — new epic atom 1/3 | lab-og-position-rankings | SHIP | keep | NEXT.md live-row parity; WR-only export for dynasty screenshot threads
 2026-05-31 | Lab OG demo rows close cycle 57 CI/preview gap without inventing new scope | lab-og-demo-rows atom | SHIP | keep | Lab L5 epic atom 1/3; labeled sample preview protects trust vs fake-live claims

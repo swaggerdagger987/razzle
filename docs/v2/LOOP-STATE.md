@@ -1,10 +1,10 @@
-cycle: 70
+cycle: 71
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: Lab OG position filter parity (epic atom 1/3)
-last_keep_cycle: 69
-last_commit: 9e97afb7
+next_slice: Bureau H2H export or next PARITY RED slice
+last_keep_cycle: 71
+last_commit: da33eafd
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
@@ -22,4 +22,4 @@ lab_l5_og_link_consolidation_epic: complete
 lab_l5_og_link_rankings_trade_breakouts: complete
 lab_l5_og_link_weekly_prospects: complete
 lab_l5_og_dynasty_comps_panel_export: complete
-lab_l5_og_position_filter_epic: active
+lab_l5_og_position_filter_epic: complete

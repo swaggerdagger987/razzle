@@ -145,7 +145,11 @@ export function ProspectsRenderer({ panel }: Props) {
           <Link href="/explore?universe=college" className="text-sm text-ink-medium underline">
             college screener →
           </Link>
-          <LabOgExportLink slug="prospects" downloadName="razzle-prospects.png" />
+          <LabOgExportLink
+            slug="prospects"
+            downloadName="razzle-prospects.png"
+            position={position || undefined}
+          />
         </footer>
       )}
     </div>

@@ -307,6 +307,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 1. **Trade partnership lanes are collusion bait** — "these two trade every week" screenshots spark DM threads; OG card must show partner pairs + trade counts, not a graph stub.
 2. **Bones trade-network OG closes atom 3/4** — Bureau export trilogy (pressure, managers, network) now screenshot-ready for deadline season.
 
+## 2026-05-31 — Cycle 72 (filter-parity epic close)
+
+1. **Devy boards filter by position** — prospect big-board screenshots are WR/QB specific; export must pass the same `position` query as rankings/breakouts.
+2. **Epic complete** — Lab L5 list panels with position tabs now ship filtered OG cards end-to-end.
+
 ## 2026-05-31 — Cycle 59
 
 ### r/DynastyFF — panel-specific stat labels on share cards (pattern)
