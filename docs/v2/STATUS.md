@@ -20,7 +20,9 @@ From `LOOP-STATE.md`:
 | Focus pillar | Explore |
 | Focus layer | L5 |
 | Next slice | lab-og-gamelog-player-default |
-| Last commit | `da33eafd` |
+| Last commit | `cc8210da` |
+
+Recent completions: Explore OG universe in share URLs; Lab L4 pro gate perks on base.
 
 ---
 
@@ -28,20 +30,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Workday | open (`good morning team`) |
-| Epic | Lab L5 — OG live panel rows on Launch-10 (atom 2/3 shipped) |
-| PR | #739 — prospects + weekly LIVE RPS/PPG stickers |
-
----
-
-## Recent ship (cycle 118)
-
-- Panel-specific LIVE sticker + blurb on `/og/prospects` and `/og/weekly` when live rows render.
-- Preserves L4 dynasty-comps pro teaser rows on base (`teaserRowsForPanel`).
-- Gate C: curl PNG ≥40KB on both routes.
+| Status | open |
+| Cycles today | 1 |
+| Last trigger | good morning team |
 
 ---
 
 ## Blockers
 
-- None for build. Merge API hit GitHub rate limit — PR #739 CI green, merge queued.
+None for factory cycle 124 merge publish.

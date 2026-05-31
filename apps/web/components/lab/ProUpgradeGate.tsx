@@ -4,8 +4,10 @@ import { toExplore, toRoom } from "@razzle/hallway";
 import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
 import type { Route } from "next";
+import { bureau7PerkLabels } from "@/lib/bureau-features";
 import {
-  PRO_UPGRADE_PERKS,
+  formatPerkNameList,
+  launch10PerkLabels,
   teaserRowsForPanel,
   upgradePitchForPanel,
 } from "@/lib/panel-upgrade-teaser";
@@ -29,6 +31,8 @@ export function ProUpgradeGate({
   const agent = panelAgent(panelSlug);
   const pitch = upgradePitchForPanel(panelSlug, agent.name);
   const rows = teaserRowsForPanel(panelSlug);
+  const launch10Names = formatPerkNameList(launch10PerkLabels());
+  const bureau7Names = formatPerkNameList(bureau7PerkLabels());
   const roomQuestion = `What should I know about ${panelTitle.toLowerCase()} for my dynasty roster?`;
 
   return (
@@ -83,9 +87,15 @@ export function ProUpgradeGate({
         </div>
         <p className="mt-3 text-xs text-ink-light">dev? flip plan in the toolbar ↑</p>
         <ul className="pro-upgrade-perks mt-6 text-left text-sm text-ink-medium">
-          {PRO_UPGRADE_PERKS.map((line) => (
-            <li key={line}>{line}</li>
-          ))}
+          <li>
+            <strong>10 launch Lab panels</strong> — {launch10Names}
+          </li>
+          <li>
+            <strong>7 Bureau behavioral tabs</strong> — {bureau7Names}
+          </li>
+          <li>
+            <strong>Situation Room</strong> — six pixel staff, your league in context
+          </li>
         </ul>
       </div>
     </div>
