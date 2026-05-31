@@ -4,7 +4,7 @@ focus_pillar: Room
 focus_layer: L5
 next_slice: room-briefing-watermark
 last_keep_cycle: 130
-last_commit: 82a74870
+last_commit: bf200753
 room_l5_briefing_gtm_epic: active
 lab_l5_og_panel_native_live_epic: active
 lab_l5_og_live_fetch_epic: complete
