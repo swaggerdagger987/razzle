@@ -1,3 +1,5 @@
+2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | PASS | No new Reddit intel.
+2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | PASS | No new Reddit intel.
 2026-05-31 | lab-og-tolab-weekly-position | — | PASS | No new Reddit intel.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | No new Reddit intel; empty weekly export unblocks heatmap tape screenshots.
 
@@ -20,9 +22,7 @@
 2026-05-31 | room-briefing-watermark | cycle 139 | No new intel; Room hallway export parity with Explore.
 2026-05-31 | lab-og-tolab-watermark | b80512bb4 | No new Reddit intel; hallway slice only.
 
-2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | No new Reddit intel; empty-state export unblocks tape screenshots.
 
-2026-05-31 | room-briefing-watermark | cycle 139 | No new intel; Room hallway export parity with Explore.
 
 
 2026-05-31 | lab-og-sample-labels | 54443bc8 | No new intel; OG trust-label slice only.
