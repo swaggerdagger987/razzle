@@ -1,5 +1,4 @@
 {
-  "epic_status": "active",
   "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
   "epic_title": "Lab L5 — pro profile OG live parity",
   "parity_ref": "Lab panel OG data rows",
