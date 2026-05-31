@@ -8,8 +8,8 @@
     {
       "id": "bureau-trade-finder-copy-link",
       "title": "Trade Finder copy link beside export card",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "cce65064"
     },
     {
       "id": "lab-l4-pro-gate-voice",

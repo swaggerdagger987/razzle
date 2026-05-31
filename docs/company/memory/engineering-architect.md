@@ -33,4 +33,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
 2026-05-31 | BureauTradeNetwork copy link | 3fd83bde | keep | inline clipboard pattern; no new ShareBar component needed
-2026-05-31 | BureauTradeFinder copy link | da33eafd | keep | hero flex row mirrors Trade Network footer pattern
+2026-05-31 | BureauTradeFinder copy link | cce65064 | keep | hero flex row mirrors Trade Network footer pattern
