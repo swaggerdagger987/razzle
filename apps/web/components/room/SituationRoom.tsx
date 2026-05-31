@@ -8,6 +8,7 @@ import { FUNNEL, track } from "@/lib/analytics";
 import { agentContextPayload, setHallwayReferrer } from "@/lib/agent-context";
 import { AgentRoster } from "./AgentRoster";
 import { BriefingCard } from "./BriefingCard";
+import { RoomShareBar } from "./RoomShareBar";
 
 const PRESET_QUESTIONS = [
   "Who should I start at flex this week?",
@@ -123,12 +124,15 @@ export function SituationRoom() {
   return (
     <div className="room-shell room-wrapper" data-room="true">
       <header className="room-header">
-        <div className="flex items-baseline gap-2">
-          <span className="room-header-title">Situation Room</span>
-          <span className="room-header-subtitle">
-            full staff on the floor
-            {contextPlayer ? ` · ${contextPlayer} in context` : ""}
-          </span>
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <div className="flex items-baseline gap-2">
+            <span className="room-header-title">Situation Room</span>
+            <span className="room-header-subtitle">
+              full staff on the floor
+              {contextPlayer ? ` · ${contextPlayer} in context` : ""}
+            </span>
+          </div>
+          <RoomShareBar />
         </div>
         <AgentRoster active={activeAgent} onSelect={onSelectAgent} />
       </header>
