@@ -82,3 +82,14 @@ def test_percentiles_og_watermark_includes_default_player_tolab():
     assert '"percentiles"' in block
     export = EXPORT_TS.read_text(encoding="utf-8")
     assert '"percentiles"' in export
+
+
+def test_breakouts_og_watermark_includes_default_wr_position():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert 'breakouts: "WR"' in source
+
+
+def test_rankings_og_has_no_tolab_default_position():
+    """Dynasty rankings board is cross-position when unfiltered — no watermark default."""
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "rankings:" not in source.split("TOLAB_DEFAULT_POSITION")[1].split("};")[0]
