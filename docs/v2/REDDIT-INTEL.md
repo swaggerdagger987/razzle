@@ -15,6 +15,12 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:**
 ```
 
+## 2026-05-31 — Workday cycle 1 atom 2 (buy-sell + dashboard export)
+
+1. **Market-mover panels need export too** — buy/sell and dynasty dashboard are trade-thread staples; footer export card closes launch-10 discoverability (atom 2/3).
+2. **Bones/Razzle footers already drive Room** — export link beside Ask keeps screenshot → share flow one click.
+3. Standing: sample preview on OG when API empty — T1 trust.
+
 ## 2026-05-31 — Workday cycle 1 (Lab OG export parity)
 
 1. **Export must live on the panel** — users screenshot from the tool they are in; buried OG routes without an "export card" link do not travel.

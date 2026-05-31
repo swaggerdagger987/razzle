@@ -25,3 +25,4 @@ explicit checks in the verification routine.
 2026-05-31 | trade-network OG Gate C | curl 200 67677B PNG | PASS | keep | docs/v2/evidence/2026-05-31-league-og-trade-network.md
 2026-05-31 | self-scout OG Gate C | curl 200 66997B PNG | PASS | keep | docs/v2/evidence/2026-05-31-league-og-self-scout.md
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
+2026-05-31 | Lab OG export links atom 2 | da33eafd | keep | buysell dashboard footers; curl 58-60KB PNGs
