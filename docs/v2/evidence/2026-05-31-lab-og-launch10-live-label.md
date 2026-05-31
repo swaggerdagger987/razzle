@@ -1,22 +1,20 @@
-# Evidence — Lab L5 launch-10 OG live label (2026-05-31)
+# Evidence — Lab L5 tradevalues OG snapshot export (2026-05-31)
 
-**Atom:** `lab-og-launch10-live-label`  
-**Route:** `apps/web/app/og/[panel]/route.tsx`
+**Atom:** `lab-og-launch10-live-label` (tradevalues slice)  
+**Route:** `TradeValuesRenderer` → `/og/tradevalues`
 
 ## Change
 
-- `showingLiveData` / `showingDemoRows` — blurb suffix keys off displayed row source after position filter.
-- `LAUNCH_10_OG_SLUGS` + `panelBlurbSuffix()` — launch-10 live cards omit `sample preview` and extra `live data` suffix; demo fallback still labeled.
+`LabOgExportLink.snapshotRows` passes in-panel top-6 trade values so OG card shows `· from your panel` instead of demo `sample preview` when API empty on edge.
 
 ## Gate C — curl
 
-```text
-rankings: 200 59509
-breakouts: 200 60649
+```bash
+curl -s -o /tmp/og-tradevalues-snap.png -w '%{http_code} %{size_download}\n' \
+  'http://localhost:3000/og/tradevalues?download=1&snapshot=W3sibiI6IkphJ01hcnIgQ2hhc2UiLCJwIjoiV1IiLCJ0IjoiQ0lOIiwicyI6MTAyMDAsInNsIjoiVmFsdWUifV0'
+# 200 41253 PNG
 ```
-
-PNG ≥40KB, 1200×630.
 
 ## Verdict
 
-**PASS** — FACTORY-DOD Gate C2/C3 for launch-10 OG panels.
+**PASS** — FACTORY-DOD Gate C2/C3 for tradevalues snapshot export.
