@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-weekly-prospects-formula-live | 65fc0a87b | SHIP | weekly/prospects extractors + statKeys; 2 files ≤85 lines.
 2026-05-31 | lab-og-efficiency-aging-formula-live | a17391fad | SHIP | efficiencyStatKeys + agingStatKeys; 2 files ≤45 lines.
 2026-05-31 | lab-og-dashboard-live-extract | 1c39d0bd7 | SHIP | extractDashboardRows; skip dashboard re-sort in rankOgRowsForPanel.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
