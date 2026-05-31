@@ -126,3 +126,15 @@ def test_pro_upgrade_perks_list_launch10_and_bureau7_names():
         assert title in catalog, f"catalog missing launch-10 title: {title}"
     for label in BUREAU_7_PERK_LABELS:
         assert label in bureau, f"bureau-features missing label: {label}"
+
+
+def test_pro_gate_og_export_uses_teaser_snapshot():
+    teaser = _teaser_source()
+    gate = (
+        Path(__file__).resolve().parents[3]
+        / "apps/web/components/lab/ProUpgradeGate.tsx"
+    ).read_text(encoding="utf-8")
+    assert "teaserOgSnapshotRows" in teaser
+    assert "LabOgExportLink" in gate
+    assert "snapshotRows={teaserOgSnapshotRows(panelSlug)}" in gate
+    assert "export upgrade card" in gate

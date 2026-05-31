@@ -4,7 +4,13 @@ import { toExplore, toRoom } from "@razzle/hallway";
 import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
 import type { Route } from "next";
-import { proUpgradePerkLines, teaserRowsForPanel, upgradePitchForPanel } from "@/lib/panel-upgrade-teaser";
+import {
+  proUpgradePerkLines,
+  teaserOgSnapshotRows,
+  teaserRowsForPanel,
+  upgradePitchForPanel,
+} from "@/lib/panel-upgrade-teaser";
+import { LabOgExportLink } from "./LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "./PanelAgentHeader";
 
 interface Props {
@@ -84,6 +90,14 @@ export function ProUpgradeGate({
             <li key={line}>{line}</li>
           ))}
         </ul>
+        <footer className="mt-6 border-t border-ink pt-4">
+          <LabOgExportLink
+            slug={panelSlug}
+            snapshotRows={teaserOgSnapshotRows(panelSlug)}
+            label="export upgrade card"
+            downloadName={`razzle-${panelSlug}-upgrade.png`}
+          />
+        </footer>
       </div>
     </div>
   );

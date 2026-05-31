@@ -172,6 +172,31 @@ export function teaserRowsForPanel(slug: string): TeaserRow[] {
   return ROWS_BY_SLUG[slug] ?? DEFAULT_ROWS;
 }
 
+/** OG snapshot rows from Pro gate teaser — matches blurred preview for export cards. */
+export function teaserOgSnapshotRows(slug: string): {
+  name: string;
+  position: string;
+  team: string;
+  stat: number;
+  statLabel: string;
+}[] {
+  return teaserRowsForPanel(slug)
+    .slice(0, 3)
+    .map((row) => {
+      const numMatch = row.detail.match(/([\d.]+)/);
+      const stat = numMatch?.[1] ? Math.round(parseFloat(numMatch[1])) : 90;
+      const parts = row.detail.split("·").map((s) => s.trim());
+      const statLabel = (parts[parts.length - 1] ?? "Preview").slice(0, 14);
+      return {
+        name: row.name,
+        position: row.position,
+        team: "",
+        stat,
+        statLabel,
+      };
+    });
+}
+
 export function upgradePitchForPanel(slug: string, agentName: string): string {
   const pitch = PITCH_BY_SLUG[slug];
   if (pitch) return `${agentName}: unlock ${pitch}.`;
