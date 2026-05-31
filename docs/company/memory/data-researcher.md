@@ -9,7 +9,7 @@
 2026-05-31 | explore-og-margin-note-lead | — | PASS | No new Reddit intel; Explore OG margin slice only.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | PASS | No new Reddit intel; hallway snapshot pid slice.
 2026-05-31 | league-trade-finder-og-room-hallway | — | PASS | No new Reddit intel; Bureau export hallway only.
-2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | PASS | No new intel; pytest contract only.
+2026-05-31 | lab-og-from-panel-gate-c-rest | 3af8ea70b | PASS | No new intel; pytest contract only.
 2026-05-31 | lab-og-tolab-gamelog-default | — | PASS | No new Reddit intel; hallway slice only.
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | No new intel; Lab formula OG slice only.
 
