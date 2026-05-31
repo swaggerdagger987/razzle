@@ -1,5 +1,6 @@
 # Memory — Builder
 
+2026-05-31 | lab-og-launch10-gamelog-efficiency-aging-labels | a8b717f9 | keep | launch10Demo/Live labels for gamelog efficiency aging; curl 58-66KB PNGs.
 2026-05-31 | lab-og-launch10-rankings-tradevalues-breakouts-labels | 1ee4afe6 | keep | launch10Demo/Live labels for rankings tradevalues breakouts; curl 66-67KB PNGs.
 2026-05-31 | lab-sidebar-search-agent-labels | e75ec714 | keep | showOwnerInTitle prefixes search hits with agent name.
 

@@ -2,22 +2,25 @@
   "date": "2026-05-31",
   "big_problem": "Launch-10 OG cards still read generic on Reddit — only prospects/weekly say which panel you are sharing.",
   "epic": "Lab L5 — Launch-10 OG panel-native trust labels (all 10)",
-  "slice_title": "Rankings + tradevalues + breakouts — LIVE/SAMPLE panel-native stickers",
-  "atom_id": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
+  "slice_title": "Gamelog + efficiency + aging — panel-native LIVE/SAMPLE stickers",
+  "atom_id": "lab-og-launch10-gamelog-efficiency-aging-labels",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with panel-specific sticker",
   "trust_pillars": ["T1", "T5", "T6"],
   "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
-  "max_lines": 80,
+  "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-gamelog.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1'",
+    "curl -s -o /tmp/og-eff.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/efficiency?download=1'",
+    "curl -s -o /tmp/og-aging.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/aging?download=1'"
   ],
   "out_of_scope": [
-    "gamelog efficiency aging (atom 2)",
-    "buysell dashboard",
+    "buysell dashboard (atom 3)",
+    "demo sticker polish (atom 4)",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",
@@ -27,9 +30,7 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   },
-  "content_commit": "1ee4afe6",
+  "content_commit": "a8b717f9",
   "reality": "PASS",
-  "merge": "open",
-  "pr_url": "https://github.com/swaggerdagger987/razzle/pull/1007",
-  "pr_number": 1007
+  "merge": "pending"
 }
