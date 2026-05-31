@@ -13,20 +13,20 @@
     {
       "id": "bureau-self-scout-sharebar-extract",
       "title": "Self-Scout — BureauSelfScoutShareBar mirrors H2H pattern",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "0bbfc1bb"
     },
     {
       "id": "bureau-self-scout-snapshot-roundtrip-test",
       "title": "Self-Scout — pytest roundtrip for snapshot codec",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-self-scout-sharebar-extract",
+  "next_atom_id": "bureau-self-scout-snapshot-roundtrip-test",
   "epic_status": "active",
   "created_at": "2026-05-31T12:15:00Z",
-  "updated_at": "2026-05-31T18:00:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
     {
       "id": "lab-l4-pro-gate-polish",
@@ -69,6 +69,12 @@
       "status": "complete",
       "last_atom": "league-h2h-og-watermark-band",
       "merge_commit": "945e4656"
+    },
+    {
+      "id": "lab-l2-sidebar-groups-by-agent",
+      "status": "complete",
+      "last_atom": "lab-sidebar-staff-picks-by-agent",
+      "merge_commit": "4e8b0e8e"
     }
   ]
 }

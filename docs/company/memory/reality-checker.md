@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | bureau-self-scout-snapshot-roundtrip-test | pending | pytest 4 codec + 63 api; no curl (test-only slice).
+
 2026-05-31 | bureau-self-scout-snapshot-export | c2de8dad | PASS | curl self-scout 66997B PNG; web build ok; PR915 merged.
 
 2026-05-31 | explore-og-universe-query Gate C | 7dbd4b11 | PASS college OG 41427B; build + pytest 58.

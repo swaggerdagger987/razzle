@@ -1,10 +1,11 @@
-cycle: 128
+cycle: 129
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
 next_slice: bureau-self-scout-snapshot-roundtrip-test
-last_keep_cycle: 128
-last_commit: 0bbfc1bb
+last_keep_cycle: 129
+last_commit: da33eafd
 lab_l5_og_live_rows_epic: complete
 lab_l4_pro_gate_epic: complete
+lab_l5_og_panel_native_live_epic: active
 league_l5_self_scout_export_epic: active

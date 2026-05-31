@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | self-scout roundtrip | pending | keep | 1-file pytest mirror; H2H codec pattern.
+
 2026-05-31 | self-scout snapshot | c2de8dad | keep | 3-file contract; mirrors power-rankings codec pattern.
 
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.

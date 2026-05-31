@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | bureau-self-scout-snapshot-roundtrip-test | pending | SHIP | League L5 epic atom 3/3; CI codec closes export epic.
+
 2026-05-31 | bureau-self-scout-snapshot-export | c2de8dad | SHIP | keep | League L5 PARITY export atom 1/3 done.
 
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | SHIP | Explore L5 export URL carries college season filter.

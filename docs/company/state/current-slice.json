@@ -1,27 +1,27 @@
 {
   "date": "2026-05-31",
-  "atom_id": "bureau-self-scout-sharebar-extract",
-  "big_problem": "Bureau exports still diverge from in-product views — Self-Scout cards rely on live API while rivals use snapshot codecs.",
+  "atom_id": "bureau-self-scout-snapshot-roundtrip-test",
+  "big_problem": "Bureau exports still diverge from in-product views — Self-Scout snapshot codec has no CI guardrail like H2H.",
   "epic": "League L5 — Self-Scout export travels with depth grades",
-  "slice_title": "Self-Scout — BureauSelfScoutShareBar mirrors H2H pattern",
+  "slice_title": "Self-Scout — pytest roundtrip for snapshot codec",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with snapshot or demo rows",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with snapshot param",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauSelfScoutShareBar.tsx",
-    "apps/web/components/league/BureauSelfScout.tsx"
+    "apps/api/tests/test_bureau_self_scout_og_snapshot_codec.py",
+    "docs/v2/evidence/2026-05-31-bureau-self-scout-snapshot-roundtrip-test.md"
   ],
   "max_files": 2,
-  "max_lines": 120,
+  "max_lines": 150,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web 2>&1 | tail -8",
-    "curl -s -o /tmp/self-scout-share.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/self-scout?download=1'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_bureau_self_scout_og_snapshot_codec.py -q",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q --tb=no 2>&1 | tail -3"
   ],
   "out_of_scope": [
+    "TS codec changes",
     "OG route changes",
-    "snapshot codec changes",
-    "pytest roundtrip atom",
+    "ShareBar changes",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",
