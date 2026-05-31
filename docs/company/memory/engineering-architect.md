@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | lab-pro-gate-panel-pitches | da33eafd | 2 files; single-line PITCH_BY_SLUG keeps teaser pytest matcher green.
+
 2026-05-31 | lab-og-live-demo-fallback-copy | 9cd6a5cf | force_demo=1 for factory curl; SAMPLE/LIVE mutual exclusive badges.
 
 2026-05-31 | lab-og-live-sticker-prospects-weekly | 5bb77346 | weekly WR default in OG apiParams only.

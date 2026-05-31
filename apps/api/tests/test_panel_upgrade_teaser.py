@@ -65,3 +65,23 @@ def test_generic_pro_gate_slugs_have_custom_teasers():
     source = _teaser_source()
     missing = [s for s in GENERIC_PRO_GATE_SLUGS if not _slug_has_custom_teaser(source, s)]
     assert not missing, f"generic pro gate slugs missing teaser: {missing}"
+
+
+# Sharpened L4 pitches — dynasty-native hooks, not generic paywall blurbs.
+SHARPENED_PITCH_MARKERS: dict[str, tuple[str, ...]] = {
+    "rankings": ("trade window", "screener"),
+    "tradevalues": ("sell-high", "market value"),
+    "breakouts": ("RBS", "waiver"),
+}
+
+
+def test_sharpened_launch_panel_pitches():
+    source = _teaser_source()
+    for slug, markers in SHARPENED_PITCH_MARKERS.items():
+        key = f'{slug}: "' if "-" not in slug else f'"{slug}": "'
+        start = source.find(key)
+        assert start != -1, f"missing pitch for {slug}"
+        line_end = source.find("\n", start)
+        pitch_line = source[start:line_end].lower()
+        missing = [m for m in markers if m.lower() not in pitch_line]
+        assert not missing, f"{slug} pitch missing markers {missing}: {pitch_line!r}"
