@@ -1,6 +1,7 @@
-# Evidence — Explore OG universe export URL (2026-05-31)
+# Evidence — Explore OG college export filename (2026-05-31)
 
 **Atom:** `explore-og-universe-query`  
+**Cycle:** 129  
 **Files:** `ExploreShareButton.tsx`, `test_explore_share_og_universe.py`
 
 ## Acceptance
@@ -12,10 +13,10 @@
 
 ## Contract
 
-- Preview + export links include `universe`, `sort`, `dir` query params
-- College universe uses download filename `razzle-college-screener.png`
-- NFL/default uses `razzle-explore.png`
+- Preview + export links include `universe`, `sort`, `dir` (plus `season`/`team` when set on base)
+- College universe download filename: `razzle-college-screener.png`
+- NFL/default download filename: `razzle-explore.png`
 
 ## Verdict
 
-**PASS** — Explore share toolbar passes universe into OG URLs for Reddit college vs NFL screenshots.
+**PASS** — College explore exports save with a distinct filename on top of merged base season/team OG params.
