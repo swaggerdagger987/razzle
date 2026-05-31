@@ -32,7 +32,7 @@
     {
       "id": "lab-og-snapshot-gamelog-comps",
       "title": "Snapshot rows on gamelog weeks and dynasty-comps comp list",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {

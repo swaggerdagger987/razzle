@@ -1,10 +1,10 @@
-cycle: 71
+cycle: 72
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-snapshot-gamelog-comps
-last_keep_cycle: 71
-last_commit: 33808392
+next_slice: lab-og-live-label
+last_keep_cycle: 72
+last_commit: da33eafd
 lab_l5_og_snapshot_launch10: complete
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
