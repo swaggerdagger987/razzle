@@ -12,10 +12,16 @@
       "merge_commit": "2cb898b6"
     },
     {
+      "id": "lab-og-position-rankings",
+      "title": "Pass position filter from dynasty rankings to OG export URL",
+      "status": "done",
+      "merge_commit": null
+    },
+    {
       "id": "lab-og-dynasty-comps-lab",
       "title": "Dynasty-comps Lab renderer + scoped export footer",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "527d9cc2"
     },
     {
       "id": "lab-og-launch10-live-label",
@@ -24,7 +30,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-dynasty-comps-lab",
+  "next_atom_id": "lab-og-launch10-live-label",
   "created_at": "2026-05-31T05:00:00Z",
-  "updated_at": "2026-05-31T05:00:00Z"
+  "updated_at": "2026-05-31T17:00:00Z"
 }
