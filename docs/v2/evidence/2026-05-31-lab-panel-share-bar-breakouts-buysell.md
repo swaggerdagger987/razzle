@@ -19,7 +19,7 @@ curl -s -o /tmp/breakouts-og.png -w '%{http_code} %{size_download}\n' \
 
 curl -s -o /tmp/buysell-og.png -w '%{http_code} %{size_download}\n' \
   'http://127.0.0.1:3000/og/buysell?download=1&force_demo=1'
-# 200 63936
+# 200 64866
 ```
 
 ## Change
