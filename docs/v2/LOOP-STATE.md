@@ -5,5 +5,6 @@ focus_layer: L5
 next_slice: bureau-h2h-export-or-new-epic
 last_keep_cycle: 95
 last_commit: 9f5ef781
+lab_l5_og_snapshot_row_fidelity_epic: complete
 league_l5_unhide_bureau_tabs_epic: complete
 league_l5_strength_of_schedule_tab: complete
