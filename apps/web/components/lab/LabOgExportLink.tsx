@@ -2,7 +2,17 @@
 export const DEFAULT_LAB_OG_PLAYER_ID = "00-0036900";
 
 /** Panels whose OG route reads player_id from the export URL (see /og/[panel]/route.tsx). */
-export const PLAYER_SCOPED_OG_SLUGS = ["gamelog", "dynasty-comps"] as const;
+export const PLAYER_SCOPED_OG_SLUGS = [
+  "gamelog",
+  "dynasty-comps",
+  "percentiles",
+  "career",
+  "career-compare",
+  "strengths",
+  "breakdown",
+  "fptsbreakdown",
+  "archetypes",
+] as const;
 
 /** In-panel link to download the Lab OG share card (matches Bureau export pattern). */
 

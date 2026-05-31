@@ -16,6 +16,7 @@ def test_player_scoped_slugs_default_player_id_in_export_url():
     assert "DEFAULT_LAB_OG_PLAYER_ID" in source
     assert 'params.set("player_id", resolvedPlayerId)' in source
     assert '"gamelog"' in source and '"dynasty-comps"' in source
+    assert '"percentiles"' in source and '"archetypes"' in source
 
 
 def test_default_lab_og_player_matches_og_route():
