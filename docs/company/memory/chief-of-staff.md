@@ -10,7 +10,7 @@ YYYY-MM-DD | hypothesis | outcome | keep | discard | revisit | evidence
 
 A good entry changes future behavior. A bad entry is a diary.
 
-2026-05-31 | workday cycle 2 | Lab OG epic atom 2/4 prospects snapshot | da33eafd | SHIP | KEEP one atom per PR | — | breakouts next | standup cycle 89
+2026-05-31 | workday cycle 2 | Lab OG epic atom 2/4 prospects snapshot | 66168c6e | SHIP | KEEP one atom per PR | — | breakouts next | standup cycle 89
 
 2026-05-31 | good morning factory | Lab L5 OG snapshot epic atom 1/4 weekly | 4a6ef16b | SHIP | KEEP one panel per atom | — | prospects next | standup cycle 88
 
