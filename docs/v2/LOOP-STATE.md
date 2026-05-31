@@ -1,4 +1,13 @@
 cycle: 99
-last_commit: 01acc653
-focus_pillar: Lab
+last_board_cycle: 54
+focus_pillar: Explore
 focus_layer: L5
+next_slice: lab-og-live-panel-rows
+last_keep_cycle: 99
+last_commit: 1dd9d62f
+explore_l5_watermark_band_epic: complete
+explore_l5_og_watermark_band: complete
+explore_l5_og_preview_watermark: complete
+explore_l5_og_college_band_copy: complete
+lab_l5_og_fidelity_epic: active
+lab_l5_tradevalues_formula_statlabel: complete
