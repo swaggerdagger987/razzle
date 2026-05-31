@@ -16,3 +16,6 @@ def test_trade_finder_og_watermark_hallway_band():
     assert "LIVE · Sleeper trade paths" in text
     assert "SAMPLE · demo trade rows" in text
     assert "resolveApiOrigin" in text
+    assert "toRoom(" in text
+    assert 'agentId: "bones"' in text
+    assert "ask ${bones.name} about" in text
