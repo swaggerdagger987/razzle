@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 116 — Launch-10 OG LIVE nflverse sticker)  
+**Last updated:** 2026-05-31 (factory cycle 117 — Lab L4 launch-10 pro gate teasers audit)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 116 |
+| Cycle | 117 |
 | Last board | 54 |
 | Focus pillar | Lab |
-| Focus layer | L5 |
-| Next slice | lab-og-live-sticker-prospects-weekly |
-| Last commit | `4e905360` |
+| Focus layer | L4 |
+| Next slice | lab-pro-gate-perks-copy |
+| Last commit | `b0405d43` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

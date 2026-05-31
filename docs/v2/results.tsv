@@ -70,7 +70,9 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 114	7afc0b03	depth+voice+simplicity	keep	Lab	L5 OG live sort keys restore	trust=T5,T6; value+efficiency_score+peak_age; curl buysell 58072B eff 59068B aging 57916B; live-sort epic complete
 115	44d05684	depth+voice+simplicity	keep	League	L5 Bureau H2H OG terracotta watermark band	trust=T5,T6; matches Explore/Lab panel band; curl h2h 67846B; watermark epic atom 2/2 complete
 116	4e905360	depth+voice+simplicity	keep	Lab	L5 Launch-10 OG LIVE nflverse sticker	trust=T5,T6; teal sticker+blurb when live rows; curl rankings 62355B; live-rows epic atom 1/3
-105	d3a469f8	depth+voice+simplicity	keep	Lab	L5 OG renderer sort parity fix	trust=T5,T6; mismatch_score+ppo+ppg; curl buysell 44258B; supersedes wrong OG stat keys
-116	5e75875e	depth+voice+simplicity	keep	League	L5 Bureau H2H snapshot roundtrip pytest	trust=T5,T6; y/m/pc contract 4 tests; pytest 4 passed; codec epic 3/3 complete
-117	ab6ae8d7	depth+voice+simplicity	keep	Lab	L5 Prospects OG live #rank labels	trust=T5,T6; prospects[] #rank statLabel; curl prospects WR 51431B; live-fetch epic atom 3/3 complete
-118	26a590c9	depth+voice+simplicity	keep	Lab	L5 Dynasty comps OG Pro teaser rows	trust=T2,T6; teaserRowsForPanel comps; curl dynasty-comps 54807B; live-extract epic atom 3/3 complete
+117	675044ea	depth+voice+simplicity	keep	Lab	L4 Pro gate screener hallway + teasers	trust=T2,T6; toExplore link; tiers/vorp/stocks/waivers/dynasty-comps; pytest 51; build ok; L4 epic atom 1/3
+118	b0405d43	depth+voice+simplicity	keep	Lab	L4 Launch-10 pro gate teaser audit	trust=T2,T6; weekly/prospects/dashboard teasers; test_panel_upgrade_teaser; pytest 12; build ok; L4 epic atom 2/3
+119	ab6ae8d7	depth+voice+simplicity	keep	Lab	L5 Prospects OG live #rank labels	trust=T5,T6; prospects[] #rank statLabel; curl prospects WR 51431B; live-fetch epic atom 3/3 complete
+120	d3a469f8	depth+voice+simplicity	keep	Lab	L5 OG renderer sort parity fix	trust=T5,T6; mismatch_score+ppo+ppg; curl buysell 44258B; supersedes wrong OG stat keys
+121	5e75875e	depth+voice+simplicity	keep	League	L5 Bureau H2H snapshot roundtrip pytest	trust=T5,T6; y/m/pc contract 4 tests; pytest 4 passed; codec epic 3/3 complete
+122	26a590c9	depth+voice+simplicity	keep	Lab	L5 Dynasty comps OG Pro teaser rows	trust=T2,T6; teaserRowsForPanel comps; curl dynasty-comps 54807B; live-extract epic atom 3/3 complete
