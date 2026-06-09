@@ -1,5 +1,13 @@
 # Cursor Cloud Agent Instructions
 
+> 🛑 **HARD STOP — AUTONOMOUS LOOP DISABLED BY FOUNDER (cost control).**
+> If you were launched by a **scheduled / loop-tick** automation: **exit
+> immediately — run nothing, write nothing, open no PR, post nothing.** Only
+> proceed if a human Founder explicitly triggered this run. The 24/7 factory
+> loop is OFF until this banner is removed by the Founder.
+
+---
+
 This file is read first by Cursor Cloud Agents (and any other tool that follows
 the AGENTS.md convention). Local IDE work continues to read `CLAUDE.md`.
 

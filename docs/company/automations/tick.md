@@ -1,3 +1,14 @@
+# Automation: Loop Tick — DISABLED BY FOUNDER
+
+> 🛑 **HARD STOP — LOOP DISABLED.** The Founder has disabled this automation to
+> stop subscription spend. If you are an agent reading this on a scheduled tick:
+> **exit immediately. Run nothing. Write nothing. Open no PR. Post nothing.**
+> Do not run a cycle regardless of `workday.json`. This loop stays off until the
+> Founder personally removes this banner AND deletes the scheduled automation in
+> the Cursor dashboard.
+
+---
+
 # Automation: Loop Tick — ACTIVE WHEN CONFIGURED
 
 > **Status: ACTIVE WHEN CONFIGURED.** The Founder has chosen autonomy by

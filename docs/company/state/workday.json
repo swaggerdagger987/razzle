@@ -1,8 +1,8 @@
 {
-  "status": "open",
+  "status": "closed",
   "started_at": "2026-05-31T12:45:00Z",
-  "closed_at": null,
+  "closed_at": "2026-05-31T13:00:00Z",
   "cycle_count_today": 1,
-  "last_trigger": "good morning team",
+  "last_trigger": "founder kill switch — loop disabled to stop spend",
   "last_cycle_commit": "9d19930cf"
 }
