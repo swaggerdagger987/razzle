@@ -1,0 +1,69 @@
+@import "tailwindcss";
+@import "../../../../packages/ui/tokens.css";
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-warm: var(--bg-warm);
+  --color-bg-card: var(--bg-card);
+  --color-bg-ink: var(--bg-ink);
+  --color-ink: var(--ink);
+  --color-ink-medium: var(--ink-medium);
+  --color-ink-light: var(--ink-light);
+  --color-ink-faint: var(--ink-faint);
+  --color-orange: var(--orange);
+  --color-orange-light: var(--orange-light);
+  --color-yellow: var(--yellow);
+  --color-yellow-light: var(--yellow-light);
+  --color-green: var(--green);
+  --color-green-light: var(--green-light);
+  --color-blue: var(--blue);
+  --color-blue-light: var(--blue-light);
+  --color-red: var(--red);
+  --color-red-light: var(--red-light);
+  --color-purple: var(--purple);
+  --color-purple-light: var(--purple-light);
+  --color-pos-qb: var(--pos-qb);
+  --color-pos-rb: var(--pos-rb);
+  --color-pos-wr: var(--pos-wr);
+  --color-pos-te: var(--pos-te);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
+  --font-hand: var(--font-hand);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius-lg);
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-mono);
+}
+
+.card-chunky {
+  background: var(--bg-card);
+  border: 3px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-chunky);
+}
+
+.btn-chunky {
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--ink);
+  font-family: var(--font-display);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.btn-chunky:hover {
+  box-shadow: var(--shadow-chunky);
+  transform: translate(-2px, -2px);
+}
+
+.btn-chunky[data-active="true"] {
+  background: var(--orange);
+  color: var(--text-on-accent);
+}
