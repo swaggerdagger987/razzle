@@ -45,6 +45,7 @@ pnpm workspace (`apps/web`, `packages/*`) + uv workspace (`apps/api`). No turbo,
 | First 10 Lab panels | see `spec/PRODUCT.md` Launch-10 | After 100 paid users |
 | First 3 staff live | Razzle, Octo, Bones | After Room ships and usage is real |
 | Launch pricing | Free + Pro $79.99/yr only | After first 100 paid users |
+| League plan SKU | In-season, with the Bureau Briefing — one purchase covers all league members | When the Briefing exists and a league asks |
 | League import | Sleeper only | When Sleeper-only traffic plateaus |
 | GTM | Reddit only | When Reddit MRR justifies expansion |
 
@@ -62,3 +63,4 @@ pnpm workspace (`apps/web`, `packages/*`) + uv workspace (`apps/api`). No turbo,
 | 2026-06-09 | **Valuation identity locked:** income approach, methodology published, assumptions user-adjustable; consensus market values shown for comparison, never sold as ours | Founder direction. See NORTH_STAR "valuation thesis" |
 | 2026-06-09 | **Launch deadline July 28, 2026** — live and Reddit-shareable before draft season; scope bends, date doesn't | Founder direction, zero negotiation |
 | 2026-06-09 | **Factory budget:** Claude subscription primary, $150 API credits overflow-only | See factory/ROUTING.md Budget |
+| 2026-06-09 | **League plan SKU planned** (covers all league members; anchored to the Bureau Briefing); Player Sheet elevated to first-class pillar with its own ladder | Founder direction |

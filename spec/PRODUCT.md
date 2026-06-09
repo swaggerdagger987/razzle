@@ -48,6 +48,8 @@ Climb down one layer at a time until it screenshots on r/DynastyFF. Never prune 
 ### Bureau — league intelligence
 **Ceiling:** connect Sleeper once; every manager profiled, every roster simulated, every trade path scored. The Bureau is the CIA: it monitors continuously and reports without being asked — what happened in your league, why, and what's coming ("Manager X projects to go heavy on RBs before the deadline"). The moat no stat site can copy.
 
+**The group-chat surface:** the Bureau's flagship artifact is the **weekly Bureau Briefing** — a league-wide, screenshot-native report (power shifts, the week's autopsy, who's panicking, who's hoarding RBs) designed to be dropped into the league group chat. Sleeper's feed does this shallowly; the Briefing does it with teeth. It is the league plan's reason to exist: one purchase, twelve readers, every week.
+
 | Layer | Means |
 |-------|-------|
 | L0 | Connect → pick league → context bar shows user |
@@ -71,9 +73,18 @@ Climb down one layer at a time until it screenshots on r/DynastyFF. Never prune 
 
 **The Room is not done until the pixel canvas ships.** Chat-only is scaffolding.
 
-## Player Sheet — junction requirements
+## Player Sheet — the connector (first-class pillar, own ladder)
 
-The hub, not a modal. Requirements: land → switch players instantly · shows league ownership when connected · Hawkeye/Dolphin context lines · typed links into Lab panels and Bureau · "ask the staff" entry into the Room. Every room's player click resolves to the same sheet.
+The hub is the most complete, thought-out surface in the product — **the connector of all rooms**, not a modal. Every room's player click resolves to the same sheet. If a feature doesn't make this sheet better, it's probably a silo.
+
+| Layer | Means |
+|-------|-------|
+| L0 | Land → switch players instantly; position-colored header; clean at 375px |
+| L1 | Full stat history (season + weekly), gamelog, career arc |
+| L2 | League context when connected: who owns him, whose roster needs him, your exposure |
+| L3 | Valuation summary: intrinsic value (your assumptions, link into the workbench) beside market price — the gap, on every sheet |
+| L4 | Staff lines: Dolphin health flag + timeline, Hawkeye usage read; "ask the staff" into the Room; trade-ideation hooks ("3 managers in your league need a TE") |
+| L5 | Value watches: aggressive alerts when this player's market moves against your model |
 
 ## The hallway — wiring checklist
 

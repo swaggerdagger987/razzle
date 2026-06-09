@@ -20,6 +20,10 @@ Appropriate for:
 - Mechanical ports, test writing against a stated contract, adapter implementations against `spec/DATA.md`.
 - Gate-failure fix loops where the failure is local (failing test, lint, type error).
 
+## Taste latitude
+
+Frontier sessions have **explicit creative license** inside the rulebook: within `spec/DESIGN.md` and `spec/VOICE.md`, add taste, wit, and craft freely — margin notes, loading copy, the extra 10% that makes a surface screenshot-worthy. Don't ask permission to be excellent. The line: when a choice is **identity-load-bearing** (changes what Razzle *is* — a room's purpose, the free/paid line, the valuation philosophy, the mascot's character) and not derivable from `spec/`, surface it to the Founder instead of silently choosing. Liberties within the lines: take them. Liberties *with* the lines: discuss first.
+
 ## The escalation rule
 
 A cheap-model session that hits a decision **not answerable from `spec/`** does not guess. It writes the question on the slice card, marks it BLOCKED, finishes what is safely in scope, and ends clean. A frontier session (or the Founder) answers on the card, flips it back to OPEN, and the next cheap session proceeds.

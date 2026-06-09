@@ -10,7 +10,7 @@
 
 ## The ambition
 
-Complete domination of fantasy football intelligence. The market is small enough to fly under the radar and big enough that if the Razzle brand sticks, it compounds for a generation. We are not building a feature — we are building the place serious players think from. Reddit subthreads are the entire distribution: keep giving real results to real players and the brand does the rest.
+Complete domination of fantasy football intelligence. The market is small enough to fly under the radar and big enough that if the Razzle brand sticks, it compounds for a generation. We are not building a feature — we are building the place serious players think from: **the Moneyball moment for AI in fantasy sports decisions**, the way analytics was for baseball front offices. Reddit subthreads are the entire distribution: keep giving real results to real players and the brand does the rest. (Positioning note: *we* may be described that way; the product itself never says "AI" — `spec/VOICE.md`.)
 
 ## The thesis
 
@@ -58,6 +58,7 @@ The main way people explore, not a modal. Land on Saquon, switch to CMC, instant
 
 - **Free = obsession hook:** full stats browsing, a few Lab panels, a few custom-scoring experiments, Bureau summary on Sleeper connect.
 - **Paid = trust for league decisions:** full Lab, Bureau deep-dive, Situation Room with full league context.
+- **League plan (the second SKU, in-season):** one purchase covers the whole league — every manager gets access and the Bureau's weekly briefing lands in front of all of them. One sale = twelve funnel entries; the league group chat becomes a distribution surface. Razzle spreads *inside* leagues, not just on Reddit.
 
 Free must be generous enough that fans fall in love — they pay when their **league** is on the line.
 
