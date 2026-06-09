@@ -48,11 +48,11 @@
 - **Scope:** to be fenced by a frontier planning pass before activation.
 - **Gates:** to be defined when fenced.
 
-### S-007 watermarked-export [OPEN]
-- **Pillar/Layer:** Explore/Lab (distribution) · **Trust:** T6
-- **Goal:** Export-as-image for screener views and workbench tables — Razzle colors, watermark "razzle.lol" bottom-right. The screenshot IS the marketing.
-- **Scope:** to be fenced before activation (likely `/og/*` server-rendered routes).
-- **Gates:** to be defined when fenced.
+### S-007 trade-answer-card [OPEN]
+- **Pillar/Layer:** Explore/Lab (distribution) · **Trust:** T1, T6
+- **Goal:** The canonical Reddit screenshot per the trade-reply doctrine (NORTH_STAR Distribution): a side-by-side trade comparison card — players/picks on each side, valued under a league's settings, key assumptions visible — exportable as image with Razzle colors and "razzle.lol" watermark. Plus plain watermarked export for screener/workbench views.
+- **Scope:** to be fenced before activation (likely `/og/*` server-rendered routes + a compare view).
+- **Gates:** to be defined when fenced; G5 must include: the card alone answers "who wins this trade?" without the reader needing the app.
 
 ### S-008 deploy [OPEN]
 - **Pillar/Layer:** Infrastructure (launch gate) · **Trust:** —
@@ -60,7 +60,7 @@
 - **Scope:** to be fenced before activation.
 - **Gates:** to be defined when fenced.
 
-> Post-launch queue (do not start before 2026-07-28 unless launch path is done): Bureau Self-Scout + monitoring/prediction, Monte Carlo championship odds, injury intel feed + Dolphin timelines + champ-probability deltas, Situation Room ask flow, Stripe Pro tier.
+> Post-launch queue (do not start before 2026-07-28 unless launch path is done): valuation model layers (positional age curves, team situation surplus/deficit, growth rates — the NORTH_STAR build sheet), consensus market values beside intrinsic values, Bureau Self-Scout + monitoring/prediction, Monte Carlo championship odds, injury intel feed + Dolphin timelines + champ-probability deltas, Situation Room ask flow, Stripe Pro tier.
 
 ## LEDGER
 

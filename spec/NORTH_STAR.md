@@ -27,6 +27,7 @@ That's Razzle. Not "consider monitoring your WR room."
 **Fantasy points are cash flows.** KeepTradeCut and consensus rankings are the *market approach* — what the crowd will pay today. Razzle is the **income approach**: a player's value is built from explicit inputs and assumptions — usage, efficiency, age curve, contract situation, *your* league's scoring — that the user can see and manipulate.
 
 - **We publish methodologies, never black-box values.** Every number comes with its assumptions exposed. Users stress-test, tweak an input, and watch the value move.
+- **The model build sheet (none of it exotic — the edge is scalability + finance discipline, not secret data):** current production baseline → positional age curve → team situation surplus/deficit (opportunity, target/carry competition, offense quality) → growth rate → translated through *your* league's scoring. Situational, per-player, per-league. Nobody has shipped this because nobody combined the finance understanding with the technology — that's the whole gap.
 - The product was born from a real pain: the founder's biggest screen time was Safari + Sleeper, manually converging stats to make trade decisions. Razzle is that convergence, automated, under your league's rules.
 - **Trade intelligence is the wedge.** The loop we own: converge stats → value players under your settings and assumptions → make the trade with conviction. Market price (consensus) is shown beside intrinsic value (yours) — the gap IS the trade thesis.
 
@@ -123,9 +124,17 @@ If 1–4 are all no and it's not infrastructure, **KILL the slice**.
 
 Pain we own: *"ChatGPT doesn't know my scoring settings." "Six tabs open for one trade." "I know Dave panics after losses — I can't prove it." "Sunday night and I still don't know why I lost."*
 
-## Distribution
+## Distribution — the trade-reply doctrine
 
-**Reddit only** until stage advances. The flywheel: helpful screenshot → group chat / Reddit → watermark → free Explore → Sleeper connect → Bureau hook → paid trust. Posting under the Founder's identity is Founder-only.
+**We never promote Razzle.** No launch posts, no ads, no "check out my tool." The engine is demand capture:
+
+Niche trade threads (r/DynastyFF and friends) have a massive surplus of people *asking* trade questions over competent people *answering* them. OPs love any interaction on their post. That asymmetry is the white space. The play: reply to real trade questions with a small, chill, competent explanation — alongside a Razzle screenshot that shows the reasoning. The answer is the marketing; the watermark does the rest. Catch a few threads and it spreads on its own; the engine is slow but it never burns out.
+
+Flywheel: trade answer → screenshot with reasoning → watermark → free Explore → Sleeper connect → Bureau hook → paid trust.
+
+**Product law that follows:** every shareable surface must work as a *trade answer*. The canonical Razzle screenshot is a side-by-side comparison — players and picks, valued under the asker's league settings, assumptions visible. If an export can't answer "who wins this trade?", it's not the priority export.
+
+Posting under the Founder's identity is Founder-only.
 
 ## Playfulness is not optional
 

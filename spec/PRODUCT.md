@@ -19,7 +19,7 @@ Climb down one layer at a time until it screenshots on r/DynastyFF. Never prune 
 | L5 | Staff margin notes (Hawkeye usage, Dolphin injury flags on rows) |
 
 ### Lab — R&D
-**Ceiling:** analytical panels where each is a standalone tool power users screenshot, anchored by the **valuation workbench** — the income approach made manipulatable. Methodology published, every assumption (usage, efficiency, age curve, contract, league scoring) exposed as an input the user can stress-test. Market price (consensus) shown beside intrinsic value (the user's model); the gap is the trade thesis. A research lab, not a catalog of names.
+**Ceiling:** analytical panels where each is a standalone tool power users screenshot, anchored by the **valuation workbench** — the income approach made manipulatable. Methodology published, every assumption exposed as an input the user can stress-test: production baseline, positional age curve, team situation surplus/deficit, growth rate, league scoring translation. Market price (consensus) shown beside intrinsic value (the user's model); the gap is the trade thesis. A research lab, not a catalog of names.
 
 | Layer | Means |
 |-------|-------|
