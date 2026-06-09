@@ -48,7 +48,7 @@ Climb down one layer at a time until it screenshots on r/DynastyFF. Never prune 
 ### Bureau — league intelligence
 **Ceiling:** connect Sleeper once; every manager profiled, every roster simulated, every trade path scored. The Bureau is the CIA: it monitors continuously and reports without being asked — what happened in your league, why, and what's coming ("Manager X projects to go heavy on RBs before the deadline"). The moat no stat site can copy.
 
-**The group-chat surface:** the Bureau's flagship artifact is the **weekly Bureau Briefing** — a league-wide, screenshot-native report (power shifts, the week's autopsy, who's panicking, who's hoarding RBs) designed to be dropped into the league group chat. Sleeper's feed does this shallowly; the Briefing does it with teeth. It is the league plan's reason to exist: one purchase, twelve readers, every week.
+**The group-chat surface:** the Bureau's flagship artifact is the **weekly Bureau Briefing** — a league-wide, screenshot-native report (power shifts, the week's autopsy, who's panicking, who's hoarding RBs) designed to be dropped into the league group chat. Sleeper's feed does this shallowly; the Briefing does it with teeth. It is the league option's reason to exist: one purchase, twelve readers, every week.
 
 | Layer | Means |
 |-------|-------|
