@@ -6,6 +6,12 @@
 
 **1,000 paid users.** During BUILD, chase the Trust Score (T1–T7) below. Everything else is a leading indicator.
 
+**The one date: July 28, 2026.** The product is live and Reddit-shareable before draft season. Zero negotiation. Scope bends; the date does not.
+
+## The ambition
+
+Complete domination of fantasy football intelligence. The market is small enough to fly under the radar and big enough that if the Razzle brand sticks, it compounds for a generation. We are not building a feature — we are building the place serious players think from. Reddit subthreads are the entire distribution: keep giving real results to real players and the brand does the rest.
+
 ## The thesis
 
 Razzle is a **fantasy football film room disguised as a Sunday comic strip**.
@@ -15,6 +21,16 @@ Warm sand, chunky borders, a Bengal tiger who doesn't hedge — and underneath, 
 > "Drake London saw 10 targets — three standard deviations above his baseline. That's why you lost."
 
 That's Razzle. Not "consider monitoring your WR room."
+
+## The valuation thesis (the core differentiator)
+
+**Fantasy points are cash flows.** KeepTradeCut and consensus rankings are the *market approach* — what the crowd will pay today. Razzle is the **income approach**: a player's value is built from explicit inputs and assumptions — usage, efficiency, age curve, contract situation, *your* league's scoring — that the user can see and manipulate.
+
+- **We publish methodologies, never black-box values.** Every number comes with its assumptions exposed. Users stress-test, tweak an input, and watch the value move.
+- The product was born from a real pain: the founder's biggest screen time was Safari + Sleeper, manually converging stats to make trade decisions. Razzle is that convergence, automated, under your league's rules.
+- **Trade intelligence is the wedge.** The loop we own: converge stats → value players under your settings and assumptions → make the trade with conviction. Market price (consensus) is shown beside intrinsic value (yours) — the gap IS the trade thesis.
+
+This is defensible precisely because it's transparent: anyone can copy a number, but a methodology users have stress-tested themselves becomes *their* methodology. That's trust.
 
 ## What we sell
 
@@ -29,9 +45,9 @@ One intelligence agency, four floors. Same lens everywhere: **what happened → 
 | Room | What it is | Holy moment |
 |------|-----------|-------------|
 | **Explore** — the files | NFL + college stats screener. Free forever. Filter, sort, share a URL, export a watermarked card. | You build **your** value formula and the table finally ranks players the way your brain does. |
-| **Lab** — the invention floor | Research artillery: analytical panels and a pivot-table-from-hell dashboard factory. Pro depth. | Group chat says Player X is washed. You end the argument with one Lab screenshot. |
-| **Bureau** — the resource desk | League-specific intelligence. Connect Sleeper once: playoff odds, relative value **under your rules**, manager profiles. | Real playoff probabilities, then deeper: who owns the most injury-prone roster, who you're actually competing with for that WR2. |
-| **Situation Room** — the briefing | Six staff on the floor. Razzle delivers the verdict with an urgency tier. A film room, not a chat product. | Trade drops in your league. You paste it: *how does this change the balance of power?* |
+| **Lab** — R&D | Where obsessed players test theories: custom formulas, valuation assumptions, strategy backtests ("what if I only draft players on expiring contracts?"). The valuation workbench lives here. | Group chat says Player X is washed. You end the argument with one Lab screenshot of your model. |
+| **Bureau** — the CIA | **Constant monitoring.** It doesn't wait to be asked: it watches the league, explains what happened, and predicts what's next — "Manager X projects to go heavy on RBs before the deadline." Playoff odds, relative value under your rules, manager profiles. | Real playoff probabilities, then deeper: who owns the most injury-prone roster, who's actually competing with you for that WR2, who's about to panic-sell. |
+| **Situation Room** — the briefing | Where you go when you need someone to talk to — and the room **already knows**. You never have to say "X just got injured": the intel is already on the floor, Dr. Dolphin already has the injury history and a real timeline, and the impact is quantified for *your* league. | CMC goes down. Before you finish typing, the room tells you your championship probability just moved from 30% to 18% — and what to do about it. |
 
 ## Player Sheet — the hub (not a fifth room)
 

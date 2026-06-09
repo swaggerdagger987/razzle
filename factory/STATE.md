@@ -3,6 +3,8 @@
 ## NOW
 
 - **Active slice:** none — S-001 is next
+- **Launch deadline:** **2026-07-28** (live + Reddit-shareable before draft season; scope bends, date doesn't)
+- **Launch-critical path:** S-001 ingest → S-002 screener → S-003 player sheet → S-004 custom scoring → S-005 valuation workbench → S-006 Sleeper connect → S-007 watermarked export → deploy
 - **Blockers:** none
 - **Last commit:** (seed)
 - **Date:** 2026-06-09
@@ -34,17 +36,31 @@
 - **Scope:** screener API (accept scoring config), `apps/web/src/features/explore/` controls, `apps/web/src/features/scoring-preview/` integration, tests.
 - **Gates:** G1–G4; G5: points column changes when rules change, values match engine unit-test fixtures, URL carries the preset.
 
-### S-005 lab-vorp-panel [OPEN]
-- **Pillar/Layer:** Lab L1 (Launch-10 `vorp`) · **Trust:** T1, T5, T6
-- **Goal:** `/lab/vorp` — `value_players` over a real season with the active scoring config; tier-colored table, Octo header, screenshot-worthy.
+### S-005 valuation-workbench-v0 [OPEN]
+- **Pillar/Layer:** Lab L1–L3 (flagship; absorbs Launch-10 `vorp`) · **Trust:** T1, T5, T6
+- **Goal:** `/lab/workbench` — the income approach made visible. VORP over a real season is the first model: assumptions panel (scoring config, replacement logic, league size) on the left, tier-colored value table on the right, values recompute live as assumptions change. Methodology note rendered beside the numbers ("how this value is built"). Octo header.
 - **Scope:** `apps/web/src/app/lab/`, `apps/web/src/features/lab/`, valuation service wiring to real data, tests.
-- **Gates:** G1–G4; G5: real top-200 renders, position ranks correct vs `test_vorp.py` logic, links back to Player Sheet (hallway `crossRoomLinkPresent`), screenshot.
+- **Gates:** G1–G4; G5: real top-200 renders, position ranks correct vs `test_vorp.py` logic, changing an assumption visibly moves values, links back to Player Sheet (hallway `crossRoomLinkPresent`), screenshot passes the r/DynastyFF test.
 
 ### S-006 sleeper-connect [OPEN]
 - **Pillar/Layer:** Bureau L0 · **Trust:** T2
-- **Goal:** Sleeper username → league list → pick league; persist `LeagueConfig` (new `leagues` migration); context bar shows `@user · league`.
+- **Goal:** Sleeper username → league list → pick league; persist `LeagueConfig` (new `leagues` migration); context bar shows `@user · league`; workbench + screener default to the connected league's scoring.
 - **Scope:** to be fenced by a frontier planning pass before activation.
 - **Gates:** to be defined when fenced.
+
+### S-007 watermarked-export [OPEN]
+- **Pillar/Layer:** Explore/Lab (distribution) · **Trust:** T6
+- **Goal:** Export-as-image for screener views and workbench tables — Razzle colors, watermark "razzle.lol" bottom-right. The screenshot IS the marketing.
+- **Scope:** to be fenced before activation (likely `/og/*` server-rendered routes).
+- **Gates:** to be defined when fenced.
+
+### S-008 deploy [OPEN]
+- **Pillar/Layer:** Infrastructure (launch gate) · **Trust:** —
+- **Goal:** Fly.io API + web live on razzle.lol behind Cloudflare; weekly sync cron; founder provides DNS + keys.
+- **Scope:** to be fenced before activation.
+- **Gates:** to be defined when fenced.
+
+> Post-launch queue (do not start before 2026-07-28 unless launch path is done): Bureau Self-Scout + monitoring/prediction, Monte Carlo championship odds, injury intel feed + Dolphin timelines + champ-probability deltas, Situation Room ask flow, Stripe Pro tier.
 
 ## LEDGER
 

@@ -26,11 +26,18 @@ A cheap-model session that hits a decision **not answerable from `spec/`** does 
 
 Signals you must escalate: the fix wants a new dependency · two specs appear to conflict · the slice needs a product call the card didn't make · the gate itself seems wrong.
 
+## Budget (hard constraints)
+
+- **Primary engine: the Founder's Claude subscription.** All routine factory work runs inside subscription-covered Claude Code sessions. Plan heavy slices for when the usage window is fresh (limits reset on ~5-hour windows); do frontier planning/review early in a window, then let cheap throughput burn the remainder.
+- **API credits: $150 total, overflow only.** Spend them solely to *finish* something a session ran out of limits mid-way through — never to start work a future session could do. Log any API spend as a line in the STATE.md ledger row for that slice.
+- A session that hits usage limits mid-slice commits what is green, marks the card with exactly what remains, and ends clean — the next session resumes from the card. Never leave the resume state in your head.
+
 ## Founder-only
 
 - Posting anywhere public under the Founder's identity (Reddit, social).
 - Pricing changes, billing live-mode, deleting data.
 - Overriding a VETO condition from `spec/NORTH_STAR.md`.
+- Providing credentials: LLM API keys, Stripe, Reddit. Everything else the factory handles itself; the Founder's standing role is veto power when direction gets weird.
 
 ## Cadence (suggested, not enforced by tooling)
 

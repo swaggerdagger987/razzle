@@ -18,8 +18,8 @@ Climb down one layer at a time until it screenshots on r/DynastyFF. Never prune 
 | L4 | Formula store / community composites |
 | L5 | Staff margin notes (Hawkeye usage, Dolphin injury flags on rows) |
 
-### Lab — the panels
-**Ceiling:** analytical panels where each is a standalone tool power users screenshot. A research lab, not a catalog of names.
+### Lab — R&D
+**Ceiling:** analytical panels where each is a standalone tool power users screenshot, anchored by the **valuation workbench** — the income approach made manipulatable. Methodology published, every assumption (usage, efficiency, age curve, contract, league scoring) exposed as an input the user can stress-test. Market price (consensus) shown beside intrinsic value (the user's model); the gap is the trade thesis. A research lab, not a catalog of names.
 
 | Layer | Means |
 |-------|-------|
@@ -46,7 +46,7 @@ Climb down one layer at a time until it screenshots on r/DynastyFF. Never prune 
 | `vorp` | Octo | tier table |
 
 ### Bureau — league intelligence
-**Ceiling:** connect Sleeper once; every manager profiled, every roster simulated, every trade path scored. The moat no stat site can copy.
+**Ceiling:** connect Sleeper once; every manager profiled, every roster simulated, every trade path scored. The Bureau is the CIA: it monitors continuously and reports without being asked — what happened in your league, why, and what's coming ("Manager X projects to go heavy on RBs before the deadline"). The moat no stat site can copy.
 
 | Layer | Means |
 |-------|-------|
@@ -58,7 +58,7 @@ Climb down one layer at a time until it screenshots on r/DynastyFF. Never prune 
 | L5 | Scenario explorer (what-if trade → re-sim instantly) |
 
 ### Situation Room
-**Ceiling:** six staff who already know your league. Pixel office. Cross-triggers. Razzle verdict with urgency tiers.
+**Ceiling:** the room **already knows** before you walk in. Live intel (injury reports, beat-reporter news) is on the floor in real time; Dr. Dolphin pairs each injury with history and a credible recovery timeline; impact is quantified for *your* league (championship probability delta, not generic severity). Six staff, cross-triggers, Razzle verdict with urgency tiers. The pixel office is delight, not the point — ambient awareness is the point.
 
 | Layer | Means |
 |-------|-------|

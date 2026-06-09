@@ -59,3 +59,6 @@ pnpm workspace (`apps/web`, `packages/*`) + uv workspace (`apps/api`). No turbo,
 | Date | Decision | Notes |
 |------|----------|-------|
 | 2026-06-09 | All defaults above; SQLite over Postgres; sync SQLAlchemy; auth deferred to managed provider | Seed of razzle-hq. Absorbs razzle-legacy ADRs 0001–0005 and razzle DECISIONS.md |
+| 2026-06-09 | **Valuation identity locked:** income approach, methodology published, assumptions user-adjustable; consensus market values shown for comparison, never sold as ours | Founder direction. See NORTH_STAR "valuation thesis" |
+| 2026-06-09 | **Launch deadline July 28, 2026** — live and Reddit-shareable before draft season; scope bends, date doesn't | Founder direction, zero negotiation |
+| 2026-06-09 | **Factory budget:** Claude subscription primary, $150 API credits overflow-only | See factory/ROUTING.md Budget |
