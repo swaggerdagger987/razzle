@@ -11,12 +11,35 @@
 
 ## BACKLOG
 
-### S-001 nflverse-ingest [OPEN]
+### S-001 nflverse-ingest [OPEN — execution-ready]
 - **Pillar/Layer:** Data (Explore L0 prerequisite) · **Trust:** T1 substrate
-- **Goal:** Fresh nflverse adapter fills `players` + `player_week_stats` via the Alembic schema; expose `GET /api/players`.
-- **Scope:** `apps/api/src/razzle_api/ingest/` (new module ok inside src), `scripts/sync_data.py`, `apps/api/src/razzle_api/api/routers/players.py` + schema, `apps/api/src/razzle_api/services/`, tests, one migration only if a column is genuinely missing.
-- **Gates:** G1–G4; G5: `python scripts/sync_data.py --quick` loads ≥500 players for the current + prior season, re-run is idempotent (row counts stable), `data/razzle.db` < 100MB, `curl -s 'localhost:8000/api/players?position=RB' | jq length` ≥ 20.
-- **Notes:** Reference (read-only, never import): `legacy/adapters/nflverse_adapter.py` in the old razzle repo — URLs, column mappings for the `stats_player_week_YYYY.csv` format. See `spec/DATA.md`.
+- **Goal:** `uv run python scripts/sync_data.py --quick` fills `players` + `player_week_stats` from nflverse for seasons 2024–2025; `GET /api/players` serves it.
+- **File plan:**
+  - NEW `apps/api/src/razzle_api/ingest/__init__.py` — docstring only.
+  - NEW `apps/api/src/razzle_api/ingest/nflverse.py` — the adapter (fetch + map + upsert).
+  - NEW `apps/api/src/razzle_api/services/players_service.py` — `list_players(session, position, limit)`.
+  - NEW `apps/api/src/razzle_api/api/routers/players.py` + `api/schemas/players.py`.
+  - EDIT `apps/api/src/razzle_api/main.py` — one import + one `include_router` line.
+  - NEW `scripts/sync_data.py` — argparse CLI: `--quick` (seasons 2024+2025), `--seasons 2023 2024`, `--status` (print row counts + db file size, no fetch).
+  - NEW `apps/api/tests/unit/test_nflverse_mapping.py`, `apps/api/tests/integration/test_players_api.py`.
+- **Interfaces:**
+  - `fetch_players() -> list[dict]` and `fetch_week_stats(season: int) -> list[dict]` — network only, no DB. Stdlib urllib + csv (+ gzip for `.gz`), `User-Agent: razzle-sync/1.0`, timeout 120s.
+  - `map_week_row(row: dict) -> dict | None` — pure: one nflverse CSV row → our column dict, or None if filtered out. This is the unit-tested function.
+  - `upsert_players(session, rows) -> int`, `upsert_week_stats(session, season, rows) -> int` — DB only, no network. SQLite upsert via `sqlalchemy.dialects.sqlite.insert(...).on_conflict_do_update(...)`; conflict targets: `gsis_id` / `(player_id, season, week)`.
+  - `GET /api/players?position=RB&limit=100` → `{"players": [{"gsis_id", "name", "position", "team"}]}`, ordered by name; `limit` default 100, max 500.
+- **Data contract:**
+  - Players: `https://github.com/nflverse/nflverse-data/releases/download/players/players.csv` — take `gsis_id` (PK; skip rows without one), `display_name`→name, `position`, `latest_team`→team. Keep positions QB/RB/WR/TE only.
+  - Weekly: release tag `stats_player`, file `stats_player_week_{season}.csv`, found via `https://api.github.com/repos/nflverse/nflverse-data/releases?per_page=100` (or direct download URL of the same shape as players). Keep rows where `season_type == "REG"` and position in QB/RB/WR/TE. **The weekly file's `player_id` column IS the gsis_id.**
+  - Column map (nflverse → ours): `attempts`→pass_att · `completions`→pass_cmp · `passing_yards`→pass_yd · `passing_tds`→pass_td · `passing_interceptions` (older files: `interceptions`)→pass_int · `sacks_suffered` (older: `sacks`)→pass_sack · `passing_2pt_conversions`→pass_two_pt · `carries`→rush_att · `rushing_yards`→rush_yd · `rushing_tds`→rush_td · `rushing_2pt_conversions`→rush_two_pt · `targets`→target · `receptions`→rec · `receiving_yards`→rec_yd · `receiving_tds`→rec_td · `receiving_2pt_conversions`→rec_two_pt · fumble = `rushing_fumbles`+`receiving_fumbles`+`sack_fumbles` · fumble_lost = same three `_lost` columns · `special_teams_tds`→special_teams_td. All other schema columns stay 0.
+  - Coercion: `""`/`"NA"`/`"NaN"`/None → 0.0; everything to float. The map must accept BOTH old and new column names (the 2025+ format renamed exactly: passing_interceptions, sacks_suffered, sack_yards_lost, team→recent_team).
+- **Test plan:** unit — `map_week_row` on two literal fixture dicts (one new-format, one old-format names) asserts identical mapped output, NA→0.0, non-REG row → None. Integration — on a tmp migrated DB: upsert fixture players+stats twice, assert row counts identical both times (idempotency) and a known value survives; seed 3 players, `GET /api/players?position=RB` via ASGITransport returns the RBs only.
+- **Gates:** G1–G4; G5 (paste outputs in commit body):
+  - `uv run python scripts/sync_data.py --quick` → exit 0
+  - `uv run python scripts/sync_data.py --status` → players ≥ 500, week-stat rows ≥ 10000, db size < 100MB
+  - run `--quick` again, then `--status` → identical row counts
+  - `curl -s 'localhost:8000/api/players?position=RB&limit=50' | python3 -c "import json,sys; print(len(json.load(sys.stdin)['players']))"` → ≥ 20
+- **Out of scope:** kicking columns (stay 0), DST/IDP, return_yd/return_td (stay 0), college data, snap counts, injuries, schedules, storing nflverse's precomputed fantasy_points columns (we always compute from rules), any UI.
+- **Pitfalls (verified against the legacy adapter, read-only ref: old razzle repo `legacy/adapters/nflverse_adapter.py`):** GitHub releases API requires a User-Agent header · players.csv uses BOM, decode `utf-8-sig` · don't trust `players.csv` team for identity (teams go stale), gsis_id only · keep `ingest/` importing the engine's column names from one place: define `STAT_COLUMNS` once (the migration already has the list — mirror it, don't import the migration).
 
 ### S-002 explore-screener [OPEN]
 - **Pillar/Layer:** Explore L0–L1 · **Trust:** T1, T6

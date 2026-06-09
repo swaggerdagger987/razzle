@@ -10,24 +10,36 @@ Horizontal work (cross-cutting refactors, dependency bumps, polish passes) is le
 
 ## Card format
 
-Cards live in `factory/STATE.md` BACKLOG, in priority order:
+Cards live in `factory/STATE.md` BACKLOG, in priority order. Cards exist in two states of detail:
+
+- **Sketch** — goal, pillar, trust pillars, rough scope. Enough to prioritize, not enough to build.
+- **Execution-ready** — a complete build sheet. **Only execution-ready cards may be claimed by an implementing session.** Frontier planning passes (`factory/ROUTING.md`) upgrade the top 1–2 sketches to execution-ready just-in-time; detailing the whole backlog up front is forbidden (specs rot).
+
+An execution-ready card contains ALL of:
 
 ```markdown
-### S-004 explore-custom-scoring [OPEN]
-- **Pillar/Layer:** Explore L3 · **Trust:** T1, T3
-- **Goal:** one sentence.
-- **Scope:** expected files/dirs — the fence.
-- **Gates:** G1–G4 always; G5 = slice-specific assertions
-  (e.g. "curl /api/screener?preset=ppr returns points column",
-  "URL state survives refresh").
-- **Evidence:** the commands + outputs the commit body must show.
+### S-00X slug [OPEN — execution-ready]
+- **Pillar/Layer / Trust:** as before.
+- **Goal:** one sentence, outcome-shaped.
+- **File plan:** every file, marked NEW or EDIT. EDITs state what changes
+  ("main.py: one import + one include_router line"). This IS the scope fence.
+- **Interfaces:** exact function signatures, endpoint paths with query params,
+  request/response shapes. The implementer designs nothing at this altitude.
+- **Data contract** (when data moves): source URLs, column names, the
+  source→schema mapping table, type coercions, filters.
+- **Test plan:** named test cases with the behavior each asserts, and fixtures.
+- **Gates:** G1–G4 plus G5 as exact replayable commands with expected output.
+- **Out of scope:** explicit list of adjacent things NOT to build.
+- **Pitfalls:** known traps, verified against reference code where it exists.
 ```
 
-Status flow: `OPEN → ACTIVE → DONE` (or `BLOCKED`, or `KILLED`).
+The standard: **a competent implementer who has read only CLAUDE.md and this card can finish the slice without making a single product or architecture decision.** If the implementer hits a decision anyway, the card was defective — mark BLOCKED with the question (that is the escalation working, not a failure).
+
+Status flow: `OPEN (sketch) → OPEN — execution-ready → ACTIVE → DONE` (or `BLOCKED`, or `KILLED`).
 
 ## Rules
 
-- **Picking:** take the **topmost OPEN** card. If blocked, write the blocker on the card, mark BLOCKED, take the next. Never cherry-pick downlist because something looks more fun.
+- **Picking:** take the **topmost OPEN execution-ready** card. If none is execution-ready, that session becomes a frontier planning pass (detail the top sketches), not an improvisation session. If blocked, write the blocker on the card, mark BLOCKED, take the next.
 - **Fence:** the Scope list is a commitment. Files outside it may be touched only with a one-line reason logged on the card.
 - **No mid-session invention:** discovering work mid-slice does not change the slice. Write 1–3 proposed OPEN cards at the bottom of BACKLOG at session end instead.
 - **Blocked means stop:** a card missing information that `spec/` can't answer gets the open question written on it, status BLOCKED. Guessing on spec-level questions is worse than stopping (`factory/ROUTING.md`).

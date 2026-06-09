@@ -35,7 +35,7 @@ Nothing else is required reading. Pull in other `spec/` files when your slice to
 
 ## Session protocol
 
-1. `git status` must be clean. Read `factory/STATE.md`. Claim the topmost OPEN slice: mark it ACTIVE, commit that one-line change (`S-00X: start`).
+1. `git status` must be clean. Read `factory/STATE.md`. Claim the topmost OPEN **execution-ready** slice (`factory/SLICE.md`): mark it ACTIVE, commit that one-line change (`S-00X: start`). If no card is execution-ready, this session's job is detailing the top sketches (frontier work per `factory/ROUTING.md`), not improvising.
 2. Implement inside the slice's scope fence. Touching files outside it requires a one-line logged reason on the card.
 3. Run gates G1–G4 plus the card's G5 (`factory/GATES.md`). Fix until green, or mark the card BLOCKED with the failing output and stop.
 4. Update STATE.md (ACTIVE → DONE, append a LEDGER row), put gate evidence in the commit body, commit, push.
