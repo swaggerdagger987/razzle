@@ -1,0 +1,34 @@
+[project]
+name = "razzle-hq"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = [
+  "ruff>=0.11.13",
+  "pytest>=8.4.0",
+]
+
+[tool.uv.workspace]
+members = ["apps/api"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["apps/api/src"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "PL"]
+ignore = ["PLR2004"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/**" = ["PLR2004"]
+"**/migrations/versions/*" = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
