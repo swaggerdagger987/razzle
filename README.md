@@ -1,3 +1,10 @@
+> [!CAUTION]
+> **THIS BRANCH IS RETIRED — MIGRATED 2026-06-09.**
+> Everything here was seeded to **`swaggerdagger987/razzle-hq` `main`**, which is the
+> single source of truth. Do not commit, plan, or read state from this branch.
+> The two post-migration spec commits (65983c6, 499515d) were reconciled into
+> razzle-hq main (230319d, a6932b8). Go to razzle-hq.
+
 # Razzle HQ
 
 Razzle is a **fantasy football film room disguised as a Sunday comic strip** — razzle.lol. This repo is the product and the factory that builds it.
