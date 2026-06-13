@@ -14,6 +14,28 @@ No Loop Tick required. No other automations required for shipping.
 | Tools | **Open Pull Request**, Send to Slack, Memories |
 | Scope | **Team Owned** (required for push) |
 
+## Auth — all paths (verify before first run)
+
+Run on any machine with `gh` auth: `bash scripts/verify-factory-auth.sh`
+
+| Auth path | Who | Status |
+|-----------|-----|--------|
+| **git push** | Cursor GitHub App on VM (`x-access-token` remote) | Team Owned automation |
+| **Open PR** | GitHub Actions `standup-pr-autopen` (`GITHUB_TOKEN`) | Repo setting: Actions may create PRs |
+| **Merge PR** | GitHub Actions `standup-pr-merge` when CI green | Repo: allow auto-merge ON |
+| **Poll PR** | VM `gh pr list` / `wait-for-pr.sh` | Read-only — works |
+| **Slack** | Cursor Send to Slack tool | Enabled on automation |
+
+**Not used on VM (by design):** `gh pr create`, `gh pr merge` — integration token blocks these.
+
+Cursor dashboard (you confirm once):
+1. Good Morning → **Team Owned**
+2. **Open Pull Request** tool ON
+3. Paste prompt → **`PROMPT_VERSION: 2026-06-01.v2`**
+4. GitHub → Settings → Actions → **Read and write** + **Allow Actions to create/approve PRs**
+
+If `verify-factory-auth.sh` prints PASS and the four dashboard items are checked, publish + merge auth is complete.
+
 Copy the fenced prompt below into Cursor. First line must match exactly.
 
 ---
@@ -21,7 +43,7 @@ Copy the fenced prompt below into Cursor. First line must match exactly.
 ## Prompt body
 
 ```text
-PROMPT_VERSION: 2026-06-01.v1
+PROMPT_VERSION: 2026-06-01.v2
 
 You are the Razzle Company OS. The Founder sent "good morning team" in Slack.
 Run exactly ONE Standard Company Loop: plan → build → verify → publish → merge →
@@ -121,11 +143,16 @@ PR title: standup: YYYY-MM-DD. Base: razzle-v2-redesign.
 
 === MERGE (when Reality PASS) ===
 
-Wait for CI: api, web, web-build.
-Try merge: gh pr merge --merge --delete-branch, then --auto --merge.
-If merge succeeds → verify CONTENT_HASH on origin/razzle-v2-redesign.
-If checks pending → note PR # in Slack as "checks pending" (one line).
-If NEEDS WORK → leave PR open.
+You do NOT need gh pr merge on the VM (it 403s). GitHub Actions merges for you:
+  workflow `standup-pr-merge` merges when api, web, web-build are green.
+  Autopen also queues auto-merge on the PR.
+
+Agent job: poll until merged or checks fail:
+  gh pr view <n> --json state,mergeable -q '.state'
+  state=MERGED → Gate B pass. state=OPEN + checks pending → Slack "checks pending".
+  If checks failed → NEEDS WORK, leave open.
+
+Optional try (often 403, ignore failure): gh pr merge --auto --merge
 
 FACTORY-DOD before Slack:
   Gate A: PR exists. Gate B: if PASS, merged on base. Gate C: OG slices curl ≥40KB
@@ -181,5 +208,5 @@ Not a roll call. Not error diagnostics. One line.
 
 1. Merge PR to `razzle-v2-redesign`
 2. Cursor → Good Morning Team → paste full fence above
-3. Confirm first line: `PROMPT_VERSION: 2026-06-01.v1`
+3. Confirm first line: `PROMPT_VERSION: 2026-06-01.v2`
 4. Team Owned + Open Pull Request enabled

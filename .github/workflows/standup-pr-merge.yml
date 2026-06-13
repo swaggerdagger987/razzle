@@ -1,0 +1,68 @@
+# Merges standup PRs when CI is green. Uses GITHUB_TOKEN — not the VM gh token.
+name: standup-pr-merge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [razzle-v2-redesign]
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+
+jobs:
+  merge-when-green:
+    if: startsWith(github.event.pull_request.title, 'standup:')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for required checks then merge
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pr = context.payload.pull_request.number;
+            const required = ["api", "web", "web-build"];
+            const maxMinutes = 25;
+            const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+            for (let i = 0; i < maxMinutes * 12; i++) {
+              const { data: combined } = await github.rest.checks.listForRef({
+                owner,
+                repo,
+                ref: context.payload.pull_request.head.sha,
+              });
+              const runs = combined.check_runs.filter((c) =>
+                required.includes(c.name)
+              );
+              if (runs.length < required.length) {
+                await sleep(5000);
+                continue;
+              }
+              const pending = runs.filter(
+                (c) => c.status !== "completed"
+              );
+              if (pending.length > 0) {
+                await sleep(5000);
+                continue;
+              }
+              const failed = runs.filter(
+                (c) => c.conclusion !== "success" && c.conclusion !== "skipped"
+              );
+              if (failed.length > 0) {
+                core.setFailed(
+                  `CI failed: ${failed.map((f) => f.name).join(", ")}`
+                );
+                return;
+              }
+              await github.rest.pulls.merge({
+                owner,
+                repo,
+                pull_number: pr,
+                merge_method: "merge",
+              });
+              core.info(`Merged PR #${pr}`);
+              return;
+            }
+            core.setFailed("Timed out waiting for CI");
